@@ -1,0 +1,3700 @@
+{
+  "base_path": "/home/msp/bym_project/dog/data/local_dog_cache.json",
+  "enriched_path": "/home/msp/bym_project/dog/data/local_dog_cache_enriched.json",
+  "queries_path": "data/eval_queries.portfolio.json",
+  "aligned_docs": 1639,
+  "topk": 5,
+  "summary": {
+    "query_count": 20,
+    "baseline_top1_hit_rate": 0,
+    "enriched_top1_hit_rate": 0.25,
+    "baseline_avg_hit_rate_at_k": 0.03,
+    "enriched_avg_hit_rate_at_k": 0.2,
+    "enriched_better_queries": 9,
+    "tied_queries": 11,
+    "enriched_worse_queries": 0
+  },
+  "reports": [
+    {
+      "id": "q1",
+      "query": "흰색 소형견",
+      "goal": "흰색 털과 작은 체구가 드러나는 후보 탐색",
+      "match_groups": [
+        [
+          "흰색",
+          "하얀",
+          "백색"
+        ],
+        [
+          "소형견",
+          "작은",
+          "소형"
+        ]
+      ],
+      "baseline": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9077,
+            "is_hit": false,
+            "desertionNo": "447523202600305",
+            "breed": "000114",
+            "sex": "F",
+            "age": "2026(년생)",
+            "weight": "3(Kg)",
+            "desc": "당신은 사랑받기 위해 태어난 강아지~  당신의 삶속에서 그 사랑 받고 있지요~",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603121503999.jpeg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447523202600305&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9049,
+            "is_hit": false,
+            "desertionNo": "441553202600462",
+            "breed": "000128",
+            "sex": "M",
+            "age": "2022(년생)",
+            "weight": "4(Kg)",
+            "desc": "순하고 사람 좋아하는 귀여운 푸들/밖에서 생활한지 오래된듯함/털 관리 안되어있음/칩 없음/너무 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260312170344.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=441553202600462&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9028,
+            "is_hit": false,
+            "desertionNo": "447513202600210",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2026(년생)",
+            "weight": "3(Kg)",
+            "desc": "생후 3개월령 추정, 인근 동네에서 발견하여 구조",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603152203178.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447513202600210&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9028,
+            "is_hit": false,
+            "desertionNo": "447513202600230",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2026(년생)",
+            "weight": "3(Kg)",
+            "desc": "생후 3개월령 추정, 인근 동네에서 발견하여 구조",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603172203106.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447513202600230&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9017,
+            "is_hit": false,
+            "desertionNo": "441417202600084",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2022(년생)",
+            "weight": "6.5(Kg)",
+            "desc": "빨간색 목걸이 착용,사람을 매우 좋아하며 낯선 사람에게도 꼬리를 흔듦.",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/03/202603181203610.png",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=441417202600084&menuNo=1000000055"
+          }
+        ]
+      },
+      "enriched": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 1,
+          "hit_rate": 0.2
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.8989,
+            "is_hit": false,
+            "desertionNo": "448542202600216",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2026(년생)",
+            "weight": "4.2(Kg)",
+            "desc": "기존 설명: 관리번호 6-041\n사진 보강 설명: 검은 털과 갈색 얼룩이 섞인 귀여운 강아지입니다. 촉촉하고 큰 눈망울이 인상적이며, 순한 분위기를 풍깁니다. 추정 연령은 3개월 정도로 보이며, 작고 앙증맞은 체구를 가지고 있습니다.",
+            "base_desc": "관리번호 6-041",
+            "vlm_desc": "검은 털과 갈색 얼룩이 섞인 귀여운 강아지입니다. 촉촉하고 큰 눈망울이 인상적이며, 순한 분위기를 풍깁니다. 추정 연령은 3개월 정도로 보이며, 작고 앙증맞은 체구를 가지고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603131503319.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448542202600216&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.8984,
+            "is_hit": false,
+            "desertionNo": "445467202600137",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2025(년생)",
+            "weight": "4(Kg)",
+            "desc": "기존 설명: 1살추정\n사진 보강 설명: 1살 추정의 수컷 강아지는 털이 복슬복슬하고 갈색과 검은색이 섞인 털을 가지고 있습니다. 눈은 촉촉하고 순해 보이며, 전체적으로 귀여운 인상을 줍니다. 추정컨대 털이 긴 품종의 강아지인 것으로 보입니다.",
+            "base_desc": "1살추정",
+            "vlm_desc": "1살 추정의 수컷 강아지는 털이 복슬복슬하고 갈색과 검은색이 섞인 털을 가지고 있습니다. 눈은 촉촉하고 순해 보이며, 전체적으로 귀여운 인상을 줍니다. 추정컨대 털이 긴 품종의 강아지인 것으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603031603579.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445467202600137&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.8983,
+            "is_hit": false,
+            "desertionNo": "447523202600305",
+            "breed": "000114",
+            "sex": "F",
+            "age": "2026(년생)",
+            "weight": "3(Kg)",
+            "desc": "기존 설명: 당신은 사랑받기 위해 태어난 강아지~  당신의 삶속에서 그 사랑 받고 있지요~\n사진 보강 설명: 밝은 갈색 털을 가진 귀여운 강아지입니다. 쫑긋한 귀와 똘망똘망한 눈망울이 인상적이며, 어딘가 모르게 수줍은 듯한 표정을 짓고 있습니다. 3kg으로 앙증맞은 체구이며, 다른 강아지 옆에 바짝 붙어 앉아 있습니다.",
+            "base_desc": "당신은 사랑받기 위해 태어난 강아지~  당신의 삶속에서 그 사랑 받고 있지요~",
+            "vlm_desc": "밝은 갈색 털을 가진 귀여운 강아지입니다. 쫑긋한 귀와 똘망똘망한 눈망울이 인상적이며, 어딘가 모르게 수줍은 듯한 표정을 짓고 있습니다. 3kg으로 앙증맞은 체구이며, 다른 강아지 옆에 바짝 붙어 앉아 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603121503999.jpeg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447523202600305&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.8973,
+            "is_hit": false,
+            "desertionNo": "443446202600036",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2026(60일미만)(년생)",
+            "weight": "3(Kg)",
+            "desc": "기존 설명: 현재는 건강하나 나이가 어려 추후 확인필요\n사진 보강 설명: 작고 귀여운 강아지가 사람의 품에 안겨 있습니다. 털은 밝은 갈색을 띠고 있으며, 가슴 부분에 붉은색 얼룩이 묻어 있습니다. 눈망울이 촉촉하고 순해 보입니다.",
+            "base_desc": "현재는 건강하나 나이가 어려 추후 확인필요",
+            "vlm_desc": "작고 귀여운 강아지가 사람의 품에 안겨 있습니다. 털은 밝은 갈색을 띠고 있으며, 가슴 부분에 붉은색 얼룩이 묻어 있습니다. 눈망울이 촉촉하고 순해 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603151203141.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=443446202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.8972,
+            "is_hit": true,
+            "desertionNo": "446484202600284",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2026(60일미만)(년생)",
+            "weight": "3(Kg)",
+            "desc": "기존 설명: 믹스 검정색 수컷 2개월 추정\n사진 보강 설명: 검정색 털에 흰색 무늬가 섞인 2개월 추정의 수컷 강아지입니다. 솜털 같은 부드러운 털을 가지고 있으며, 작은 발에는 귀여운 발톱이 보입니다. 장난기가 가득한 눈빛으로 빨간색 천 장난감을 물고 있습니다.",
+            "base_desc": "믹스 검정색 수컷 2개월 추정",
+            "vlm_desc": "검정색 털에 흰색 무늬가 섞인 2개월 추정의 수컷 강아지입니다. 솜털 같은 부드러운 털을 가지고 있으며, 작은 발에는 귀여운 발톱이 보입니다. 장난기가 가득한 눈빛으로 빨간색 천 장난감을 물고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603091703386[2].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446484202600284&menuNo=1000000055"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q2",
+      "query": "검은색 강아지",
+      "goal": "검은 털이 눈에 띄는 후보 탐색",
+      "match_groups": [
+        [
+          "검은",
+          "검정",
+          "블랙"
+        ]
+      ],
+      "baseline": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9053,
+            "is_hit": false,
+            "desertionNo": "446497202600079",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2023(년생)",
+            "weight": "18(Kg)",
+            "desc": "백수로8길 110에서 발견된 3마리 강아지 중 믹스 수컷 강아지",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260309100306.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446497202600079&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9041,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9029,
+            "is_hit": false,
+            "desertionNo": "446497202600078",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "15(Kg)",
+            "desc": "백수로8길 110에서 발견된 3마리 강아지 중 믹스 수컷 강아지",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603091003202.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446497202600078&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.8998,
+            "is_hit": false,
+            "desertionNo": "446497202600074",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "14(Kg)",
+            "desc": "영광읍 물무로3길 40에서 발견된 수컷 강아지",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603090903995.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446497202600074&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.8995,
+            "is_hit": false,
+            "desertionNo": "445468202600339",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2025(년생)",
+            "weight": "13(Kg)",
+            "desc": "빨간 목테를 하고있으며 겁은조금있지만 성격이 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603171103374[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445468202600339&menuNo=1000000055"
+          }
+        ]
+      },
+      "enriched": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 2,
+          "hit_rate": 0.4
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.8942,
+            "is_hit": false,
+            "desertionNo": "431369202600081",
+            "breed": "000100",
+            "sex": "M",
+            "age": "2023(년생)",
+            "weight": "13(Kg)",
+            "desc": "기존 설명: 사나움, 잘생김\n사진 보강 설명: 황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "base_desc": "사나움, 잘생김",
+            "vlm_desc": "황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603161203404.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=431369202600081&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.8927,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "기존 설명: 밥을 많이 굶어 잘 움직이지 못함\n사진 보강 설명: 하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "base_desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "vlm_desc": "하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.8877,
+            "is_hit": true,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "기존 설명: 사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심\n사진 보강 설명: 검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "base_desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "vlm_desc": "검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.8874,
+            "is_hit": true,
+            "desertionNo": "431373202600242",
+            "breed": "000114",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "11(Kg)",
+            "desc": "기존 설명: 귀엽게생김\n사진 보강 설명: 검은 털이 빽빽하게 덮인 강아지로, 곰을 닮은 귀여운 외모를 가지고 있습니다. 눈은 촉촉하고, 턱 아래에는 흰 털이 섞여 있습니다. 늠름한 표정이 인상적입니다.",
+            "base_desc": "귀엽게생김",
+            "vlm_desc": "검은 털이 빽빽하게 덮인 강아지로, 곰을 닮은 귀여운 외모를 가지고 있습니다. 눈은 촉촉하고, 턱 아래에는 흰 털이 섞여 있습니다. 늠름한 표정이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603111203914.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=431373202600242&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.8861,
+            "is_hit": false,
+            "desertionNo": "443440202600024",
+            "breed": "000155",
+            "sex": "M",
+            "age": "2021(년생)",
+            "weight": "20(Kg)",
+            "desc": "기존 설명: 꼬리 없음\n사진 보강 설명: 하얀 털을 가진 수컷 강아지로, 꼬리가 없는 것이 특징입니다. 편안한 표정과 젖은 혀를 내밀고 있어 활발하고 친근한 느낌을 줍니다. 늠름한 인상과 함께 귀가 쫑긋 솟아 있습니다.",
+            "base_desc": "꼬리 없음",
+            "vlm_desc": "하얀 털을 가진 수컷 강아지로, 꼬리가 없는 것이 특징입니다. 편안한 표정과 젖은 혀를 내밀고 있어 활발하고 친근한 느낌을 줍니다. 늠름한 인상과 함께 귀가 쫑긋 솟아 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603091303521[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=443440202600024&menuNo=1000000055"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q3",
+      "query": "갈색 털 중형견",
+      "goal": "갈색 계열 털과 중간 체구 후보 탐색",
+      "match_groups": [
+        [
+          "갈색",
+          "브라운",
+          "황갈"
+        ],
+        [
+          "중형견",
+          "중형",
+          "중간"
+        ]
+      ],
+      "baseline": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9305,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9286,
+            "is_hit": false,
+            "desertionNo": "445468202600339",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2025(년생)",
+            "weight": "13(Kg)",
+            "desc": "빨간 목테를 하고있으며 겁은조금있지만 성격이 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603171103374[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445468202600339&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9284,
+            "is_hit": false,
+            "desertionNo": "447507202600038",
+            "breed": "000115",
+            "sex": "F",
+            "age": "2024(년생)",
+            "weight": "18(Kg)",
+            "desc": "양호함.매우 영리하고 적응뛰어남 순하고 사회성좋음",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260312170369[2].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447507202600038&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9274,
+            "is_hit": false,
+            "desertionNo": "447513202600052",
+            "breed": "000114",
+            "sex": "F",
+            "age": "2025(년생)",
+            "weight": "13(Kg)",
+            "desc": "생후 8개월령 추정, 인근 동네에서 배회하여 구조",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603031503814.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447513202600052&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9269,
+            "is_hit": false,
+            "desertionNo": "443447202600103",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "15(Kg)",
+            "desc": "사상충 양성, 피부병 심함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603131703706.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=443447202600103&menuNo=1000000055"
+          }
+        ]
+      },
+      "enriched": {
+        "summary": {
+          "top1_hit": true,
+          "hit_count": 2,
+          "hit_rate": 0.4
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9246,
+            "is_hit": true,
+            "desertionNo": "431369202600081",
+            "breed": "000100",
+            "sex": "M",
+            "age": "2023(년생)",
+            "weight": "13(Kg)",
+            "desc": "기존 설명: 사나움, 잘생김\n사진 보강 설명: 황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "base_desc": "사나움, 잘생김",
+            "vlm_desc": "황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603161203404.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=431369202600081&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9216,
+            "is_hit": true,
+            "desertionNo": "448538202600068",
+            "breed": "000050",
+            "sex": "M",
+            "age": "2023(년생)",
+            "weight": "13.9(Kg)",
+            "desc": "기존 설명: 갈색흰색,순함\n사진 보강 설명: 하얀 털에 갈색 무늬가 섞인 프랑스 불독으로 보입니다. 둥글고 처진 눈과 주름진 얼굴이 인상적이며, 사람에게 안기는 모습에서 순한 분위기가 느껴집니다. 추정컨대, 나이가 있는 것으로 보입니다.",
+            "base_desc": "갈색흰색,순함",
+            "vlm_desc": "하얀 털에 갈색 무늬가 섞인 프랑스 불독으로 보입니다. 둥글고 처진 눈과 주름진 얼굴이 인상적이며, 사람에게 안기는 모습에서 순한 분위기가 느껴집니다. 추정컨대, 나이가 있는 것으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/03/202603181603642[2].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448538202600068&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9207,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "기존 설명: 밥을 많이 굶어 잘 움직이지 못함\n사진 보강 설명: 하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "base_desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "vlm_desc": "하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9196,
+            "is_hit": false,
+            "desertionNo": "444462202600182",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2013(년생)",
+            "weight": "15(Kg)",
+            "desc": "기존 설명: 순하고 잘따름\n사진 보강 설명: 하얀 털과 검은 털이 섞인 중년의 수컷 강아지입니다. 눈은 촉촉하고, 전반적으로 차분하고 온순한 분위기를 풍깁니다. 털이 다소 긴 편이며, 낡은 목줄을 하고 있습니다.",
+            "base_desc": "순하고 잘따름",
+            "vlm_desc": "하얀 털과 검은 털이 섞인 중년의 수컷 강아지입니다. 눈은 촉촉하고, 전반적으로 차분하고 온순한 분위기를 풍깁니다. 털이 다소 긴 편이며, 낡은 목줄을 하고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603171103303.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=444462202600182&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9195,
+            "is_hit": false,
+            "desertionNo": "431373202600242",
+            "breed": "000114",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "11(Kg)",
+            "desc": "기존 설명: 귀엽게생김\n사진 보강 설명: 검은 털이 빽빽하게 덮인 강아지로, 곰을 닮은 귀여운 외모를 가지고 있습니다. 눈은 촉촉하고, 턱 아래에는 흰 털이 섞여 있습니다. 늠름한 표정이 인상적입니다.",
+            "base_desc": "귀엽게생김",
+            "vlm_desc": "검은 털이 빽빽하게 덮인 강아지로, 곰을 닮은 귀여운 외모를 가지고 있습니다. 눈은 촉촉하고, 턱 아래에는 흰 털이 섞여 있습니다. 늠름한 표정이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603111203914.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=431373202600242&menuNo=1000000055"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q4",
+      "query": "귀가 쫑긋 선 강아지",
+      "goal": "귀 모양이 잘 드러나는 후보 탐색",
+      "match_groups": [
+        [
+          "귀"
+        ],
+        [
+          "쫑긋",
+          "서",
+          "선"
+        ]
+      ],
+      "baseline": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9184,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9163,
+            "is_hit": false,
+            "desertionNo": "445468202600339",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2025(년생)",
+            "weight": "13(Kg)",
+            "desc": "빨간 목테를 하고있으며 겁은조금있지만 성격이 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603171103374[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445468202600339&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9161,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9153,
+            "is_hit": false,
+            "desertionNo": "446497202600079",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2023(년생)",
+            "weight": "18(Kg)",
+            "desc": "백수로8길 110에서 발견된 3마리 강아지 중 믹스 수컷 강아지",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260309100306.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446497202600079&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9146,
+            "is_hit": false,
+            "desertionNo": "447507202600036",
+            "breed": "000054",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "25(Kg)",
+            "desc": "양호함.매우똑똑하고 영리함 점잖고 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603121703437[2].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447507202600036&menuNo=1000000055"
+          }
+        ]
+      },
+      "enriched": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9181,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "기존 설명: 사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심\n사진 보강 설명: 검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "base_desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "vlm_desc": "검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9139,
+            "is_hit": false,
+            "desertionNo": "431369202600081",
+            "breed": "000100",
+            "sex": "M",
+            "age": "2023(년생)",
+            "weight": "13(Kg)",
+            "desc": "기존 설명: 사나움, 잘생김\n사진 보강 설명: 황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "base_desc": "사나움, 잘생김",
+            "vlm_desc": "황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603161203404.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=431369202600081&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9134,
+            "is_hit": false,
+            "desertionNo": "442434202600064",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "10(Kg)",
+            "desc": "기존 설명: 사납고 겁이 많음\n사진 보강 설명: 하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "base_desc": "사납고 겁이 많음",
+            "vlm_desc": "하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260317100382.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=442434202600064&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9134,
+            "is_hit": false,
+            "desertionNo": "441378202600073",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "16.7(Kg)",
+            "desc": "기존 설명: 진드기 감염\n사진 보강 설명: 하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "base_desc": "진드기 감염",
+            "vlm_desc": "하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603111503153.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=441378202600073&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9129,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "기존 설명: 밥을 많이 굶어 잘 움직이지 못함\n사진 보강 설명: 하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "base_desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "vlm_desc": "하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q5",
+      "query": "복슬복슬한 하얀 강아지",
+      "goal": "털 질감과 밝은 털색이 함께 드러나는 후보 탐색",
+      "match_groups": [
+        [
+          "복슬",
+          "풍성",
+          "털"
+        ],
+        [
+          "흰색",
+          "하얀",
+          "백색"
+        ]
+      ],
+      "baseline": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9262,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9167,
+            "is_hit": false,
+            "desertionNo": "443447202600103",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "15(Kg)",
+            "desc": "사상충 양성, 피부병 심함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603131703706.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=443447202600103&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9141,
+            "is_hit": false,
+            "desertionNo": "446495202600025",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2022(년생)",
+            "weight": "16(Kg)",
+            "desc": "크기와 다르게 온순하고 얌전합니다",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101403235.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446495202600025&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9128,
+            "is_hit": false,
+            "desertionNo": "445468202600334",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2013(년생)",
+            "weight": "16(Kg)",
+            "desc": "눈이 안보이며 배쪽에 혹이있고 많이 말라있음",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603160903389.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445468202600334&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9122,
+            "is_hit": false,
+            "desertionNo": "446483202600309",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2021(년생)",
+            "weight": "15(Kg)",
+            "desc": "집주변매일출몰 포획틀에구조",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260317160397[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446483202600309&menuNo=1000000055"
+          }
+        ]
+      },
+      "enriched": {
+        "summary": {
+          "top1_hit": true,
+          "hit_count": 4,
+          "hit_rate": 0.8
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9164,
+            "is_hit": true,
+            "desertionNo": "442434202600064",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "10(Kg)",
+            "desc": "기존 설명: 사납고 겁이 많음\n사진 보강 설명: 하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "base_desc": "사납고 겁이 많음",
+            "vlm_desc": "하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260317100382.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=442434202600064&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9129,
+            "is_hit": true,
+            "desertionNo": "441378202600073",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "16.7(Kg)",
+            "desc": "기존 설명: 진드기 감염\n사진 보강 설명: 하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "base_desc": "진드기 감염",
+            "vlm_desc": "하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603111503153.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=441378202600073&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9096,
+            "is_hit": true,
+            "desertionNo": "446484202600275",
+            "breed": "000114",
+            "sex": "F",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "기존 설명: 믹스 흰색 암컷 6살 추정\n사진 보강 설명: 하얀 털을 가진 6살 추정 암컷입니다. 쫑긋한 귀와 검은 눈이 인상적이며, 붉은색 목걸이를 하고 있습니다. 다소 마른 체형을 보이고 있습니다.",
+            "base_desc": "믹스 흰색 암컷 6살 추정",
+            "vlm_desc": "하얀 털을 가진 6살 추정 암컷입니다. 쫑긋한 귀와 검은 눈이 인상적이며, 붉은색 목걸이를 하고 있습니다. 다소 마른 체형을 보이고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603091703458[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446484202600275&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9093,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "기존 설명: 사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심\n사진 보강 설명: 검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "base_desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "vlm_desc": "검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9091,
+            "is_hit": true,
+            "desertionNo": "445467202600182",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2025(년생)",
+            "weight": "10(Kg)",
+            "desc": "기존 설명: 1살추정 순함\n사진 보강 설명: 하얀색과 회색 무늬가 섞인 털을 가진 수컷 강아지입니다. 눈은 검은색이고, 얼굴에 흰색 줄무늬가 있습니다. 1살 추정으로 순해 보이는 모습입니다.",
+            "base_desc": "1살추정 순함",
+            "vlm_desc": "하얀색과 회색 무늬가 섞인 털을 가진 수컷 강아지입니다. 눈은 검은색이고, 얼굴에 흰색 줄무늬가 있습니다. 1살 추정으로 순해 보이는 모습입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603050903493.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445467202600182&menuNo=1000000055"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q6",
+      "query": "작고 마른 체형의 강아지",
+      "goal": "작은 체구와 마른 인상이 표현된 후보 탐색",
+      "match_groups": [
+        [
+          "소형견",
+          "작은",
+          "소형"
+        ],
+        [
+          "마른",
+          "가벼",
+          "슬림"
+        ]
+      ],
+      "baseline": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9205,
+            "is_hit": false,
+            "desertionNo": "447507202600038",
+            "breed": "000115",
+            "sex": "F",
+            "age": "2024(년생)",
+            "weight": "18(Kg)",
+            "desc": "양호함.매우 영리하고 적응뛰어남 순하고 사회성좋음",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260312170369[2].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447507202600038&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9198,
+            "is_hit": false,
+            "desertionNo": "447507202600036",
+            "breed": "000054",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "25(Kg)",
+            "desc": "양호함.매우똑똑하고 영리함 점잖고 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603121703437[2].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447507202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9192,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9191,
+            "is_hit": false,
+            "desertionNo": "445468202600339",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2025(년생)",
+            "weight": "13(Kg)",
+            "desc": "빨간 목테를 하고있으며 겁은조금있지만 성격이 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603171103374[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445468202600339&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9176,
+            "is_hit": false,
+            "desertionNo": "447513202600052",
+            "breed": "000114",
+            "sex": "F",
+            "age": "2025(년생)",
+            "weight": "13(Kg)",
+            "desc": "생후 8개월령 추정, 인근 동네에서 배회하여 구조",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603031503814.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447513202600052&menuNo=1000000055"
+          }
+        ]
+      },
+      "enriched": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9259,
+            "is_hit": false,
+            "desertionNo": "442434202600064",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "10(Kg)",
+            "desc": "기존 설명: 사납고 겁이 많음\n사진 보강 설명: 하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "base_desc": "사납고 겁이 많음",
+            "vlm_desc": "하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260317100382.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=442434202600064&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9249,
+            "is_hit": false,
+            "desertionNo": "441378202600073",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "16.7(Kg)",
+            "desc": "기존 설명: 진드기 감염\n사진 보강 설명: 하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "base_desc": "진드기 감염",
+            "vlm_desc": "하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603111503153.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=441378202600073&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9187,
+            "is_hit": false,
+            "desertionNo": "447509202600082",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2018(년생)",
+            "weight": "20(Kg)",
+            "desc": "기존 설명: 심하게 굶주린듯 순함\n사진 보강 설명: 하얀 털에 갈색빛이 도는 수컷 강아지로, 몸이  худо худо하고 털이 듬성듬성합니다. 눈은 순하고, 귀는 쫑긋 솟아 있습니다. 밥그릇이 놓인 공간을 주시하며, 굶주린 듯한 모습입니다.",
+            "base_desc": "심하게 굶주린듯 순함",
+            "vlm_desc": "하얀 털에 갈색빛이 도는 수컷 강아지로, 몸이  худо худо하고 털이 듬성듬성합니다. 눈은 순하고, 귀는 쫑긋 솟아 있습니다. 밥그릇이 놓인 공간을 주시하며, 굶주린 듯한 모습입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603161103200.jpeg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447509202600082&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9174,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "기존 설명: 사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심\n사진 보강 설명: 검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "base_desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "vlm_desc": "검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9155,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "기존 설명: 밥을 많이 굶어 잘 움직이지 못함\n사진 보강 설명: 하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "base_desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "vlm_desc": "하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q7",
+      "query": "얼굴에 검은 무늬가 있는 강아지",
+      "goal": "얼굴 특징과 무늬 설명이 드러나는 후보 탐색",
+      "match_groups": [
+        [
+          "얼굴",
+          "눈"
+        ],
+        [
+          "검은",
+          "검정",
+          "무늬"
+        ]
+      ],
+      "baseline": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9301,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9261,
+            "is_hit": false,
+            "desertionNo": "447507202600036",
+            "breed": "000054",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "25(Kg)",
+            "desc": "양호함.매우똑똑하고 영리함 점잖고 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603121703437[2].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447507202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9238,
+            "is_hit": false,
+            "desertionNo": "446483202600272",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "26(Kg)",
+            "desc": "집주변매일출몰 포획구조 매우사나움",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603111703862.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446483202600272&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9233,
+            "is_hit": false,
+            "desertionNo": "445468202600339",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2025(년생)",
+            "weight": "13(Kg)",
+            "desc": "빨간 목테를 하고있으며 겁은조금있지만 성격이 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603171103374[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445468202600339&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9208,
+            "is_hit": false,
+            "desertionNo": "445468202600340",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "18(Kg)",
+            "desc": "빨간목테를 하고있으며 사람에 대한 경계심이 많음",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603171103870.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445468202600340&menuNo=1000000055"
+          }
+        ]
+      },
+      "enriched": {
+        "summary": {
+          "top1_hit": true,
+          "hit_count": 3,
+          "hit_rate": 0.6
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9278,
+            "is_hit": true,
+            "desertionNo": "442434202600064",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "10(Kg)",
+            "desc": "기존 설명: 사납고 겁이 많음\n사진 보강 설명: 하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "base_desc": "사납고 겁이 많음",
+            "vlm_desc": "하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260317100382.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=442434202600064&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9261,
+            "is_hit": true,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "기존 설명: 사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심\n사진 보강 설명: 검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "base_desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "vlm_desc": "검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9256,
+            "is_hit": false,
+            "desertionNo": "441378202600073",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "16.7(Kg)",
+            "desc": "기존 설명: 진드기 감염\n사진 보강 설명: 하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "base_desc": "진드기 감염",
+            "vlm_desc": "하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603111503153.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=441378202600073&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9243,
+            "is_hit": true,
+            "desertionNo": "445468202600340",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "18(Kg)",
+            "desc": "기존 설명: 빨간목테를 하고있으며 사람에 대한 경계심이 많음\n사진 보강 설명: 밝은 황갈색 털을 가진 암컷 강아지로, 사람을 바라보는 눈빛이 경계심을 드러냅니다. 목에는 빨간색 목걸이를 하고 있으며, 뒤편에는 검은색 단열재가 붙은 벽과 파란색 지붕의 강아지 집이 보입니다. 늠름한 자세로 서 있는 모습이 인상적입니다.",
+            "base_desc": "빨간목테를 하고있으며 사람에 대한 경계심이 많음",
+            "vlm_desc": "밝은 황갈색 털을 가진 암컷 강아지로, 사람을 바라보는 눈빛이 경계심을 드러냅니다. 목에는 빨간색 목걸이를 하고 있으며, 뒤편에는 검은색 단열재가 붙은 벽과 파란색 지붕의 강아지 집이 보입니다. 늠름한 자세로 서 있는 모습이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603171103870.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445468202600340&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9172,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "기존 설명: 밥을 많이 굶어 잘 움직이지 못함\n사진 보강 설명: 하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "base_desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "vlm_desc": "하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q8",
+      "query": "황갈색 강아지",
+      "goal": "노란빛 또는 갈색 계열 털 후보 탐색",
+      "match_groups": [
+        [
+          "황갈",
+          "노란",
+          "갈색",
+          "베이지"
+        ]
+      ],
+      "baseline": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.921,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9163,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.916,
+            "is_hit": false,
+            "desertionNo": "446497202600076",
+            "breed": "000050",
+            "sex": "M",
+            "age": "2023(년생)",
+            "weight": "13(Kg)",
+            "desc": "법성면 시내에서 발견된 수컷 프렌치 불독 한마리",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603090903744[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446497202600076&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.916,
+            "is_hit": false,
+            "desertionNo": "445468202600339",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2025(년생)",
+            "weight": "13(Kg)",
+            "desc": "빨간 목테를 하고있으며 겁은조금있지만 성격이 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603171103374[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445468202600339&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9159,
+            "is_hit": false,
+            "desertionNo": "446495202600025",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2022(년생)",
+            "weight": "16(Kg)",
+            "desc": "크기와 다르게 온순하고 얌전합니다",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101403235.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446495202600025&menuNo=1000000055"
+          }
+        ]
+      },
+      "enriched": {
+        "summary": {
+          "top1_hit": true,
+          "hit_count": 2,
+          "hit_rate": 0.4
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9182,
+            "is_hit": true,
+            "desertionNo": "431369202600081",
+            "breed": "000100",
+            "sex": "M",
+            "age": "2023(년생)",
+            "weight": "13(Kg)",
+            "desc": "기존 설명: 사나움, 잘생김\n사진 보강 설명: 황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "base_desc": "사나움, 잘생김",
+            "vlm_desc": "황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603161203404.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=431369202600081&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9147,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "기존 설명: 밥을 많이 굶어 잘 움직이지 못함\n사진 보강 설명: 하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "base_desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "vlm_desc": "하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9108,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "기존 설명: 사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심\n사진 보강 설명: 검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "base_desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "vlm_desc": "검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9105,
+            "is_hit": false,
+            "desertionNo": "442434202600064",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "10(Kg)",
+            "desc": "기존 설명: 사납고 겁이 많음\n사진 보강 설명: 하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "base_desc": "사납고 겁이 많음",
+            "vlm_desc": "하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260317100382.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=442434202600064&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9086,
+            "is_hit": true,
+            "desertionNo": "445467202600248",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "15(Kg)",
+            "desc": "기존 설명: 6살추정 사나움 입질있음\n사진 보강 설명: 갈색과 흰색 털을 가진 중형견으로, 덥수룩한 털이 특징입니다. 눈은 초롱초롱하고, 턱 부분에 털이 풍성하게 자라 있습니다. 6살 추정으로, 다소 굳은 표정을 짓고 있습니다.",
+            "base_desc": "6살추정 사나움 입질있음",
+            "vlm_desc": "갈색과 흰색 털을 가진 중형견으로, 덥수룩한 털이 특징입니다. 눈은 초롱초롱하고, 턱 부분에 털이 풍성하게 자라 있습니다. 6살 추정으로, 다소 굳은 표정을 짓고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603131703348.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445467202600248&menuNo=1000000055"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q9",
+      "query": "체구가 큰 강아지",
+      "goal": "큰 체구가 드러나는 후보 탐색",
+      "match_groups": [
+        [
+          "대형견",
+          "대형",
+          "큰"
+        ]
+      ],
+      "baseline": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 1,
+          "hit_rate": 0.2
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9249,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9241,
+            "is_hit": true,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9237,
+            "is_hit": false,
+            "desertionNo": "445468202600339",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2025(년생)",
+            "weight": "13(Kg)",
+            "desc": "빨간 목테를 하고있으며 겁은조금있지만 성격이 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603171103374[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445468202600339&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9203,
+            "is_hit": false,
+            "desertionNo": "446495202600025",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2022(년생)",
+            "weight": "16(Kg)",
+            "desc": "크기와 다르게 온순하고 얌전합니다",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101403235.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446495202600025&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9201,
+            "is_hit": false,
+            "desertionNo": "443447202600103",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "15(Kg)",
+            "desc": "사상충 양성, 피부병 심함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603131703706.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=443447202600103&menuNo=1000000055"
+          }
+        ]
+      },
+      "enriched": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 1,
+          "hit_rate": 0.2
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9214,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "기존 설명: 밥을 많이 굶어 잘 움직이지 못함\n사진 보강 설명: 하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "base_desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "vlm_desc": "하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9203,
+            "is_hit": false,
+            "desertionNo": "431369202600081",
+            "breed": "000100",
+            "sex": "M",
+            "age": "2023(년생)",
+            "weight": "13(Kg)",
+            "desc": "기존 설명: 사나움, 잘생김\n사진 보강 설명: 황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "base_desc": "사나움, 잘생김",
+            "vlm_desc": "황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603161203404.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=431369202600081&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9184,
+            "is_hit": true,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "기존 설명: 사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심\n사진 보강 설명: 검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "base_desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "vlm_desc": "검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9183,
+            "is_hit": false,
+            "desertionNo": "442434202600064",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "10(Kg)",
+            "desc": "기존 설명: 사납고 겁이 많음\n사진 보강 설명: 하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "base_desc": "사납고 겁이 많음",
+            "vlm_desc": "하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260317100382.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=442434202600064&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9158,
+            "is_hit": false,
+            "desertionNo": "445467202600248",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "15(Kg)",
+            "desc": "기존 설명: 6살추정 사나움 입질있음\n사진 보강 설명: 갈색과 흰색 털을 가진 중형견으로, 덥수룩한 털이 특징입니다. 눈은 초롱초롱하고, 턱 부분에 털이 풍성하게 자라 있습니다. 6살 추정으로, 다소 굳은 표정을 짓고 있습니다.",
+            "base_desc": "6살추정 사나움 입질있음",
+            "vlm_desc": "갈색과 흰색 털을 가진 중형견으로, 덥수룩한 털이 특징입니다. 눈은 초롱초롱하고, 턱 부분에 털이 풍성하게 자라 있습니다. 6살 추정으로, 다소 굳은 표정을 짓고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603131703348.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445467202600248&menuNo=1000000055"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q10",
+      "query": "눈매가 또렷한 강아지",
+      "goal": "눈이나 얼굴 인상이 설명에 드러나는 후보 탐색",
+      "match_groups": [
+        [
+          "눈",
+          "눈매"
+        ],
+        [
+          "또렷",
+          "선명"
+        ]
+      ],
+      "baseline": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9149,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9142,
+            "is_hit": false,
+            "desertionNo": "445468202600339",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2025(년생)",
+            "weight": "13(Kg)",
+            "desc": "빨간 목테를 하고있으며 겁은조금있지만 성격이 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603171103374[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445468202600339&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9116,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9107,
+            "is_hit": false,
+            "desertionNo": "447507202600036",
+            "breed": "000054",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "25(Kg)",
+            "desc": "양호함.매우똑똑하고 영리함 점잖고 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603121703437[2].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447507202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9106,
+            "is_hit": false,
+            "desertionNo": "443447202600103",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "15(Kg)",
+            "desc": "사상충 양성, 피부병 심함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603131703706.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=443447202600103&menuNo=1000000055"
+          }
+        ]
+      },
+      "enriched": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9125,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "기존 설명: 사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심\n사진 보강 설명: 검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "base_desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "vlm_desc": "검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9118,
+            "is_hit": false,
+            "desertionNo": "442434202600064",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "10(Kg)",
+            "desc": "기존 설명: 사납고 겁이 많음\n사진 보강 설명: 하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "base_desc": "사납고 겁이 많음",
+            "vlm_desc": "하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260317100382.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=442434202600064&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9107,
+            "is_hit": false,
+            "desertionNo": "431369202600081",
+            "breed": "000100",
+            "sex": "M",
+            "age": "2023(년생)",
+            "weight": "13(Kg)",
+            "desc": "기존 설명: 사나움, 잘생김\n사진 보강 설명: 황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "base_desc": "사나움, 잘생김",
+            "vlm_desc": "황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603161203404.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=431369202600081&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9085,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "기존 설명: 밥을 많이 굶어 잘 움직이지 못함\n사진 보강 설명: 하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "base_desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "vlm_desc": "하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9085,
+            "is_hit": false,
+            "desertionNo": "445468202600340",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "18(Kg)",
+            "desc": "기존 설명: 빨간목테를 하고있으며 사람에 대한 경계심이 많음\n사진 보강 설명: 밝은 황갈색 털을 가진 암컷 강아지로, 사람을 바라보는 눈빛이 경계심을 드러냅니다. 목에는 빨간색 목걸이를 하고 있으며, 뒤편에는 검은색 단열재가 붙은 벽과 파란색 지붕의 강아지 집이 보입니다. 늠름한 자세로 서 있는 모습이 인상적입니다.",
+            "base_desc": "빨간목테를 하고있으며 사람에 대한 경계심이 많음",
+            "vlm_desc": "밝은 황갈색 털을 가진 암컷 강아지로, 사람을 바라보는 눈빛이 경계심을 드러냅니다. 목에는 빨간색 목걸이를 하고 있으며, 뒤편에는 검은색 단열재가 붙은 벽과 파란색 지붕의 강아지 집이 보입니다. 늠름한 자세로 서 있는 모습이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603171103870.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445468202600340&menuNo=1000000055"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q11",
+      "query": "짧은 털의 갈색 강아지",
+      "goal": "단모와 갈색 털이 함께 드러나는 후보 탐색",
+      "match_groups": [
+        [
+          "짧은 털",
+          "단모",
+          "짧게"
+        ],
+        [
+          "갈색",
+          "브라운",
+          "황갈"
+        ]
+      ],
+      "baseline": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9196,
+            "is_hit": false,
+            "desertionNo": "445468202600339",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2025(년생)",
+            "weight": "13(Kg)",
+            "desc": "빨간 목테를 하고있으며 겁은조금있지만 성격이 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603171103374[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445468202600339&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9185,
+            "is_hit": false,
+            "desertionNo": "446497202600079",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2023(년생)",
+            "weight": "18(Kg)",
+            "desc": "백수로8길 110에서 발견된 3마리 강아지 중 믹스 수컷 강아지",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260309100306.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446497202600079&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.918,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9176,
+            "is_hit": false,
+            "desertionNo": "446497202600074",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "14(Kg)",
+            "desc": "영광읍 물무로3길 40에서 발견된 수컷 강아지",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603090903995.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446497202600074&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9167,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          }
+        ]
+      },
+      "enriched": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9178,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "기존 설명: 사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심\n사진 보강 설명: 검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "base_desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "vlm_desc": "검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9167,
+            "is_hit": false,
+            "desertionNo": "442434202600064",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "10(Kg)",
+            "desc": "기존 설명: 사납고 겁이 많음\n사진 보강 설명: 하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "base_desc": "사납고 겁이 많음",
+            "vlm_desc": "하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260317100382.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=442434202600064&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9148,
+            "is_hit": false,
+            "desertionNo": "441378202600073",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "16.7(Kg)",
+            "desc": "기존 설명: 진드기 감염\n사진 보강 설명: 하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "base_desc": "진드기 감염",
+            "vlm_desc": "하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603111503153.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=441378202600073&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9132,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "기존 설명: 밥을 많이 굶어 잘 움직이지 못함\n사진 보강 설명: 하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "base_desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "vlm_desc": "하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9119,
+            "is_hit": false,
+            "desertionNo": "431369202600081",
+            "breed": "000100",
+            "sex": "M",
+            "age": "2023(년생)",
+            "weight": "13(Kg)",
+            "desc": "기존 설명: 사나움, 잘생김\n사진 보강 설명: 황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "base_desc": "사나움, 잘생김",
+            "vlm_desc": "황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603161203404.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=431369202600081&menuNo=1000000055"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q12",
+      "query": "귀가 처진 하얀 강아지",
+      "goal": "밝은 털색과 처진 귀 형태가 함께 드러나는 후보 탐색",
+      "match_groups": [
+        [
+          "흰색",
+          "하얀",
+          "백색"
+        ],
+        [
+          "귀",
+          "처진",
+          "늘어진"
+        ]
+      ],
+      "baseline": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9063,
+            "is_hit": false,
+            "desertionNo": "446497202600079",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2023(년생)",
+            "weight": "18(Kg)",
+            "desc": "백수로8길 110에서 발견된 3마리 강아지 중 믹스 수컷 강아지",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260309100306.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446497202600079&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9039,
+            "is_hit": false,
+            "desertionNo": "446497202600078",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "15(Kg)",
+            "desc": "백수로8길 110에서 발견된 3마리 강아지 중 믹스 수컷 강아지",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603091003202.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446497202600078&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.8981,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.8973,
+            "is_hit": false,
+            "desertionNo": "446497202600074",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "14(Kg)",
+            "desc": "영광읍 물무로3길 40에서 발견된 수컷 강아지",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603090903995.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446497202600074&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.8964,
+            "is_hit": false,
+            "desertionNo": "441401202600145",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2026(년생)",
+            "weight": "13(Kg)",
+            "desc": "생후10개월령 추정, 겁이 많아 시간이 필요한 아이",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/03/202603181503889.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=441401202600145&menuNo=1000000055"
+          }
+        ]
+      },
+      "enriched": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 1,
+          "hit_rate": 0.2
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.8944,
+            "is_hit": false,
+            "desertionNo": "442434202600064",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "10(Kg)",
+            "desc": "기존 설명: 사납고 겁이 많음\n사진 보강 설명: 하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "base_desc": "사납고 겁이 많음",
+            "vlm_desc": "하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260317100382.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=442434202600064&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.8917,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "기존 설명: 사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심\n사진 보강 설명: 검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "base_desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "vlm_desc": "검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.8913,
+            "is_hit": false,
+            "desertionNo": "431369202600081",
+            "breed": "000100",
+            "sex": "M",
+            "age": "2023(년생)",
+            "weight": "13(Kg)",
+            "desc": "기존 설명: 사나움, 잘생김\n사진 보강 설명: 황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "base_desc": "사나움, 잘생김",
+            "vlm_desc": "황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603161203404.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=431369202600081&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.8909,
+            "is_hit": true,
+            "desertionNo": "446490202600050",
+            "breed": "000114",
+            "sex": "F",
+            "age": "2021(년생)",
+            "weight": "10(Kg)",
+            "desc": "기존 설명: 없음\n사진 보강 설명: 하얀 털을 가진 암컷 강아지로, 눈에는 검은 점이 띄어 보입니다. 늠름한 표정과 귀여운 외모를 가지고 있으며, 튼튼한 다리를 가진 것으로 보입니다. 추정컨대, 활발하고 애교 많은 성격을 가진 것으로 보입니다.",
+            "base_desc": "없음",
+            "vlm_desc": "하얀 털을 가진 암컷 강아지로, 눈에는 검은 점이 띄어 보입니다. 늠름한 표정과 귀여운 외모를 가지고 있으며, 튼튼한 다리를 가진 것으로 보입니다. 추정컨대, 활발하고 애교 많은 성격을 가진 것으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603111403603.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446490202600050&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.8901,
+            "is_hit": false,
+            "desertionNo": "441378202600073",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "16.7(Kg)",
+            "desc": "기존 설명: 진드기 감염\n사진 보강 설명: 하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "base_desc": "진드기 감염",
+            "vlm_desc": "하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603111503153.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=441378202600073&menuNo=1000000055"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q13",
+      "query": "검은색과 흰색이 섞인 강아지",
+      "goal": "두 가지 털색이 함께 묘사되는 후보 탐색",
+      "match_groups": [
+        [
+          "검은",
+          "검정",
+          "블랙"
+        ],
+        [
+          "흰색",
+          "하얀",
+          "백색"
+        ]
+      ],
+      "baseline": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9268,
+            "is_hit": false,
+            "desertionNo": "445468202600339",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2025(년생)",
+            "weight": "13(Kg)",
+            "desc": "빨간 목테를 하고있으며 겁은조금있지만 성격이 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603171103374[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445468202600339&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9244,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9226,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9215,
+            "is_hit": false,
+            "desertionNo": "446497202600074",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "14(Kg)",
+            "desc": "영광읍 물무로3길 40에서 발견된 수컷 강아지",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603090903995.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446497202600074&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9213,
+            "is_hit": false,
+            "desertionNo": "447507202600036",
+            "breed": "000054",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "25(Kg)",
+            "desc": "양호함.매우똑똑하고 영리함 점잖고 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603121703437[2].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447507202600036&menuNo=1000000055"
+          }
+        ]
+      },
+      "enriched": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 1,
+          "hit_rate": 0.2
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9222,
+            "is_hit": false,
+            "desertionNo": "441378202600073",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "16.7(Kg)",
+            "desc": "기존 설명: 진드기 감염\n사진 보강 설명: 하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "base_desc": "진드기 감염",
+            "vlm_desc": "하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603111503153.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=441378202600073&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9221,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "기존 설명: 사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심\n사진 보강 설명: 검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "base_desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "vlm_desc": "검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.921,
+            "is_hit": true,
+            "desertionNo": "442434202600064",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "10(Kg)",
+            "desc": "기존 설명: 사납고 겁이 많음\n사진 보강 설명: 하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "base_desc": "사납고 겁이 많음",
+            "vlm_desc": "하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260317100382.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=442434202600064&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9195,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "기존 설명: 밥을 많이 굶어 잘 움직이지 못함\n사진 보강 설명: 하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "base_desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "vlm_desc": "하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9169,
+            "is_hit": false,
+            "desertionNo": "431373202600242",
+            "breed": "000114",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "11(Kg)",
+            "desc": "기존 설명: 귀엽게생김\n사진 보강 설명: 검은 털이 빽빽하게 덮인 강아지로, 곰을 닮은 귀여운 외모를 가지고 있습니다. 눈은 촉촉하고, 턱 아래에는 흰 털이 섞여 있습니다. 늠름한 표정이 인상적입니다.",
+            "base_desc": "귀엽게생김",
+            "vlm_desc": "검은 털이 빽빽하게 덮인 강아지로, 곰을 닮은 귀여운 외모를 가지고 있습니다. 눈은 촉촉하고, 턱 아래에는 흰 털이 섞여 있습니다. 늠름한 표정이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603111203914.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=431373202600242&menuNo=1000000055"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q14",
+      "query": "마른 중형견",
+      "goal": "중형 체구와 마른 인상이 함께 드러나는 후보 탐색",
+      "match_groups": [
+        [
+          "중형견",
+          "중형",
+          "중간"
+        ],
+        [
+          "마른",
+          "가벼",
+          "슬림"
+        ]
+      ],
+      "baseline": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9072,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9068,
+            "is_hit": false,
+            "desertionNo": "443447202600103",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "15(Kg)",
+            "desc": "사상충 양성, 피부병 심함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603131703706.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=443447202600103&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9066,
+            "is_hit": false,
+            "desertionNo": "446497202600076",
+            "breed": "000050",
+            "sex": "M",
+            "age": "2023(년생)",
+            "weight": "13(Kg)",
+            "desc": "법성면 시내에서 발견된 수컷 프렌치 불독 한마리",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603090903744[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446497202600076&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9059,
+            "is_hit": false,
+            "desertionNo": "445467202600248",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "15(Kg)",
+            "desc": "6살추정 사나움 입질있음",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603131703348.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445467202600248&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9047,
+            "is_hit": false,
+            "desertionNo": "446495202600025",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2022(년생)",
+            "weight": "16(Kg)",
+            "desc": "크기와 다르게 온순하고 얌전합니다",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101403235.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446495202600025&menuNo=1000000055"
+          }
+        ]
+      },
+      "enriched": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9015,
+            "is_hit": false,
+            "desertionNo": "431369202600081",
+            "breed": "000100",
+            "sex": "M",
+            "age": "2023(년생)",
+            "weight": "13(Kg)",
+            "desc": "기존 설명: 사나움, 잘생김\n사진 보강 설명: 황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "base_desc": "사나움, 잘생김",
+            "vlm_desc": "황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603161203404.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=431369202600081&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.8992,
+            "is_hit": false,
+            "desertionNo": "448538202600068",
+            "breed": "000050",
+            "sex": "M",
+            "age": "2023(년생)",
+            "weight": "13.9(Kg)",
+            "desc": "기존 설명: 갈색흰색,순함\n사진 보강 설명: 하얀 털에 갈색 무늬가 섞인 프랑스 불독으로 보입니다. 둥글고 처진 눈과 주름진 얼굴이 인상적이며, 사람에게 안기는 모습에서 순한 분위기가 느껴집니다. 추정컨대, 나이가 있는 것으로 보입니다.",
+            "base_desc": "갈색흰색,순함",
+            "vlm_desc": "하얀 털에 갈색 무늬가 섞인 프랑스 불독으로 보입니다. 둥글고 처진 눈과 주름진 얼굴이 인상적이며, 사람에게 안기는 모습에서 순한 분위기가 느껴집니다. 추정컨대, 나이가 있는 것으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/03/202603181603642[2].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448538202600068&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.8967,
+            "is_hit": false,
+            "desertionNo": "444462202600182",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2013(년생)",
+            "weight": "15(Kg)",
+            "desc": "기존 설명: 순하고 잘따름\n사진 보강 설명: 하얀 털과 검은 털이 섞인 중년의 수컷 강아지입니다. 눈은 촉촉하고, 전반적으로 차분하고 온순한 분위기를 풍깁니다. 털이 다소 긴 편이며, 낡은 목줄을 하고 있습니다.",
+            "base_desc": "순하고 잘따름",
+            "vlm_desc": "하얀 털과 검은 털이 섞인 중년의 수컷 강아지입니다. 눈은 촉촉하고, 전반적으로 차분하고 온순한 분위기를 풍깁니다. 털이 다소 긴 편이며, 낡은 목줄을 하고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603171103303.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=444462202600182&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.8931,
+            "is_hit": false,
+            "desertionNo": "430366202600101",
+            "breed": "000114",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "16.6(Kg)",
+            "desc": "기존 설명: .\n사진 보강 설명: 검은 털과 갈색 털이 섞인 암컷 강아지로, 활짝 웃는 모습이 인상적입니다. 밝은 햇살 아래 걷는 모습에서 활발하고 긍정적인 분위기가 느껴집니다. 목줄을 착용하고 있으며, 체격은 튼튼해 보입니다.",
+            "base_desc": ".",
+            "vlm_desc": "검은 털과 갈색 털이 섞인 암컷 강아지로, 활짝 웃는 모습이 인상적입니다. 밝은 햇살 아래 걷는 모습에서 활발하고 긍정적인 분위기가 느껴집니다. 목줄을 착용하고 있으며, 체격은 튼튼해 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101403362.png",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=430366202600101&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.8931,
+            "is_hit": false,
+            "desertionNo": "443440202600024",
+            "breed": "000155",
+            "sex": "M",
+            "age": "2021(년생)",
+            "weight": "20(Kg)",
+            "desc": "기존 설명: 꼬리 없음\n사진 보강 설명: 하얀 털을 가진 수컷 강아지로, 꼬리가 없는 것이 특징입니다. 편안한 표정과 젖은 혀를 내밀고 있어 활발하고 친근한 느낌을 줍니다. 늠름한 인상과 함께 귀가 쫑긋 솟아 있습니다.",
+            "base_desc": "꼬리 없음",
+            "vlm_desc": "하얀 털을 가진 수컷 강아지로, 꼬리가 없는 것이 특징입니다. 편안한 표정과 젖은 혀를 내밀고 있어 활발하고 친근한 느낌을 줍니다. 늠름한 인상과 함께 귀가 쫑긋 솟아 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603091303521[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=443440202600024&menuNo=1000000055"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q15",
+      "query": "풍성한 털의 대형견",
+      "goal": "장모 또는 풍성한 털과 큰 체구가 함께 드러나는 후보 탐색",
+      "match_groups": [
+        [
+          "풍성",
+          "복슬",
+          "장모",
+          "털"
+        ],
+        [
+          "대형견",
+          "대형",
+          "큰"
+        ]
+      ],
+      "baseline": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9362,
+            "is_hit": false,
+            "desertionNo": "445468202600339",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2025(년생)",
+            "weight": "13(Kg)",
+            "desc": "빨간 목테를 하고있으며 겁은조금있지만 성격이 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603171103374[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445468202600339&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9338,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9334,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9295,
+            "is_hit": false,
+            "desertionNo": "443447202600103",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "15(Kg)",
+            "desc": "사상충 양성, 피부병 심함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603131703706.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=443447202600103&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9284,
+            "is_hit": false,
+            "desertionNo": "447507202600036",
+            "breed": "000054",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "25(Kg)",
+            "desc": "양호함.매우똑똑하고 영리함 점잖고 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603121703437[2].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447507202600036&menuNo=1000000055"
+          }
+        ]
+      },
+      "enriched": {
+        "summary": {
+          "top1_hit": true,
+          "hit_count": 1,
+          "hit_rate": 0.2
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.931,
+            "is_hit": true,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "기존 설명: 사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심\n사진 보강 설명: 검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "base_desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "vlm_desc": "검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9309,
+            "is_hit": false,
+            "desertionNo": "442434202600064",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "10(Kg)",
+            "desc": "기존 설명: 사납고 겁이 많음\n사진 보강 설명: 하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "base_desc": "사납고 겁이 많음",
+            "vlm_desc": "하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260317100382.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=442434202600064&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9292,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "기존 설명: 밥을 많이 굶어 잘 움직이지 못함\n사진 보강 설명: 하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "base_desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "vlm_desc": "하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9288,
+            "is_hit": false,
+            "desertionNo": "441378202600073",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "16.7(Kg)",
+            "desc": "기존 설명: 진드기 감염\n사진 보강 설명: 하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "base_desc": "진드기 감염",
+            "vlm_desc": "하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603111503153.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=441378202600073&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9267,
+            "is_hit": false,
+            "desertionNo": "431373202600242",
+            "breed": "000114",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "11(Kg)",
+            "desc": "기존 설명: 귀엽게생김\n사진 보강 설명: 검은 털이 빽빽하게 덮인 강아지로, 곰을 닮은 귀여운 외모를 가지고 있습니다. 눈은 촉촉하고, 턱 아래에는 흰 털이 섞여 있습니다. 늠름한 표정이 인상적입니다.",
+            "base_desc": "귀엽게생김",
+            "vlm_desc": "검은 털이 빽빽하게 덮인 강아지로, 곰을 닮은 귀여운 외모를 가지고 있습니다. 눈은 촉촉하고, 턱 아래에는 흰 털이 섞여 있습니다. 늠름한 표정이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603111203914.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=431373202600242&menuNo=1000000055"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q16",
+      "query": "얼굴이 밝은 갈색 강아지",
+      "goal": "밝은 얼굴 인상과 갈색 계열 털이 함께 드러나는 후보 탐색",
+      "match_groups": [
+        [
+          "얼굴",
+          "표정"
+        ],
+        [
+          "갈색",
+          "브라운",
+          "황갈"
+        ]
+      ],
+      "baseline": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9302,
+            "is_hit": false,
+            "desertionNo": "445468202600339",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2025(년생)",
+            "weight": "13(Kg)",
+            "desc": "빨간 목테를 하고있으며 겁은조금있지만 성격이 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603171103374[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445468202600339&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9286,
+            "is_hit": false,
+            "desertionNo": "446497202600079",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2023(년생)",
+            "weight": "18(Kg)",
+            "desc": "백수로8길 110에서 발견된 3마리 강아지 중 믹스 수컷 강아지",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260309100306.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446497202600079&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.927,
+            "is_hit": false,
+            "desertionNo": "446497202600074",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "14(Kg)",
+            "desc": "영광읍 물무로3길 40에서 발견된 수컷 강아지",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603090903995.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446497202600074&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9268,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9256,
+            "is_hit": false,
+            "desertionNo": "446497202600078",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "15(Kg)",
+            "desc": "백수로8길 110에서 발견된 3마리 강아지 중 믹스 수컷 강아지",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603091003202.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446497202600078&menuNo=1000000055"
+          }
+        ]
+      },
+      "enriched": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9239,
+            "is_hit": false,
+            "desertionNo": "442434202600064",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "10(Kg)",
+            "desc": "기존 설명: 사납고 겁이 많음\n사진 보강 설명: 하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "base_desc": "사납고 겁이 많음",
+            "vlm_desc": "하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260317100382.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=442434202600064&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.923,
+            "is_hit": false,
+            "desertionNo": "441378202600073",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "16.7(Kg)",
+            "desc": "기존 설명: 진드기 감염\n사진 보강 설명: 하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "base_desc": "진드기 감염",
+            "vlm_desc": "하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603111503153.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=441378202600073&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9222,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "기존 설명: 사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심\n사진 보강 설명: 검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "base_desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "vlm_desc": "검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9212,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "기존 설명: 밥을 많이 굶어 잘 움직이지 못함\n사진 보강 설명: 하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "base_desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "vlm_desc": "하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9209,
+            "is_hit": false,
+            "desertionNo": "431369202600081",
+            "breed": "000100",
+            "sex": "M",
+            "age": "2023(년생)",
+            "weight": "13(Kg)",
+            "desc": "기존 설명: 사나움, 잘생김\n사진 보강 설명: 황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "base_desc": "사나움, 잘생김",
+            "vlm_desc": "황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603161203404.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=431369202600081&menuNo=1000000055"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q17",
+      "query": "작고 귀여운 인상의 강아지",
+      "goal": "작은 체구와 둥근 인상 표현이 드러나는 후보 탐색",
+      "match_groups": [
+        [
+          "소형견",
+          "작은",
+          "소형"
+        ],
+        [
+          "둥근",
+          "귀여",
+          "아담"
+        ]
+      ],
+      "baseline": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9312,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.926,
+            "is_hit": false,
+            "desertionNo": "445468202600339",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2025(년생)",
+            "weight": "13(Kg)",
+            "desc": "빨간 목테를 하고있으며 겁은조금있지만 성격이 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603171103374[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445468202600339&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9221,
+            "is_hit": false,
+            "desertionNo": "445468202600334",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2013(년생)",
+            "weight": "16(Kg)",
+            "desc": "눈이 안보이며 배쪽에 혹이있고 많이 말라있음",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603160903389.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445468202600334&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9207,
+            "is_hit": false,
+            "desertionNo": "447507202600036",
+            "breed": "000054",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "25(Kg)",
+            "desc": "양호함.매우똑똑하고 영리함 점잖고 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603121703437[2].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447507202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9205,
+            "is_hit": false,
+            "desertionNo": "446495202600025",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2022(년생)",
+            "weight": "16(Kg)",
+            "desc": "크기와 다르게 온순하고 얌전합니다",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101403235.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446495202600025&menuNo=1000000055"
+          }
+        ]
+      },
+      "enriched": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9275,
+            "is_hit": false,
+            "desertionNo": "442434202600064",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "10(Kg)",
+            "desc": "기존 설명: 사납고 겁이 많음\n사진 보강 설명: 하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "base_desc": "사납고 겁이 많음",
+            "vlm_desc": "하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260317100382.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=442434202600064&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9263,
+            "is_hit": false,
+            "desertionNo": "441378202600073",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "16.7(Kg)",
+            "desc": "기존 설명: 진드기 감염\n사진 보강 설명: 하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "base_desc": "진드기 감염",
+            "vlm_desc": "하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603111503153.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=441378202600073&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9239,
+            "is_hit": false,
+            "desertionNo": "447509202600082",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2018(년생)",
+            "weight": "20(Kg)",
+            "desc": "기존 설명: 심하게 굶주린듯 순함\n사진 보강 설명: 하얀 털에 갈색빛이 도는 수컷 강아지로, 몸이  худо худо하고 털이 듬성듬성합니다. 눈은 순하고, 귀는 쫑긋 솟아 있습니다. 밥그릇이 놓인 공간을 주시하며, 굶주린 듯한 모습입니다.",
+            "base_desc": "심하게 굶주린듯 순함",
+            "vlm_desc": "하얀 털에 갈색빛이 도는 수컷 강아지로, 몸이  худо худо하고 털이 듬성듬성합니다. 눈은 순하고, 귀는 쫑긋 솟아 있습니다. 밥그릇이 놓인 공간을 주시하며, 굶주린 듯한 모습입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603161103200.jpeg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447509202600082&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.923,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "기존 설명: 사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심\n사진 보강 설명: 검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "base_desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "vlm_desc": "검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9224,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "기존 설명: 밥을 많이 굶어 잘 움직이지 못함\n사진 보강 설명: 하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "base_desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "vlm_desc": "하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q18",
+      "query": "긴 다리의 마른 강아지",
+      "goal": "마른 체형과 다리 비율이 드러나는 후보 탐색",
+      "match_groups": [
+        [
+          "다리",
+          "길게"
+        ],
+        [
+          "마른",
+          "슬림",
+          "가벼"
+        ]
+      ],
+      "baseline": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.8923,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.8913,
+            "is_hit": false,
+            "desertionNo": "446497202600079",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2023(년생)",
+            "weight": "18(Kg)",
+            "desc": "백수로8길 110에서 발견된 3마리 강아지 중 믹스 수컷 강아지",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260309100306.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446497202600079&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.8892,
+            "is_hit": false,
+            "desertionNo": "446497202600078",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "15(Kg)",
+            "desc": "백수로8길 110에서 발견된 3마리 강아지 중 믹스 수컷 강아지",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603091003202.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446497202600078&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.8885,
+            "is_hit": false,
+            "desertionNo": "446497202600074",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "14(Kg)",
+            "desc": "영광읍 물무로3길 40에서 발견된 수컷 강아지",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603090903995.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446497202600074&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.8853,
+            "is_hit": false,
+            "desertionNo": "445468202600339",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2025(년생)",
+            "weight": "13(Kg)",
+            "desc": "빨간 목테를 하고있으며 겁은조금있지만 성격이 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603171103374[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445468202600339&menuNo=1000000055"
+          }
+        ]
+      },
+      "enriched": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.8814,
+            "is_hit": false,
+            "desertionNo": "445471202600062",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2021(년생)",
+            "weight": "20(Kg)",
+            "desc": "기존 설명: 다리가 찢어짐\n사진 보강 설명: 하얀 털을 가진 수컷 강아지로, 다리에 상처가 있고 멍이 들어 있습니다. 눈은 초롱초롱하며, 주변을 경계하는 듯한 표정을 짓고 있습니다. 튼튼한 체격을 가진 것으로 보이며, 추정컨대 대형견 품종일 수 있습니다.",
+            "base_desc": "다리가 찢어짐",
+            "vlm_desc": "하얀 털을 가진 수컷 강아지로, 다리에 상처가 있고 멍이 들어 있습니다. 눈은 초롱초롱하며, 주변을 경계하는 듯한 표정을 짓고 있습니다. 튼튼한 체격을 가진 것으로 보이며, 추정컨대 대형견 품종일 수 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101603494.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445471202600062&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.8803,
+            "is_hit": false,
+            "desertionNo": "431369202600081",
+            "breed": "000100",
+            "sex": "M",
+            "age": "2023(년생)",
+            "weight": "13(Kg)",
+            "desc": "기존 설명: 사나움, 잘생김\n사진 보강 설명: 황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "base_desc": "사나움, 잘생김",
+            "vlm_desc": "황갈색 털을 가진 수컷 강아지로, 늠름한 인상과 똘망똘망한 눈빛이 돋보입니다. 강아지는 푸른색 매트가 깔린 이동장에 앉아 카메라를 응시하고 있습니다. 추정컨대, 늠름하고 잘생긴 외모와 어울리는 차분한 분위기를 가지고 있는 것으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603161203404.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=431369202600081&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.8756,
+            "is_hit": false,
+            "desertionNo": "441378202600073",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "16.7(Kg)",
+            "desc": "기존 설명: 진드기 감염\n사진 보강 설명: 하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "base_desc": "진드기 감염",
+            "vlm_desc": "하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603111503153.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=441378202600073&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.8743,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "기존 설명: 사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심\n사진 보강 설명: 검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "base_desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "vlm_desc": "검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.874,
+            "is_hit": false,
+            "desertionNo": "442434202600064",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "10(Kg)",
+            "desc": "기존 설명: 사납고 겁이 많음\n사진 보강 설명: 하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "base_desc": "사납고 겁이 많음",
+            "vlm_desc": "하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260317100382.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=442434202600064&menuNo=1000000055"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q19",
+      "query": "얼굴 주변 털이 풍성한 강아지",
+      "goal": "얼굴 부근 털 질감이 드러나는 후보 탐색",
+      "match_groups": [
+        [
+          "얼굴",
+          "목",
+          "주변"
+        ],
+        [
+          "풍성",
+          "복슬",
+          "털"
+        ]
+      ],
+      "baseline": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9249,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9216,
+            "is_hit": false,
+            "desertionNo": "445468202600339",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2025(년생)",
+            "weight": "13(Kg)",
+            "desc": "빨간 목테를 하고있으며 겁은조금있지만 성격이 순함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603171103374[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445468202600339&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9184,
+            "is_hit": false,
+            "desertionNo": "448538202600053",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2022(년생)",
+            "weight": "13(Kg)",
+            "desc": "갈색흰색,순함,심장사상충양성",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603091603114.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448538202600053&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9183,
+            "is_hit": false,
+            "desertionNo": "448538202600065",
+            "breed": "000114",
+            "sex": "F",
+            "age": "2021(년생)",
+            "weight": "14(Kg)",
+            "desc": "갈색흰색,순함,심장사상충양성",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603131703130[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448538202600065&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9176,
+            "is_hit": false,
+            "desertionNo": "447507202600038",
+            "breed": "000115",
+            "sex": "F",
+            "age": "2024(년생)",
+            "weight": "18(Kg)",
+            "desc": "양호함.매우 영리하고 적응뛰어남 순하고 사회성좋음",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260312170369[2].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447507202600038&menuNo=1000000055"
+          }
+        ]
+      },
+      "enriched": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 0,
+          "hit_rate": 0.0
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9306,
+            "is_hit": false,
+            "desertionNo": "442434202600064",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "10(Kg)",
+            "desc": "기존 설명: 사납고 겁이 많음\n사진 보강 설명: 하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "base_desc": "사납고 겁이 많음",
+            "vlm_desc": "하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260317100382.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=442434202600064&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9298,
+            "is_hit": false,
+            "desertionNo": "441378202600073",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "16.7(Kg)",
+            "desc": "기존 설명: 진드기 감염\n사진 보강 설명: 하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "base_desc": "진드기 감염",
+            "vlm_desc": "하얀 털을 가진 강아지가 펜스 안에서 카메라를 응시하고 있습니다. 눈은 갈색이며, 코는 분홍색입니다. 진드기 감염으로 보이며, 추정 연령은 2023년생입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603111503153.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=441378202600073&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9225,
+            "is_hit": false,
+            "desertionNo": "447502202600148",
+            "breed": "000142",
+            "sex": "M",
+            "age": "2024(년생)",
+            "weight": "30(Kg)",
+            "desc": "기존 설명: 사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심\n사진 보강 설명: 검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "base_desc": "사람 좋아하고 활발함,지금은 얌전하지만 장난꾸러기 일듯함,굉장히 거대하심",
+            "vlm_desc": "검은 털을 가진 크고 늠름한 수컷 강아지입니다. 사람을 만날 때 밝은 표정을 짓고 있으며, 보호자의 손길을 편안하게 받아들이는 모습입니다. 튼튼한 체격과 늠름한 눈빛이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603101503856[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447502202600148&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9221,
+            "is_hit": false,
+            "desertionNo": "431373202600242",
+            "breed": "000114",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "11(Kg)",
+            "desc": "기존 설명: 귀엽게생김\n사진 보강 설명: 검은 털이 빽빽하게 덮인 강아지로, 곰을 닮은 귀여운 외모를 가지고 있습니다. 눈은 촉촉하고, 턱 아래에는 흰 털이 섞여 있습니다. 늠름한 표정이 인상적입니다.",
+            "base_desc": "귀엽게생김",
+            "vlm_desc": "검은 털이 빽빽하게 덮인 강아지로, 곰을 닮은 귀여운 외모를 가지고 있습니다. 눈은 촉촉하고, 턱 아래에는 흰 털이 섞여 있습니다. 늠름한 표정이 인상적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603111203914.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=431373202600242&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9216,
+            "is_hit": false,
+            "desertionNo": "448543202600036",
+            "breed": "000067",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "기존 설명: 밥을 많이 굶어 잘 움직이지 못함\n사진 보강 설명: 하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "base_desc": "밥을 많이 굶어 잘 움직이지 못함",
+            "vlm_desc": "하얀 털을 가진 수컷 강아지로, 몸이  худоща위해 뼈가  드러나 보입니다. 눈은 초롱초롱하고, 바닥을 향해 몸을 쭉 뻗고 있습니다. 2020년생으로 추정되며, 11kg 정도의 체중을 가지고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603062003775.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448543202600036&menuNo=1000000055"
+          }
+        ]
+      }
+    },
+    {
+      "id": "q20",
+      "query": "중간 크기의 베이지색 강아지",
+      "goal": "베이지 계열 털색과 중간 체구가 함께 드러나는 후보 탐색",
+      "match_groups": [
+        [
+          "베이지",
+          "노란",
+          "황갈",
+          "갈색"
+        ],
+        [
+          "중형견",
+          "중형",
+          "중간"
+        ]
+      ],
+      "baseline": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 2,
+          "hit_rate": 0.4
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9169,
+            "is_hit": false,
+            "desertionNo": "447513202600052",
+            "breed": "000114",
+            "sex": "F",
+            "age": "2025(년생)",
+            "weight": "13(Kg)",
+            "desc": "생후 8개월령 추정, 인근 동네에서 배회하여 구조",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603031503814.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447513202600052&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.9144,
+            "is_hit": false,
+            "desertionNo": "443447202600103",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "15(Kg)",
+            "desc": "사상충 양성, 피부병 심함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603131703706.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=443447202600103&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9144,
+            "is_hit": false,
+            "desertionNo": "447505202600186",
+            "breed": "000114",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "13.0(Kg)",
+            "desc": "사람을 무서워하고 만지기 어려움. 개는 좋아함",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603121103490[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447505202600186&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9141,
+            "is_hit": true,
+            "desertionNo": "448538202600053",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2022(년생)",
+            "weight": "13(Kg)",
+            "desc": "갈색흰색,순함,심장사상충양성",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603091603114.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448538202600053&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9135,
+            "is_hit": true,
+            "desertionNo": "448538202600065",
+            "breed": "000114",
+            "sex": "F",
+            "age": "2021(년생)",
+            "weight": "14(Kg)",
+            "desc": "갈색흰색,순함,심장사상충양성",
+            "base_desc": "",
+            "vlm_desc": "",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603131703130[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=448538202600065&menuNo=1000000055"
+          }
+        ]
+      },
+      "enriched": {
+        "summary": {
+          "top1_hit": false,
+          "hit_count": 2,
+          "hit_rate": 0.4
+        },
+        "results": [
+          {
+            "rank": 1,
+            "score": 0.9111,
+            "is_hit": false,
+            "desertionNo": "446484202600275",
+            "breed": "000114",
+            "sex": "F",
+            "age": "2020(년생)",
+            "weight": "11(Kg)",
+            "desc": "기존 설명: 믹스 흰색 암컷 6살 추정\n사진 보강 설명: 하얀 털을 가진 6살 추정 암컷입니다. 쫑긋한 귀와 검은 눈이 인상적이며, 붉은색 목걸이를 하고 있습니다. 다소 마른 체형을 보이고 있습니다.",
+            "base_desc": "믹스 흰색 암컷 6살 추정",
+            "vlm_desc": "하얀 털을 가진 6살 추정 암컷입니다. 쫑긋한 귀와 검은 눈이 인상적이며, 붉은색 목걸이를 하고 있습니다. 다소 마른 체형을 보이고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603091703458[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446484202600275&menuNo=1000000055"
+          },
+          {
+            "rank": 2,
+            "score": 0.911,
+            "is_hit": false,
+            "desertionNo": "442434202600064",
+            "breed": "000067",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "10(Kg)",
+            "desc": "기존 설명: 사납고 겁이 많음\n사진 보강 설명: 하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "base_desc": "사납고 겁이 많음",
+            "vlm_desc": "하얀 털을 가진 암컷 강아지로, 쇠창살 우리 안에 웅크리고 있습니다. 눈은 검은색이며, 겉으로 보기에는 얌전해 보입니다. 추정컨대 작은 체구에 털이 짧은 견종으로 보입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/20260317100382.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=442434202600064&menuNo=1000000055"
+          },
+          {
+            "rank": 3,
+            "score": 0.9096,
+            "is_hit": false,
+            "desertionNo": "446484202600293",
+            "breed": "000114",
+            "sex": "F",
+            "age": "2023(년생)",
+            "weight": "10(Kg)",
+            "desc": "기존 설명: 믹스 흰색 암컷 3살추정\n사진 보강 설명: 하얀 털을 가진 3살 추정 암컷입니다. 쫑긋한 귀와 똘망똘망한 눈이 인상적이며, 몸은 날씬해 보입니다. 붉은색 코와 검은색 눈이 대비되어 더욱 매력적입니다.",
+            "base_desc": "믹스 흰색 암컷 3살추정",
+            "vlm_desc": "하얀 털을 가진 3살 추정 암컷입니다. 쫑긋한 귀와 똘망똘망한 눈이 인상적이며, 몸은 날씬해 보입니다. 붉은색 코와 검은색 눈이 대비되어 더욱 매력적입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603091903177[1].jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=446484202600293&menuNo=1000000055"
+          },
+          {
+            "rank": 4,
+            "score": 0.9091,
+            "is_hit": true,
+            "desertionNo": "445467202600248",
+            "breed": "000114",
+            "sex": "M",
+            "age": "2020(년생)",
+            "weight": "15(Kg)",
+            "desc": "기존 설명: 6살추정 사나움 입질있음\n사진 보강 설명: 갈색과 흰색 털을 가진 중형견으로, 덥수룩한 털이 특징입니다. 눈은 초롱초롱하고, 턱 부분에 털이 풍성하게 자라 있습니다. 6살 추정으로, 다소 굳은 표정을 짓고 있습니다.",
+            "base_desc": "6살추정 사나움 입질있음",
+            "vlm_desc": "갈색과 흰색 털을 가진 중형견으로, 덥수룩한 털이 특징입니다. 눈은 초롱초롱하고, 턱 부분에 털이 풍성하게 자라 있습니다. 6살 추정으로, 다소 굳은 표정을 짓고 있습니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603131703348.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=445467202600248&menuNo=1000000055"
+          },
+          {
+            "rank": 5,
+            "score": 0.9089,
+            "is_hit": true,
+            "desertionNo": "447513202600052",
+            "breed": "000114",
+            "sex": "F",
+            "age": "2025(년생)",
+            "weight": "13(Kg)",
+            "desc": "기존 설명: 생후 8개월령 추정, 인근 동네에서 배회하여 구조\n사진 보강 설명: 생후 8개월 추정 암컷 강아지는 황갈색 털을 가지고 있으며, 튼튼한 체격을 자랑합니다. 눈은 짙은 갈색이며, 귀가 쫑긋 솟아 있습니다. 전체적으로 차분하고 순한 분위기를 풍기는 모습입니다.",
+            "base_desc": "생후 8개월령 추정, 인근 동네에서 배회하여 구조",
+            "vlm_desc": "생후 8개월 추정 암컷 강아지는 황갈색 털을 가지고 있으며, 튼튼한 체격을 자랑합니다. 눈은 짙은 갈색이며, 귀가 쫑긋 솟아 있습니다. 전체적으로 차분하고 순한 분위기를 풍기는 모습입니다.",
+            "image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/02/202603031503814.jpg",
+            "detail_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447513202600052&menuNo=1000000055"
+          }
+        ]
+      }
+    }
+  ]
+}
