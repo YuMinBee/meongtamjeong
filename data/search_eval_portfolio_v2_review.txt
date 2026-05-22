@@ -1,0 +1,122 @@
+# Manual Review Template
+# Fill only these fields: baseline_score, enriched_score, winner
+# winner must be one of: baseline / enriched / tie
+# score range: 1 to 5
+
+[query] q1 | 검은 털 강아지
+baseline_auto_hit_at_5=0
+enriched_auto_hit_at_5=2
+baseline_auto_top1=False
+enriched_auto_top1=False
+baseline_score= 1 
+enriched_score= 4
+winner=enriched
+
+[query] q2 | 하얀 털 강아지
+baseline_auto_hit_at_5=0
+enriched_auto_hit_at_5=2
+baseline_auto_top1=False
+enriched_auto_top1=True
+baseline_score= 1
+enriched_score= 4 
+winner= enriched
+
+[query] q3 | 갈색 털 강아지
+baseline_auto_hit_at_5=0
+enriched_auto_hit_at_5=2
+baseline_auto_top1=False
+enriched_auto_top1=True
+baseline_score=1
+enriched_score=3
+winner=enriched
+
+[query] q4 | 황갈색 털 강아지
+baseline_auto_hit_at_5=1
+enriched_auto_hit_at_5=2
+baseline_auto_top1=False
+enriched_auto_top1=True
+baseline_score=1
+enriched_score=1
+winner= tie
+
+[query] q5 | 검은 털에 흰색 무늬가 있는 강아지
+baseline_auto_hit_at_5=0
+enriched_auto_hit_at_5=1
+baseline_auto_top1=False
+enriched_auto_top1=False
+baseline_score=1
+enriched_score=1
+winner=tie
+
+[query] q6 | 검은색과 갈색 털이 섞인 강아지
+baseline_auto_hit_at_5=0
+enriched_auto_hit_at_5=0
+baseline_auto_top1=False
+enriched_auto_top1=False
+baseline_score=1
+enriched_score=1
+winner=tie
+
+[query] q7 | 쫑긋한 귀의 강아지
+baseline_auto_hit_at_5=0
+enriched_auto_hit_at_5=0
+baseline_auto_top1=False
+enriched_auto_top1=False
+baseline_score=1
+enriched_score=3
+winner=enriched
+
+[query] q8 | 복슬복슬한 털의 강아지
+baseline_auto_hit_at_5=0
+enriched_auto_hit_at_5=0
+baseline_auto_top1=False
+enriched_auto_top1=False
+baseline_score=1
+enriched_score=1
+winner=tie
+
+[query] q9 | 짧은 털의 강아지
+baseline_auto_hit_at_5=0
+enriched_auto_hit_at_5=1
+baseline_auto_top1=False
+enriched_auto_top1=False
+baseline_score=1
+enriched_score=1
+winner=tie
+
+[query] q10 | 얼굴에 무늬가 있는 강아지
+baseline_auto_hit_at_5=0
+enriched_auto_hit_at_5=0
+baseline_auto_top1=False
+enriched_auto_top1=False
+baseline_score=1
+enriched_score=1
+winner=tie
+
+[query] q11 | 하얀 털과 쫑긋한 귀를 가진 강아지
+baseline_auto_hit_at_5=0
+enriched_auto_hit_at_5=1
+baseline_auto_top1=False
+enriched_auto_top1=False
+baseline_score=1
+enriched_score=4
+winner=enriched
+
+[query] q12 | 갈색 털과 쫑긋한 귀를 가진 강아지
+baseline_auto_hit_at_5=0
+enriched_auto_hit_at_5=0
+baseline_auto_top1=False
+enriched_auto_top1=False
+baseline_score=1
+enriched_score=1
+winner=tie
+
+[query] q13 | 눈매가 또렷한 강아지
+baseline_auto_hit_at_5=0
+enriched_auto_hit_at_5=1
+baseline_auto_top1=False
+enriched_auto_top1=False
+baseline_score=1
+enriched_score=4
+winner=enriched
+
