@@ -2,6 +2,7 @@ import io
 import html
 import json
 import os
+import re
 from datetime import datetime, timedelta
 from pathlib import Path
 from threading import Lock
@@ -52,6 +53,7 @@ LIVE_FETCH_DAYS = int(os.getenv("LIVE_FETCH_DAYS", str(LIVE_FETCH_YEARS * 365)))
 LIVE_FETCH_ROWS = int(os.getenv("LIVE_FETCH_ROWS", "1000"))
 LIVE_FETCH_MAX_PAGES = int(os.getenv("LIVE_FETCH_MAX_PAGES", "500"))
 LIVE_CACHE_LOCK = Lock()
+ENRICHED_DOG_CACHE_PATH = DATA_DIR / "local_dog_cache_enriched.json"
 GEMMA3_MODEL_PATH = os.getenv("GEMMA3_MODEL_PATH", "")
 GEMMA3_MODEL_ID = os.getenv("GEMMA3_MODEL_ID", "google/gemma-3-12b-it")
 GEMMA3_GPU_MAX_MEMORY = os.getenv("GEMMA3_GPU_MAX_MEMORY", "20GiB")
@@ -256,9 +258,286 @@ def resolve_detail_url(meta: Dict[str, Any]) -> str:
 def resolve_desc(meta: Dict[str, Any]) -> str:
     return (
         clean_text(meta.get("desc"))
+        or clean_text(meta.get("merged_desc"))
+        or clean_text(meta.get("vlm_desc"))
         or clean_text(meta.get("desc_full"))
         or clean_text(meta.get("specialMark"))
     )
+
+
+def text_has_any(text: str, keywords: List[str]) -> bool:
+    lowered = clean_text(text).lower()
+    return any(keyword.lower() in lowered for keyword in keywords)
+
+
+def parse_weight_kg(value: Any) -> Optional[float]:
+    text = clean_text(value).replace(",", ".")
+    match = re.search(r"(\d+(?:\.\d+)?)", text)
+    if not match:
+        return None
+    try:
+        return float(match.group(1))
+    except ValueError:
+        return None
+
+
+def size_label_from_weight(weight: Any) -> str:
+    kg = parse_weight_kg(weight)
+    if kg is None:
+        return ""
+    if kg < 10:
+        return "소형견"
+    if kg < 25:
+        return "중형견"
+    return "대형견"
+
+
+def infer_living_from_text(text: str) -> str:
+    if text_has_any(text, ["아파트", "원룸", "오피스텔", "빌라"]):
+        return "실내 주거"
+    if text_has_any(text, ["마당", "단독", "주택", "전원"]):
+        return "마당이 있는 주거"
+    return "주거 형태 정보 없음"
+
+
+def infer_family_from_text(text: str) -> str:
+    if text_has_any(text, ["1인", "혼자", "자취", "독거"]):
+        return "1인 가구"
+    if text_has_any(text, ["아이", "어린이", "초등", "자녀"]):
+        return "아이와 함께 사는 가족"
+    if text_has_any(text, ["부모", "가족", "부부", "동거"]):
+        return "가족 가구"
+    if text_has_any(text, ["고양이", "반려묘"]):
+        return "고양이와 함께 사는 가구"
+    if text_has_any(text, ["강아지", "반려견", "개 "]):
+        return "기존 반려견이 있는 가구"
+    return "가족 구성 정보 없음"
+
+
+def infer_walk_time_from_text(text: str) -> str:
+    match = re.search(r"(하루|매일|평일|주말)?\s*(\d+)\s*(분|시간)", text)
+    if match:
+        amount = match.group(2)
+        unit = match.group(3)
+        return f"하루 {amount}{unit}"
+    if text_has_any(text, ["산책 못", "산책 어렵", "시간이 적", "바쁨", "야근"]):
+        return "짧은 산책 위주"
+    if text_has_any(text, ["산책 많이", "운동", "등산", "러닝", "활동"]):
+        return "충분한 산책 가능"
+    return "산책 가능 시간 정보 없음"
+
+
+def infer_size_from_text(text: str) -> str:
+    if text_has_any(text, ["소형", "작은", "작고", "크지 않은", "작았으면"]):
+        return "소형견"
+    if text_has_any(text, ["중형"]):
+        return "중형견"
+    if text_has_any(text, ["대형", "큰 강아지", "큰 개", "커도"]):
+        return "대형견"
+    return "크기 선호 정보 없음"
+
+
+def infer_personality_from_text(text: str) -> str:
+    traits = []
+    if text_has_any(text, ["차분", "얌전", "조용", "순한", "순함"]):
+        traits.append("차분한")
+    if text_has_any(text, ["사람 좋아", "사교", "친화", "애교", "잘 따르는"]):
+        traits.append("사람을 좋아하는")
+    if text_has_any(text, ["활발", "장난", "에너지", "운동"]):
+        traits.append("활발한")
+    if text_has_any(text, ["독립", "혼자", "분리불안 적"]):
+        traits.append("혼자 있는 시간을 견딜 수 있는")
+    if text_has_any(text, ["초보", "처음", "첫 반려견"]):
+        traits.append("초보 보호자에게 맞는")
+    return ", ".join(traits) if traits else "성격 선호 정보 없음"
+
+
+def infer_survey_from_text(text: str) -> Dict[str, str]:
+    return {
+        "living": infer_living_from_text(text),
+        "family": infer_family_from_text(text),
+        "walk_time": infer_walk_time_from_text(text),
+        "dog_size": infer_size_from_text(text),
+        "preferred_personality": infer_personality_from_text(text),
+    }
+
+
+def build_missing_survey_questions(survey: Dict[str, str]) -> List[str]:
+    questions = []
+    if "정보 없음" in survey["living"]:
+        questions.append("어떤 주거 형태에서 함께 지내나요?")
+    if "정보 없음" in survey["family"]:
+        questions.append("함께 사는 가족이나 기존 반려동물이 있나요?")
+    if "정보 없음" in survey["walk_time"]:
+        questions.append("하루에 산책은 어느 정도 가능하나요?")
+    if "정보 없음" in survey["dog_size"]:
+        questions.append("선호하는 크기가 있나요? 소형, 중형, 대형 중 어디에 가까운가요?")
+    if "정보 없음" in survey["preferred_personality"]:
+        questions.append("차분한 성격, 활발한 성격 등 선호하는 성향이 있나요?")
+    return questions
+
+
+def build_profile_text_from_survey_dict(survey: Dict[str, str], original_text: str = "") -> str:
+    survey_obj = SurveyInput(**survey)
+    profile = survey_to_text(survey_obj)
+    original_text = clean_text(original_text)
+    if original_text:
+        profile = f"{profile}. 사용자 원문: {original_text}"
+    return profile
+
+
+def build_recommendation_reasons(profile_text: str, candidate: Dict[str, Any]) -> List[str]:
+    reasons = []
+    desc = clean_text(candidate.get("desc"))
+    breed = clean_text(candidate.get("breed"))
+    weight = clean_text(candidate.get("weight"))
+    age = clean_text(candidate.get("age"))
+    sex = clean_text(candidate.get("sex"))
+    size_label = size_label_from_weight(weight)
+    preferred_size = infer_size_from_text(profile_text)
+
+    if size_label and preferred_size == size_label:
+        reasons.append(f"체중 정보상 {size_label}에 가까워 크기 선호와 맞습니다.")
+    elif size_label:
+        reasons.append(f"체중 기준 {size_label} 후보입니다.")
+
+    if text_has_any(profile_text, ["차분", "얌전", "조용", "순한", "순함"]):
+        if text_has_any(desc, ["순", "얌전", "조용", "차분", "온순"]):
+            reasons.append("공고 설명에 차분하거나 순한 특징이 있어 성격 선호와 맞습니다.")
+    if text_has_any(profile_text, ["활발", "산책", "운동", "등산", "러닝"]):
+        if text_has_any(desc + " " + breed, ["활발", "에너지", "장난", "리트리버", "진도", "믹스"]):
+            reasons.append("활동성 있는 생활을 원하는 조건과 비교해 볼 만한 후보입니다.")
+    if text_has_any(profile_text, ["초보", "처음", "첫 반려견"]):
+        if text_has_any(desc, ["순", "사람", "온순", "얌전"]):
+            reasons.append("초보 보호자가 확인하기 좋은 온순함 관련 단서가 있습니다.")
+    if text_has_any(profile_text, ["아파트", "원룸", "실내", "1인"]):
+        if size_label == "소형견" or text_has_any(desc, ["얌전", "조용", "순"]):
+            reasons.append("실내 생활 조건에서 우선 검토하기 좋은 단서가 있습니다.")
+
+    basic = []
+    if breed:
+        basic.append(breed)
+    if age and age != "Unknown":
+        basic.append(age)
+    if sex and sex != "Unknown":
+        basic.append(sex)
+    if basic:
+        reasons.append(" / ".join(basic) + " 정보를 기준으로 후보를 비교할 수 있습니다.")
+
+    if not reasons:
+        reasons.append("유사도 검색 상위 후보로, 사진과 공고 정보를 직접 비교해 볼 가치가 있습니다.")
+    return reasons[:4]
+
+
+def annotate_results_with_reasons(
+    results: List[Dict[str, Any]],
+    profile_text: str,
+) -> List[Dict[str, Any]]:
+    annotated = []
+    for result in results:
+        item = dict(result)
+        item["recommendation_reasons"] = build_recommendation_reasons(profile_text, item)
+        annotated.append(item)
+    return annotated
+
+
+def load_enriched_notice_items() -> List[Dict[str, Any]]:
+    if not ENRICHED_DOG_CACHE_PATH.exists():
+        return []
+    with ENRICHED_DOG_CACHE_PATH.open("r", encoding="utf-8") as f:
+        payload = json.load(f)
+    if isinstance(payload, list):
+        return payload
+    items = payload.get("items")
+    return items if isinstance(items, list) else []
+
+
+def find_notice_item(desertion_no: str) -> Optional[Dict[str, Any]]:
+    target = clean_text(desertion_no)
+    if not target:
+        return None
+    for item in load_enriched_notice_items():
+        if clean_text(item.get("desertionNo")) == target:
+            return item
+    for item in METAS:
+        if clean_text(item.get("desertionNo")) == target:
+            return item
+    return None
+
+
+def build_notice_description_draft(item: Dict[str, Any]) -> Dict[str, Any]:
+    breed = resolve_breed_label(item)
+    sex = clean_text(item.get("sex") or item.get("sexCd")) or "성별 미상"
+    age = clean_text(item.get("age")) or "나이 미상"
+    weight = clean_text(item.get("weight")) or "체중 미상"
+    neuter = clean_text(item.get("neuter") or item.get("neuterYn")) or "중성화 미상"
+    base_desc = clean_text(item.get("desc") or item.get("specialMark"))
+    vlm_desc = clean_text(item.get("vlm_desc"))
+    merged_desc = clean_text(item.get("merged_desc")) or " ".join(
+        part for part in (base_desc, vlm_desc) if part
+    )
+
+    summary = merged_desc or "사진과 보호소 상담을 통해 외형과 성향을 추가 확인해 주세요."
+    public_notice = (
+        f"{breed} 후보입니다. 기본 정보는 {sex}, {age}, {weight}, 중성화 {neuter}입니다. "
+        f"{summary}"
+    )
+
+    tags = []
+    size_label = size_label_from_weight(weight)
+    if size_label:
+        tags.append(size_label)
+    for label, words in {
+        "차분함": ["차분", "얌전", "조용", "순", "온순"],
+        "활동적": ["활발", "장난", "에너지"],
+        "사람친화": ["사람", "애교", "친화", "잘 따름"],
+        "사진설명보강": ["vlm"],
+    }.items():
+        haystack = f"{summary} {vlm_desc}".lower()
+        if label == "사진설명보강":
+            if vlm_desc:
+                tags.append(label)
+        elif any(word in haystack for word in words):
+            tags.append(label)
+
+    return {
+        "public_notice_draft": public_notice,
+        "base_desc": base_desc,
+        "vlm_desc": vlm_desc,
+        "merged_desc": merged_desc,
+        "summary_tags": tags,
+        "source": {
+            "desertionNo": clean_text(item.get("desertionNo")),
+            "breed": breed,
+            "sex": sex,
+            "age": age,
+            "weight": weight,
+            "neuter": neuter,
+            "image_url": clean_text(item.get("image_url") or item.get("url")),
+            "detail_url": resolve_detail_url(item),
+        },
+    }
+
+
+def gemma_rewrite_notice_description(draft: Dict[str, Any]) -> str:
+    prompt = f"""
+너는 보호소 공고 작성 보조자야.
+아래 정보를 바탕으로 입양 공고에 바로 넣을 수 있는 한국어 설명을 3~5문장으로 작성해.
+
+- 사진이나 공고에서 확인되지 않은 성격, 건강 상태, 훈련 여부는 단정하지 마.
+- 보호소 방문과 상담을 통해 확인해야 한다는 문장을 마지막에 자연스럽게 넣어.
+- 과장된 홍보 문구보다 차분하고 정확한 설명을 우선해.
+
+[기본 초안]
+{draft["public_notice_draft"]}
+
+[원문 설명]
+{draft["base_desc"]}
+
+[VLM 보강 설명]
+{draft["vlm_desc"]}
+"""
+    return gemma_generate_text(prompt=prompt, max_new_tokens=220)
 
 
 def normalize_breed_fields(rec: Dict[str, Any]) -> Dict[str, str]:
@@ -1047,7 +1326,7 @@ def search_text(body: TextQuery):
 def recommend(body: TextQuery):
     search_query = expand_query_text(body.query)
     vec = embed_text(search_query)
-    results = search(vec, body.topk or 5)
+    results = annotate_results_with_reasons(search(vec, body.topk or 5), body.query)
     msg = gemma_recommend(profile_text=body.query, candidates=results)
     return JSONResponse({"recommendation": msg, "results": results})
 
@@ -1061,7 +1340,7 @@ async def recommend_with_image(
     data = await ref_image.read()
     pil = Image.open(io.BytesIO(data)).convert("RGB")
     vec = embed_image(pil)
-    results = search(vec, topk)
+    results = annotate_results_with_reasons(search(vec, topk), profile)
     msg = gemma_recommend(profile_text=profile, candidates=results)
 
     return JSONResponse(
@@ -1080,6 +1359,30 @@ class SurveyInput(BaseModel):
     walk_time: str
     dog_size: str
     preferred_personality: str
+
+
+class AdoptionCounselRequest(BaseModel):
+    message: str
+    extra_text: Optional[str] = None
+    topk: Optional[int] = 5
+    generate_recommendation: Optional[bool] = True
+
+
+class NoticeDescriptionRequest(BaseModel):
+    desertionNo: Optional[str] = None
+    breed: Optional[str] = None
+    breed_code: Optional[str] = None
+    breed_name: Optional[str] = None
+    sex: Optional[str] = None
+    age: Optional[str] = None
+    weight: Optional[str] = None
+    neuter: Optional[str] = None
+    desc: Optional[str] = None
+    vlm_desc: Optional[str] = None
+    merged_desc: Optional[str] = None
+    image_url: Optional[str] = None
+    detail_url: Optional[str] = None
+    generate_with_gemma: Optional[bool] = False
 
 
 def survey_to_text(data: SurveyInput) -> str:
@@ -1130,8 +1433,9 @@ async def _handle_recommend(
         img_vec = embed_image(pil)
 
     final_vec = combine_embeddings(survey_vec, text_vec, img_vec)
-    results = search(final_vec, topk)
-    msg = gemma_recommend(profile_text=survey_text, candidates=results)
+    profile_text = f"{survey_text}. {extra_text}" if extra_text else survey_text
+    results = annotate_results_with_reasons(search(final_vec, topk), profile_text)
+    msg = gemma_recommend(profile_text=profile_text, candidates=results)
 
     return JSONResponse(
         {
@@ -1175,6 +1479,93 @@ async def recommend_with_survey_json(
 
         traceback.print_exc()
         return JSONResponse({"error": str(e)}, status_code=500)
+
+
+@app.post("/skills/adoption-counsel")
+def adoption_counsel_skill(body: AdoptionCounselRequest):
+    topk = min(max(int(body.topk or 5), 1), 20)
+    original_text = " ".join(part for part in (body.message, body.extra_text or "") if part)
+    survey = infer_survey_from_text(original_text)
+    missing_questions = build_missing_survey_questions(survey)
+    profile_text = build_profile_text_from_survey_dict(survey, original_text)
+    search_query = expand_query_text(profile_text)
+    vec = embed_text(search_query)
+    results = annotate_results_with_reasons(search(vec, topk), profile_text)
+
+    recommendation = ""
+    recommendation_error = ""
+    if body.generate_recommendation:
+        try:
+            recommendation = gemma_recommend(profile_text=profile_text, candidates=results)
+        except Exception as exc:
+            recommendation_error = str(exc)
+
+    return JSONResponse(
+        {
+            "skill": "adoption_counsel",
+            "survey": survey,
+            "missing_questions": missing_questions,
+            "profile_text": profile_text,
+            "search_query": search_query,
+            "recommendation": recommendation,
+            "recommendation_error": recommendation_error,
+            "count": len(results),
+            "results": results,
+        }
+    )
+
+
+@app.post("/skills/recommendation-reasons")
+def recommendation_reasons_skill(body: TextQuery):
+    topk = min(max(int(body.topk or 5), 1), 20)
+    search_query = expand_query_text(body.query)
+    vec = embed_text(search_query)
+    results = annotate_results_with_reasons(search(vec, topk), body.query)
+    return JSONResponse(
+        {
+            "skill": "recommendation_reasons",
+            "profile_text": body.query,
+            "search_query": search_query,
+            "count": len(results),
+            "results": results,
+        }
+    )
+
+
+@app.post("/skills/notice-description")
+def notice_description_skill(body: NoticeDescriptionRequest):
+    payload = body.model_dump(exclude_none=True)
+    generate_with_gemma = bool(payload.pop("generate_with_gemma", False))
+    desertion_no = clean_text(payload.get("desertionNo"))
+
+    source = find_notice_item(desertion_no) if desertion_no else None
+    if source:
+        source = {**source, **payload}
+    elif payload:
+        source = payload
+    else:
+        raise HTTPException(
+            status_code=400,
+            detail="desertionNo 또는 공고 설명에 필요한 필드를 입력하세요.",
+        )
+
+    draft = build_notice_description_draft(source)
+    gemma_draft = ""
+    gemma_error = ""
+    if generate_with_gemma:
+        try:
+            gemma_draft = gemma_rewrite_notice_description(draft)
+        except Exception as exc:
+            gemma_error = str(exc)
+
+    return JSONResponse(
+        {
+            "skill": "notice_description",
+            "draft": draft,
+            "gemma_draft": gemma_draft,
+            "gemma_error": gemma_error,
+        }
+    )
 
 
 @app.post("/chat")
