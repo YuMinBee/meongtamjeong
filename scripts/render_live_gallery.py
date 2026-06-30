@@ -1,11 +1,17 @@
 import argparse
 import html
 import json
+import sys
 from pathlib import Path
 from typing import Any, Dict, List
 
 
 BASE_DIR = Path(__file__).resolve().parents[1]
+if str(BASE_DIR) not in sys.path:
+    sys.path.insert(0, str(BASE_DIR))
+
+from app.dog_attributes import build_photo_advice, summarize_vlm_attrs_ko
+
 DATA_DIR = BASE_DIR / "data"
 DEFAULT_INPUT_PATH = DATA_DIR / "local_dog_cache.json"
 DEFAULT_OUTPUT_PATH = DATA_DIR / "live_breed_gallery.html"
@@ -90,6 +96,8 @@ def group_by_breed(items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
                 "desc": clean_text(item.get("merged_desc")) or clean_text(item.get("desc")) or "",
                 "base_desc": clean_text(item.get("desc")) or "",
                 "vlm_desc": clean_text(item.get("vlm_desc")) or "",
+                "visual_attrs": summarize_vlm_attrs_ko(item.get("vlm_attrs")),
+                "photo_advice": item.get("photo_advice") if isinstance(item.get("photo_advice"), list) else build_photo_advice(item.get("vlm_attrs")),
                 "image_url": image_url,
                 "detail_url": resolve_detail_url(item),
             }

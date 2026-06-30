@@ -1,10 +1,11 @@
-# 멍탐정 (MeongTamjeong)
+# dog service
 
 유기견 공고 데이터를 기반으로 CLIP + FAISS 유사도 검색, Gemma 기반 추천 문장 생성, VLM 설명 보강, 종 코드별 시각화를 제공하는 프로젝트입니다.
 
 ## 빠른 시작
 
 ```bash
+cd dog
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -116,12 +117,29 @@ flowchart TD
 이번 작업에서는 "실제 공고를 더 쉽게 확인하고, 검색에 필요한 설명 정보를 보강하고, 보호소 사용자 입장에서도 추가 입력 부담을 줄일 수 있는 흐름을 만드는 것"에 집중했습니다.
 
 - Gemma 3 기반 VLM 설명 보강 스크립트 `scripts/enrich_live_descriptions.py`를 추가했습니다.
+- 최신 VLM을 실시간 추천 요청마다 돌리지 않고, 보호소 공고 수집 후 오프라인 배치로 사진 속성을 구조화한 `vlm_attrs` JSON을 생성하도록 확장했습니다.
 - 기존 공고 설명과 VLM 설명을 합친 `merged_desc` 필드를 생성하도록 구성했습니다.
+- `vlm_attrs`에서 만든 색상, 털 길이, 귀 모양, 크기 힌트, 얼굴/전신 노출, 사진 품질 정보를 검색 임베딩과 추천 이유에 함께 반영합니다.
+- 실시간 추천 요청에서는 VLM을 다시 호출하지 않고, 오프라인 배치로 저장된 `vlm_attrs`와 `vlm_attr_text`를 검색 임베딩, 그래프 재랭킹, 추천 이유, 공고문 작성 보조에 재사용합니다.
+- 운영 순서는 `fetch_live_dogs.py`로 공고 수집, `enrich_live_descriptions.py --task attributes`로 사진 속성 JSON 생성, `build_embeddings.py --input data/local_dog_cache_enriched.json`로 FAISS 인덱스 재생성입니다.
+- 검색/추천 서비스는 기본적으로 active 공고만 노출합니다. `process_state`가 종료/입양/반환/자연사/안락사/기증이거나 `notice_end`가 지난 공고는 제외하고, 상태가 없는 과거 공고도 기본 검색에서는 숨깁니다.
+- 지난 공고는 모델 평가, 회귀 테스트, 포트폴리오 지표 재현을 위해 백업/아카이브로 보존하고, 실제 추천 인덱스는 active-only로 재생성하는 운영 방식을 권장합니다.
 - 설명 보강 전후 비교를 위한 `scripts/build_search_eval_report.py`를 추가했습니다.
 - 종 코드별 사진을 브라우저에서 바로 볼 수 있는 `scripts/render_live_gallery.py`를 추가했습니다.
 - 갤러리 검색에서 종 코드, 품종명, 공고번호를 함께 찾을 수 있도록 구성했습니다.
 - 공고 상세 링크를 현재 국가동물보호정보시스템 라우팅에 맞게 보정했습니다.
 
+## 3차 개발 내용: 하이브리드 멀티모달 RAG
+
+기존 구조는 CLIP 임베딩과 FAISS로 후보를 찾고 Gemma가 추천 문장을 만드는 RAG 구조였습니다. 이번 단계에서는 단일 벡터 검색만 쓰지 않고, 사용자 조건을 구조화한 뒤 여러 근거를 합쳐 재랭킹하는 하이브리드 멀티모달 RAG로 확장했습니다.
+
+- `app/hybrid_rag.py`를 추가해 조건 파싱, BM25 키워드 검색, VLM 속성 필터, 메타데이터 매칭, 재랭킹 점수와 근거 생성을 분리했습니다.
+- `query_expansion.py`의 하드코딩 alias 확장 대신 `coat_color`, `fur_length`, `ear_shape`, `body_size_hint`, `sex`, `personality`, `photo_quality` 같은 구조화 조건을 검색 문장으로 변환합니다.
+- `/search/text`, `/recommend`, 이미지 추천, 설문 추천이 모두 같은 하이브리드 검색/재랭킹 경로를 사용하도록 연결했습니다.
+- `/rag/recommend`와 `/rag/recommend_form`을 추가해 생활환경, 외형 조건, 추가 텍스트, 참고 이미지를 하나의 사용자 플로우로 처리합니다.
+- `/visualize/adoption-flow`에서 통합 탐색 UI를 제공하고, 각 후보마다 벡터/BM25/조건 매칭 근거와 사진 보완 조언을 함께 보여줍니다.
+- `app/graph_rag.py`를 추가해 `Dog -> Trait/Region/Shelter/Status` 경량 그래프를 만들고, FAISS/BM25 후보에 그래프 조건 후보를 합친 뒤 `graph_conditions`, `graph_expansion`, `graph_similarity` 점수로 재랭킹합니다.
+- 현재 저장된 `dog_metas.json`에는 보호소/지역 필드가 없어 해당 엣지는 0개지만, `care_name`, `process_state`, 지역 필드가 들어온 메타로 임베딩을 재생성하면 그래프에 자동 반영됩니다.
 ## 현재 데이터/시스템 지표
 
 아래 수치는 현재 저장된 파일 기준의 현황입니다.
@@ -165,7 +183,7 @@ flowchart TD
 
 ## Before / After 확인 포인트
 
-설명 보강 예시는 로컬 실행 후 생성되는 `data/local_dog_cache_enriched.json`에서 확인할 수 있습니다. 이 파일은 공고 캐시와 VLM 생성 결과를 담는 산출물이므로 GitHub에는 기본 포함하지 않습니다.
+설명 보강 예시는 `data/local_dog_cache_enriched.json`에서 직접 확인할 수 있습니다.
 
 - `desc`: 보호소 공고 원문 설명
 - `vlm_desc`: Gemma 3 VLM이 사진을 바탕으로 생성한 보강 설명
@@ -194,43 +212,15 @@ flowchart TD
 - 종 코드별 갤러리에서 실제 공고 탐색 편의성이 개선되었는지 확인
 - 필요하면 이후에 사용자 피드백 기반 만족도 지표를 별도로 설계
 
-## 발전 방향
-
-현재 프로젝트는 `CLIP + FAISS` 검색, `Gemma` 추천 문장 생성, VLM 기반 공고 설명 보강까지 구현된 상태입니다. 이후 발전 방향은 단순히 모델을 더 붙이는 것보다, "입양 전 탐색을 얼마나 실제 의사결정에 가깝게 도와줄 수 있는가"를 기준으로 확장하는 것이 적절합니다.
-
-| 우선순위 | 방향 | 상태 | 내용 | 기대 효과 |
-| --- | --- | --- | --- | --- |
-| 1 | 입양 상담 흐름 고도화 | 기본 적용 | 자연어 조건을 설문 JSON으로 정리하고 검색 질의로 변환 | 사용자가 막연한 문장 대신 구체적인 조건으로 후보를 탐색 가능 |
-| 2 | 추천 근거 설명 강화 | 기본 적용 | 후보별로 크기, 나이, 성별, 설명, 유사도 점수를 바탕으로 추천 근거 생성 | 추천 결과에 대한 신뢰도와 해석 가능성 향상 |
-| 3 | VLM 공고 작성 보조 기능 | 기본 적용 | 기존 설명과 VLM 보강 설명을 바탕으로 공고 설명 초안 생성 | 보호소의 공고 작성 부담 감소, 공고 정보 품질 개선 |
-| 4 | 사진 품질 점검 | 향후 | 흐림, 어두움, 얼굴 가림, 개체가 너무 작게 나온 사진을 감지하고 재촬영 필요 여부 안내 | 온라인 공고의 첫인상과 탐색 효율 개선 |
-| 5 | 피드백 기반 재랭킹 | 향후 | 사용자의 "관심 있음/없음" 반응을 저장해 다음 검색에서 선호 조건을 반영 | 개인화 추천 품질 개선 |
-| 6 | 보호소 관리자 대시보드 | 향후 | 설명 부족 공고, 사진 없는 공고, 오래된 공고, 종 코드별 공고 수를 한 화면에서 확인 | 보호소 운영 효율과 데이터 관리 품질 향상 |
-| 7 | 유기묘·타 반려동물 확장 | 향후 | 동물 분류와 메타 필드를 확장해 유기묘 등 다른 보호동물에도 적용 | 시스템 확장성 검증 |
-
-### 다음 고도화 순서
-
-1. **입양 상담 스킬 UI화**: 현재 API는 자연어 조건을 설문 JSON으로 정리합니다. 이후에는 실제 대화형 화면에서 부족한 질문만 이어서 묻는 방식으로 확장할 수 있습니다.
-2. **추천 근거 품질 개선**: 현재는 규칙 기반 근거를 제공합니다. 이후에는 사용자 피드백과 Gemma 설명을 결합해 더 자연스럽고 일관된 근거를 만들 수 있습니다.
-3. **보호소 공고 보강 도구 화면화**: 현재는 API로 공고문 초안을 생성합니다. 이후에는 보호소 담당자가 원문/VLM 설명을 비교하고 수정할 수 있는 관리자 화면으로 확장할 수 있습니다.
-4. **사용자 피드백 루프**: 추천 결과에 대한 반응을 저장하고, 이후 검색 가중치나 재랭킹에 반영합니다. 정성 평가에서 실제 서비스형 평가로 넘어갈 수 있습니다.
-
-### 장기 확장 아이디어
-
-- 지역과 보호소 위치를 반영한 거리 기반 추천
-- 입양 이후 적응 기간을 돕는 케어 챗봇
-- 공공기관·지역 보호소 데이터베이스와의 정기 동기화
-- 사진/설명 품질 지표를 활용한 보호소 운영 리포트
-- 모델 응답 품질, 검색 품질, 사용자 만족도를 분리한 평가 체계 구축
-
 ## 디렉터리 구조
 
 ```text
 .
 ├── app/                  # FastAPI 서버
 ├── scripts/              # 임베딩 생성/업데이트/분석/테스트 스크립트
-├── data/                 # FAISS 인덱스, 메타, 평가 질의
+├── data/                 # FAISS 인덱스, 메타, 캐시, 로그
 ├── assets/samples/       # 샘플 이미지
+├── archive/              # 레거시 파일 보관
 ├── .env.example
 ├── README.md
 ├── requirements.txt
@@ -242,17 +232,17 @@ flowchart TD
 필수(실행에 필요):
 - 코드/설정: `app/`, `scripts/`, `requirements.txt`, `.env`(또는 `.env.example` 참고)
 - 데이터: `data/dog_faiss.index`, `data/dog_metas.json`
+- 임베딩을 재생성하지 않을 거면: `data/all_dog_embeddings.npz`
 
 불필요(다시 생성됨):
-- `.venv/`, `__pycache__/`, `.hf_cache/`
-- `data/local_dog_cache*.json`, `data/search_eval_*.json`, `data/*.html`, `data/*.log` 같은 생성 산출물
+- `.venv/`, `__pycache__/`
 
 ## 설치/실행
 
 ### 1) 압축해서 이동(권장)
 
 ```bash
-cd /path/to/meongtamjeong
+cd /path/to/dog
 tar --exclude='.venv' --exclude='__pycache__' -czf dog.tar.gz .
 ```
 
@@ -274,6 +264,9 @@ pip install -r requirements.txt
 - `GEMMA3_MODEL_ID`: 로컬 경로가 없을 때 사용할 Gemma 모델 ID
 - `GEMMA3_GPU_MAX_MEMORY`: Gemma 실행 시 GPU 최대 메모리
 - `GEMMA3_CPU_MAX_MEMORY`: Gemma 실행 시 CPU 오프로드 메모리
+- `VLM_MODEL_PATH`: 속성 추출용 로컬 VLM snapshot 경로(`GEMMA3_MODEL_PATH`보다 우선)
+- `VLM_MODEL_ID`: 속성 추출용 VLM 모델 ID(`GEMMA3_MODEL_ID`보다 우선)
+- `VLM_MODEL_CLASS`: `gemma3` 또는 `auto`. Qwen 계열처럼 범용 image-text 모델은 `auto`를 사용
 - `ANIMAL_API_KEY`: 공공 유기동물 API 키(임베딩 생성/업데이트 시 사용 가능)
 
 ### 3) API 실행
@@ -295,8 +288,13 @@ curl -H 'x-api-key: change-me' http://localhost:8000/health
 | 메서드 | 경로 | 설명 |
 | --- | --- | --- |
 | `GET` | `/health` | 인덱스 크기, 실행 디바이스, 종 코드 그룹 수 확인 |
-| `POST` | `/search/text` | 텍스트 질의로 CLIP 임베딩을 만들고 FAISS 유사도 검색 |
-| `POST` | `/recommend` | 텍스트 질의 검색 결과를 바탕으로 Gemma 추천 문장 생성 |
+| `POST` | `/search/text` | 텍스트 질의를 구조화하고 벡터/BM25/VLM 속성 기반 하이브리드 검색 |
+| `POST` | `/recommend` | 하이브리드 검색 결과를 바탕으로 Gemma 추천 문장 생성 |
+| `POST` | `/rag/recommend` | 생활환경, 외형 조건, 추가 텍스트를 하나의 JSON 플로우로 추천 |
+| `POST` | `/rag/recommend_form` | 생활환경, 외형 조건, 참고 이미지를 FormData로 받아 멀티모달 추천 |
+| `GET` | `/visualize/adoption-flow` | 통합 입양 탐색 UI |
+| `GET` | `/rag/graph` | Graph-enhanced RAG 인덱스 요약과 feature 예시 |
+| `POST` | `/shelter/notice_draft` | `vlm_attrs`와 공고 정보를 바탕으로 보호소 공고 초안 생성 |
 | `POST` | `/recommend_with_image` | 기준 이미지와 사용자 프로필을 함께 사용해 추천 |
 | `POST` | `/recommend_with_survey_json` | 설문 JSON과 추가 텍스트로 추천 |
 | `POST` | `/recommend_with_survey_form` | 설문 JSON 문자열, 추가 텍스트, 선택 이미지로 추천 |
@@ -307,9 +305,6 @@ curl -H 'x-api-key: change-me' http://localhost:8000/health
 | `GET` | `/live/breeds` | 최신 공고 캐시 기준 종 코드 요약 |
 | `GET` | `/live/breeds/{breed_code}/images` | 최신 공고 캐시 기준 특정 종 코드 이미지 목록 |
 | `GET` | `/visualize/live-breeds` | 최신 공고 캐시 기준 종 코드 갤러리 HTML |
-| `POST` | `/skills/adoption-counsel` | 자연어 조건을 설문 JSON으로 정리하고 추천 후보 검색 |
-| `POST` | `/skills/recommendation-reasons` | 검색 후보별 추천 근거를 구조화해서 반환 |
-| `POST` | `/skills/notice-description` | 공고 원문/VLM 설명을 바탕으로 공고문 초안 생성 |
 
 추천 API 예시:
 
@@ -347,43 +342,16 @@ curl -X POST 'http://localhost:8000/recommend_with_image?topk=5' \
   -F 'ref_image=@/path/to/sample.jpg'
 ```
 
-스킬 API 예시:
-
-```bash
-curl -X POST 'http://localhost:8000/skills/adoption-counsel' \
-  -H 'x-api-key: change-me' \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "message": "아파트에서 혼자 살고 하루 30분 산책 가능해요. 처음 키우는 거라 차분한 소형견이면 좋겠어요.",
-    "topk": 5
-  }'
-```
-
-```bash
-curl -X POST 'http://localhost:8000/skills/recommendation-reasons' \
-  -H 'x-api-key: change-me' \
-  -H 'Content-Type: application/json' \
-  -d '{"query":"1인 가구, 하루 30분 산책, 차분한 소형견","topk":5}'
-```
-
-```bash
-curl -X POST 'http://localhost:8000/skills/notice-description' \
-  -H 'x-api-key: change-me' \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "desertionNo": "공고번호",
-    "desc": "보호소 원문 설명",
-    "vlm_desc": "사진 기반 VLM 보강 설명"
-  }'
-```
-
 ## 자주 쓰는 스크립트
 
 ```bash
 python scripts/build_embeddings.py
 python scripts/update_embeddings.py
 python scripts/fetch_live_dogs.py --years 3
-python scripts/enrich_live_descriptions.py --limit 20
+python scripts/enrich_live_descriptions.py --task attributes --limit 20
+python scripts/run_offline_vlm_pipeline.py --limit 100 --target 1000 --text-only
+python scripts/enrich_live_descriptions.py --task both --model-class auto --model-path /path/to/local/vlm
+python scripts/build_embeddings.py --input data/local_dog_cache_enriched.json --text-only
 python scripts/render_live_gallery.py --input data/local_dog_cache_enriched.json
 python scripts/local_dog_search.py
 python scripts/analyze_meta_text_freq.py

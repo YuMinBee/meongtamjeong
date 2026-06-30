@@ -19,3 +19,13 @@ data/local_dog_cache*.json
 data/search_eval_*.json
 data/search_eval_*.txt
 data/last_update.txt
+
+# Generated model/index artifacts
+*.pt
+*.index
+data/dog_metas*.json
+data/cat_metas*.json
+data/*_faiss*.index
+data/image_crops*/
+data/reports/
+logs/

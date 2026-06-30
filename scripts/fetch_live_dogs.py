@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -12,6 +13,11 @@ from urllib3.util.retry import Retry
 
 
 BASE_DIR = Path(__file__).resolve().parents[1]
+if str(BASE_DIR) not in sys.path:
+    sys.path.insert(0, str(BASE_DIR))
+
+from app.species import clean_species, species_config, species_from_upkind
+
 DATA_DIR = BASE_DIR / "data"
 ENV_PATH = BASE_DIR / ".env"
 load_dotenv(ENV_PATH)
@@ -21,7 +27,6 @@ API_BASE = (
     "abandonmentPublic_v2"
 )
 DEFAULT_API_KEY = os.getenv("ANIMAL_API_KEY", "")
-DEFAULT_OUTPUT_PATH = DATA_DIR / "local_dog_cache.json"
 
 
 def clean_text(value: Any) -> str:
@@ -70,7 +75,7 @@ def normalize_breed_fields(rec: Dict[str, Any]) -> Dict[str, str]:
 
 
 def extract_image_url(rec: Dict[str, Any]) -> str:
-    for key in ("image_url", "url", "popfile", "fileName", "thumb", "image", "img"):
+    for key in ("image_url", "url", "popfile", "popfile1", "popfile2", "fileName", "thumb", "image", "img"):
         value = clean_text(rec.get(key))
         if value.startswith("http"):
             return value
@@ -84,13 +89,17 @@ def extract_image_url(rec: Dict[str, Any]) -> str:
     return ""
 
 
-def build_live_dog_meta(rec: Dict[str, Any]) -> Dict[str, Any]:
+def build_live_animal_meta(rec: Dict[str, Any], species: str = "dog") -> Dict[str, Any]:
     breed_fields = normalize_breed_fields(rec)
     desertion_no = clean_text(rec.get("desertionNo")) or "Unknown"
     notice_no = clean_text(rec.get("noticeNo"))
+    upkind = clean_text(rec.get("upkind") or rec.get("upkindCd")) or species_config(species)["upkind"]
+    normalized_species = species_from_upkind(upkind, clean_species(species))
 
     return {
         "type": "live",
+        "species": normalized_species,
+        "upkind": upkind,
         "desertionNo": desertion_no,
         "notice_no": notice_no,
         "breed": breed_fields["breed"],
@@ -108,11 +117,19 @@ def build_live_dog_meta(rec: Dict[str, Any]) -> Dict[str, Any]:
             if desertion_no != "Unknown"
             else ""
         ),
-        "care_name": clean_text(rec.get("careNm")),
-        "notice_start": clean_text(rec.get("noticeSdt")),
-        "notice_end": clean_text(rec.get("noticeEdt")),
-        "process_state": clean_text(rec.get("processState")),
+        "care_name": clean_text(rec.get("careNm") or rec.get("care_name")),
+        "care_tel": clean_text(rec.get("careTel") or rec.get("care_tel")),
+        "care_addr": clean_text(rec.get("careAddr") or rec.get("care_addr")),
+        "org_name": clean_text(rec.get("orgNm") or rec.get("org_name")),
+        "happen_place": clean_text(rec.get("happenPlace") or rec.get("happen_place")),
+        "notice_start": clean_text(rec.get("noticeSdt") or rec.get("notice_start")),
+        "notice_end": clean_text(rec.get("noticeEdt") or rec.get("notice_end")),
+        "process_state": clean_text(rec.get("processState") or rec.get("process_state")),
     }
+
+
+def build_live_dog_meta(rec: Dict[str, Any]) -> Dict[str, Any]:
+    return build_live_animal_meta(rec, species="dog")
 
 
 def build_session() -> requests.Session:
@@ -129,13 +146,16 @@ def build_session() -> requests.Session:
     return session
 
 
-def fetch_live_dogs(
+def fetch_live_animals(
     api_key: str,
+    species: str,
     years: int,
     rows: int,
     max_pages: int,
     include_closed: bool = False,
 ) -> Dict[str, Any]:
+    normalized_species = clean_species(species)
+    upkind = species_config(normalized_species)["upkind"]
     end = datetime.now()
     start = end - timedelta(days=years * 365)
     session = build_session()
@@ -157,7 +177,7 @@ def fetch_live_dogs(
             "numOfRows": rows,
             "pageNo": page,
             "_type": "json",
-            "upkind": 417000,
+            "upkind": upkind,
             "bgnde": start.strftime("%Y%m%d"),
             "endde": end.strftime("%Y%m%d"),
         }
@@ -181,7 +201,7 @@ def fetch_live_dogs(
                 stats["skipped_closed"] += 1
                 continue
 
-            meta = build_live_dog_meta(rec)
+            meta = build_live_animal_meta(rec, species=normalized_species)
             if not meta["image_url"]:
                 stats["skipped_no_image"] += 1
                 continue
@@ -197,12 +217,24 @@ def fetch_live_dogs(
 
     return {
         "fetched_at": end.isoformat(timespec="seconds"),
+        "species": normalized_species,
+        "upkind": upkind,
         "years": years,
         "days": years * 365,
         "include_closed": include_closed,
         "items": items,
         "stats": stats,
     }
+
+
+def fetch_live_dogs(
+    api_key: str,
+    years: int,
+    rows: int,
+    max_pages: int,
+    include_closed: bool = False,
+) -> Dict[str, Any]:
+    return fetch_live_animals(api_key, "dog", years, rows, max_pages, include_closed)
 
 
 def save_payload(payload: Dict[str, Any], output_path: Path) -> None:
@@ -213,16 +245,17 @@ def save_payload(payload: Dict[str, Any], output_path: Path) -> None:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="최근 N년 유기견 공고를 공공 API에서 받아 로컬 JSON 캐시 파일로 저장합니다."
+        description="최근 N년 유기동물 공고를 공공 API에서 받아 로컬 JSON 캐시 파일로 저장합니다."
     )
+    parser.add_argument("--species", default="dog", choices=("dog", "cat", "other"), help="조회할 동물 종류")
     parser.add_argument("--years", type=int, default=3, help="오늘 기준 몇 년 전까지 조회할지")
     parser.add_argument("--rows", type=int, default=1000, help="페이지당 조회 건수")
     parser.add_argument("--max-pages", type=int, default=500, help="최대 페이지 수")
     parser.add_argument(
         "--out",
         type=Path,
-        default=DEFAULT_OUTPUT_PATH,
-        help="출력 JSON 경로",
+        default=None,
+        help="출력 JSON 경로. 생략하면 species별 data/local_{species}_cache.json 사용",
     )
     parser.add_argument(
         "--api-key",
@@ -239,17 +272,21 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-    payload = fetch_live_dogs(
+    species = clean_species(args.species)
+    output_path = args.out or DATA_DIR / species_config(species)["cache"]
+    payload = fetch_live_animals(
         api_key=args.api_key,
+        species=species,
         years=args.years,
         rows=args.rows,
         max_pages=args.max_pages,
         include_closed=args.include_closed,
     )
-    save_payload(payload, args.out)
+    save_payload(payload, output_path)
 
     stats = payload["stats"]
-    print(f"[DONE] 저장 완료: {args.out}")
+    print(f"[DONE] 저장 완료: {output_path}")
+    print(f"[INFO] species={payload['species']} upkind={payload['upkind']}")
     print(f"[INFO] fetched_at={payload['fetched_at']}")
     print(f"[INFO] years={payload['years']} days={payload['days']}")
     print(f"[INFO] pages={stats['pages_fetched']} raw={stats['raw_items']} kept={stats['kept_items']}")
