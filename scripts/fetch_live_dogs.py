@@ -16,7 +16,8 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
 
-from app.species import clean_species, species_config, species_from_upkind
+from app.species import clean_species, species_config, species_from_upkind  # noqa: E402
+from app.notice_status import is_searchable_notice  # noqa: E402
 
 DATA_DIR = BASE_DIR / "data"
 ENV_PATH = BASE_DIR / ".env"
@@ -49,14 +50,11 @@ def parse_api_date(value: Any) -> Optional[datetime]:
 
 
 def is_active_notice(rec: Dict[str, Any], 기준일: datetime) -> bool:
-    notice_end = parse_api_date(rec.get("noticeEdt") or rec.get("notice_end"))
-    if notice_end and notice_end.date() < 기준일.date():
-        return False
-
-    process_state = clean_text(rec.get("processState") or rec.get("process_state"))
-    if any(token in process_state for token in ("종료", "입양", "반환", "자연사", "안락사")):
-        return False
-    return True
+    return is_searchable_notice(
+        rec,
+        reference_date=기준일,
+        include_unknown=True,
+    )
 
 
 def normalize_breed_fields(rec: Dict[str, Any]) -> Dict[str, str]:

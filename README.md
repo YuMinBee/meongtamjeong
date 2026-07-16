@@ -33,6 +33,17 @@ curl -X POST 'http://localhost:8000/search/text' \
 
 따라서 본 프로젝트는 짧고 불균일한 공고 정보를 보완하고, 이미지와 텍스트 기반 유사도 검색을 통해 사용자가 자신의 환경과 조건에 맞는 후보를 더 빠르게 탐색할 수 있도록 돕는 것을 목표로 합니다. 또한 보호소가 모든 공고를 상세하게 작성하기 어려운 현실을 고려하여, VLM 기반 설명 보강을 통해 정보 품질을 높이고 공고 작성 부담을 줄일 수 있는 방향을 함께 제안합니다.
 
+### 생활조건 기반 검색의 역할과 한계
+
+`POST /search/profile`은 기존 하이브리드 검색으로 후보군을 먼저 찾은 뒤, 사용자의 생활조건과 공고에 명시된 정보를 비교해 후보 순서를 다시 정렬합니다. 이 기능은 입양 적합성을 확정하거나 개체의 실제 성격을 예측하지 않습니다.
+
+- 성격, 아동·다른 동물과의 생활 가능성, 혼자 지낼 수 있는 시간은 공고에 명시된 근거가 있을 때만 평가합니다.
+- 정보가 없으면 임의로 추정하지 않고 `unknown_conditions`로 반환합니다.
+- 사진 품질 점수는 온라인 공고의 탐색 편의성을 나타낼 뿐, 개체의 입양 적합성이나 건강 상태를 의미하지 않습니다.
+- 공고 상태와 실제 보호 여부는 상세 공고와 보호소 상담으로 다시 확인해야 합니다.
+
+> 이 결과는 입양 적합성을 확정하지 않으며, 실제 성격과 생활 적합성은 보호소 방문 및 상담을 통해 확인해야 합니다.
+
 ## 왜 필요한가
 
 이 프로젝트의 필요성은 "입양을 온라인에서 대신 결정해주는가"가 아니라, "입양 전 탐색과 비교를 얼마나 효율적으로 도와줄 수 있는가"에 있습니다.
@@ -122,7 +133,7 @@ flowchart TD
 - `vlm_attrs`에서 만든 색상, 털 길이, 귀 모양, 크기 힌트, 얼굴/전신 노출, 사진 품질 정보를 검색 임베딩과 추천 이유에 함께 반영합니다.
 - 실시간 추천 요청에서는 VLM을 다시 호출하지 않고, 오프라인 배치로 저장된 `vlm_attrs`와 `vlm_attr_text`를 검색 임베딩, 그래프 재랭킹, 추천 이유, 공고문 작성 보조에 재사용합니다.
 - 운영 순서는 `fetch_live_dogs.py`로 공고 수집, `enrich_live_descriptions.py --task attributes`로 사진 속성 JSON 생성, `build_embeddings.py --input data/local_dog_cache_enriched.json`로 FAISS 인덱스 재생성입니다.
-- 검색/추천 서비스는 기본적으로 active 공고만 노출합니다. `process_state`가 종료/입양/반환/자연사/안락사/기증이거나 `notice_end`가 지난 공고는 제외하고, 상태가 없는 과거 공고도 기본 검색에서는 숨깁니다.
+- 검색/추천 서비스는 `process_state`가 종료/입양/반환/자연사/안락사/기증이거나 `notice_end`가 지난 공고를 제외합니다. 기존 API는 원래 정책대로 unknown 공고를 기본 제외합니다. `/search/profile`만 상태 메타가 없는 기존 인덱스도 상담 필요 표시와 함께 기본 포함하며 별도 환경변수로 제어합니다.
 - 지난 공고는 모델 평가, 회귀 테스트, 포트폴리오 지표 재현을 위해 백업/아카이브로 보존하고, 실제 추천 인덱스는 active-only로 재생성하는 운영 방식을 권장합니다.
 - 설명 보강 전후 비교를 위한 `scripts/build_search_eval_report.py`를 추가했습니다.
 - 종 코드별 사진을 브라우저에서 바로 볼 수 있는 `scripts/render_live_gallery.py`를 추가했습니다.
@@ -140,6 +151,61 @@ flowchart TD
 - `/visualize/adoption-flow`에서 통합 탐색 UI를 제공하고, 각 후보마다 벡터/BM25/조건 매칭 근거와 사진 보완 조언을 함께 보여줍니다.
 - `app/graph_rag.py`를 추가해 `Dog -> Trait/Region/Shelter/Status` 경량 그래프를 만들고, FAISS/BM25 후보에 그래프 조건 후보를 합친 뒤 `graph_conditions`, `graph_expansion`, `graph_similarity` 점수로 재랭킹합니다.
 - 현재 저장된 `dog_metas.json`에는 보호소/지역 필드가 없어 해당 엣지는 0개지만, `care_name`, `process_state`, 지역 필드가 들어온 메타로 임베딩을 재생성하면 그래프에 자동 반영됩니다.
+
+## 생활조건 기반 후보 재정렬
+
+### 사용자 입력
+
+`/search/profile`의 `profile`은 아래 9개 필드를 사용합니다. 정의되지 않은 필드는 허용하지 않으며, 잘못된 enum 값이나 문자열 형태의 boolean은 HTTP 422로 거절됩니다.
+
+| 필드 | 형식 | 필수 | 허용값 또는 의미 |
+| --- | --- | --- | --- |
+| `housing_type` | string enum | 예 | `apartment`, `house`, `other` |
+| `daily_absence_hours` | number | 예 | 하루 평균 부재 시간, `0~24` |
+| `activity_level` | string enum | 예 | `low`, `medium`, `high` |
+| `dog_experience` | string enum | 예 | `none`, `some`, `experienced` |
+| `preferred_size` | string enum | 예 | `small`, `medium`, `large`, `any` |
+| `preferred_age` | string enum | 예 | `puppy`, `adult`, `senior`, `any` |
+| `preferred_region` | string 또는 null | 아니요 | 희망 지역. 빈 문자열은 `null` 처리 |
+| `has_children` | boolean | 예 | JSON boolean `true` 또는 `false` |
+| `has_other_pets` | boolean | 예 | JSON boolean `true` 또는 `false` |
+
+요청에는 후보 생성에 사용할 `query` 또는 비어 있지 않은 `conditions` 중 하나가 반드시 있어야 합니다. `topk` 기본값은 5이며 허용 범위는 1~20입니다.
+
+### 재정렬 흐름
+
+```mermaid
+flowchart LR
+    A[query 또는 conditions와 profile] --> B[기존 하이브리드 후보 검색]
+    B --> C[공고 메타데이터 정규화]
+    C --> D{공고 상태}
+    D -->|closed 또는 expired| X[결과 제외]
+    D -->|active 또는 허용된 unknown| E[생활조건 호환 점수]
+    E --> F[사진 품질 점수 결합]
+    F --> G[final_score 재정렬]
+    G --> H[Top-K와 규칙 기반 근거 반환]
+```
+
+기존 CLIP/FAISS, BM25, VLM 속성, 그래프 점수로 `topk × PROFILE_CANDIDATE_MULTIPLIER`개의 후보를 먼저 검색하고 최대 50개 안에서 재정렬합니다. 후보 메타데이터는 나이, 체중/크기, 성별, 중성화 여부, 지역, 품종/믹스 여부, 설명, VLM 속성, 사진 품질, 공고 상태로 보수적으로 정규화합니다. 근거가 없는 값은 추정하지 않고 unknown으로 둡니다.
+
+### 점수 구성과 추천 근거
+
+```text
+final_score
+  = retrieval_score
+  + PROFILE_COMPATIBILITY_WEIGHT × compatibility_score
+  + PROFILE_QUALITY_WEIGHT × quality_score
+```
+
+- `retrieval_score`: 기존 하이브리드 검색 점수를 0~1로 제한한 값
+- `compatibility_score`: 확인 가능한 생활조건 중 일치 1, 주의 0의 평균
+- `quality_score`: 0~1 사진 품질 점수. 정보가 없으면 `null`
+- `final_score`: 정렬용 가산 점수이며 확률이 아니므로 1보다 클 수 있음
+
+공고 정보가 부족한 조건은 호환 점수의 분자와 분모에서 모두 제외합니다. 모든 조건이 unknown이면 `compatibility_score=0`으로 두어 임의의 가점이나 감점을 만들지 않으며, 사진 품질이 unknown이면 품질 항도 더하지 않습니다. `preferred_size=any`, `preferred_age=any`, 빈 `preferred_region`, `has_children=false`, `has_other_pets=false`처럼 비교가 필요 없는 조건도 평가 대상에서 제외합니다.
+
+각 결과에는 `retrieval_score`, `compatibility_score`, `quality_score`, `final_score`, `matched_conditions`, `caution_conditions`, `unknown_conditions`, 규칙 기반 `recommendation_reason`, 정규화된 `meta`, 실제 `source_url`이 포함됩니다. 성격, 공격성, 아동 친화성, 다른 동물과의 사회성은 명시적 공고 근거가 없으면 판단하지 않습니다.
+
 ## 현재 데이터/시스템 지표
 
 아래 수치는 현재 저장된 파일 기준의 현황입니다.
@@ -218,6 +284,7 @@ flowchart TD
 .
 ├── app/                  # FastAPI 서버
 ├── scripts/              # 임베딩 생성/업데이트/분석/테스트 스크립트
+├── tests/                # 프로필 재정렬, 메타 병합, API 회귀 테스트
 ├── data/                 # FAISS 인덱스, 메타, 캐시, 로그
 ├── assets/samples/       # 샘플 이미지
 ├── archive/              # 레거시 파일 보관
@@ -259,6 +326,19 @@ pip install -r requirements.txt
 
 `.env.example`를 참고해서 `.env`를 만드세요.
 
+| 환경변수 | 기본값 | 역할 |
+| --- | --- | --- |
+| `NOTICE_FILTER_INACTIVE` | `true` | 하이브리드 후보 생성에서 closed/expired 공고 제외 |
+| `NOTICE_INCLUDE_UNKNOWN` | `false` | 기존 검색 API에서 상태 unknown 공고를 후보로 허용할지 결정 |
+| `PROFILE_INCLUDE_UNKNOWN_NOTICES` | `true` | 프로필 검색에서 상태 unknown 공고를 확인 필요 표시와 함께 허용 |
+| `PROFILE_COMPATIBILITY_WEIGHT` | `0.25` | compatibility 가중치, 0 이상 |
+| `PROFILE_QUALITY_WEIGHT` | `0.05` | 사진 품질 가중치, 0 이상 |
+| `PROFILE_CANDIDATE_MULTIPLIER` | `5` | 프로필 재정렬 전 후보군 배수, 1 이상 |
+| `INDEX_PATH` | `./data/dog_faiss.index` | FAISS 인덱스 경로 |
+| `METAS_PATH` | `./data/dog_metas.json` | 인덱스 행과 순서가 일치하는 메타데이터 경로 |
+
+기존 API의 `NOTICE_INCLUDE_UNKNOWN` 기본값은 변경하지 않았습니다. 프로필 검색은 `PROFILE_INCLUDE_UNKNOWN_NOTICES=true`일 때 상태 정보가 없는 기존 메타도 반환하되 `unknown_conditions`에 상태 확인 안내를 추가합니다. active 상태가 포함된 메타데이터로 인덱스를 재생성한 운영 환경에서는 이 값도 `false`로 바꿀 수 있습니다. `/search/profile`의 최종 결과는 설정과 관계없이 closed/expired를 다시 제외합니다.
+
 - `API_KEY`: 요청 헤더 `x-api-key` 값
 - `GEMMA3_MODEL_PATH`: 로컬 Gemma 3 snapshot 경로
 - `GEMMA3_MODEL_ID`: 로컬 경로가 없을 때 사용할 Gemma 모델 ID
@@ -289,6 +369,7 @@ curl -H 'x-api-key: change-me' http://localhost:8000/health
 | --- | --- | --- |
 | `GET` | `/health` | 인덱스 크기, 실행 디바이스, 종 코드 그룹 수 확인 |
 | `POST` | `/search/text` | 텍스트 질의를 구조화하고 벡터/BM25/VLM 속성 기반 하이브리드 검색 |
+| `POST` | `/search/profile` | 기존 하이브리드 후보를 9개 생활조건, 공고 상태, 사진 품질로 재정렬 |
 | `POST` | `/recommend` | 하이브리드 검색 결과를 바탕으로 Gemma 추천 문장 생성 |
 | `POST` | `/rag/recommend` | 생활환경, 외형 조건, 추가 텍스트를 하나의 JSON 플로우로 추천 |
 | `POST` | `/rag/recommend_form` | 생활환경, 외형 조건, 참고 이미지를 FormData로 받아 멀티모달 추천 |
@@ -314,6 +395,31 @@ curl -X POST 'http://localhost:8000/recommend' \
   -H 'Content-Type: application/json' \
   -d '{"query":"1인 가구이고 산책은 하루 30분 가능해요. 얌전한 소형견을 찾고 있어요.","topk":6}'
 ```
+
+생활조건 기반 검색 예시:
+
+```bash
+curl -X POST 'http://localhost:8000/search/profile' \
+  -H 'x-api-key: change-me' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "query": "서울에서 차분한 소형 성견을 찾고 있어요",
+    "profile": {
+      "housing_type": "apartment",
+      "daily_absence_hours": 6,
+      "activity_level": "low",
+      "dog_experience": "none",
+      "preferred_size": "small",
+      "preferred_age": "adult",
+      "preferred_region": "서울",
+      "has_children": false,
+      "has_other_pets": false
+    },
+    "topk": 5
+  }'
+```
+
+응답 상단에는 `candidate_count`, 실제 `count`, 사용한 `weights`, `notice_policy`, `disclaimer`가 포함되고 각 후보에는 네 점수와 조건별 근거, 실제 공고 링크가 포함됩니다.
 
 설문 JSON 추천 예시:
 
@@ -357,6 +463,41 @@ python scripts/local_dog_search.py
 python scripts/analyze_meta_text_freq.py
 python scripts/test_api.py
 ```
+
+### 기존 인덱스 메타데이터 보강
+
+```bash
+python scripts/merge_dog_metadata.py \
+  --metas data/dog_metas.json \
+  --cache data/local_dog_cache.json \
+  --enriched data/local_dog_cache_enriched.json \
+  --output data/dog_metas.enriched.json
+```
+
+`desertionNo` 또는 `desertion_no`를 기준으로 일반 cache를 적용한 뒤 enriched cache를 적용합니다. 빈 값과 Unknown 계열 값은 기존의 유효한 값을 덮지 않습니다. 출력 파일은 원본 메타의 개수, 순서, 식별자와 `type`을 유지하므로 기존 FAISS 인덱스를 그대로 두고 `METAS_PATH=./data/dog_metas.enriched.json`로 사용할 수 있습니다. 선택 cache 파일이 없으면 경고 후 계속하지만 `--metas`가 없거나 JSON 최상위가 list가 아니면 오류로 종료합니다.
+
+보강된 설명 자체를 검색 벡터에도 반영하려면 인덱스를 재생성합니다.
+
+```bash
+python scripts/build_embeddings.py \
+  --input data/local_dog_cache_enriched.json \
+  --species dog \
+  --target 10000 \
+  --index-out data/dog_faiss.index \
+  --metas-out data/dog_metas.json
+```
+
+기본 재생성은 closed/expired를 제외하지만 상태 unknown은 포함합니다. 필요에 따라 `--text-only`로 이미지 벡터 생성을 생략하거나, 보존 목적일 때만 `--include-closed`를 사용할 수 있습니다.
+
+## 테스트
+
+개발 의존성에는 `pytest>=8.0`이 포함되어 있습니다. 프로젝트 루트에서 다음 명령을 실행합니다.
+
+```bash
+python -m pytest -q
+```
+
+자동 테스트는 프로필별 순위 변화, unknown의 중립 처리, 종료 공고 제외, 점수와 근거 일관성, 기존 텍스트·이미지 API 회귀, 메타 병합의 개수·순서·식별자 보존과 우선순위를 검증합니다. `pytest.ini`는 `tests/`만 수집하므로 `scripts/test_api.py` 같은 기존 실행용 스크립트는 자동 수집하지 않습니다.
 
 ## 정확히 같은 환경(현재 PC 기준)
 

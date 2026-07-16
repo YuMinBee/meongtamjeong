@@ -69,9 +69,25 @@ def clean_text(value: Any) -> str:
 def _has_value(value: Any) -> bool:
     if value is None:
         return False
-    if isinstance(value, (list, tuple, set, dict)):
-        return bool(value)
-    return bool(clean_text(value))
+    if isinstance(value, dict):
+        return any(_has_value(item) for item in value.values())
+    if isinstance(value, (list, tuple, set)):
+        return any(_has_value(item) for item in value)
+    text = clean_text(value)
+    if text.lower() in {
+        "",
+        "-",
+        "--",
+        "unknown",
+        "none",
+        "null",
+        "n/a",
+        "미상",
+        "알 수 없음",
+        "정보 없음",
+    }:
+        return False
+    return True
 
 
 def _as_list(value: Any) -> List[str]:

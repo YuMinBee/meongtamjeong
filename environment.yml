@@ -24,3 +24,4 @@ dependencies:
       - tqdm
       - python-multipart>=0.0.9
       - ultralytics>=8.3
+      - pytest>=8.0

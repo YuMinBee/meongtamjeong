@@ -38,6 +38,12 @@ from app.hybrid_rag import (
 )
 from app.graph_rag import build_dog_graph, rerank_with_graph
 from app.notice_status import classify_notice, is_searchable_notice, notice_filter_reason
+from app.profile_rerank import (
+    PROFILE_RESULT_DISCLAIMER,
+    ProfileRerankSettings,
+    ProfileSearchRequest,
+    rerank_candidates,
+)
 from app.species import clean_species, species_config, species_from_upkind
 from app.query_expansion import expand_query_text
 
@@ -56,6 +62,9 @@ app.add_middleware(
 API_KEY = os.getenv("API_KEY", "change-me")
 NOTICE_FILTER_INACTIVE = os.getenv("NOTICE_FILTER_INACTIVE", "true").lower() in {"1", "true", "yes", "on"}
 NOTICE_INCLUDE_UNKNOWN = os.getenv("NOTICE_INCLUDE_UNKNOWN", "false").lower() in {"1", "true", "yes", "on"}
+PROFILE_INCLUDE_UNKNOWN_NOTICES = os.getenv(
+    "PROFILE_INCLUDE_UNKNOWN_NOTICES", "true"
+).lower() in {"1", "true", "yes", "on"}
 INDEX_PATH = Path(os.getenv("INDEX_PATH", str(DATA_DIR / "dog_faiss.index")))
 METAS_PATH = Path(os.getenv("METAS_PATH", str(DATA_DIR / "dog_metas.json")))
 CLIP_MODEL = os.getenv("CLIP_MODEL", "ViT-B/32")
@@ -81,6 +90,7 @@ GEMMA_RUNTIME_LOCK = Lock()
 GEMMA_PROCESSOR: Optional[Any] = None
 GEMMA_MODEL: Optional[Any] = None
 GEMMA_MODEL_NAME = ""
+PROFILE_RERANK_SETTINGS = ProfileRerankSettings.from_env()
 
 
 @app.middleware("http")
@@ -155,6 +165,13 @@ HYBRID_DOCS, HYBRID_VECTOR_TO_DOC = build_hybrid_documents(METAS)
 HYBRID_BM25 = BM25Index(HYBRID_DOCS)
 GRAPH_OVERLAY_METAS = load_graph_overlay_metas()
 DOG_GRAPH = build_dog_graph(HYBRID_DOCS, GRAPH_OVERLAY_METAS)
+# build_dog_graph conservatively fills missing document fields from the current
+# live/enriched cache. Build this lookup afterwards so profile reranking sees
+# the same status, region and VLM metadata as the graph layer.
+HYBRID_META_BY_ID = {
+    str(doc.get("doc_id") or "").strip(): doc.get("meta") or {}
+    for doc in HYBRID_DOCS
+}
 
 
 def notice_status_by_doc_index() -> Dict[int, str]:
@@ -497,15 +514,11 @@ def parse_api_date(value: Any) -> Optional[datetime]:
 
 
 def is_active_notice(rec: Dict[str, Any], 기준일: Optional[datetime] = None) -> bool:
-    기준일 = 기준일 or datetime.now()
-    notice_end = parse_api_date(rec.get("noticeEdt") or rec.get("notice_end"))
-    if notice_end and notice_end.date() < 기준일.date():
-        return False
-
-    process_state = clean_text(rec.get("processState") or rec.get("process_state"))
-    if any(token in process_state for token in ("종료", "입양", "반환", "자연사", "안락사")):
-        return False
-    return True
+    return is_searchable_notice(
+        rec,
+        reference_date=기준일,
+        include_unknown=True,
+    )
 
 
 def load_live_dog_cache() -> Dict[str, Any]:
@@ -1192,6 +1205,7 @@ def hybrid_search(
     rerank_depth: int = 80,
     strict_filters: bool = False,
     query_vec: Optional[np.ndarray] = None,
+    include_unknown_notices: Optional[bool] = None,
 ) -> List[Dict[str, Any]]:
     topk = max(1, min(int(topk or 10), 50))
     rerank_depth = max(topk, min(int(rerank_depth or 80), max(index.ntotal, topk)))
@@ -1223,7 +1237,11 @@ def hybrid_search(
         strict_filters=strict_filters,
         extra_candidate_indices=graph_candidate_scores.keys(),
         filter_inactive_notices=NOTICE_FILTER_INACTIVE,
-        include_unknown_notices=NOTICE_INCLUDE_UNKNOWN,
+        include_unknown_notices=(
+            NOTICE_INCLUDE_UNKNOWN
+            if include_unknown_notices is None
+            else include_unknown_notices
+        ),
     )
     ranked = rerank_with_graph(
         ranked=ranked,
@@ -1512,6 +1530,60 @@ def recommend(body: TextQuery):
             "retrieval": "graph_enhanced_multimodal_rag",
             "structured_query": structured,
             "recommendation": msg,
+            "results": results,
+        }
+    )
+
+
+@app.post("/search/profile")
+def search_profile(body: ProfileSearchRequest):
+    structured = parse_structured_query(body.query)
+    if body.conditions:
+        structured = merge_structured_query(structured, body.conditions)
+    search_query = build_search_query_text(body.query, structured)
+    candidate_limit = PROFILE_RERANK_SETTINGS.candidate_count(body.topk)
+    candidates = hybrid_search(
+        query_text=search_query or body.query,
+        structured_query=structured,
+        topk=candidate_limit,
+        rerank_depth=max(candidate_limit * 10, 80),
+        include_unknown_notices=PROFILE_INCLUDE_UNKNOWN_NOTICES,
+    )
+
+    candidates_with_meta: List[Dict[str, Any]] = []
+    for candidate in candidates:
+        item = dict(candidate)
+        dog_id = clean_text(candidate.get("desertionNo"))
+        raw_meta = HYBRID_META_BY_ID.get(dog_id)
+        if raw_meta:
+            item["_raw_meta"] = raw_meta
+        candidates_with_meta.append(item)
+
+    results = rerank_candidates(
+        candidates_with_meta,
+        body.profile,
+        PROFILE_RERANK_SETTINGS,
+        topk=body.topk,
+        include_unknown_notices=PROFILE_INCLUDE_UNKNOWN_NOTICES,
+    )
+    return JSONResponse(
+        {
+            "retrieval": "graph_enhanced_multimodal_rag+profile_rerank",
+            "query": body.query,
+            "structured_query": structured,
+            "profile": body.profile.model_dump(mode="json"),
+            "candidate_count": len(candidates),
+            "count": len(results),
+            "weights": {
+                "compatibility": PROFILE_RERANK_SETTINGS.compatibility_weight,
+                "quality": PROFILE_RERANK_SETTINGS.quality_weight,
+                "candidate_multiplier": PROFILE_RERANK_SETTINGS.candidate_multiplier,
+            },
+            "notice_policy": {
+                "filter_inactive": True,
+                "include_unknown": PROFILE_INCLUDE_UNKNOWN_NOTICES,
+            },
+            "disclaimer": PROFILE_RESULT_DISCLAIMER,
             "results": results,
         }
     )

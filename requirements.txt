@@ -19,3 +19,4 @@ sentencepiece>=0.2.0
 openai-clip>=1.0.1
 python-multipart>=0.0.9
 ultralytics>=8.3
+pytest>=8.0
