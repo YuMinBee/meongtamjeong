@@ -34,6 +34,9 @@ REQUIRED_PROFILE_FIELDS = {
 REQUIRED_RESULT_FIELDS = {
     "retrieval_score",
     "compatibility_score",
+    "applicable_count",
+    "evaluated_count",
+    "evidence_coverage",
     "quality_score",
     "final_score",
     "matched_conditions",
@@ -108,6 +111,7 @@ def small_active_candidate() -> dict[str, object]:
         "other_pets_compatible": False,
         "processState": "보호중",
         "noticeEdt": "20261231",
+        "last_verified_at": "2026-07-17T03:00:00",
         "detail_url": "https://example.test/small-active",
     }
 
@@ -228,6 +232,7 @@ def test_normalize_dog_maps_public_aliases_to_canonical_evidence(
     assert dog.photo_quality_score == pytest.approx(0.8)
     assert dog.notice_status == "active"
     assert dog.notice_end == "20261231"
+    assert dog.last_verified_at == "2026-07-17T03:00:00"
     assert dog.source_url == "https://example.test/small-active"
 
 
@@ -301,6 +306,9 @@ def test_unknown_evidence_is_neutral_and_explicitly_reported(
     assert REQUIRED_RESULT_FIELDS <= set(result)
     assert result["retrieval_score"] == pytest.approx(0.4)
     assert result["compatibility_score"] == pytest.approx(0.0)
+    assert result["applicable_count"] == 8
+    assert result["evaluated_count"] == 0
+    assert result["evidence_coverage"] == pytest.approx(0.0)
     assert result["quality_score"] is None
     assert result["final_score"] == pytest.approx(0.4)
     assert result["matched_conditions"] == []
@@ -310,6 +318,82 @@ def test_unknown_evidence_is_neutral_and_explicitly_reported(
         message in result["recommendation_reason"]
         for message in result["unknown_conditions"]
     )
+    assert "확인된 조건 0/8" in result["recommendation_reason"]
+
+
+def test_evidence_coverage_counts_only_conditions_supported_by_notice_evidence(
+    small_profile: UserProfile,
+    reference_date: datetime,
+) -> None:
+    candidate = {
+        "score": 0.4,
+        "desertionNo": "active-with-size-only",
+        "weight": "7(Kg)",
+        "processState": "보호중",
+        "noticeEdt": "20261231",
+    }
+
+    result = rerank_candidates(
+        [candidate],
+        small_profile,
+        ProfileRerankSettings(compatibility_weight=0.25, quality_weight=0.05),
+        topk=1,
+        reference_date=reference_date,
+    )[0]
+
+    assert result["applicable_count"] == 8
+    assert result["evaluated_count"] == 1
+    assert result["evidence_coverage"] == pytest.approx(1 / 8)
+    assert result["compatibility_score"] == pytest.approx(1 / 8)
+    assert result["final_score"] == pytest.approx(0.4 + 0.25 * (1 / 8))
+    assert len(result["matched_conditions"]) == 1
+    assert result["caution_conditions"] == []
+    assert len(result["unknown_conditions"]) == 7
+    assert "확인된 조건 1/8" in result["recommendation_reason"]
+
+
+def test_sparse_evidence_does_not_outrank_broad_evidence(
+    small_profile: UserProfile,
+    small_active_candidate: dict[str, object],
+    reference_date: datetime,
+) -> None:
+    sparse = {
+        "score": 0.5,
+        "desertionNo": "sparse",
+        "weight": "7(Kg)",
+        "processState": "보호중",
+        "noticeEdt": "20261231",
+    }
+    broad = deepcopy(small_active_candidate)
+    broad.update({"score": 0.5, "desertionNo": "broad"})
+
+    results = rerank_candidates(
+        [sparse, broad],
+        small_profile,
+        ProfileRerankSettings(compatibility_weight=0.25, quality_weight=0),
+        topk=2,
+        reference_date=reference_date,
+    )
+
+    assert [result["dog_id"] for result in results] == ["broad", "sparse"]
+    assert results[0]["compatibility_score"] > results[1]["compatibility_score"]
+
+
+def test_verified_weight_takes_precedence_over_vlm_size_observation(
+    reference_date: datetime,
+) -> None:
+    dog = normalize_dog(
+        {
+            "desertionNo": "size-conflict",
+            "weight": "25(Kg)",
+            "vlm_attrs": {"body_size_hint": "small"},
+        },
+        reference_date=reference_date,
+    )
+
+    assert dog.weight == pytest.approx(25.0)
+    assert dog.size == "large"
+    assert dog.vlm_attributes["body_size_hint"] == "small"
 
 
 def test_closed_and_expired_are_excluded_while_unknown_policy_is_configurable(
@@ -542,6 +626,16 @@ def test_exact_score_formula_sorting_and_reason_consistency(
         assert REQUIRED_RESULT_FIELDS <= set(result)
         assert isinstance(result["retrieval_score"], float)
         assert isinstance(result["compatibility_score"], float)
+        assert isinstance(result["applicable_count"], int)
+        assert isinstance(result["evaluated_count"], int)
+        assert isinstance(result["evidence_coverage"], float)
+        assert 0 <= result["evaluated_count"] <= result["applicable_count"]
+        expected_coverage = (
+            result["evaluated_count"] / result["applicable_count"]
+            if result["applicable_count"]
+            else 0.0
+        )
+        assert result["evidence_coverage"] == pytest.approx(expected_coverage)
         assert result["quality_score"] is None or isinstance(
             result["quality_score"], float
         )
@@ -571,6 +665,10 @@ def test_exact_score_formula_sorting_and_reason_consistency(
         )
         assert all(
             message in result["recommendation_reason"] for message in all_evidence
+        )
+        assert (
+            f"확인된 조건 {result['evaluated_count']}/{result['applicable_count']}"
+            in result["recommendation_reason"]
         )
         assert not (
             set(result["matched_conditions"])

@@ -24,8 +24,7 @@ ENV_PATH = BASE_DIR / ".env"
 load_dotenv(ENV_PATH)
 
 API_BASE = (
-    "http://apis.data.go.kr/1543061/abandonmentPublicService_v2/"
-    "abandonmentPublic_v2"
+    "https://apis.data.go.kr/1543061/abandonmentPublicService_v2/abandonmentPublic_v2"
 )
 DEFAULT_API_KEY = os.getenv("ANIMAL_API_KEY", "")
 
@@ -58,11 +57,17 @@ def is_active_notice(rec: Dict[str, Any], 기준일: datetime) -> bool:
 
 
 def normalize_breed_fields(rec: Dict[str, Any]) -> Dict[str, str]:
-    raw_kind = clean_text(rec.get("kindCd") or rec.get("breed") or rec.get("breed_name"))
+    raw_kind = clean_text(
+        rec.get("kindCd") or rec.get("breed") or rec.get("breed_name")
+    )
     raw_breed_code = clean_text(rec.get("breedCd") or rec.get("breed_code"))
 
     breed_code = raw_breed_code or (raw_kind if raw_kind.isdigit() else "")
-    breed_name = raw_kind if raw_kind and not raw_kind.isdigit() else clean_text(rec.get("breed_name"))
+    breed_name = (
+        raw_kind
+        if raw_kind and not raw_kind.isdigit()
+        else clean_text(rec.get("breed_name"))
+    )
     breed = breed_name or breed_code or "Unknown"
 
     return {
@@ -73,7 +78,17 @@ def normalize_breed_fields(rec: Dict[str, Any]) -> Dict[str, str]:
 
 
 def extract_image_url(rec: Dict[str, Any]) -> str:
-    for key in ("image_url", "url", "popfile", "popfile1", "popfile2", "fileName", "thumb", "image", "img"):
+    for key in (
+        "image_url",
+        "url",
+        "popfile",
+        "popfile1",
+        "popfile2",
+        "fileName",
+        "thumb",
+        "image",
+        "img",
+    ):
         value = clean_text(rec.get(key))
         if value.startswith("http"):
             return value
@@ -91,7 +106,10 @@ def build_live_animal_meta(rec: Dict[str, Any], species: str = "dog") -> Dict[st
     breed_fields = normalize_breed_fields(rec)
     desertion_no = clean_text(rec.get("desertionNo")) or "Unknown"
     notice_no = clean_text(rec.get("noticeNo"))
-    upkind = clean_text(rec.get("upkind") or rec.get("upkindCd")) or species_config(species)["upkind"]
+    upkind = (
+        clean_text(rec.get("upkind") or rec.get("upkindCd"))
+        or species_config(species)["upkind"]
+    )
     normalized_species = species_from_upkind(upkind, clean_species(species))
 
     return {
@@ -106,7 +124,9 @@ def build_live_animal_meta(rec: Dict[str, Any], species: str = "dog") -> Dict[st
         "sex": clean_text(rec.get("sexCd")) or clean_text(rec.get("sex")) or "Unknown",
         "age": clean_text(rec.get("age")) or "Unknown",
         "weight": clean_text(rec.get("weight")) or "Unknown",
-        "neuter": clean_text(rec.get("neuterYn")) or clean_text(rec.get("neuter")) or "Unknown",
+        "neuter": clean_text(rec.get("neuterYn"))
+        or clean_text(rec.get("neuter"))
+        or "Unknown",
         "desc": clean_text(rec.get("specialMark")) or clean_text(rec.get("desc")) or "",
         "image_url": extract_image_url(rec),
         "detail_url": (
@@ -122,7 +142,9 @@ def build_live_animal_meta(rec: Dict[str, Any], species: str = "dog") -> Dict[st
         "happen_place": clean_text(rec.get("happenPlace") or rec.get("happen_place")),
         "notice_start": clean_text(rec.get("noticeSdt") or rec.get("notice_start")),
         "notice_end": clean_text(rec.get("noticeEdt") or rec.get("notice_end")),
-        "process_state": clean_text(rec.get("processState") or rec.get("process_state")),
+        "process_state": clean_text(
+            rec.get("processState") or rec.get("process_state")
+        ),
     }
 
 
@@ -154,7 +176,7 @@ def fetch_live_animals(
 ) -> Dict[str, Any]:
     normalized_species = clean_species(species)
     upkind = species_config(normalized_species)["upkind"]
-    end = datetime.now()
+    end = datetime.now().astimezone()
     start = end - timedelta(days=years * 365)
     session = build_session()
 
@@ -184,7 +206,9 @@ def fetch_live_animals(
         resp.raise_for_status()
 
         data = resp.json()
-        body = data.get("response", {}).get("body", {}) if isinstance(data, dict) else {}
+        body = (
+            data.get("response", {}).get("body", {}) if isinstance(data, dict) else {}
+        )
         page_items = body.get("items", {}).get("item", [])
         if isinstance(page_items, dict):
             page_items = [page_items]
@@ -203,6 +227,10 @@ def fetch_live_animals(
             if not meta["image_url"]:
                 stats["skipped_no_image"] += 1
                 continue
+
+            # This is the time at which the upstream notice was checked, not
+            # an assertion that the notice will remain active afterward.
+            meta["last_verified_at"] = end.isoformat(timespec="seconds")
 
             desertion_no = meta["desertionNo"]
             if desertion_no in seen:
@@ -245,8 +273,15 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="최근 N년 유기동물 공고를 공공 API에서 받아 로컬 JSON 캐시 파일로 저장합니다."
     )
-    parser.add_argument("--species", default="dog", choices=("dog", "cat", "other"), help="조회할 동물 종류")
-    parser.add_argument("--years", type=int, default=3, help="오늘 기준 몇 년 전까지 조회할지")
+    parser.add_argument(
+        "--species",
+        default="dog",
+        choices=("dog", "cat", "other"),
+        help="조회할 동물 종류",
+    )
+    parser.add_argument(
+        "--years", type=int, default=3, help="오늘 기준 몇 년 전까지 조회할지"
+    )
     parser.add_argument("--rows", type=int, default=1000, help="페이지당 조회 건수")
     parser.add_argument("--max-pages", type=int, default=500, help="최대 페이지 수")
     parser.add_argument(
@@ -287,7 +322,9 @@ def main() -> None:
     print(f"[INFO] species={payload['species']} upkind={payload['upkind']}")
     print(f"[INFO] fetched_at={payload['fetched_at']}")
     print(f"[INFO] years={payload['years']} days={payload['days']}")
-    print(f"[INFO] pages={stats['pages_fetched']} raw={stats['raw_items']} kept={stats['kept_items']}")
+    print(
+        f"[INFO] pages={stats['pages_fetched']} raw={stats['raw_items']} kept={stats['kept_items']}"
+    )
     print(
         "[INFO] skipped "
         f"closed={stats['skipped_closed']} "

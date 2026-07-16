@@ -2,7 +2,7 @@ fastapi>=0.115
 uvicorn[standard]>=0.30
 pydantic>=2
 
-# numpy 1.26+는 Python 3.8을 지원하지 않음
+# NumPy 1.26+ no longer supports Python 3.8.
 numpy>=1.24,<1.25; python_version < '3.9'
 numpy>=1.26,<3; python_version >= '3.9'
 
@@ -13,10 +13,8 @@ faiss-cpu
 
 torch
 torchvision
-transformers>=4.51
-accelerate>=0.34
-sentencepiece>=0.2.0
-openai-clip>=1.0.1
+clip @ git+https://github.com/openai/CLIP.git@dcba3cb2e2827b402d2701e7e1c7d9fed8a20ef1
+ftfy>=6.2
+regex>=2024.0
+tqdm>=4.66
 python-multipart>=0.0.9
-ultralytics>=8.3
-pytest>=8.0

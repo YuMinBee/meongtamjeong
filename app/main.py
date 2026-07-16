@@ -51,7 +51,10 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = BASE_DIR / "data"
 ENV_PATH = BASE_DIR / ".env"
 load_dotenv(ENV_PATH)
-app = FastAPI(title="Dog Similarity + Gemma")
+app = FastAPI(
+    title="멍탐정 (MeongTamjeong)",
+    description="유기견 보호소 방문 전 후보를 좁히는 멀티모달 탐색 보조 API",
+)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -70,7 +73,7 @@ METAS_PATH = Path(os.getenv("METAS_PATH", str(DATA_DIR / "dog_metas.json")))
 CLIP_MODEL = os.getenv("CLIP_MODEL", "ViT-B/32")
 ANIMAL_API_KEY = os.getenv("ANIMAL_API_KEY", "")
 ANIMAL_API_BASE = (
-    "http://apis.data.go.kr/1543061/abandonmentPublicService_v2/"
+    "https://apis.data.go.kr/1543061/abandonmentPublicService_v2/"
     "abandonmentPublic_v2"
 )
 LIVE_DOG_CACHE_PATH = DATA_DIR / "local_dog_cache.json"
@@ -81,6 +84,12 @@ LIVE_FETCH_MAX_PAGES = int(os.getenv("LIVE_FETCH_MAX_PAGES", "500"))
 LIVE_CACHE_LOCK = Lock()
 GEMMA3_MODEL_PATH = os.getenv("GEMMA3_MODEL_PATH", "")
 GEMMA3_MODEL_ID = os.getenv("GEMMA3_MODEL_ID", "google/gemma-3-12b-it")
+GEMMA3_ENABLED = os.getenv("GEMMA3_ENABLED", "true").lower() in {
+    "1",
+    "true",
+    "yes",
+    "on",
+}
 GEMMA3_GPU_MAX_MEMORY = os.getenv("GEMMA3_GPU_MAX_MEMORY", "20GiB")
 GEMMA3_CPU_MAX_MEMORY = os.getenv("GEMMA3_CPU_MAX_MEMORY", "96GiB")
 GEMMA3_RECOMMEND_MAX_NEW_TOKENS = int(os.getenv("GEMMA3_RECOMMEND_MAX_NEW_TOKENS", "320"))
@@ -269,6 +278,8 @@ def resolve_gemma_model_path() -> Tuple[str, bool]:
 
 def load_gemma_runtime() -> Tuple[Any, Any]:
     global GEMMA_PROCESSOR, GEMMA_MODEL, GEMMA_MODEL_NAME
+    if not GEMMA3_ENABLED:
+        raise RuntimeError("Gemma 기능은 GEMMA3_ENABLED=false로 비활성화되어 있습니다.")
     if GEMMA_PROCESSOR is not None and GEMMA_MODEL is not None:
         return GEMMA_PROCESSOR, GEMMA_MODEL
 
@@ -1470,6 +1481,7 @@ def health():
         "notice_status": graph_summary["notice_status"],
         "notice_filter_inactive": NOTICE_FILTER_INACTIVE,
         "notice_include_unknown": NOTICE_INCLUDE_UNKNOWN,
+        "gemma_enabled": GEMMA3_ENABLED,
     }
 
 
@@ -1632,7 +1644,7 @@ def rag_recommend(body: HybridRagQuery):
         strict_filters=bool(body.strict_filters),
     )
     recommendation = ""
-    if body.include_recommendation:
+    if body.include_recommendation and GEMMA3_ENABLED:
         recommendation = gemma_recommend(profile_text=raw_query, candidates=results)
 
     return JSONResponse(
@@ -1900,7 +1912,11 @@ async def rag_recommend_form(
         strict_filters=strict_filters,
         query_vec=query_vec,
     )
-    recommendation = gemma_recommend(profile_text=raw_query, candidates=results) if include_recommendation else ""
+    recommendation = (
+        gemma_recommend(profile_text=raw_query, candidates=results)
+        if include_recommendation and GEMMA3_ENABLED
+        else ""
+    )
     return JSONResponse(
         {
             "retrieval": "graph_enhanced_multimodal_rag",
@@ -2101,7 +2117,7 @@ def image_audit_ui(request: Request):
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Image Audit</title>
+  <title>멍탐정 이미지 점검</title>
   <style>
     :root { --bg:#f7f8f6; --panel:#fff; --ink:#17211d; --muted:#65736d; --line:#d9e0dc; --soft:#eef3f0; --accent:#1f6b4b; --bad:#a33a31; --warn:#956100; --good:#28724d; }
     * { box-sizing:border-box; }
@@ -2301,7 +2317,7 @@ def feature_dashboard_ui(request: Request):
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dog RAG Dashboard</title>
+  <title>멍탐정 검색 대시보드</title>
   <style>
     :root {
       --bg:#f7f8f6; --panel:#ffffff; --ink:#17211d; --muted:#66736d;
@@ -2631,7 +2647,7 @@ def adoption_flow_ui(request: Request):
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Adoption Flow</title>
+  <title>멍탐정 입양 탐색</title>
   <style>
     :root { --ink:#17211b; --muted:#66736c; --line:#d9e2dc; --soft:#f4f7f5; --accent:#236b4b; --warn:#8a5b00; }
     * { box-sizing:border-box; }
@@ -2696,7 +2712,7 @@ def adoption_flow_ui(request: Request):
       <div class="checks">
         <label><input name="strict_filters" type="checkbox" /> 조건 엄격 적용</label>
         <label><input name="use_llm_parse" type="checkbox" /> LLM 파싱</label>
-        <label><input name="include_recommendation" type="checkbox" checked /> 추천 설명</label>
+        <label><input name="include_recommendation" type="checkbox" __GEMMA_CHECKED__ /> 추천 설명</label>
       </div>
       <button id="submitBtn" type="submit">검색</button>
     </fieldset>
@@ -2766,7 +2782,9 @@ form.addEventListener('submit', async event => {
 </script>
 </body>
 </html>
-""".replace("__API_KEY__", api_key_json)
+""".replace("__API_KEY__", api_key_json).replace(
+        "__GEMMA_CHECKED__", "checked" if GEMMA3_ENABLED else ""
+    )
     return HTMLResponse(page)
 
 @app.post("/recommend_with_survey_form")

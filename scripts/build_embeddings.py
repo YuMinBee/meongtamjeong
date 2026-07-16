@@ -60,7 +60,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 model, preprocess = clip.load("ViT-B/32", device=device)
 print(f"[INFO] device={device}")
 
-BASE = "http://apis.data.go.kr/1543061/abandonmentPublicService_v2/abandonmentPublic_v2"
+BASE = "https://apis.data.go.kr/1543061/abandonmentPublicService_v2/abandonmentPublic_v2"
 API_KEY = os.getenv("ANIMAL_API_KEY", "")
 
 session = requests.Session()
@@ -125,6 +125,11 @@ def parse_args():
     parser.add_argument("--target", type=int, default=TARGET, help="Maximum records to process.")
     parser.add_argument("--text-only", action="store_true", help="Skip image downloads and build only text embeddings.")
     parser.add_argument("--include-closed", action="store_true", help="Include closed or expired notices in the rebuilt FAISS index.")
+    parser.add_argument(
+        "--exclude-unknown",
+        action="store_true",
+        help="Exclude notices whose active status cannot be verified.",
+    )
     parser.add_argument("--index-out", type=Path, default=None, help="Output FAISS index path. Defaults to data/{species}_faiss.index.")
     parser.add_argument("--metas-out", type=Path, default=None, help="Output metadata path. Defaults to data/{species}_metas.json.")
     parser.add_argument("--upkind", default="", help="Override public API upkind code when fetching without --input.")
@@ -358,7 +363,10 @@ while ok < target:
         did = first_text(rec, "desertionNo")
         if not did or did in seen:
             continue
-        if not args.include_closed and not is_searchable_notice(rec, include_unknown=True):
+        if not args.include_closed and not is_searchable_notice(
+            rec,
+            include_unknown=not args.exclude_unknown,
+        ):
             skipped_inactive += 1
             continue
         seen.add(did)

@@ -1,18 +1,42 @@
-# dog service
+# 멍탐정 (MeongTamjeong)
 
-유기견 공고 데이터를 기반으로 CLIP + FAISS 유사도 검색, Gemma 기반 추천 문장 생성, VLM 설명 보강, 종 코드별 시각화를 제공하는 프로젝트입니다.
+이미지와 자연어로 유기견 공고를 찾고, 공고에서 확인된 정보와 사용자의 생활조건을 바탕으로 보호소 방문 전 후보를 좁히는 오픈소스 멀티모달 탐색 도구입니다. 이 프로젝트는 입양 적합성을 확정하거나 실제 입양 결정을 대신하지 않습니다.
+
+- [데이터 카드](DATA_CARD.md)
+- [모델·시스템 카드](MODEL_CARD.md)
+- [제3자 소프트웨어·모델 고지](THIRD_PARTY_NOTICES.md)
+- [2026 오픈소스 개발자대회 제출 체크리스트](docs/contest-2026-checklist.md)
+- [기여 방법](CONTRIBUTING.md)
+- [보안 정책](SECURITY.md)
 
 ## 빠른 시작
 
+Python 3.10을 기준으로 검증합니다.
+
 ```bash
-cd dog
+git clone https://github.com/YuMinBee/meongtamjeong.git
+cd meongtamjeong
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-기본 API 키는 `.env.example` 기준 `change-me`입니다. 실제 배포나 제출용 실행에서는 `.env`에 별도 값을 넣어 사용하세요. 로컬에서 서버가 켜지면 아래 명령으로 상태를 확인할 수 있습니다.
+Windows PowerShell에서는 가상환경 활성화 명령으로 `.venv\Scripts\Activate.ps1`을 사용합니다. 최초 실행 시 CLIP 가중치를 내려받을 수 있습니다. `/search/text`, `/search/profile`과 규칙 기반 추천 근거는 Gemma 없이 동작하며, Gemma 추천 문장과 오프라인 VLM 보강은 선택 기능입니다.
+
+선택 기능은 필요한 경우에만 별도로 설치합니다.
+
+```bash
+# Gemma 추천 문장·오프라인 VLM 보강
+python -m pip install -r requirements-vlm.txt
+
+# Ultralytics 기반 객체 영역 추출
+python -m pip install -r requirements-detection.txt
+```
+
+Ultralytics를 설치·배포하기 전에는 AGPL-3.0 의무와 프로젝트 라이선스 호환성을 반드시 확인하세요.
+
+기본 API 키는 `.env.example` 기준 `change-me`입니다. 실제 배포나 제출용 실행에서는 `.env`에 별도 값을 넣어 사용하세요. 대회 시연은 상태 unknown 공고를 제외하고 active-only artifact를 요구하는 `.env.contest.example`을 기준으로 준비합니다. 로컬에서 서버가 켜지면 아래 명령으로 상태를 확인할 수 있습니다.
 
 ```bash
 curl -H 'x-api-key: change-me' http://localhost:8000/health
@@ -26,6 +50,16 @@ curl -X POST 'http://localhost:8000/search/text' \
   -H 'Content-Type: application/json' \
   -d '{"query":"작고 차분한 흰색 강아지","topk":5}'
 ```
+
+현재 데이터가 대회 시연이나 운영에 적합한지 먼저 확인하려면 다음 명령을 사용합니다.
+
+```bash
+python scripts/check_contest_readiness.py \
+  --metas data/dog_metas.json \
+  --index data/dog_faiss.index
+```
+
+`--strict`를 추가하면 식별자 누락, 인덱스/메타 불일치, 공고 상태 커버리지 부재처럼 제출을 막는 항목이 있을 때 0이 아닌 종료 코드를 반환합니다.
 
 ## 프로젝트 목적
 
@@ -48,15 +82,15 @@ curl -X POST 'http://localhost:8000/search/text' \
 
 이 프로젝트의 필요성은 "입양을 온라인에서 대신 결정해주는가"가 아니라, "입양 전 탐색과 비교를 얼마나 효율적으로 도와줄 수 있는가"에 있습니다.
 
-- 국내 조사에서는 반려동물 양육 가구와 양육 희망 가구가 관련 정보를 주로 포털사이트와 유튜브 등 온라인 채널에서 수집하는 것으로 나타났습니다. 또한 향후 입양 희망 경로에서도 보호소·유기동물 입양에 대한 선호가 높게 나타났습니다.
+- [한국농촌경제연구원의 2024년 조사](https://repository.krei.re.kr/bitstream/2018.oak/31235/1/P298.pdf)에서는 반려동물 관련 정보 채널로 포털사이트와 유튜브가 높은 비중을 보였고, 향후 입양 희망자 264명 중 48.1%가 보호소·유기동물 입양을 선호했습니다. 농림축산식품부의 [2025년 동물복지 국민의식조사](https://www.mafra.go.kr/bbs/home/792/576961/artclView.do)에서도 5,000명 온라인 조사 중 1년 이내 입양 의향 응답자의 88.3%가 유실·유기동물 입양을 고려한다고 보고했습니다.
 
-- 매년 10만 마리 이상 유기동물이 발생하고, 동물보호센터 운영 비용은 증가하고 있습니다. 2024년 식용견 산업 단계적 폐지 이후 구조견 유입 증가 가능성까지 고려하면, 보호소 데이터 탐색과 정보 정리가 더 중요해질 수 있습니다.
+- 농림축산식품부의 [2023년 반려동물 보호·복지 실태조사](https://mafra.go.kr/bbs/home/792/584544/download.do)에 따르면 유실·유기동물 등 113,072마리가 구조됐고, 동물보호센터 운영 비용은 전년보다 26.8% 증가했습니다.
 
-- ASPCA가 약 1,500명의 입양자를 조사한 결과, 외형과 사람과의 상호작용 행동은 입양 결정에서 중요한 요소로 나타났습니다. 이는 공고 단계에서 사진과 설명이 단순 부가 정보가 아니라, 초기 탐색 판단에 실질적인 영향을 줄 수 있음을 시사합니다.
+- [미국 5개 보호소 입양자 1,491명을 분석한 연구](https://www.mdpi.com/2076-2615/2/2/144)에서는 외형, 입양자와의 사회적 행동, 놀이 행동이 주요 입양 이유로 나타났습니다. 이는 공고 단계에서 사진과 설명이 초기 탐색에 영향을 줄 수 있음을 시사합니다.
 
-- HeARTs Speak 2018 조사 내용을 인용한 Best Friends 자료에 따르면, 입양자의 65%는 입양 전에 온라인 사진을 확인했고, 10명 중 9명은 여러 후보를 비교할 때 사진을 활용했으며, 64%는 온라인 사진이 매우 중요하거나 중요하다고 응답했습니다.
+- [Best Friends가 소개한 HeARTs Speak의 2018년 요약 자료](https://bestfriends.org/network/blog/photo-pros-share-tricks-trade)에서는 입양자의 65%가 입양 전 온라인 사진을 확인했고, 10명 중 9명은 후보 비교에 사진을 사용했으며, 64%는 온라인 사진이 매우 또는 극히 중요하다고 답했습니다. 링크된 글에는 원 조사의 표본과 방법이 제시되지 않아 보조 근거로만 사용합니다.
 
-- Kimberly T. El-beid(2016)는 선행연구들을 정리하며 사진 품질, 시선 처리, 촬영 환경, 선명도 같은 요소가 온라인 입양 공고의 관심도와 입양 속도에 영향을 줄 수 있다고 설명합니다.
+- [Lampe와 Witte의 보호견 온라인 사진 연구](https://pubmed.ncbi.nlm.nih.gov/25495493/)에서는 카메라를 향한 시선, 서 있는 자세, 적절한 사진 크기, 야외 배경, 흐리지 않은 사진이 더 빠른 입양과 관련됐습니다. 이는 상관관계 결과이며 개별 공고의 입양 가능성을 예측하는 근거로 사용하지 않습니다.
 
 즉, 보호소 공고의 사진과 설명은 단순히 "올려두는 정보"가 아니라, 사용자가 후보를 고르고 비교하는 과정에서 중요한 탐색 자료입니다. 본 프로젝트는 바로 이 탐색 단계의 비효율을 줄이는 데 초점을 둡니다.
 
@@ -68,7 +102,7 @@ curl -X POST 'http://localhost:8000/search/text' \
 
 2. 1차 개발: 품종 분류 대신 `CLIP + FAISS` 기반 벡터 유사도 검색으로 전환했습니다. 텍스트 질의와 이미지 질의를 같은 임베딩 공간에서 다루며, "어떤 종인지"보다 "사용자가 찾는 조건과 얼마나 닮았는지"를 기준으로 후보를 찾는 구조를 만들었습니다.
 
-3. 2차 개발: 검색 결과의 해석 가능성을 높이기 위해 `Gemma 3` 기반 VLM 설명 보강을 추가했습니다. 원문 설명과 보강 설명을 합친 `merged_desc`를 생성하고, 설명 길이 증가와 샘플 질의 기반 검색 적합도 같은 설명 중심 지표를 별도로 측정했습니다. 현재 저장된 데이터 기준으로 VLM 설명 보강 완료는 `1,639`건, 평균 설명 길이는 `20.1자 -> 147.5자`로 약 `7.35배` 증가했고, 샘플 질의 10개 기준 규칙 평가에서는 `top1 hit rate 0.0 -> 0.4`, `avg hit@5 0.02 -> 0.30`으로 나타났습니다.
+3. 2차 개발: 검색 결과의 해석 가능성을 높이기 위해 `Gemma 3` 기반 VLM 설명 보강을 추가했습니다. 원문 설명과 보강 설명을 합친 `merged_desc`를 생성하고, 설명 길이 증가와 샘플 질의 기반 검색 적합도 같은 설명 중심 지표를 별도로 측정했습니다. 당시 로컬 실험에서는 VLM 설명 보강 `1,639`건, 평균 설명 길이 `20.1자 -> 147.5자`, 샘플 질의 10개 기준 `top1 hit rate 0.0 -> 0.4`, `avg hit@5 0.02 -> 0.30`을 기록했습니다. 당시 cache와 생성 report는 현재 Git에 포함되어 있지 않으므로 출품 성능 근거로 쓰기 전 재현 artifact가 필요합니다.
 
 ## 기술 전환 흐름도
 
@@ -198,36 +232,44 @@ final_score
 ```
 
 - `retrieval_score`: 기존 하이브리드 검색 점수를 0~1로 제한한 값
-- `compatibility_score`: 확인 가능한 생활조건 중 일치 1, 주의 0의 평균
+- `compatibility_score`: 일치 1, 주의 0을 적용 가능한 전체 조건 수로 나눈 근거 커버리지 반영 점수
 - `quality_score`: 0~1 사진 품질 점수. 정보가 없으면 `null`
 - `final_score`: 정렬용 가산 점수이며 확률이 아니므로 1보다 클 수 있음
 
-공고 정보가 부족한 조건은 호환 점수의 분자와 분모에서 모두 제외합니다. 모든 조건이 unknown이면 `compatibility_score=0`으로 두어 임의의 가점이나 감점을 만들지 않으며, 사진 품질이 unknown이면 품질 항도 더하지 않습니다. `preferred_size=any`, `preferred_age=any`, 빈 `preferred_region`, `has_children=false`, `has_other_pets=false`처럼 비교가 필요 없는 조건도 평가 대상에서 제외합니다.
+공고 정보가 부족한 조건은 일치나 주의로 단정하지 않고 호환성 가점을 주지 않습니다. `compatibility_score`는 확인된 일치 점수 합을 적용 가능한 전체 조건 수로 나누므로, 정보가 한 항목뿐인 후보가 그 한 번의 일치만으로 과도한 가점을 받지 않습니다. 모든 조건이 unknown이면 `compatibility_score=0`이며 음수 감점은 없습니다. 사진 품질이 unknown이면 품질 항도 더하지 않습니다. `preferred_size=any`, `preferred_age=any`, 빈 `preferred_region`, `has_children=false`, `has_other_pets=false`처럼 비교가 필요 없는 조건은 평가 대상에서 제외합니다.
 
-각 결과에는 `retrieval_score`, `compatibility_score`, `quality_score`, `final_score`, `matched_conditions`, `caution_conditions`, `unknown_conditions`, 규칙 기반 `recommendation_reason`, 정규화된 `meta`, 실제 `source_url`이 포함됩니다. 성격, 공격성, 아동 친화성, 다른 동물과의 사회성은 명시적 공고 근거가 없으면 판단하지 않습니다.
+각 결과에는 `retrieval_score`, `compatibility_score`, `quality_score`, `final_score`, `applicable_count`, `evaluated_count`, `evidence_coverage`, `matched_conditions`, `caution_conditions`, `unknown_conditions`, 규칙 기반 `recommendation_reason`, 정규화된 `meta`, 실제 `source_url`이 포함됩니다. 점수와 함께 근거 커버리지를 확인해야 합니다. 성격, 공격성, 아동 친화성, 다른 동물과의 사회성은 명시적 공고 근거가 없으면 판단하지 않습니다.
 
 ## 현재 데이터/시스템 지표
 
-아래 수치는 현재 저장된 파일 기준의 현황입니다.
+현재 Git에 추적된 검색 artifact에서 직접 확인되는 값은 다음과 같습니다.
 
 - 임베딩 메타 총 개수: `17,838`
 - 이미지 메타: `9,826`
 - 텍스트 메타: `8,012`
-- 활성 공고 캐시 개수: `1,665`
-- 종 코드 수: `41`
+- 고유 공고 식별자 수: `12,934`
+- FAISS 벡터 수: `17,838` (메타 행 수와 일치)
+- 상태·종료일·지역·보호소 커버리지: `0%`
+
+아래 값은 이전 로컬 cache와 enriched cache로 수행한 과거 설명 보강 실험 기록입니다. 해당 원본 cache와 생성 report는 현재 Git에 포함되어 있지 않으므로, 출품 성능 근거로 사용하려면 같은 스냅샷 또는 새 공개 평가 artifact를 먼저 추가해야 합니다.
+
+- 당시 활성 공고 캐시 개수: `1,665`
+- 당시 종 코드 수: `41`
 - VLM 설명 보강 완료 개수: `1,639`
-- 현재 `vlm_error` 개수: `0`
+- 당시 `vlm_error` 개수: `0`
 - 설명 보강 전 평균 설명 길이: `20.1자`
 - 설명 보강 후 평균 설명 길이: `147.5자`
 - 설명 길이 증가 배수: 약 `7.35배`
 - 샘플 질의 10개 기준 `top1 hit rate`: `0.0 -> 0.4`
 - 샘플 질의 10개 기준 `avg hit@5`: `0.02 -> 0.30`
 
+> 현재 추적 중인 `data/dog_metas.json`은 검색 동작 확인에는 사용할 수 있지만, active 공고만 보여주는 대회 시연 데이터나 위 Before/After 수치의 완전한 재현 자료로는 충분하지 않습니다. 시연 전 최신 공고 cache를 수집해 active-only 인덱스를 다시 생성하고 readiness 검사를 통과해야 합니다.
+
 이 숫자 중 임베딩 메타 개수와 공고 수는 운영 규모를 보여주는 지표에 가깝고, 설명 길이와 샘플 질의 기반 hit rate는 VLM 설명 보강 전후 비교를 위한 보조 평가 지표입니다.
 
 ## 실험 방법
 
-현재 README에 적은 설명 보강 관련 수치는 아래 방식으로 계산했습니다.
+과거 설명 보강 관련 수치는 아래 방식으로 계산했습니다. 현재 저장소에는 `eval_queries.sample.json`과 계산 스크립트는 있지만 당시 두 cache와 생성 report가 없으므로, 아래 절차는 방법 기록이며 현재 checkout만으로 같은 숫자를 재생성할 수 있다는 뜻은 아닙니다.
 
 1. 운영 규모 지표
 - `data/dog_metas.json`에서 전체 메타 수, 이미지 메타 수, 텍스트 메타 수를 집계했습니다.
@@ -249,7 +291,7 @@ final_score
 
 ## Before / After 확인 포인트
 
-설명 보강 예시는 `data/local_dog_cache_enriched.json`에서 직접 확인할 수 있습니다.
+설명 보강 예시는 파이프라인을 실행해 `data/local_dog_cache_enriched.json`을 새로 생성하거나 당시 artifact를 복원한 뒤 확인할 수 있습니다. 이 파일은 현재 Git에 포함되어 있지 않습니다.
 
 - `desc`: 보호소 공고 원문 설명
 - `vlm_desc`: Gemma 3 VLM이 사진을 바탕으로 생성한 보강 설명
@@ -309,14 +351,14 @@ final_score
 ### 1) 압축해서 이동(권장)
 
 ```bash
-cd /path/to/dog
-tar --exclude='.venv' --exclude='__pycache__' -czf dog.tar.gz .
+cd /path/to/meongtamjeong
+tar --exclude='.venv' --exclude='__pycache__' -czf meongtamjeong.tar.gz .
 ```
 
 새 컴퓨터에서:
 
 ```bash
-tar -xzf dog.tar.gz
+tar -xzf meongtamjeong.tar.gz
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -340,6 +382,7 @@ pip install -r requirements.txt
 기존 API의 `NOTICE_INCLUDE_UNKNOWN` 기본값은 변경하지 않았습니다. 프로필 검색은 `PROFILE_INCLUDE_UNKNOWN_NOTICES=true`일 때 상태 정보가 없는 기존 메타도 반환하되 `unknown_conditions`에 상태 확인 안내를 추가합니다. active 상태가 포함된 메타데이터로 인덱스를 재생성한 운영 환경에서는 이 값도 `false`로 바꿀 수 있습니다. `/search/profile`의 최종 결과는 설정과 관계없이 closed/expired를 다시 제외합니다.
 
 - `API_KEY`: 요청 헤더 `x-api-key` 값
+- `GEMMA3_ENABLED`: Gemma 기반 선택 API 활성화 여부. `false`면 모델을 다운로드하거나 로드하지 않음
 - `GEMMA3_MODEL_PATH`: 로컬 Gemma 3 snapshot 경로
 - `GEMMA3_MODEL_ID`: 로컬 경로가 없을 때 사용할 Gemma 모델 ID
 - `GEMMA3_GPU_MAX_MEMORY`: Gemma 실행 시 GPU 최대 메모리
@@ -483,27 +526,30 @@ python scripts/build_embeddings.py \
   --input data/local_dog_cache_enriched.json \
   --species dog \
   --target 10000 \
+  --exclude-unknown \
   --index-out data/dog_faiss.index \
   --metas-out data/dog_metas.json
 ```
 
-기본 재생성은 closed/expired를 제외하지만 상태 unknown은 포함합니다. 필요에 따라 `--text-only`로 이미지 벡터 생성을 생략하거나, 보존 목적일 때만 `--include-closed`를 사용할 수 있습니다.
+기본 재생성은 기존 호환성을 위해 closed/expired를 제외하되 상태 unknown은 포함합니다. 운영·대회 시연용 active-only artifact는 위 예시처럼 `--exclude-unknown`을 사용합니다. 필요에 따라 `--text-only`로 이미지 벡터 생성을 생략하거나, 보존 목적일 때만 `--include-closed`를 사용할 수 있습니다.
 
 ## 테스트
 
-개발 의존성에는 `pytest>=8.0`이 포함되어 있습니다. 프로젝트 루트에서 다음 명령을 실행합니다.
+가벼운 테스트·정적 검사 전용 환경은 애플리케이션의 GPU/VLM 의존성을 설치하지 않고 구성할 수 있습니다.
+
+```bash
+python -m pip install -r requirements-dev.txt
+```
+
+프로젝트 루트에서 다음 명령을 실행합니다.
 
 ```bash
 python -m pytest -q
+ruff check app/profile_rerank.py app/notice_status.py app/graph_rag.py scripts/fetch_live_dogs.py scripts/merge_dog_metadata.py scripts/check_contest_readiness.py tests
 ```
 
 자동 테스트는 프로필별 순위 변화, unknown의 중립 처리, 종료 공고 제외, 점수와 근거 일관성, 기존 텍스트·이미지 API 회귀, 메타 병합의 개수·순서·식별자 보존과 우선순위를 검증합니다. `pytest.ini`는 `tests/`만 수집하므로 `scripts/test_api.py` 같은 기존 실행용 스크립트는 자동 수집하지 않습니다.
 
 ## 정확히 같은 환경(현재 PC 기준)
 
-현재 `.venv` 기준으로 `requirements.lock.txt`가 생성되어 있습니다(전체 `pip freeze`).
-OS/파이썬 버전이 같을 때만 그대로 쓰는 걸 권장합니다.
-
-```bash
-pip install -r requirements.lock.txt
-```
+`requirements.lock.txt`는 과거 시스템 전체 환경에서 생성된 참고용 freeze이며 ROS·CUDA 패키지까지 포함합니다. 현재 프로젝트의 clean install 기준으로 사용하지 마세요. 핵심 검색은 `requirements.txt`, Gemma/VLM은 `requirements-vlm.txt`, 객체 탐지는 `requirements-detection.txt`, 테스트·CI는 `requirements-dev.txt`, 전체 GPU 환경은 `environment.yml`을 기준으로 합니다. 제출용 lockfile은 clean 환경에서 별도로 다시 생성할 예정입니다.

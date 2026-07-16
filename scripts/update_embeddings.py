@@ -68,7 +68,7 @@ def safe_write_faiss_index(index_obj, path: Path) -> None:
         faiss.write_index(index_obj, str(safe_path))
         shutil.copy2(safe_path, path)
 
-BASE = "http://apis.data.go.kr/1543061/abandonmentPublicService_v2/abandonmentPublic_v2"
+BASE = "https://apis.data.go.kr/1543061/abandonmentPublicService_v2/abandonmentPublic_v2"
 API_KEY = os.getenv("ANIMAL_API_KEY", "")
 if not API_KEY:
     raise SystemExit(

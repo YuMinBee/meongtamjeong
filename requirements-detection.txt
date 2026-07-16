@@ -1,0 +1,4 @@
+-r requirements.txt
+
+# Optional object-region extraction. Review AGPL-3.0 obligations before use.
+ultralytics>=8.3

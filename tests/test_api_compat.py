@@ -262,6 +262,14 @@ def test_search_profile_route_runs_real_validation_and_reranking(
     assert result["retrieval_score"] == pytest.approx(0.61)
     assert result["final_score"] >= result["retrieval_score"]
     assert result["matched_conditions"]
+    assert result["applicable_count"] >= result["evaluated_count"] > 0
+    assert result["evidence_coverage"] == pytest.approx(
+        result["evaluated_count"] / result["applicable_count"]
+    )
+    assert (
+        f"확인된 조건 {result['evaluated_count']}/{result['applicable_count']}"
+        in result["recommendation_reason"]
+    )
 
     search_call = isolated_runtime["hybrid"][0]
     expected_candidates = main_module.PROFILE_RERANK_SETTINGS.candidate_count(1)
@@ -281,3 +289,26 @@ def test_profile_route_rejects_incomplete_profile_before_search(
 
     assert response.status_code == 422
     assert isolated_runtime["hybrid"] == []
+
+
+def test_rag_search_skips_optional_gemma_when_disabled(
+    client: TestClient,
+    isolated_runtime: dict[str, Any],
+    main_module: Any,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(main_module, "GEMMA3_ENABLED", False)
+
+    response = client.post(
+        "/rag/recommend",
+        headers=API_HEADERS,
+        json={
+            "query": "small calm dog",
+            "topk": 1,
+            "include_recommendation": True,
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.json()["recommendation"] == ""
+    assert isolated_runtime["gemma"] == []

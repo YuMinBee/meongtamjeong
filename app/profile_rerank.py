@@ -224,6 +224,7 @@ class NormalizedDog(BaseModel):
     photo_quality_score: Optional[float] = Field(default=None, ge=0, le=1)
     notice_status: Literal["active", "closed", "expired", "unknown"] = UNKNOWN
     notice_end: Optional[str] = None
+    last_verified_at: Optional[str] = None
     source_url: str = ""
 
     # These hints are populated only when the notice explicitly provides them.
@@ -279,7 +280,9 @@ class ConditionAssessment:
 @dataclass(frozen=True)
 class CompatibilityResult:
     score: float
+    applicable_count: int
     evaluated_count: int
+    evidence_coverage: float
     matched_conditions: List[str]
     caution_conditions: List[str]
     unknown_conditions: List[str]
@@ -578,12 +581,17 @@ def normalize_dog(
     weight = _parse_float(raw_weight)
     if weight is not None and weight <= 0:
         weight = None
-    explicit_size = _normalize_size(
-        _first_value(meta, "size", "size_hint", "body_size_hint")
-        or vlm_attributes.get("body_size_hint")
-    )
+    explicit_size = _normalize_size(_first_value(meta, "size", "size_hint"))
     inferred_size = _normalize_size(infer_size_from_weight(weight))
-    size = explicit_size if explicit_size != UNKNOWN else inferred_size
+    observed_size = _normalize_size(
+        _first_value(meta, "body_size_hint") or vlm_attributes.get("body_size_hint")
+    )
+    if explicit_size != UNKNOWN:
+        size = explicit_size
+    elif inferred_size != UNKNOWN:
+        size = inferred_size
+    else:
+        size = observed_size
 
     breed = (
         _first_text(meta, "breed_name", "kindCd", "breed", "breed_code", "breedCd")
@@ -657,6 +665,15 @@ def normalize_dog(
         notice_status = explicit_notice_status
 
     notice_end = _first_text(meta, "notice_end", "noticeEdt") or None
+    last_verified_at = (
+        _first_text(
+            meta,
+            "last_verified_at",
+            "fetched_at",
+            "collected_at",
+        )
+        or None
+    )
     source_url = _first_text(meta, "detail_url", "source_url", "url")
     dog_id = _first_text(meta, "desertionNo", "desertion_no", "dog_id") or UNKNOWN
 
@@ -678,6 +695,7 @@ def normalize_dog(
         photo_quality_score=quality,
         notice_status=notice_status,
         notice_end=notice_end,
+        last_verified_at=last_verified_at,
         source_url=source_url,
         housing_types=_normalize_housing_types(
             _first_value(meta, "housing_types", "housing_type", "suitable_housing")
@@ -940,12 +958,19 @@ def calculate_compatibility(
     known_scores = [
         assessment.score for assessment in present if assessment.score is not None
     ]
-    # In an additive formula, zero is the neutral contribution when every
-    # requested condition is unknown. Unknown items never enter the divisor.
-    score = sum(known_scores) / len(known_scores) if known_scores else 0.0
+    applicable_count = len(present)
+    evaluated_count = len(known_scores)
+    evidence_coverage = evaluated_count / applicable_count if applicable_count else 0.0
+    # A condition with no notice evidence contributes no compatibility credit
+    # and no negative value. Dividing by all applicable conditions prevents a
+    # single known match from outranking a broadly evidenced candidate merely
+    # because most fields are missing.
+    score = sum(known_scores) / applicable_count if applicable_count else 0.0
     return CompatibilityResult(
         score=max(0.0, min(1.0, score)),
-        evaluated_count=len(known_scores),
+        applicable_count=applicable_count,
+        evaluated_count=evaluated_count,
+        evidence_coverage=max(0.0, min(1.0, evidence_coverage)),
         matched_conditions=[a.message for a in present if a.status == "matched"],
         caution_conditions=[a.message for a in present if a.status == "caution"],
         unknown_conditions=[a.message for a in present if a.status == "unknown"],
@@ -953,14 +978,20 @@ def calculate_compatibility(
 
 
 def build_recommendation_reason(compatibility: CompatibilityResult) -> str:
+    coverage_summary = (
+        f"확인된 조건 {compatibility.evaluated_count}/{compatibility.applicable_count}."
+    )
     messages = (
         compatibility.matched_conditions
         + compatibility.caution_conditions
         + compatibility.unknown_conditions
     )
     if not messages:
-        return "기존 검색 상위 후보입니다. 실제 생활 적합성은 보호소에서 확인해 주세요."
-    return " ".join(messages)
+        return (
+            f"{coverage_summary} 기존 검색 상위 후보입니다. "
+            "실제 생활 적합성은 보호소에서 확인해 주세요."
+        )
+    return f"{coverage_summary} {' '.join(messages)}"
 
 
 def _clamp_score(value: Any) -> float:
@@ -1003,7 +1034,9 @@ def rerank_candidates(
         if dog.notice_status == UNKNOWN:
             compatibility = CompatibilityResult(
                 score=compatibility.score,
+                applicable_count=compatibility.applicable_count,
                 evaluated_count=compatibility.evaluated_count,
+                evidence_coverage=compatibility.evidence_coverage,
                 matched_conditions=compatibility.matched_conditions,
                 caution_conditions=compatibility.caution_conditions,
                 unknown_conditions=compatibility.unknown_conditions
@@ -1023,6 +1056,9 @@ def rerank_candidates(
             "source_url": dog.source_url,
             "retrieval_score": round(retrieval_score, 6),
             "compatibility_score": round(compatibility.score, 6),
+            "applicable_count": compatibility.applicable_count,
+            "evaluated_count": compatibility.evaluated_count,
+            "evidence_coverage": round(compatibility.evidence_coverage, 6),
             "quality_score": round(quality_score, 6)
             if quality_score is not None
             else None,

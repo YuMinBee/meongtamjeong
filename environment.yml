@@ -18,10 +18,10 @@ dependencies:
       - transformers>=4.51
       - accelerate>=0.34
       - sentencepiece>=0.2.0
-      - openai-clip>=1.0.1
-      - ftfy
-      - regex
-      - tqdm
+      - clip @ git+https://github.com/openai/CLIP.git@dcba3cb2e2827b402d2701e7e1c7d9fed8a20ef1
+      - ftfy>=6.2
+      - regex>=2024.0
+      - tqdm>=4.66
       - python-multipart>=0.0.9
       - ultralytics>=8.3
       - pytest>=8.0
