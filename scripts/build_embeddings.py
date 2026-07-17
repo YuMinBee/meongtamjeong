@@ -418,6 +418,7 @@ while ok < target:
             "notice_start": first_text(rec, "notice_start", "noticeSdt"),
             "notice_end": first_text(rec, "notice_end", "noticeEdt"),
             "process_state": first_text(rec, "process_state", "processState"),
+            "last_verified_at": first_text(rec, "last_verified_at", "fetched_at", "collected_at"),
             "image_url": url or "",
         }
 

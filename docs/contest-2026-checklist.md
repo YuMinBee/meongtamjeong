@@ -25,13 +25,13 @@
 
 ## P0: 출품 전에 반드시 해결
 
-- [ ] 최상위 프로젝트 `LICENSE` 확정
-- [ ] Ultralytics를 유지할지, permissive-license 탐지기로 교체할지 결정
+- [x] 최상위 프로젝트 `LICENSE` 확정 (Apache-2.0, YuMinBee)
+- [x] Ultralytics 직접 의존성을 제거하고 TorchVision Faster R-CNN으로 교체
 - [ ] `THIRD_PARTY_NOTICES.md`의 실제 버전·라이선스 재검증
 - [ ] 샘플 이미지의 출처·재배포 권리 확인 또는 교체
 - [ ] 비밀키·토큰·개인정보가 Git 기록과 artifact에 없는지 검사
-- [ ] 최신 active 공고 스냅샷 생성
-- [ ] 공고 상태·종료일·지역·보호소·마지막 확인 시각 커버리지 기록
+- [x] 최신 active 공고 스냅샷 생성 (2026-07-17 기준 1,394건)
+- [x] 공고 상태·종료일·지역·보호소·마지막 확인 시각 커버리지 기록
 - [ ] FAISS `ntotal`과 메타 행 수·순서 일치 검증
 - [ ] closed/expired 공고가 Top-K에 노출되지 않는 회귀 테스트
 - [ ] clean clone에서 한 명령 설치·실행 검증
@@ -73,6 +73,6 @@
 
 ## 현재 차단 사항
 
-- 프로젝트 라이선스는 소유자 결정이 필요합니다.
-- 로컬 환경에 `ANIMAL_API_KEY`와 라이브 cache가 없어 active 스냅샷 재생성은 아직 실행하지 못했습니다.
+- 프로젝트 라이선스는 Apache-2.0으로 확정했으며 데이터·사진·모델의 별도 조건을 함께 고지해야 합니다.
+- active 스냅샷은 재생성했으며, 출품 직전 같은 절차로 상태를 다시 확인해야 합니다.
 - 과거 `requirements.lock.txt`는 ROS·CUDA를 포함한 시스템 전체 freeze이므로 제출용 lockfile로 사용할 수 없습니다.

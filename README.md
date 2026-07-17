@@ -8,6 +8,7 @@
 - [2026 오픈소스 개발자대회 제출 체크리스트](docs/contest-2026-checklist.md)
 - [기여 방법](CONTRIBUTING.md)
 - [보안 정책](SECURITY.md)
+- [Apache-2.0 라이선스](LICENSE)
 
 ## 빠른 시작
 
@@ -24,17 +25,14 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 
 Windows PowerShell에서는 가상환경 활성화 명령으로 `.venv\Scripts\Activate.ps1`을 사용합니다. 최초 실행 시 CLIP 가중치를 내려받을 수 있습니다. `/search/text`, `/search/profile`과 규칙 기반 추천 근거는 Gemma 없이 동작하며, Gemma 추천 문장과 오프라인 VLM 보강은 선택 기능입니다.
 
-선택 기능은 필요한 경우에만 별도로 설치합니다.
+Gemma/VLM 기능은 필요한 경우에만 별도로 설치합니다. 객체 영역 추출은 핵심 의존성의 TorchVision Faster R-CNN과 OpenCV로 실행되므로 별도 탐지 패키지가 필요하지 않습니다.
 
 ```bash
 # Gemma 추천 문장·오프라인 VLM 보강
 python -m pip install -r requirements-vlm.txt
-
-# Ultralytics 기반 객체 영역 추출
-python -m pip install -r requirements-detection.txt
 ```
 
-Ultralytics를 설치·배포하기 전에는 AGPL-3.0 의무와 프로젝트 라이선스 호환성을 반드시 확인하세요.
+객체 영역 보강을 처음 실행하면 TorchVision의 COCO 사전학습 가중치를 내려받을 수 있습니다. 가중치 출처와 이용 조건은 `MODEL_CARD.md`와 `THIRD_PARTY_NOTICES.md`를 확인하세요.
 
 기본 API 키는 `.env.example` 기준 `change-me`입니다. 실제 배포나 제출용 실행에서는 `.env`에 별도 값을 넣어 사용하세요. 대회 시연은 상태 unknown 공고를 제외하고 active-only artifact를 요구하는 `.env.contest.example`을 기준으로 준비합니다. 로컬에서 서버가 켜지면 아래 명령으로 상태를 확인할 수 있습니다.
 
@@ -497,6 +495,7 @@ curl -X POST 'http://localhost:8000/recommend_with_image?topk=5' \
 python scripts/build_embeddings.py
 python scripts/update_embeddings.py
 python scripts/fetch_live_dogs.py --years 3
+python scripts/enrich_image_crops.py --input data/local_dog_cache.json --output data/local_dog_cache_enriched.json --crop-dir data/image_crops_fasterrcnn --limit 0 --device auto
 python scripts/enrich_live_descriptions.py --task attributes --limit 20
 python scripts/run_offline_vlm_pipeline.py --limit 100 --target 1000 --text-only
 python scripts/enrich_live_descriptions.py --task both --model-class auto --model-path /path/to/local/vlm
@@ -506,6 +505,8 @@ python scripts/local_dog_search.py
 python scripts/analyze_meta_text_freq.py
 python scripts/test_api.py
 ```
+
+`enrich_image_crops.py`의 기본 탐지기는 `fasterrcnn_mobilenet_v3_large_fpn`입니다. 모델을 교체한 뒤에는 `--retry-missing-only`를 사용하지 말고 새 output·crop 경로에서 전체를 다시 생성해야 서로 다른 탐지기의 결과가 섞이지 않습니다. `--device auto`는 CUDA가 있으면 GPU를, 없으면 CPU를 사용합니다.
 
 ### 기존 인덱스 메타데이터 보강
 
@@ -545,11 +546,15 @@ python -m pip install -r requirements-dev.txt
 
 ```bash
 python -m pytest -q
-ruff check app/profile_rerank.py app/notice_status.py app/graph_rag.py scripts/fetch_live_dogs.py scripts/merge_dog_metadata.py scripts/check_contest_readiness.py tests
+ruff check app/profile_rerank.py app/notice_status.py app/graph_rag.py scripts/fetch_live_dogs.py scripts/enrich_image_crops.py scripts/merge_dog_metadata.py scripts/check_contest_readiness.py tests
 ```
 
 자동 테스트는 프로필별 순위 변화, unknown의 중립 처리, 종료 공고 제외, 점수와 근거 일관성, 기존 텍스트·이미지 API 회귀, 메타 병합의 개수·순서·식별자 보존과 우선순위를 검증합니다. `pytest.ini`는 `tests/`만 수집하므로 `scripts/test_api.py` 같은 기존 실행용 스크립트는 자동 수집하지 않습니다.
 
 ## 정확히 같은 환경(현재 PC 기준)
 
-`requirements.lock.txt`는 과거 시스템 전체 환경에서 생성된 참고용 freeze이며 ROS·CUDA 패키지까지 포함합니다. 현재 프로젝트의 clean install 기준으로 사용하지 마세요. 핵심 검색은 `requirements.txt`, Gemma/VLM은 `requirements-vlm.txt`, 객체 탐지는 `requirements-detection.txt`, 테스트·CI는 `requirements-dev.txt`, 전체 GPU 환경은 `environment.yml`을 기준으로 합니다. 제출용 lockfile은 clean 환경에서 별도로 다시 생성할 예정입니다.
+`requirements.lock.txt`는 과거 시스템 전체 환경에서 생성된 참고용 freeze이며 ROS·CUDA 패키지까지 포함합니다. 현재 프로젝트의 clean install 기준으로 사용하지 마세요. 핵심 검색과 객체 영역 추출은 `requirements.txt`, Gemma/VLM은 `requirements-vlm.txt`, 테스트·CI는 `requirements-dev.txt`, 전체 GPU 환경은 `environment.yml`을 기준으로 합니다. 제출용 lockfile은 clean 환경에서 별도로 다시 생성할 예정입니다.
+
+## 라이선스
+
+프로젝트 소스코드는 [Apache License 2.0](LICENSE)으로 배포하며 저작권자는 `YuMinBee`입니다. 공공 API 데이터, 공고 사진, 사전학습 모델과 제3자 패키지는 프로젝트 코드 라이선스와 별개의 출처·약관이 적용되므로 `DATA_CARD.md`, `MODEL_CARD.md`, `THIRD_PARTY_NOTICES.md`를 함께 확인해야 합니다.

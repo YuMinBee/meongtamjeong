@@ -41,9 +41,9 @@
 | FAISS | 근접 벡터 검색 | 핵심 검색에 필요 |
 | BM25/규칙/그래프 | 텍스트·메타 근거 보강 | 코드에 포함 |
 | Gemma 3 | 추천 문장, 오프라인 사진 설명 | 선택 |
-| Ultralytics YOLO | 오프라인 객체 영역 추출 | 선택 |
+| TorchVision Faster R-CNN MobileNetV3-FPN | 오프라인 객체 영역 추출 | 인덱스 보강 시 선택 |
 
-Gemma와 YOLO 가중치는 저장소에 포함하지 않습니다. 각 모델의 약관·라이선스에 동의한 사용자가 별도로 준비해야 합니다.
+Gemma와 Faster R-CNN 가중치는 저장소에 포함하지 않습니다. Faster R-CNN은 TorchVision의 COCO 사전학습 가중치를 첫 실행 시 내려받으며, 각 모델의 출처·학습 데이터·이용 조건을 확인한 사용자가 준비해야 합니다. 탐지기 선택 근거와 제한은 [탐지기 비교 기록](docs/detector-comparison.md)에 정리합니다.
 
 ## 현재 평가
 

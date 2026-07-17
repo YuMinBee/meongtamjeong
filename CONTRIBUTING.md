@@ -27,7 +27,7 @@ Windows PowerShell에서는 `.venv\Scripts\Activate.ps1`을 사용합니다. 전
 
 ```bash
 python -m pytest -q
-ruff check app/profile_rerank.py app/notice_status.py app/graph_rag.py scripts/fetch_live_dogs.py scripts/merge_dog_metadata.py scripts/check_contest_readiness.py tests
+ruff check app/profile_rerank.py app/notice_status.py app/graph_rag.py scripts/fetch_live_dogs.py scripts/enrich_image_crops.py scripts/merge_dog_metadata.py scripts/check_contest_readiness.py tests
 python scripts/check_contest_readiness.py --metas data/dog_metas.json --index data/dog_faiss.index --strict
 ```
 
@@ -36,3 +36,5 @@ python scripts/check_contest_readiness.py --metas data/dog_metas.json --index da
 ## Pull request
 
 PR에는 문제, 변경 이유, 사용자 영향, 검증 명령과 데이터·라이선스 영향을 적습니다. 기능 변경과 대규모 데이터 artifact 갱신은 가능한 한 별도 커밋으로 분리합니다.
+
+별도로 명시하지 않는 한 프로젝트에 의도적으로 제출한 기여는 Apache License 2.0 조건으로 제공하는 데 동의한 것으로 봅니다. 제출자는 해당 기여를 제공할 권한이 있어야 하며 제3자 코드·데이터·모델을 포함할 때는 출처와 별도 조건을 밝혀야 합니다.

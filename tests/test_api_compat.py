@@ -100,6 +100,7 @@ def main_module(request: pytest.FixtureRequest):
     monkeypatch.setenv("PROFILE_COMPATIBILITY_WEIGHT", "0.25")
     monkeypatch.setenv("PROFILE_QUALITY_WEIGHT", "0.05")
     monkeypatch.setenv("PROFILE_CANDIDATE_MULTIPLIER", "5")
+    monkeypatch.setenv("PROFILE_INCLUDE_UNKNOWN_NOTICES", "true")
 
     sys.modules.pop("app.main", None)
     try:

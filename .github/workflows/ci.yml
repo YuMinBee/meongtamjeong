@@ -34,6 +34,7 @@ jobs:
           app/notice_status.py
           app/graph_rag.py
           scripts/fetch_live_dogs.py
+          scripts/enrich_image_crops.py
           scripts/merge_dog_metadata.py
           scripts/check_contest_readiness.py
           tests

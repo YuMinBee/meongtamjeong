@@ -17,25 +17,26 @@
 
 ## 현재 추적 스냅샷
 
-현재 저장소의 정적 검색 스냅샷은 다음 파일로 구성됩니다. 기존 artifact 안에는 생성 시각·원천 조회 기간·모델 버전을 담은 manifest가 없어 정확한 생성 시각은 확인할 수 없습니다.
+현재 저장소의 정적 검색 스냅샷은 2026-07-17에 공공 API에서 다시 확인한 활성 공고 1,394건으로 구성됩니다. 생성 시각·조회 범위·모델·행 수·파일 해시는 `data/snapshot_manifest.json`에 기록합니다.
 
 | 파일 | 역할 | 현재 상태 |
 | --- | --- | --- |
-| `data/dog_metas.json` | 인덱스 행과 대응하는 검색 메타 | 17,838행 |
-| `data/dog_faiss.index` | CLIP 기반 FAISS 검색 인덱스 | 저장소에 포함 |
+| `data/dog_metas.json` | 인덱스 행과 대응하는 검색 메타 | 4,100행, 활성 공고 1,394건 |
+| `data/dog_faiss.index` | 전체 사진·Faster R-CNN crop·텍스트 CLIP 인덱스 | 4,100벡터, 512차원 |
+| `data/snapshot_manifest.json` | 생성 조건·모델·커버리지·SHA-256 | 저장소에 포함 |
 | `data/eval_queries.sample.json` | 설명 보강 회귀용 샘플 질의 | 10개 질의 |
 
-현재 `dog_metas.json`에는 공고 상태, 공고 종료일, 지역, 보호소 필드가 없습니다. 이 스냅샷은 검색 회귀에는 사용할 수 있지만, 활성 공고만 반환해야 하는 운영·대회 시연용 데이터로 사용하면 안 됩니다.
+현재 `dog_metas.json`은 공고 상태, 종료일, 지역, 보호소, 마지막 확인 시각이 모두 채워진 active-only 스냅샷입니다. 공고는 이후 종료될 수 있으므로 실제 방문 전 공고 링크와 보호소에서 상태를 다시 확인해야 합니다.
 
 ## 생성·갱신 흐름
 
 1. `scripts/fetch_live_dogs.py`로 최신 공고를 수집합니다.
-2. 선택적으로 `scripts/enrich_live_descriptions.py`와 객체 영역 보강 스크립트를 실행합니다.
+2. 선택적으로 `scripts/enrich_live_descriptions.py`를 실행하고, `scripts/enrich_image_crops.py`로 Faster R-CNN crop과 사진 품질을 생성합니다.
 3. 기존 인덱스를 유지할 때는 `scripts/merge_dog_metadata.py`로 상태·지역·보호소 정보를 병합합니다.
 4. active-only 검색 인덱스가 필요하면 `scripts/build_embeddings.py --exclude-unknown`으로 인덱스와 메타를 함께 재생성합니다.
 5. `scripts/check_contest_readiness.py --strict`로 메타 커버리지와 인덱스 정합성을 확인합니다.
 
-생성 시각, 원천 API, 레코드 수, 파일 해시와 사용한 모델 버전을 릴리스 manifest에 함께 기록하는 것을 권장합니다.
+생성 시각, 원천 API, 레코드 수, 파일 해시와 사용한 모델 버전은 릴리스마다 manifest를 갱신합니다.
 
 ## 필드와 결측 처리
 

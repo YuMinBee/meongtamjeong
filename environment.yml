@@ -10,6 +10,7 @@ dependencies:
       - pydantic>=2
       - numpy>=1.26,<3
       - Pillow>=10.0
+      - opencv-python-headless>=4.10,<5
       - python-dotenv>=1.0
       - requests>=2.31
       - faiss-cpu
@@ -23,5 +24,4 @@ dependencies:
       - regex>=2024.0
       - tqdm>=4.66
       - python-multipart>=0.0.9
-      - ultralytics>=8.3
       - pytest>=8.0

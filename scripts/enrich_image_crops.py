@@ -5,7 +5,7 @@ import json
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Tuple
+from typing import Any, Dict, List, Mapping, Sequence, Tuple
 from urllib.parse import quote
 
 import requests
@@ -16,7 +16,7 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
 
-from app.species import clean_species
+from app.species import clean_species  # noqa: E402
 
 DATA_DIR = BASE_DIR / "data"
 DEFAULT_INPUT = DATA_DIR / "local_dog_cache.json"
@@ -26,6 +26,11 @@ TARGET_CLASS_NAMES = {
     "dog": {"dog"},
     "cat": {"cat"},
 }
+DEFAULT_DETECTOR_MODEL = "fasterrcnn_mobilenet_v3_large_fpn"
+SUPPORTED_DETECTOR_MODELS = (
+    DEFAULT_DETECTOR_MODEL,
+    "ssdlite320_mobilenet_v3_large",
+)
 
 
 def clean_text(value: Any) -> str:
@@ -39,13 +44,25 @@ def safe_url(url: str) -> str:
 
 
 def extract_image_url(rec: Dict[str, Any]) -> str:
-    for key in ("image_url", "url", "popfile", "popfile1", "popfile2", "fileName", "thumb", "image", "img"):
+    for key in (
+        "image_url",
+        "url",
+        "popfile",
+        "popfile1",
+        "popfile2",
+        "fileName",
+        "thumb",
+        "image",
+        "img",
+    ):
         value = clean_text(rec.get(key))
         if value.startswith("http"):
             return value
     for key, value in rec.items():
         text = clean_text(value)
-        if text.startswith("http") and any(token in str(key).lower() for token in ("pop", "file", "img", "thumb")):
+        if text.startswith("http") and any(
+            token in str(key).lower() for token in ("pop", "file", "img", "thumb")
+        ):
             return text
     return ""
 
@@ -61,7 +78,9 @@ def load_records(path: Path) -> Tuple[Any, List[Dict[str, Any]]]:
     return payload, [item for item in items if isinstance(item, dict)]
 
 
-def save_records(payload: Any, items: List[Dict[str, Any]], output: Path, stats: Dict[str, Any]) -> None:
+def save_records(
+    payload: Any, items: List[Dict[str, Any]], output: Path, stats: Dict[str, Any]
+) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
     if isinstance(payload, dict):
         updated = dict(payload)
@@ -69,14 +88,22 @@ def save_records(payload: Any, items: List[Dict[str, Any]], output: Path, stats:
         updated["image_crop_stats"] = stats
     else:
         updated = items
-    output.write_text(json.dumps(updated, ensure_ascii=False, indent=2), encoding="utf-8")
+    output.write_text(
+        json.dumps(updated, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
 
 
 def download_image(url: str, timeout: int = 20) -> Image.Image:
-    headers = {"Accept": "image/*", "Referer": "https://www.animal.go.kr/", "User-Agent": "Mozilla/5.0"}
+    headers = {
+        "Accept": "image/*",
+        "Referer": "https://www.animal.go.kr/",
+        "User-Agent": "Mozilla/5.0",
+    }
     resp = requests.get(safe_url(url), timeout=timeout, headers=headers)
     if resp.status_code != 200 and url.startswith("http://"):
-        resp = requests.get(safe_url("https://" + url[7:]), timeout=timeout, headers=headers)
+        resp = requests.get(
+            safe_url("https://" + url[7:]), timeout=timeout, headers=headers
+        )
     resp.raise_for_status()
     return Image.open(BytesIO(resp.content)).convert("RGB")
 
@@ -89,7 +116,32 @@ class Detection:
     area_ratio: float
 
 
-def normalize_bbox(xyxy: Tuple[float, float, float, float], width: int, height: int) -> List[float]:
+@dataclass
+class TorchVisionDetector:
+    name: str
+    model: Any
+    preprocess: Any
+    categories: Sequence[str]
+    device: str
+
+    def detect(self, image: Image.Image, species: str, conf: float) -> List[Detection]:
+        import torch
+
+        tensor = self.preprocess(image).to(self.device)
+        with torch.inference_mode():
+            prediction = self.model([tensor])[0]
+        return parse_torchvision_output(
+            prediction,
+            categories=self.categories,
+            image_size=image.size,
+            species=species,
+            conf=conf,
+        )
+
+
+def normalize_bbox(
+    xyxy: Tuple[float, float, float, float], width: int, height: int
+) -> List[float]:
     x1, y1, x2, y2 = xyxy
     return [
         round(max(0.0, min(1.0, x1 / width)), 4),
@@ -99,7 +151,9 @@ def normalize_bbox(xyxy: Tuple[float, float, float, float], width: int, height: 
     ]
 
 
-def expand_bbox(xyxy: Tuple[float, float, float, float], width: int, height: int, margin: float) -> Tuple[int, int, int, int]:
+def expand_bbox(
+    xyxy: Tuple[float, float, float, float], width: int, height: int, margin: float
+) -> Tuple[int, int, int, int]:
     x1, y1, x2, y2 = xyxy
     box_w = max(1.0, x2 - x1)
     box_h = max(1.0, y2 - y1)
@@ -113,7 +167,12 @@ def expand_bbox(xyxy: Tuple[float, float, float, float], width: int, height: int
     )
 
 
-def bbox_centered(xyxy: Tuple[float, float, float, float], width: int, height: int, tolerance: float = 0.24) -> bool:
+def bbox_centered(
+    xyxy: Tuple[float, float, float, float],
+    width: int,
+    height: int,
+    tolerance: float = 0.24,
+) -> bool:
     x1, y1, x2, y2 = xyxy
     cx = ((x1 + x2) / 2.0) / max(1, width)
     cy = ((y1 + y2) / 2.0) / max(1, height)
@@ -168,52 +227,129 @@ def compute_photo_quality(image: Image.Image, prefix: str = "") -> Dict[str, Any
     }
 
 
-def load_yolo(model_name: str):
-    try:
-        from ultralytics import YOLO
-    except ImportError as exc:
-        raise RuntimeError("ultralytics is required. Install with: pip install ultralytics opencv-python-headless") from exc
-    return YOLO(model_name)
-
-
-def detect_target(model: Any, image: Image.Image, species: str, conf: float, imgsz: int, device: str = "") -> List[Detection]:
-    import numpy as np
-
-    target_names = TARGET_CLASS_NAMES.get(species, {species})
-    predict_kwargs = {"source": np.asarray(image), "conf": conf, "imgsz": imgsz, "verbose": False}
-    if clean_text(device):
-        predict_kwargs["device"] = clean_text(device)
-    result = model.predict(**predict_kwargs)[0]
-    boxes = getattr(result, "boxes", None)
-    if boxes is None:
+def _as_list(value: Any) -> List[Any]:
+    if value is None:
         return []
+    if hasattr(value, "detach"):
+        value = value.detach()
+    if hasattr(value, "cpu"):
+        value = value.cpu()
+    if hasattr(value, "tolist"):
+        value = value.tolist()
+    return list(value)
 
-    names = getattr(model, "names", {}) or getattr(result, "names", {}) or {}
-    width, height = image.size
+
+def parse_torchvision_output(
+    prediction: Mapping[str, Any],
+    categories: Sequence[str],
+    image_size: Tuple[int, int],
+    species: str,
+    conf: float,
+) -> List[Detection]:
+    target_names = TARGET_CLASS_NAMES.get(species, {species})
+    width, height = image_size
+    boxes = _as_list(prediction.get("boxes"))
+    labels = _as_list(prediction.get("labels"))
+    scores = _as_list(prediction.get("scores"))
     detections: List[Detection] = []
-    for box in boxes:
-        cls_id = int(box.cls[0].item()) if getattr(box, "cls", None) is not None else -1
-        class_name = clean_text(names.get(cls_id, str(cls_id))).lower()
+    for raw_box, raw_label, raw_score in zip(boxes, labels, scores):
+        confidence = float(raw_score)
+        if confidence < conf:
+            continue
+        label = int(raw_label)
+        class_name = clean_text(
+            categories[label] if 0 <= label < len(categories) else label
+        ).lower()
         if class_name not in target_names:
             continue
-        xyxy_values = box.xyxy[0].detach().cpu().tolist()
-        x1, y1, x2, y2 = [float(v) for v in xyxy_values]
+        if not isinstance(raw_box, (list, tuple)) or len(raw_box) != 4:
+            continue
+        x1, y1, x2, y2 = [float(value) for value in raw_box]
+        x1 = max(0.0, min(float(width), x1))
+        y1 = max(0.0, min(float(height), y1))
+        x2 = max(0.0, min(float(width), x2))
+        y2 = max(0.0, min(float(height), y2))
+        if x2 <= x1 or y2 <= y1:
+            continue
         area = max(0.0, x2 - x1) * max(0.0, y2 - y1)
         detections.append(
             Detection(
                 class_name=class_name,
-                confidence=float(box.conf[0].item()) if getattr(box, "conf", None) is not None else 0.0,
+                confidence=confidence,
                 xyxy=(x1, y1, x2, y2),
                 area_ratio=area / max(1, width * height),
             )
         )
-    detections.sort(key=lambda det: (det.confidence * 0.45) + (det.area_ratio * 0.55), reverse=True)
+    detections.sort(
+        key=lambda det: (det.confidence * 0.45) + (det.area_ratio * 0.55), reverse=True
+    )
     return detections
 
 
+def resolve_device(device: str) -> str:
+    requested = clean_text(device).lower()
+    if requested.isdigit():
+        return f"cuda:{requested}"
+    if requested and requested != "auto":
+        return requested
+
+    import torch
+
+    return "cuda:0" if torch.cuda.is_available() else "cpu"
+
+
+def load_torchvision_detector(model_name: str, device: str = "") -> TorchVisionDetector:
+    try:
+        from torchvision.models.detection import (
+            FasterRCNN_MobileNet_V3_Large_FPN_Weights,
+            SSDLite320_MobileNet_V3_Large_Weights,
+            fasterrcnn_mobilenet_v3_large_fpn,
+            ssdlite320_mobilenet_v3_large,
+        )
+    except ImportError as exc:
+        raise RuntimeError(
+            "torch and torchvision are required for object-region extraction"
+        ) from exc
+
+    factories = {
+        "fasterrcnn_mobilenet_v3_large_fpn": (
+            fasterrcnn_mobilenet_v3_large_fpn,
+            FasterRCNN_MobileNet_V3_Large_FPN_Weights.DEFAULT,
+        ),
+        "ssdlite320_mobilenet_v3_large": (
+            ssdlite320_mobilenet_v3_large,
+            SSDLite320_MobileNet_V3_Large_Weights.DEFAULT,
+        ),
+    }
+    if model_name not in factories:
+        supported = ", ".join(SUPPORTED_DETECTOR_MODELS)
+        raise ValueError(
+            f"unsupported detector model: {model_name}. Choose one of: {supported}"
+        )
+
+    factory, weights = factories[model_name]
+    resolved_device = resolve_device(device)
+    model = factory(weights=weights).to(resolved_device).eval()
+    categories = weights.meta.get("categories", ())
+    return TorchVisionDetector(
+        name=model_name,
+        model=model,
+        preprocess=weights.transforms(),
+        categories=categories,
+        device=resolved_device,
+    )
+
+
 def crop_filename(record: Dict[str, Any], index: int, species: str) -> str:
-    dog_id = clean_text(record.get("desertionNo") or record.get("desertion_no") or record.get("notice_no"))
-    safe_id = "".join(ch for ch in dog_id if ch.isalnum() or ch in ("-", "_")) or f"item_{index:05d}"
+    dog_id = clean_text(
+        record.get("desertionNo")
+        or record.get("desertion_no")
+        or record.get("notice_no")
+    )
+    safe_id = (
+        "".join(ch for ch in dog_id if ch.isalnum() or ch in ("-", "_"))
+        or f"item_{index:05d}"
+    )
     return f"{safe_id}.jpg"
 
 
@@ -225,7 +361,7 @@ def process_records(args: argparse.Namespace) -> Dict[str, Any]:
     else:
         work_records = records
 
-    model = load_yolo(args.model)
+    detector = load_torchvision_detector(args.model, args.device)
     crop_dir = args.crop_dir / species
     crop_dir.mkdir(parents=True, exist_ok=True)
 
@@ -249,7 +385,7 @@ def process_records(args: argparse.Namespace) -> Dict[str, Any]:
         "retry_missing_only": bool(args.retry_missing_only),
         "conf": args.conf,
         "imgsz": args.imgsz,
-        "device": args.device,
+        "device": detector.device,
     }
 
     def maybe_checkpoint() -> None:
@@ -262,8 +398,13 @@ def process_records(args: argparse.Namespace) -> Dict[str, Any]:
 
     for idx, rec in enumerate(work_records):
         stats["records_processed"] += 1
-        previous_attrs = rec.get("image_attrs") if isinstance(rec.get("image_attrs"), dict) else {}
-        previous_detected = previous_attrs.get("target_detected") is True or previous_attrs.get("dog_detected") is True
+        previous_attrs = (
+            rec.get("image_attrs") if isinstance(rec.get("image_attrs"), dict) else {}
+        )
+        previous_detected = (
+            previous_attrs.get("target_detected") is True
+            or previous_attrs.get("dog_detected") is True
+        )
         previous_error = clean_text(previous_attrs.get("error"))
         if args.retry_missing_only and previous_detected:
             stats["skipped_existing_detected"] += 1
@@ -273,14 +414,16 @@ def process_records(args: argparse.Namespace) -> Dict[str, Any]:
         url = extract_image_url(rec)
         attrs: Dict[str, Any] = {
             "detector": args.model,
-            "detector_type": "yolo_detection_only",
+            "detector_type": "torchvision_detection_only",
+            "detector_backend": "torchvision",
             "target_species": species,
             "target_detected": False,
             "detection_count": 0,
             "retry_missing_only": bool(args.retry_missing_only),
             "retry_conf": args.conf,
             "retry_imgsz": args.imgsz,
-            "retry_device": args.device,
+            "retry_device": detector.device,
+            "preprocessing": "torchvision_weights_default",
             "previous_target_detected": previous_detected,
             "previous_error": previous_error,
         }
@@ -302,8 +445,14 @@ def process_records(args: argparse.Namespace) -> Dict[str, Any]:
             attrs.update(compute_photo_quality(image))
             if "photo_quality_score" in attrs:
                 stats["quality_scored"] += 1
-            detections = detect_target(model, image, species=species, conf=args.conf, imgsz=args.imgsz, device=args.device)
-            attrs.update({"image_width": width, "image_height": height, "detection_count": len(detections)})
+            detections = detector.detect(image, species=species, conf=args.conf)
+            attrs.update(
+                {
+                    "image_width": width,
+                    "image_height": height,
+                    "detection_count": len(detections),
+                }
+            )
             if species == "dog":
                 attrs["dog_count"] = len(detections)
             if not detections:
@@ -334,7 +483,9 @@ def process_records(args: argparse.Namespace) -> Dict[str, Any]:
                     "primary_bbox_xyxy": [round(v, 2) for v in primary.xyxy],
                     "primary_bbox_norm": normalize_bbox(primary.xyxy, width, height),
                     "crop_bbox_xyxy": list(crop_box),
-                    "dog_area_ratio" if species == "dog" else "target_area_ratio": round(primary.area_ratio, 4),
+                    "dog_area_ratio"
+                    if species == "dog"
+                    else "target_area_ratio": round(primary.area_ratio, 4),
                     "bbox_centered": bbox_centered(primary.xyxy, width, height),
                     "crop_path": str(rel_crop_path).replace("\\", "/"),
                     "crop_width": crop.size[0],
@@ -360,19 +511,73 @@ def process_records(args: argparse.Namespace) -> Dict[str, Any]:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Create YOLO detection-only animal bbox/crop metadata for adoption notice images.")
-    parser.add_argument("--input", type=Path, default=DEFAULT_INPUT, help="Input cache/metas JSON path.")
-    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT, help="Output enriched JSON path.")
-    parser.add_argument("--crop-dir", type=Path, default=DEFAULT_CROP_DIR, help="Directory where crop images are saved.")
-    parser.add_argument("--species", default="dog", choices=("dog", "cat"), help="Target species class to detect.")
-    parser.add_argument("--model", default="yolo11n.pt", help="Ultralytics YOLO model name/path.")
-    parser.add_argument("--limit", type=int, default=50, help="Maximum records to process. Use 0 for all records.")
-    parser.add_argument("--conf", type=float, default=0.25, help="YOLO confidence threshold.")
-    parser.add_argument("--imgsz", type=int, default=640, help="YOLO inference image size.")
-    parser.add_argument("--device", default="", help="Ultralytics device, for example 0/cuda:0/cpu. Empty lets Ultralytics choose.")
-    parser.add_argument("--crop-margin", type=float, default=0.08, help="BBox expansion ratio before saving crop.")
-    parser.add_argument("--checkpoint-every", type=int, default=100, help="Save partial output and print progress every N processed records. Use 0 to disable.")
-    parser.add_argument("--retry-missing-only", action="store_true", help="Preserve existing successful detections and retry only records without a detected crop.")
+    parser = argparse.ArgumentParser(
+        description="Create TorchVision detection-only animal bbox/crop metadata for adoption notice images."
+    )
+    parser.add_argument(
+        "--input", type=Path, default=DEFAULT_INPUT, help="Input cache/metas JSON path."
+    )
+    parser.add_argument(
+        "--output", type=Path, default=DEFAULT_OUTPUT, help="Output enriched JSON path."
+    )
+    parser.add_argument(
+        "--crop-dir",
+        type=Path,
+        default=DEFAULT_CROP_DIR,
+        help="Directory where crop images are saved.",
+    )
+    parser.add_argument(
+        "--species",
+        default="dog",
+        choices=("dog", "cat"),
+        help="Target species class to detect.",
+    )
+    parser.add_argument(
+        "--model",
+        default=DEFAULT_DETECTOR_MODEL,
+        choices=SUPPORTED_DETECTOR_MODELS,
+        help="TorchVision object detector.",
+    )
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=50,
+        help="Maximum records to process. Use 0 for all records.",
+    )
+    parser.add_argument(
+        "--conf",
+        type=float,
+        default=0.25,
+        help="Object-detection confidence threshold.",
+    )
+    parser.add_argument(
+        "--imgsz",
+        type=int,
+        default=640,
+        help="Deprecated compatibility option; TorchVision uses the selected weights' preprocessing.",
+    )
+    parser.add_argument(
+        "--device",
+        default="",
+        help="Inference device, for example 0/cuda:0/cpu. Empty selects CUDA when available.",
+    )
+    parser.add_argument(
+        "--crop-margin",
+        type=float,
+        default=0.08,
+        help="BBox expansion ratio before saving crop.",
+    )
+    parser.add_argument(
+        "--checkpoint-every",
+        type=int,
+        default=100,
+        help="Save partial output and print progress every N processed records. Use 0 to disable.",
+    )
+    parser.add_argument(
+        "--retry-missing-only",
+        action="store_true",
+        help="Preserve existing successful detections and retry only records without a detected crop.",
+    )
     return parser.parse_args()
 
 

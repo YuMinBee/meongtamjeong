@@ -12,7 +12,8 @@
 | Requests | HTTP 클라이언트 | Apache-2.0 | Python 패키지 |
 | python-dotenv | 환경변수 파일 로딩 | BSD-3-Clause | Python 패키지 |
 | python-multipart | multipart 요청 파싱 | Apache-2.0 | Python 패키지 |
-| PyTorch / torchvision | 모델 실행·이미지 전처리 | BSD-style | Python 패키지 |
+| PyTorch / torchvision | 모델 실행·이미지 전처리·Faster R-CNN 객체 탐지 | BSD-style | Python 패키지. 사전학습 가중치는 학습 데이터 조건을 별도 확인 |
+| OpenCV | 사진 선명도·노출·대비 품질 특징 계산 | Apache-2.0 | headless Python 패키지 |
 | OpenAI CLIP | 이미지·텍스트 임베딩 | MIT | 코드·가중치 출처와 버전을 릴리스 manifest에 기록 |
 | ftfy | CLIP 텍스트 정규화 | Apache-2.0 | Python 패키지 |
 | regex | CLIP 토큰화 보조 | Python 1.6/CNRI-derived + Apache-2.0 | 포함된 `LICENSE.txt` 기준 |
@@ -24,20 +25,20 @@
 | HTTPX | API 테스트 클라이언트 | BSD-3-Clause | 개발 의존성 |
 | pytest | 자동 테스트 | MIT | 개발 의존성 |
 | Ruff | 정적 검사·포맷 | MIT | 개발 의존성 |
-| Ultralytics YOLO | 선택적 객체 영역 추출 | AGPL-3.0 또는 Enterprise | 현재 프로젝트 라이선스와의 호환 결정을 출품 전 완료해야 함 |
 | Google Gemma 3 | 선택적 생성·VLM 모델 | Gemma Terms of Use | 가중치는 저장소에 포함하지 않음. 사용자가 별도 약관에 동의해 준비 |
 
 주요 원문:
 
 - OpenAI CLIP: https://github.com/openai/CLIP
 - FAISS: https://github.com/facebookresearch/faiss
-- Ultralytics 라이선스 안내: https://docs.ultralytics.com/help/contributing
+- TorchVision: https://github.com/pytorch/vision
+- COCO 데이터셋: https://cocodataset.org/
 - Gemma Terms of Use: https://ai.google.dev/gemma/terms
 - Gemma Prohibited Use Policy: https://ai.google.dev/gemma/prohibited_use_policy
 
-## 프로젝트 라이선스 결정 필요
+## 프로젝트 라이선스
 
-현재 코드 저장소에는 최상위 `LICENSE`가 없습니다. Ultralytics YOLO를 현재 형태로 유지해 배포한다면 공식 안내의 AGPL-3.0 의무를 기준으로 프로젝트 전체 라이선스 호환성을 검토해야 합니다. permissive 라이선스를 원한다면 객체 탐지 구성요소를 호환 가능한 대안으로 교체한 뒤 다시 감사해야 합니다.
+프로젝트 소스코드는 Apache License 2.0으로 배포하며 저작권자는 `YuMinBee`입니다. 과거 로컬 Git 작성자 설정으로 생긴 이름 차이는 `.mailmap`에서 동일한 작성자로 정규화합니다. Ultralytics 직접 의존성과 YOLO 가중치는 현재 배포 구성에서 제거하고 TorchVision Faster R-CNN으로 교체했습니다. 데이터, 공고 사진, 사전학습 모델과 제3자 패키지는 프로젝트 코드 라이선스의 적용 대상이 아니며 각 원문 조건을 따릅니다.
 
 ## 모델 배포
 
