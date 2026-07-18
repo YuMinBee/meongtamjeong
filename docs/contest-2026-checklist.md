@@ -28,7 +28,8 @@
 - [x] 최상위 프로젝트 `LICENSE` 확정 (Apache-2.0, YuMinBee)
 - [x] Ultralytics 직접 의존성을 제거하고 TorchVision Faster R-CNN으로 교체
 - [ ] `THIRD_PARTY_NOTICES.md`의 실제 버전·라이선스 재검증
-- [ ] 샘플 이미지의 출처·재배포 권리 확인 또는 교체
+- [x] 출처 불명 AI 샘플 제거 및 공공데이터 공고 샘플 provenance manifest 추가
+- [ ] 개별 공고 사진 재배포 조건 확인(미확인 시 원격 공고 URL 샘플로 전환)
 - [ ] 비밀키·토큰·개인정보가 Git 기록과 artifact에 없는지 검사
 - [x] 최신 active 공고 스냅샷 생성 (2026-07-17 기준 1,394건)
 - [x] 공고 상태·종료일·지역·보호소·마지막 확인 시각 커버리지 기록

@@ -326,13 +326,15 @@ final_score
 ├── scripts/              # 임베딩 생성/업데이트/분석/테스트 스크립트
 ├── tests/                # 프로필 재정렬, 메타 병합, API 회귀 테스트
 ├── data/                 # FAISS 인덱스, 메타, 캐시, 로그
-├── assets/samples/       # 샘플 이미지
+├── assets/samples/       # 공공데이터 공고 이미지 검색 샘플과 출처 manifest
 ├── archive/              # 레거시 파일 보관
 ├── .env.example
 ├── README.md
 ├── requirements.txt
 └── requirements.lock.txt
 ```
+
+이미지 입력 예시는 [`assets/samples/`](assets/samples/)에 있습니다. 각 샘플은 2026-07-17 활성 공고 스냅샷에서 골랐고, 원본 공고·사진 URL과 변환 방식·파일 해시는 [`assets/samples/manifest.json`](assets/samples/manifest.json)에 기록했습니다. 샘플은 검색 기능 시연용이며 입양 추천이나 현재 공고 상태 보증을 의미하지 않습니다.
 
 ## 다른 컴퓨터로 옮길 때
 
@@ -406,9 +408,17 @@ curl -H 'x-api-key: change-me' http://localhost:8000/health
 
 모든 API 요청에는 헤더 `x-api-key`가 필요합니다. `GET` 요청은 쿼리 파라미터 `api_key`로도 전달할 수 있지만, 로컬 테스트가 아니라면 헤더 방식을 권장합니다.
 
+생활조건 재정렬을 시연하는 한국어 데모 화면은 로컬 서버 실행 후 아래 주소에서 열 수 있습니다. 화면 자체는 키 없이 열리며 검색 요청만 인증합니다. 커스텀 키를 쓴다면 우측 상단의 연결 설정에 입력하세요. 키는 현재 탭의 세션에만 보관됩니다. 기본 `change-me` 키를 쓰는 로컬 환경에서는 `autostart=1`로 예시 검색을 바로 실행할 수 있습니다.
+
+```text
+http://localhost:8000/demo
+http://localhost:8000/demo?autostart=1
+```
+
 | 메서드 | 경로 | 설명 |
 | --- | --- | --- |
 | `GET` | `/health` | 인덱스 크기, 실행 디바이스, 종 코드 그룹 수 확인 |
+| `GET` | `/demo` | `/search/profile`을 사용하는 대회용 생활조건 재정렬 데모 |
 | `POST` | `/search/text` | 텍스트 질의를 구조화하고 벡터/BM25/VLM 속성 기반 하이브리드 검색 |
 | `POST` | `/search/profile` | 기존 하이브리드 후보를 9개 생활조건, 공고 상태, 사진 품질로 재정렬 |
 | `POST` | `/recommend` | 하이브리드 검색 결과를 바탕으로 Gemma 추천 문장 생성 |

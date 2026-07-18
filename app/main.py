@@ -49,6 +49,7 @@ from app.query_expansion import expand_query_text
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = BASE_DIR / "data"
+PROFILE_DEMO_PATH = BASE_DIR / "app" / "profile_demo.html"
 ENV_PATH = BASE_DIR / ".env"
 load_dotenv(ENV_PATH)
 app = FastAPI(
@@ -100,10 +101,13 @@ GEMMA_PROCESSOR: Optional[Any] = None
 GEMMA_MODEL: Optional[Any] = None
 GEMMA_MODEL_NAME = ""
 PROFILE_RERANK_SETTINGS = ProfileRerankSettings.from_env()
+PUBLIC_DEMO_PATHS = {"/demo", "/visualize/profile-search"}
 
 
 @app.middleware("http")
 async def api_key_checker(request: Request, call_next):
+    if request.method == "GET" and request.url.path in PUBLIC_DEMO_PATHS:
+        return await call_next(request)
     key = request.headers.get("x-api-key")
     if request.method == "GET" and not key:
         key = request.query_params.get("api_key")
@@ -2308,6 +2312,14 @@ render();
 </html>
 """.replace("__PAYLOAD__", payload_json).replace("__API_KEY__", quote(api_key))
     return HTMLResponse(page)
+
+
+@app.get("/demo", response_class=HTMLResponse)
+@app.get("/visualize/profile-search", response_class=HTMLResponse)
+def profile_search_demo():
+    return HTMLResponse(PROFILE_DEMO_PATH.read_text(encoding="utf-8"))
+
+
 @app.get("/visualize/dashboard", response_class=HTMLResponse)
 def feature_dashboard_ui(request: Request):
     api_key_json = json.dumps(request.query_params.get("api_key", ""))

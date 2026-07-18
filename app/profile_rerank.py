@@ -205,7 +205,7 @@ class ProfileSearchRequest(BaseModel):
 
 
 class NormalizedDog(BaseModel):
-    """Canonical, conservative view of fields that can support reranking."""
+    """Canonical, conservative view used for reranking and result evidence."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -224,8 +224,16 @@ class NormalizedDog(BaseModel):
     photo_quality_score: Optional[float] = Field(default=None, ge=0, le=1)
     notice_status: Literal["active", "closed", "expired", "unknown"] = UNKNOWN
     notice_end: Optional[str] = None
+    notice_start: Optional[str] = None
+    notice_no: str = ""
     last_verified_at: Optional[str] = None
     source_url: str = ""
+    image_url: str = ""
+    care_name: str = UNKNOWN
+    care_tel: str = ""
+    care_addr: str = ""
+    org_name: str = ""
+    happen_place: str = ""
 
     # These hints are populated only when the notice explicitly provides them.
     housing_types: List[Literal["apartment", "house", "other"]] = Field(
@@ -665,6 +673,8 @@ def normalize_dog(
         notice_status = explicit_notice_status
 
     notice_end = _first_text(meta, "notice_end", "noticeEdt") or None
+    notice_start = _first_text(meta, "notice_start", "noticeSdt") or None
+    notice_no = _first_text(meta, "notice_no", "noticeNo")
     last_verified_at = (
         _first_text(
             meta,
@@ -675,6 +685,7 @@ def normalize_dog(
         or None
     )
     source_url = _first_text(meta, "detail_url", "source_url", "url")
+    image_url = _first_text(meta, "image_url", "popfile", "popfile1")
     dog_id = _first_text(meta, "desertionNo", "desertion_no", "dog_id") or UNKNOWN
 
     return NormalizedDog(
@@ -695,8 +706,16 @@ def normalize_dog(
         photo_quality_score=quality,
         notice_status=notice_status,
         notice_end=notice_end,
+        notice_start=notice_start,
+        notice_no=notice_no,
         last_verified_at=last_verified_at,
         source_url=source_url,
+        image_url=image_url,
+        care_name=_first_text(meta, "care_name", "careNm") or UNKNOWN,
+        care_tel=_first_text(meta, "care_tel", "careTel"),
+        care_addr=_first_text(meta, "care_addr", "careAddr"),
+        org_name=_first_text(meta, "org_name", "orgNm"),
+        happen_place=_first_text(meta, "happen_place", "happenPlace"),
         housing_types=_normalize_housing_types(
             _first_value(meta, "housing_types", "housing_type", "suitable_housing")
         ),

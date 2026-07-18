@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-07-18",
+  "purpose": "Reference inputs for the image-assisted dog search demo",
+  "selection_note": "Selected for visual, age, and size diversity; inclusion is not an adoption recommendation.",
+  "source": {
+    "provider": "농림축산식품부 국가동물보호정보시스템",
+    "dataset_url": "https://www.data.go.kr/data/15098931/openapi.do",
+    "snapshot_fetched_at": "2026-07-17T12:25:15+09:00",
+    "portal_scope_display": "이용허락범위 제한 없음"
+  },
+  "rights": {
+    "individual_photo_license": "API 응답에 별도 표기 없음",
+    "project_apache_license_applies": false,
+    "notice": "공공데이터포털의 표시와 각 공고의 출처를 기록합니다. 개별 사진의 촬영자·별도 라이선스는 API에서 확인되지 않으므로 프로젝트 소스의 Apache-2.0 자산으로 재허가하지 않습니다."
+  },
+  "transformation": {
+    "operation": "Faster R-CNN dog-region crop",
+    "detector": "fasterrcnn_mobilenet_v3_large_fpn",
+    "detector_weights": "FasterRCNN_MobileNet_V3_Large_FPN_Weights.COCO_V1",
+    "generative_edit": false
+  },
+  "samples": [
+    {
+      "file": "notice_444457202600428.jpg",
+      "sha256": "ad171b65d7f0d12f5f02eb74ffb25b1127a001b1381a7bc63f4c9f5d182ae880",
+      "desertion_no": "444457202600428",
+      "notice_no": "충남-부여-2026-00249",
+      "organization": "충청남도 부여군",
+      "shelter": "남부여동물보호소",
+      "source_image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/07/202607151707282.jpg",
+      "notice_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=444457202600428&menuNo=1000000055",
+      "notice_start": "20260715",
+      "notice_end": "20260727",
+      "status_at_snapshot": "보호중",
+      "last_verified_at": "2026-07-17T12:25:15+09:00",
+      "source_age": "2026(60일미만)(년생)",
+      "source_weight": "1(Kg)",
+      "crop_width": 1674,
+      "crop_height": 827,
+      "crop_quality_score": 0.9723
+    },
+    {
+      "file": "notice_441407202600711.jpg",
+      "sha256": "65175805993d683d2681d2aa86b30b547fd5102d7ee92dc6df6047a7af00db11",
+      "desertion_no": "441407202600711",
+      "notice_no": "경기-이천-2026-00349",
+      "organization": "경기도 이천시",
+      "shelter": "위더스 동물보호센터",
+      "source_image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/07/202607151907398.jpg",
+      "notice_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=441407202600711&menuNo=1000000055",
+      "notice_start": "20260715",
+      "notice_end": "20260727",
+      "status_at_snapshot": "보호중",
+      "last_verified_at": "2026-07-17T12:25:15+09:00",
+      "source_age": "2024(년생)",
+      "source_weight": "3.50(Kg)",
+      "crop_width": 618,
+      "crop_height": 769,
+      "crop_quality_score": 0.9876
+    },
+    {
+      "file": "notice_428349202600501.jpg",
+      "sha256": "f88ad6009c9c3912a776855e1276304b68037097e6dfd68f03d6295760661b1f",
+      "desertion_no": "428349202600501",
+      "notice_no": "인천-영종-2026-00036",
+      "organization": "인천광역시 영종구",
+      "shelter": "신공항동물병원",
+      "source_image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/07/20260716080713.jpg",
+      "notice_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=428349202600501&menuNo=1000000055",
+      "notice_start": "20260716",
+      "notice_end": "20260727",
+      "status_at_snapshot": "보호중",
+      "last_verified_at": "2026-07-17T12:25:15+09:00",
+      "source_age": "2024(년생)",
+      "source_weight": "17(Kg)",
+      "crop_width": 369,
+      "crop_height": 855,
+      "crop_quality_score": 0.9695
+    },
+    {
+      "file": "notice_447518202600172.jpg",
+      "sha256": "f18c04ab609ee448b4e7e84e4c4ee2da5d2215a7e617c813f4c893c7a2cb9716",
+      "desertion_no": "447518202600172",
+      "notice_no": "경북-영덕-2026-00131",
+      "organization": "경상북도 영덕군",
+      "shelter": "영덕유기동물보호센터",
+      "source_image_url": "http://openapi.animal.go.kr/openapi/service/rest/fileDownloadSrvc/files/shelter/2026/07/202607151607174.jpg",
+      "notice_url": "https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=447518202600172&menuNo=1000000055",
+      "notice_start": "20260715",
+      "notice_end": "20260727",
+      "status_at_snapshot": "보호중",
+      "last_verified_at": "2026-07-17T12:25:15+09:00",
+      "source_age": "2023(년생)",
+      "source_weight": "20.00(Kg)",
+      "crop_width": 1300,
+      "crop_height": 1733,
+      "crop_quality_score": 0.94
+    }
+  ]
+}

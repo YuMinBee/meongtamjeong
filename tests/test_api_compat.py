@@ -292,6 +292,16 @@ def test_profile_route_rejects_incomplete_profile_before_search(
     assert isolated_runtime["hybrid"] == []
 
 
+def test_profile_demo_route_serves_the_profile_search_ui(client: TestClient) -> None:
+    response = client.get("/demo")
+
+    assert response.status_code == 200
+    assert "text/html" in response.headers["content-type"]
+    assert "먼저 볼 친구" in response.text
+    assert "fetch('/search/profile'" in response.text
+    assert "/rag/recommend_form" not in response.text
+
+
 def test_rag_search_skips_optional_gemma_when_disabled(
     client: TestClient,
     isolated_runtime: dict[str, Any],

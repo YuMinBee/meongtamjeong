@@ -722,7 +722,17 @@ def test_raw_meta_is_merged_and_candidate_fields_take_precedence(
         "recommended_experience": "experienced",
         "other_pets_compatible": True,
         "processState": "보호중",
+        "noticeSdt": "20260701",
         "noticeEdt": "20261231",
+        "noticeNo": "서울-2026-001",
+        "last_verified_at": "2026-07-17T12:25:15+09:00",
+        "detail_url": "https://example.org/notices/merged-dog",
+        "image_url": "https://example.org/images/merged-dog.jpg",
+        "care_name": "테스트 보호소",
+        "care_tel": "02-0000-0000",
+        "care_addr": "서울시 테스트구",
+        "org_name": "테스트구청",
+        "happen_place": "테스트 공원",
     }
     candidate = {
         "score": 0.5,
@@ -746,6 +756,14 @@ def test_raw_meta_is_merged_and_candidate_fields_take_precedence(
     assert result["meta"]["size"] == "large"
     assert result["meta"]["region"] == "부산"
     assert result["meta"]["notice_status"] == "active"
+    assert result["meta"]["notice_start"] == "20260701"
+    assert result["meta"]["notice_no"] == "서울-2026-001"
+    assert result["meta"]["image_url"].endswith("merged-dog.jpg")
+    assert result["meta"]["care_name"] == "테스트 보호소"
+    assert result["meta"]["care_tel"] == "02-0000-0000"
+    assert result["meta"]["care_addr"] == "서울시 테스트구"
+    assert result["meta"]["org_name"] == "테스트구청"
+    assert result["meta"]["happen_place"] == "테스트 공원"
     assert "_raw_meta" not in result["meta"]
 
 

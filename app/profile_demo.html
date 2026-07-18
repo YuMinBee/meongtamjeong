@@ -1,0 +1,1185 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#174f40" />
+  <title>멍탐정 · 보호소 방문 후보 탐색</title>
+  <style>
+    :root {
+      --canvas:#f5f2eb;
+      --surface:#fffdf8;
+      --surface-strong:#ffffff;
+      --ink:#17342c;
+      --muted:#667770;
+      --line:#dfe4de;
+      --line-strong:#cad4cd;
+      --brand:#175b47;
+      --brand-deep:#103f34;
+      --brand-soft:#dcebe3;
+      --accent:#e87542;
+      --accent-soft:#fbe6d9;
+      --gold:#9a6816;
+      --gold-soft:#fbf0d5;
+      --blue:#386781;
+      --blue-soft:#e3eff4;
+      --danger:#a04b43;
+      --danger-soft:#f8e7e4;
+      --shadow:0 18px 60px rgba(28, 57, 47, .09);
+      --shadow-soft:0 8px 28px rgba(28, 57, 47, .07);
+      --radius-xl:28px;
+      --radius-lg:20px;
+      --radius-md:14px;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      margin:0;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 8% 5%, rgba(232,117,66,.11), transparent 25rem),
+        radial-gradient(circle at 92% 12%, rgba(23,91,71,.10), transparent 28rem),
+        var(--canvas);
+      font-family:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      line-height:1.5;
+      -webkit-font-smoothing:antialiased;
+    }
+    button, input, select { font:inherit; }
+    button, a, input, select, summary { -webkit-tap-highlight-color:transparent; }
+    button { color:inherit; }
+    a { color:inherit; }
+    img { max-width:100%; }
+    [hidden] { display:none !important; }
+    .skip-link {
+      position:fixed;
+      left:16px;
+      top:12px;
+      z-index:100;
+      padding:10px 14px;
+      color:#fff;
+      background:var(--brand-deep);
+      border-radius:10px;
+      transform:translateY(-160%);
+    }
+    .skip-link:focus { transform:translateY(0); }
+    :focus-visible { outline:3px solid rgba(232,117,66,.55); outline-offset:3px; }
+    .shell { width:min(1280px, calc(100vw - 40px)); margin:0 auto; }
+    .site-header {
+      position:sticky;
+      top:0;
+      z-index:30;
+      border-bottom:1px solid rgba(202,212,205,.82);
+      background:rgba(245,242,235,.86);
+      backdrop-filter:blur(18px);
+    }
+    .header-inner {
+      min-height:76px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:24px;
+    }
+    .brand { display:flex; align-items:center; gap:12px; text-decoration:none; }
+    .brand-mark {
+      width:44px;
+      height:44px;
+      display:grid;
+      place-items:center;
+      color:#fff;
+      background:var(--brand);
+      border-radius:15px;
+      box-shadow:0 8px 18px rgba(23,91,71,.22);
+    }
+    .brand-mark svg { width:28px; height:28px; }
+    .brand-copy { display:grid; line-height:1.15; }
+    .brand-copy strong { font-size:1.12rem; letter-spacing:-.04em; }
+    .brand-copy span { margin-top:4px; color:var(--muted); font-size:.72rem; letter-spacing:.08em; }
+    .header-actions { display:flex; align-items:center; gap:10px; }
+    .principle-badge, .connection-button {
+      min-height:42px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border-radius:999px;
+      font-size:.84rem;
+      font-weight:700;
+    }
+    .principle-badge { padding:0 14px; color:var(--brand); background:var(--brand-soft); }
+    .connection-button {
+      padding:0 13px;
+      border:1px solid var(--line-strong);
+      background:rgba(255,253,248,.85);
+      cursor:pointer;
+    }
+    .connection-dot { width:8px; height:8px; border-radius:50%; background:#9eaaa4; }
+    .connection-button.ready .connection-dot { background:#35a26f; box-shadow:0 0 0 4px rgba(53,162,111,.12); }
+    main { padding:50px 0 70px; }
+    .hero {
+      display:grid;
+      grid-template-columns:minmax(0, 1.25fr) minmax(340px, .75fr);
+      gap:44px;
+      align-items:end;
+      padding:16px 0 46px;
+    }
+    .eyebrow {
+      margin:0 0 13px;
+      color:var(--accent);
+      font-size:.76rem;
+      font-weight:850;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+    }
+    .hero h1 {
+      max-width:760px;
+      margin:0;
+      font-size:clamp(2.35rem, 5.2vw, 4.7rem);
+      line-height:1.04;
+      letter-spacing:-.065em;
+      word-break:keep-all;
+    }
+    .hero h1 em { color:var(--brand); font-style:normal; position:relative; white-space:nowrap; }
+    .hero h1 em::after {
+      content:"";
+      position:absolute;
+      z-index:-1;
+      left:-.02em;
+      right:-.02em;
+      bottom:.08em;
+      height:.24em;
+      border-radius:999px;
+      background:var(--accent-soft);
+    }
+    .hero-lead {
+      max-width:700px;
+      margin:22px 0 0;
+      color:#4f645d;
+      font-size:1.06rem;
+      line-height:1.75;
+      word-break:keep-all;
+    }
+    .hero-proof {
+      display:grid;
+      gap:10px;
+      padding:12px;
+      border:1px solid rgba(202,212,205,.8);
+      border-radius:var(--radius-xl);
+      background:rgba(255,253,248,.72);
+      box-shadow:var(--shadow-soft);
+    }
+    .proof-item {
+      min-height:68px;
+      display:grid;
+      grid-template-columns:42px 1fr;
+      gap:12px;
+      align-items:center;
+      padding:10px 12px;
+      border-radius:18px;
+      background:rgba(255,255,255,.78);
+    }
+    .proof-icon {
+      width:42px;
+      height:42px;
+      display:grid;
+      place-items:center;
+      color:var(--brand);
+      background:var(--brand-soft);
+      border-radius:14px;
+    }
+    .proof-icon svg { width:21px; height:21px; }
+    .proof-item strong { display:block; font-size:.92rem; letter-spacing:-.02em; }
+    .proof-item span { display:block; margin-top:2px; color:var(--muted); font-size:.78rem; }
+    .workspace {
+      display:grid;
+      grid-template-columns:390px minmax(0, 1fr);
+      gap:24px;
+      align-items:start;
+    }
+    .profile-panel {
+      position:sticky;
+      top:98px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      border-radius:var(--radius-xl);
+      background:var(--surface);
+      box-shadow:var(--shadow);
+    }
+    .panel-head { padding:25px 25px 18px; border-bottom:1px solid var(--line); }
+    .step-label { color:var(--accent); font-size:.72rem; font-weight:850; letter-spacing:.12em; }
+    .panel-head h2, .results-head h2 { margin:6px 0 0; letter-spacing:-.04em; }
+    .panel-head h2 { font-size:1.42rem; }
+    .panel-head p { margin:7px 0 0; color:var(--muted); font-size:.86rem; }
+    .search-form { padding:22px 25px 26px; }
+    .field { display:grid; gap:8px; margin-bottom:18px; }
+    .field > span, .field-label { color:#435a52; font-size:.82rem; font-weight:750; }
+    .required::after { content:" · 필수"; color:var(--accent); font-size:.69rem; }
+    input[type="text"], input[type="password"], input[type="number"], select {
+      width:100%;
+      min-height:48px;
+      padding:0 13px;
+      color:var(--ink);
+      border:1px solid var(--line-strong);
+      border-radius:12px;
+      background:#fff;
+      transition:border-color .18s ease, box-shadow .18s ease;
+    }
+    input:hover, select:hover { border-color:#aebdb4; }
+    input:focus, select:focus { border-color:var(--brand); box-shadow:0 0 0 4px rgba(23,91,71,.10); outline:0; }
+    .query-input { min-height:56px !important; padding:0 15px !important; font-weight:650; letter-spacing:-.02em; }
+    .preset-wrap { margin:-2px 0 22px; }
+    .preset-label { margin:0 0 9px; color:var(--muted); font-size:.76rem; }
+    .preset-list { display:flex; flex-wrap:wrap; gap:7px; }
+    .preset-button {
+      min-height:36px;
+      padding:0 11px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      color:#496159;
+      background:#fff;
+      font-size:.76rem;
+      font-weight:720;
+      cursor:pointer;
+    }
+    .preset-button:hover, .preset-button.active { color:var(--brand); border-color:#a7c3b6; background:var(--brand-soft); }
+    .form-divider { height:1px; margin:3px 0 20px; background:var(--line); }
+    .form-section-title { display:flex; justify-content:space-between; gap:12px; align-items:end; margin-bottom:14px; }
+    .form-section-title strong { font-size:.9rem; }
+    .form-section-title span { color:var(--muted); font-size:.7rem; }
+    .field-grid { display:grid; grid-template-columns:1fr 1fr; gap:13px 11px; }
+    .field-grid .field { margin:0; }
+    .absence-row { display:grid; grid-template-columns:1fr 72px; gap:12px; align-items:center; }
+    input[type="range"] { width:100%; accent-color:var(--brand); }
+    .range-output {
+      min-height:42px;
+      display:grid;
+      place-items:center;
+      color:var(--brand);
+      border:1px solid #b9d0c3;
+      border-radius:12px;
+      background:var(--brand-soft);
+      font-size:.82rem;
+      font-weight:800;
+    }
+    .switch-list { display:grid; gap:8px; margin:18px 0; }
+    .switch-row {
+      min-height:50px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:9px 12px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:#fff;
+      cursor:pointer;
+    }
+    .switch-copy strong { display:block; font-size:.8rem; }
+    .switch-copy span { display:block; margin-top:1px; color:var(--muted); font-size:.68rem; }
+    .switch { width:42px; height:24px; position:relative; flex:0 0 auto; }
+    .switch input { position:absolute; opacity:0; pointer-events:none; }
+    .switch-track { position:absolute; inset:0; border-radius:999px; background:#cfd7d2; transition:.2s ease; }
+    .switch-track::after {
+      content:"";
+      position:absolute;
+      width:18px;
+      height:18px;
+      top:3px;
+      left:3px;
+      border-radius:50%;
+      background:#fff;
+      box-shadow:0 1px 5px rgba(0,0,0,.2);
+      transition:.2s ease;
+    }
+    .switch input:checked + .switch-track { background:var(--brand); }
+    .switch input:checked + .switch-track::after { transform:translateX(18px); }
+    .switch input:focus-visible + .switch-track { outline:3px solid rgba(232,117,66,.55); outline-offset:3px; }
+    details.advanced { margin:17px 0 20px; border-top:1px dashed var(--line-strong); border-bottom:1px dashed var(--line-strong); }
+    details.advanced summary { min-height:46px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; color:#4b615a; font-size:.78rem; font-weight:750; }
+    details.advanced summary::after { content:"＋"; color:var(--brand); font-size:1rem; }
+    details.advanced[open] summary::after { content:"－"; }
+    .advanced-body { display:grid; grid-template-columns:1fr 1fr; gap:11px; padding:0 0 15px; }
+    .advanced-body .field { margin:0; }
+    .primary-button {
+      width:100%;
+      min-height:56px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:0 18px;
+      color:#fff;
+      border:0;
+      border-radius:15px;
+      background:var(--brand);
+      box-shadow:0 10px 24px rgba(23,91,71,.22);
+      font-weight:820;
+      cursor:pointer;
+      transition:transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+    }
+    .primary-button:hover { transform:translateY(-1px); box-shadow:0 13px 28px rgba(23,91,71,.26); }
+    .primary-button:disabled { opacity:.62; cursor:wait; transform:none; }
+    .primary-button svg { width:20px; height:20px; }
+    .form-note { margin:12px 4px 0; color:var(--muted); font-size:.68rem; line-height:1.55; text-align:center; }
+    .results-panel { min-width:0; }
+    .results-head {
+      min-height:92px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:24px;
+      padding:3px 4px 18px;
+    }
+    .results-head h2 { font-size:1.65rem; }
+    .results-description { margin:7px 0 0; color:var(--muted); font-size:.86rem; }
+    .result-count { text-align:right; }
+    .result-count strong { display:block; font-size:1.25rem; letter-spacing:-.04em; }
+    .result-count span { color:var(--muted); font-size:.72rem; }
+    .ethics-banner {
+      display:grid;
+      grid-template-columns:38px 1fr;
+      gap:12px;
+      align-items:center;
+      margin-bottom:14px;
+      padding:13px 15px;
+      color:#35584b;
+      border:1px solid #bfd4c8;
+      border-radius:16px;
+      background:rgba(220,235,227,.78);
+    }
+    .ethics-banner svg { width:23px; height:23px; margin:auto; color:var(--brand); }
+    .ethics-banner strong { display:block; font-size:.8rem; }
+    .ethics-banner span { display:block; margin-top:2px; font-size:.72rem; line-height:1.5; }
+    .compare-note {
+      min-height:44px;
+      display:flex;
+      align-items:center;
+      gap:9px;
+      margin-bottom:14px;
+      padding:0 14px;
+      color:#7a4e13;
+      border:1px solid #ead39d;
+      border-radius:14px;
+      background:var(--gold-soft);
+      font-size:.76rem;
+      font-weight:700;
+    }
+    .compare-note svg { width:18px; height:18px; }
+    .results-list { display:grid; gap:16px; margin:0; padding:0; list-style:none; }
+    .dog-card {
+      position:relative;
+      overflow:hidden;
+      display:grid;
+      grid-template-columns:245px minmax(0, 1fr);
+      min-height:310px;
+      border:1px solid var(--line);
+      border-radius:var(--radius-lg);
+      background:var(--surface-strong);
+      box-shadow:var(--shadow-soft);
+      transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .dog-card:hover { transform:translateY(-2px); border-color:#bbc9c0; box-shadow:0 18px 38px rgba(28,57,47,.11); }
+    .image-shell { position:relative; min-height:310px; overflow:hidden; background:#e7ece8; }
+    .image-shell img { width:100%; height:100%; position:absolute; inset:0; object-fit:cover; }
+    .image-fallback { width:100%; height:100%; min-height:310px; display:grid; place-items:center; color:#7b8d85; background:linear-gradient(145deg, #e8eee9, #f5f1e8); }
+    .image-fallback svg { width:70px; height:70px; opacity:.55; }
+    .rank-badge {
+      position:absolute;
+      z-index:2;
+      top:14px;
+      left:14px;
+      min-width:46px;
+      min-height:46px;
+      display:grid;
+      place-items:center;
+      padding:0 9px;
+      color:#fff;
+      border:1px solid rgba(255,255,255,.35);
+      border-radius:15px;
+      background:rgba(16,63,52,.9);
+      backdrop-filter:blur(8px);
+      font-size:.9rem;
+      font-weight:900;
+    }
+    .rank-change {
+      position:absolute;
+      z-index:2;
+      left:14px;
+      bottom:14px;
+      min-height:32px;
+      display:flex;
+      align-items:center;
+      padding:0 10px;
+      color:#fff;
+      border-radius:999px;
+      background:rgba(16,63,52,.88);
+      backdrop-filter:blur(8px);
+      font-size:.7rem;
+      font-weight:850;
+    }
+    .rank-change.down { background:rgba(112,81,42,.88); }
+    .card-body { min-width:0; display:flex; flex-direction:column; padding:21px 22px 18px; }
+    .card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
+    .notice-badge {
+      min-height:30px;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:0 9px;
+      color:var(--brand);
+      border-radius:999px;
+      background:var(--brand-soft);
+      font-size:.68rem;
+      font-weight:850;
+      white-space:nowrap;
+    }
+    .notice-badge::before { content:""; width:6px; height:6px; border-radius:50%; background:#33a06c; }
+    .notice-badge.unknown { color:#785215; background:var(--gold-soft); }
+    .notice-badge.unknown::before { background:#c18a26; }
+    .dog-title { min-width:0; }
+    .dog-title h3 { margin:0; font-size:1.32rem; line-height:1.22; letter-spacing:-.045em; }
+    .dog-title p { margin:6px 0 0; color:var(--muted); font-size:.77rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .meta-chips { display:flex; flex-wrap:wrap; gap:6px; margin:14px 0 0; }
+    .meta-chip { padding:5px 8px; border:1px solid var(--line); border-radius:8px; color:#536861; background:#fafbf9; font-size:.7rem; }
+    .reason-box { margin-top:15px; padding:13px 14px; border-radius:13px; background:#f5f7f4; }
+    .reason-label { display:flex; align-items:center; gap:6px; margin-bottom:7px; color:var(--brand); font-size:.69rem; font-weight:850; }
+    .reason-label svg { width:16px; height:16px; }
+    .reason-text { margin:0; color:#314b42; font-size:.79rem; line-height:1.58; word-break:keep-all; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3; overflow:hidden; }
+    .evidence-preview { display:grid; gap:6px; margin-top:12px; }
+    .evidence-line { display:grid; grid-template-columns:76px minmax(0,1fr); gap:8px; align-items:start; font-size:.72rem; }
+    .evidence-kind { min-height:25px; display:flex; align-items:center; gap:5px; font-weight:800; }
+    .evidence-kind::before { content:""; width:7px; height:7px; border-radius:50%; }
+    .evidence-line.match .evidence-kind { color:var(--brand); }
+    .evidence-line.match .evidence-kind::before { background:#38a475; }
+    .evidence-line.caution .evidence-kind { color:var(--danger); }
+    .evidence-line.caution .evidence-kind::before { background:#c5675d; }
+    .evidence-line.unknown .evidence-kind { color:var(--gold); }
+    .evidence-line.unknown .evidence-kind::before { background:#d09a35; }
+    .evidence-message { min-width:0; color:#566a63; line-height:1.48; }
+    .card-footer { display:flex; align-items:end; justify-content:space-between; gap:14px; margin-top:auto; padding-top:16px; }
+    .verified { color:var(--muted); font-size:.67rem; line-height:1.45; }
+    .verified strong { display:block; color:#4c625a; font-size:.7rem; }
+    .card-actions { display:flex; align-items:center; gap:8px; }
+    .score-button, .notice-link {
+      min-height:42px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:7px;
+      padding:0 12px;
+      border-radius:11px;
+      font-size:.74rem;
+      font-weight:800;
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    .score-button { border:1px solid var(--line-strong); background:#fff; cursor:pointer; }
+    .notice-link { color:#fff; background:var(--brand); }
+    .notice-link[aria-disabled="true"] { opacity:.58; }
+    .notice-link svg, .score-button svg { width:16px; height:16px; }
+    .score-panel { margin-top:13px; padding:14px; border:1px solid var(--line); border-radius:13px; background:#fbfcfa; }
+    .score-panel[hidden] { display:none; }
+    .evidence-full { display:grid; gap:9px; margin-bottom:13px; }
+    .evidence-group { padding:10px 11px; border-radius:10px; background:#f2f6f3; }
+    .evidence-group.caution { background:var(--danger-soft); }
+    .evidence-group.unknown { background:var(--gold-soft); }
+    .evidence-group h4 { margin:0 0 6px; color:var(--brand); font-size:.7rem; }
+    .evidence-group.caution h4 { color:var(--danger); }
+    .evidence-group.unknown h4 { color:var(--gold); }
+    .evidence-group h4 span { opacity:.72; }
+    .evidence-group ul { display:grid; gap:4px; margin:0; padding-left:17px; color:#51665e; font-size:.68rem; line-height:1.48; }
+    .score-note { margin:0 0 11px; color:var(--muted); font-size:.67rem; }
+    .score-grid { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:8px; }
+    .score-item { min-width:0; padding:9px; border-radius:10px; background:#f0f4f1; }
+    .score-item span { display:block; color:var(--muted); font-size:.61rem; }
+    .score-item strong { display:block; margin-top:3px; font-size:.86rem; }
+    .coverage { margin-top:9px; color:#496159; font-size:.67rem; font-weight:700; }
+    .state-card {
+      min-height:420px;
+      display:grid;
+      place-items:center;
+      padding:40px;
+      border:1px dashed #bdc9c1;
+      border-radius:var(--radius-lg);
+      background:rgba(255,253,248,.72);
+      text-align:center;
+    }
+    .state-visual { width:132px; height:132px; display:grid; place-items:center; margin:0 auto 20px; color:var(--brand); border-radius:44px; background:var(--brand-soft); transform:rotate(-3deg); }
+    .state-visual svg { width:82px; height:82px; transform:rotate(3deg); }
+    .state-card h3 { margin:0; font-size:1.22rem; letter-spacing:-.035em; }
+    .state-card p { max-width:420px; margin:9px auto 0; color:var(--muted); font-size:.83rem; line-height:1.65; word-break:keep-all; }
+    .state-tips { display:flex; flex-wrap:wrap; justify-content:center; gap:7px; margin-top:18px; }
+    .state-tips span { padding:6px 9px; color:#466057; border-radius:999px; background:#e9efeb; font-size:.69rem; font-weight:700; }
+    .error-card { border-color:#e1b9b5; background:var(--danger-soft); }
+    .error-card .state-visual { color:var(--danger); background:#f3d6d2; }
+    .skeleton-list { display:grid; gap:16px; }
+    .skeleton-card { height:310px; display:grid; grid-template-columns:245px 1fr; overflow:hidden; border:1px solid var(--line); border-radius:var(--radius-lg); background:#fff; }
+    .skeleton-image, .skeleton-line { background:linear-gradient(90deg,#e8ece9 25%,#f5f7f5 50%,#e8ece9 75%); background-size:200% 100%; animation:shimmer 1.35s infinite; }
+    .skeleton-body { padding:24px; }
+    .skeleton-line { height:14px; margin-bottom:14px; border-radius:999px; }
+    .skeleton-line:nth-child(1) { width:42%; height:22px; }
+    .skeleton-line:nth-child(2) { width:66%; }
+    .skeleton-line:nth-child(3) { width:100%; height:64px; border-radius:12px; margin-top:30px; }
+    .skeleton-line:nth-child(4) { width:82%; }
+    @keyframes shimmer { to { background-position:-200% 0; } }
+    .method-strip {
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:12px;
+      margin-top:50px;
+      padding:12px;
+      border:1px solid var(--line);
+      border-radius:var(--radius-xl);
+      background:rgba(255,253,248,.66);
+    }
+    .method-step { min-height:108px; display:grid; grid-template-columns:42px 1fr; gap:13px; align-items:start; padding:18px; border-radius:19px; background:#fff; }
+    .method-number { width:42px; height:42px; display:grid; place-items:center; color:var(--brand); border-radius:14px; background:var(--brand-soft); font-size:.75rem; font-weight:900; }
+    .method-step strong { display:block; font-size:.86rem; }
+    .method-step p { margin:5px 0 0; color:var(--muted); font-size:.72rem; line-height:1.55; word-break:keep-all; }
+    footer { margin-top:34px; display:flex; justify-content:space-between; gap:20px; color:var(--muted); font-size:.7rem; }
+    footer strong { color:#4c6259; }
+    dialog {
+      width:min(460px, calc(100vw - 32px));
+      padding:0;
+      color:var(--ink);
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:var(--surface);
+      box-shadow:0 24px 80px rgba(19,52,43,.24);
+    }
+    dialog::backdrop { background:rgba(17,39,33,.48); backdrop-filter:blur(4px); }
+    .dialog-head { display:flex; justify-content:space-between; gap:20px; padding:22px 23px 15px; }
+    .dialog-head h2 { margin:0; font-size:1.15rem; letter-spacing:-.035em; }
+    .dialog-head p { margin:5px 0 0; color:var(--muted); font-size:.75rem; }
+    .icon-button { width:42px; height:42px; display:grid; place-items:center; border:1px solid var(--line); border-radius:12px; background:#fff; cursor:pointer; }
+    .dialog-body { padding:4px 23px 23px; }
+    .dialog-actions { display:grid; grid-template-columns:1fr 1.4fr; gap:9px; margin-top:18px; }
+    .dialog-actions button { min-height:48px; border-radius:12px; border:1px solid var(--line); font-weight:800; cursor:pointer; }
+    .dialog-actions .save { color:#fff; border-color:var(--brand); background:var(--brand); }
+    .privacy-note { margin:9px 1px 0; color:var(--muted); font-size:.67rem; }
+    @media (max-width:1050px) {
+      .hero { grid-template-columns:1fr; gap:24px; }
+      .hero-proof { grid-template-columns:repeat(3, 1fr); }
+      .proof-item { grid-template-columns:1fr; text-align:center; }
+      .proof-icon { margin:auto; }
+      .workspace { grid-template-columns:340px minmax(0,1fr); }
+      .dog-card { grid-template-columns:210px minmax(0,1fr); }
+      .image-shell { min-height:330px; }
+      .card-top { display:grid; }
+      .notice-badge { justify-self:start; }
+      .card-footer { align-items:stretch; flex-direction:column; }
+      .card-actions { display:grid; grid-template-columns:1fr 1fr; }
+    }
+    @media (max-width:820px) {
+      .shell { width:min(100% - 28px, 680px); }
+      .principle-badge { display:none; }
+      main { padding-top:30px; }
+      .hero { padding-bottom:32px; }
+      .hero h1 { font-size:clamp(2.35rem, 12vw, 3.6rem); }
+      .hero-proof { grid-template-columns:1fr; }
+      .proof-item { grid-template-columns:42px 1fr; text-align:left; }
+      .proof-icon { margin:0; }
+      .workspace { grid-template-columns:1fr; }
+      .profile-panel { position:static; }
+      .results-head { margin-top:18px; }
+      .method-strip { grid-template-columns:1fr; }
+    }
+    @media (max-width:590px) {
+      .header-inner { min-height:66px; }
+      .brand-copy span { display:none; }
+      .connection-button span:last-child { display:none; }
+      .hero { padding-top:4px; }
+      .hero-lead { font-size:.94rem; }
+      .panel-head, .search-form { padding-left:19px; padding-right:19px; }
+      .field-grid { grid-template-columns:1fr; }
+      .advanced-body { grid-template-columns:1fr; }
+      .results-head { align-items:flex-start; }
+      .result-count { text-align:left; }
+      .dog-card { grid-template-columns:1fr; }
+      .image-shell, .image-fallback { min-height:245px; aspect-ratio:4/3; }
+      .card-body { padding:18px; }
+      .card-top { display:flex; }
+      .card-footer { flex-direction:column; align-items:stretch; }
+      .card-actions { grid-template-columns:1fr 1.2fr; }
+      .score-grid { grid-template-columns:1fr 1fr; }
+      .skeleton-card { grid-template-columns:1fr; height:530px; }
+      .skeleton-image { min-height:245px; }
+      .method-strip { margin-top:30px; }
+      footer { flex-direction:column; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      *, *::before, *::after { scroll-behavior:auto !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#searchWorkspace">탐색 화면으로 바로가기</a>
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="#top" aria-label="멍탐정 처음으로">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M8.2 14.3c-3.4-.8-5.1-3.7-4.3-6.1.7-2.2 3.7-3.5 6-1.3 1.2-2.8 3.5-4.2 6.1-4.2s4.9 1.4 6.1 4.2c2.3-2.2 5.3-.9 6 1.3.8 2.4-.9 5.3-4.3 6.1" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M7.2 15.1c0-5.7 3.5-9.2 8.8-9.2s8.8 3.5 8.8 9.2c0 6.8-3.5 11.4-8.8 11.4S7.2 21.9 7.2 15.1Z" stroke="currentColor" stroke-width="2.4"/>
+            <circle cx="12.4" cy="15.5" r="1.35" fill="currentColor"/><circle cx="19.6" cy="15.5" r="1.35" fill="currentColor"/>
+            <path d="M13.2 20.2c1.7 1.5 3.9 1.5 5.6 0M16 18.1v2.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="brand-copy"><strong>멍탐정</strong><span>MEONGTAMJEONG</span></span>
+      </a>
+      <div class="header-actions">
+        <span class="principle-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          근거가 있는 만큼만
+        </span>
+        <button class="connection-button" id="connectionButton" type="button" aria-haspopup="dialog">
+          <span class="connection-dot" aria-hidden="true"></span><span id="connectionLabel">연결 설정</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <div class="shell">
+      <section class="hero" aria-labelledby="heroTitle">
+        <div>
+          <p class="eyebrow">Evidence-aware adoption search</p>
+          <h1 id="heroTitle">보호소에 가기 전,<br><em>먼저 볼 친구</em>를 좁혀보세요.</h1>
+          <p class="hero-lead">사진과 공고 문장을 함께 찾고, 생활환경에 따라 후보의 순서를 다시 정리합니다. 멍탐정은 입양을 결정하지 않습니다. 확인할 근거와 보호소에 물어볼 질문을 남깁니다.</p>
+        </div>
+        <div class="hero-proof" aria-label="멍탐정 탐색 원칙">
+          <div class="proof-item">
+            <span class="proof-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3h10v3H7zM5 6h14v14H5z" stroke="currentColor" stroke-width="1.8"/><path d="M8 11h8M8 15h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <span><strong>활성 공고 우선</strong><span>종료·입양 완료 공고는 제외</span></span>
+          </div>
+          <div class="proof-item">
+            <span class="proof-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="5.5" stroke="currentColor" stroke-width="1.9"/><path d="m15 15 4 4M8 10.5l1.6 1.6L13 8.8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span><strong>검색 후 재정렬</strong><span>기존 검색 결과는 그대로 활용</span></span>
+          </div>
+          <div class="proof-item">
+            <span class="proof-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4.8 6v5.4c0 4.4 3 7.8 7.2 9.6 4.2-1.8 7.2-5.2 7.2-9.6V6L12 3Z" stroke="currentColor" stroke-width="1.8"/><path d="M9.5 12h5M12 9.5v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <span><strong>추정하지 않기</strong><span>모르는 정보는 상담 필요로 표시</span></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace" id="searchWorkspace" aria-label="생활조건 기반 후보 탐색">
+        <aside class="profile-panel">
+          <div class="panel-head">
+            <span class="step-label">STEP 01</span>
+            <h2>나의 생활조건</h2>
+            <p>같은 후보도 생활환경에 따라 확인 순서가 달라져요.</p>
+          </div>
+          <form class="search-form" id="profileSearchForm">
+            <label class="field">
+              <span class="required">어떤 친구를 찾고 있나요?</span>
+              <input class="query-input" id="query" name="query" type="text" maxlength="2000" required value="서울에서 만날 수 있는 성견" placeholder="예: 서울에서 만날 수 있는 소형 성견" />
+            </label>
+
+            <div class="preset-wrap">
+              <p class="preset-label">영상 시연용 프로필</p>
+              <div class="preset-list" role="group" aria-label="예시 프로필 선택">
+                <button class="preset-button active" type="button" data-preset="beginner">초보 1인가구</button>
+                <button class="preset-button" type="button" data-preset="activeFamily">활동적인 가족</button>
+                <button class="preset-button" type="button" data-preset="seniorCompanion">느긋한 반려생활</button>
+              </div>
+            </div>
+
+            <div class="form-divider"></div>
+            <div class="form-section-title"><strong>생활환경</strong><span>공고에 근거가 있을 때만 반영</span></div>
+            <div class="field-grid">
+              <label class="field"><span>주거 형태</span>
+                <select id="housingType" name="housing_type">
+                  <option value="apartment">아파트</option><option value="house">단독·다가구 주택</option><option value="other">기타</option>
+                </select>
+              </label>
+              <label class="field"><span>활동 수준</span>
+                <select id="activityLevel" name="activity_level">
+                  <option value="low">낮음</option><option value="medium">보통</option><option value="high">높음</option>
+                </select>
+              </label>
+            </div>
+
+            <label class="field" style="margin-top:16px">
+              <span>하루 평균 집을 비우는 시간</span>
+              <span class="absence-row">
+                <input id="absenceHours" name="daily_absence_hours" type="range" min="0" max="16" step="1" value="8" aria-describedby="absenceOutput" />
+                <output class="range-output" id="absenceOutput" for="absenceHours">8시간</output>
+              </span>
+            </label>
+
+            <div class="field-grid">
+              <label class="field"><span>반려견 경험</span>
+                <select id="dogExperience" name="dog_experience">
+                  <option value="none">처음이에요</option><option value="some">경험이 있어요</option><option value="experienced">충분한 경험</option>
+                </select>
+              </label>
+              <label class="field"><span>희망 지역</span><input id="preferredRegion" name="preferred_region" type="text" value="서울" maxlength="100" placeholder="선택 사항" /></label>
+              <label class="field"><span>선호 크기</span>
+                <select id="preferredSize" name="preferred_size">
+                  <option value="small">소형</option><option value="medium">중형</option><option value="large">대형</option><option value="any">상관없음</option>
+                </select>
+              </label>
+              <label class="field"><span>선호 연령</span>
+                <select id="preferredAge" name="preferred_age">
+                  <option value="puppy">어린 강아지</option><option value="adult" selected>성견</option><option value="senior">노령견</option><option value="any">상관없음</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="switch-list">
+              <label class="switch-row">
+                <span class="switch-copy"><strong>어린이와 함께 살아요</strong><span>관련 정보가 없으면 확인 필요로 표시</span></span>
+                <span class="switch"><input id="hasChildren" name="has_children" type="checkbox" /><span class="switch-track" aria-hidden="true"></span></span>
+              </label>
+              <label class="switch-row">
+                <span class="switch-copy"><strong>다른 반려동물이 있어요</strong><span>합사 가능 여부는 임의로 추정하지 않음</span></span>
+                <span class="switch"><input id="hasOtherPets" name="has_other_pets" type="checkbox" /><span class="switch-track" aria-hidden="true"></span></span>
+              </label>
+            </div>
+
+            <details class="advanced">
+              <summary>검색 결과 개수 설정</summary>
+              <div class="advanced-body">
+                <label class="field"><span>보여줄 후보</span>
+                  <select id="topk" name="topk"><option value="5">5마리</option><option value="6" selected>6마리</option><option value="8">8마리</option><option value="10">10마리</option></select>
+                </label>
+              </div>
+            </details>
+
+            <button class="primary-button" id="searchButton" type="submit">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6" stroke="currentColor" stroke-width="2"/><path d="m15 15 4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <span>방문 후보 찾아보기</span>
+            </button>
+            <p class="form-note">생활조건 점수는 입양 적합 확률이 아닙니다.<br>최종 판단은 보호소 방문과 상담을 통해 내려주세요.</p>
+          </form>
+        </aside>
+
+        <section class="results-panel" aria-labelledby="resultsTitle">
+          <header class="results-head">
+            <div><span class="step-label">STEP 02</span><h2 id="resultsTitle">먼저 확인할 후보</h2><p class="results-description" id="resultsDescription">검색어와 생활조건을 입력하면 근거와 함께 보여드려요.</p></div>
+            <div class="result-count" id="resultCount" hidden><strong>0마리</strong><span>방문 전 확인 후보</span></div>
+          </header>
+          <div class="ethics-banner">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 4.8 6v5.4c0 4.4 3 7.8 7.2 9.6 4.2-1.8 7.2-5.2 7.2-9.6V6L12 3Z" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 12.2 11 14.7l4.8-5.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><strong>결정 대신, 확인 순서를 돕습니다.</strong><span id="disclaimerText">성격·공격성·아동 및 다른 동물 친화성은 공고에 명시되지 않았다면 판단하지 않습니다.</span></div>
+          </div>
+          <div class="compare-note" id="compareNote" hidden>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 7h11l-3-3M17 17H6l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>이전 프로필과 비교한 순위 변화를 카드에 표시했어요.</span>
+          </div>
+
+          <div class="skeleton-list" id="loadingState" hidden aria-hidden="true">
+            <div class="skeleton-card"><div class="skeleton-image"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div></div>
+            <div class="skeleton-card"><div class="skeleton-image"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div></div>
+          </div>
+
+          <div class="state-card" id="emptyState">
+            <div>
+              <div class="state-visual" aria-hidden="true">
+                <svg viewBox="0 0 120 120" fill="none"><path d="M31 47c-14-3-20-16-15-26 5-9 18-12 28-2 5-12 15-18 27-18 13 0 23 7 28 19 10-9 23-6 27 3 4 10-2 22-16 25" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><path d="M29 48c0-25 15-40 42-40 26 0 41 15 41 40 0 31-15 52-41 52-27 0-42-21-42-52Z" stroke="currentColor" stroke-width="6"/><circle cx="54" cy="51" r="5" fill="currentColor"/><circle cx="86" cy="51" r="5" fill="currentColor"/><path d="M58 72c8 7 18 7 26 0M71 63v13" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><circle cx="93" cy="88" r="20" fill="#fffdf8" stroke="currentColor" stroke-width="5"/><path d="m107 103 12 12" stroke="currentColor" stroke-width="6" stroke-linecap="round"/></svg>
+              </div>
+              <h3>어떤 친구부터 만나볼까요?</h3>
+              <p>왼쪽의 예시 프로필을 선택하고 검색해 보세요. 같은 검색어를 유지한 채 프로필만 바꾸면 재정렬 효과를 가장 쉽게 확인할 수 있어요.</p>
+              <div class="state-tips"><span>활성 공고 확인</span><span>조건별 근거 분리</span><span>실제 공고 연결</span></div>
+            </div>
+          </div>
+          <div class="state-card error-card" id="errorState" hidden role="alert">
+            <div><div class="state-visual" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 2.8 20h18.4L12 3Z" stroke="currentColor" stroke-width="1.8"/><path d="M12 9v5M12 17.2v.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><h3>탐색을 완료하지 못했어요</h3><p id="errorMessage">연결 설정을 확인한 뒤 다시 시도해 주세요.</p></div>
+          </div>
+          <ol class="results-list" id="resultsList" aria-live="polite" aria-busy="false"></ol>
+        </section>
+      </section>
+
+      <section class="method-strip" aria-label="멍탐정 재정렬 흐름">
+        <div class="method-step"><span class="method-number">01</span><div><strong>기존 검색을 유지해요</strong><p>CLIP·FAISS·BM25·그래프 검색이 먼저 관련 후보군을 찾습니다.</p></div></div>
+        <div class="method-step"><span class="method-number">02</span><div><strong>확인 가능한 조건만 비교해요</strong><p>크기·연령·지역처럼 공고에 근거가 있는 정보만 생활조건과 비교합니다.</p></div></div>
+        <div class="method-step"><span class="method-number">03</span><div><strong>모르는 것은 질문으로 남겨요</strong><p>성격과 사회성은 추정하지 않고 보호소에서 확인할 항목으로 구분합니다.</p></div></div>
+      </section>
+
+      <footer><span><strong>멍탐정</strong> · Evidence-aware multimodal search for shelter dogs</span><span>Apache-2.0 Open Source · 입양 결정 보조가 아닌 탐색 보조 도구</span></footer>
+    </div>
+  </main>
+
+  <dialog id="connectionDialog" aria-labelledby="connectionTitle">
+    <div class="dialog-head">
+      <div><h2 id="connectionTitle">로컬 API 연결</h2><p>FastAPI 실행 시 설정한 API 키를 입력하세요.</p></div>
+      <button class="icon-button" id="closeDialogButton" type="button" aria-label="닫기">✕</button>
+    </div>
+    <div class="dialog-body">
+      <label class="field"><span>API key</span><input id="apiKeyInput" type="password" autocomplete="off" placeholder="x-api-key 값" /></label>
+      <p class="privacy-note">키는 현재 브라우저 탭의 세션 저장소에만 보관되며 화면에는 표시하지 않습니다.</p>
+      <div class="dialog-actions"><button id="cancelConnectionButton" type="button">취소</button><button class="save" id="saveConnectionButton" type="button">연결 정보 저장</button></div>
+    </div>
+  </dialog>
+
+  <script>
+    const form = document.getElementById('profileSearchForm');
+    const queryInput = document.getElementById('query');
+    const searchButton = document.getElementById('searchButton');
+    const resultsList = document.getElementById('resultsList');
+    const emptyState = document.getElementById('emptyState');
+    const errorState = document.getElementById('errorState');
+    const errorMessage = document.getElementById('errorMessage');
+    const loadingState = document.getElementById('loadingState');
+    const resultCount = document.getElementById('resultCount');
+    const resultsDescription = document.getElementById('resultsDescription');
+    const disclaimerText = document.getElementById('disclaimerText');
+    const compareNote = document.getElementById('compareNote');
+    const absenceHours = document.getElementById('absenceHours');
+    const absenceOutput = document.getElementById('absenceOutput');
+    const connectionButton = document.getElementById('connectionButton');
+    const connectionLabel = document.getElementById('connectionLabel');
+    const connectionDialog = document.getElementById('connectionDialog');
+    const apiKeyInput = document.getElementById('apiKeyInput');
+
+    const presets = {
+      beginner: {
+        query:'서울에서 만날 수 있는 성견', housing_type:'apartment', daily_absence_hours:8,
+        activity_level:'low', dog_experience:'none', preferred_size:'small',
+        preferred_age:'adult', preferred_region:'서울', has_children:false, has_other_pets:false
+      },
+      activeFamily: {
+        query:'서울에서 만날 수 있는 성견', housing_type:'house', daily_absence_hours:3,
+        activity_level:'high', dog_experience:'experienced', preferred_size:'large',
+        preferred_age:'adult', preferred_region:'서울', has_children:true, has_other_pets:false
+      },
+      seniorCompanion: {
+        query:'서울에서 만날 수 있는 성견', housing_type:'apartment', daily_absence_hours:4,
+        activity_level:'low', dog_experience:'some', preferred_size:'any',
+        preferred_age:'senior', preferred_region:'서울', has_children:false, has_other_pets:true
+      }
+    };
+
+    const labels = {
+      size:{small:'소형', medium:'중형', large:'대형'},
+      age:{puppy:'어린 강아지', adult:'성견', senior:'노령견'},
+      sex:{male:'수컷', female:'암컷'},
+      neutered:{yes:'중성화 완료', no:'중성화 안 됨'},
+      housing:{apartment:'아파트', house:'주택', other:'기타 주거'},
+      activity:{low:'낮은 활동량', medium:'보통 활동량', high:'높은 활동량'},
+      experience:{none:'첫 반려견', some:'반려 경험 있음', experienced:'충분한 반려 경험'}
+    };
+
+    let previousRanks = new Map();
+    let previousSearchSignature = '';
+    let canComparePrevious = false;
+    let hasRenderedResults = false;
+    let activePreset = 'beginner';
+
+    const urlParams = new URLSearchParams(window.location.search);
+    let apiKey = sessionStorage.getItem('meongtamjeongApiKey') || 'change-me';
+
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']/g, character => ({
+        '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+      })[character]);
+    }
+
+    function safeUrl(value) {
+      if (!value) return '';
+      try {
+        const parsed = new URL(String(value), window.location.origin);
+        return ['http:', 'https:'].includes(parsed.protocol) ? parsed.href : '';
+      } catch (_) {
+        return '';
+      }
+    }
+
+    function known(value) {
+      if (value === null || value === undefined || value === '') return false;
+      return !['unknown', '알 수 없음', '정보 없음', '-'].includes(String(value).trim().toLowerCase());
+    }
+
+    function formatDate(value) {
+      if (!known(value)) return '확인 시각 정보 없음';
+      const raw = String(value).trim();
+      if (/^\d{8}$/.test(raw)) return `${raw.slice(0,4)}.${raw.slice(4,6)}.${raw.slice(6,8)}`;
+      const parsed = new Date(raw);
+      if (!Number.isNaN(parsed.getTime())) {
+        return new Intl.DateTimeFormat('ko-KR', {year:'numeric', month:'2-digit', day:'2-digit'}).format(parsed);
+      }
+      return raw;
+    }
+
+    function formatAge(meta) {
+      if (Number.isFinite(Number(meta.age))) {
+        const age = Number(meta.age);
+        return age < 1 ? `${Math.max(1, Math.round(age * 12))}개월` : `${Math.round(age)}살`;
+      }
+      return labels.age[meta.age_group] || '연령 미상';
+    }
+
+    function formatWeight(meta) {
+      const parts = [];
+      if (labels.size[meta.size]) parts.push(labels.size[meta.size]);
+      if (Number.isFinite(Number(meta.weight)) && Number(meta.weight) > 0) parts.push(`${Number(meta.weight).toFixed(1).replace('.0','')}kg`);
+      return parts.join(' · ') || '크기 미상';
+    }
+
+    function formatScore(value) {
+      return Number.isFinite(Number(value)) ? Number(value).toFixed(3) : '정보 없음';
+    }
+
+    function profilePayload() {
+      const region = document.getElementById('preferredRegion').value.trim();
+      return {
+        housing_type:document.getElementById('housingType').value,
+        daily_absence_hours:Number(absenceHours.value),
+        activity_level:document.getElementById('activityLevel').value,
+        dog_experience:document.getElementById('dogExperience').value,
+        preferred_size:document.getElementById('preferredSize').value,
+        preferred_age:document.getElementById('preferredAge').value,
+        preferred_region:region || null,
+        has_children:document.getElementById('hasChildren').checked,
+        has_other_pets:document.getElementById('hasOtherPets').checked
+      };
+    }
+
+    function profileSummary(profile) {
+      return [
+        labels.housing[profile.housing_type],
+        `하루 ${profile.daily_absence_hours}시간 부재`,
+        labels.activity[profile.activity_level],
+        labels.experience[profile.dog_experience],
+        profile.preferred_size === 'any' ? '크기 무관' : `${labels.size[profile.preferred_size]} 선호`,
+        profile.preferred_age === 'any' ? '연령 무관' : `${labels.age[profile.preferred_age]} 선호`,
+        profile.preferred_region || null
+      ].filter(Boolean).join(' · ');
+    }
+
+    function applyPreset(name) {
+      const preset = presets[name];
+      if (!preset) return;
+      activePreset = name;
+      queryInput.value = preset.query;
+      document.getElementById('housingType').value = preset.housing_type;
+      absenceHours.value = preset.daily_absence_hours;
+      document.getElementById('activityLevel').value = preset.activity_level;
+      document.getElementById('dogExperience').value = preset.dog_experience;
+      document.getElementById('preferredSize').value = preset.preferred_size;
+      document.getElementById('preferredAge').value = preset.preferred_age;
+      document.getElementById('preferredRegion').value = preset.preferred_region;
+      document.getElementById('hasChildren').checked = preset.has_children;
+      document.getElementById('hasOtherPets').checked = preset.has_other_pets;
+      absenceOutput.textContent = `${preset.daily_absence_hours}시간`;
+      document.querySelectorAll('[data-preset]').forEach(button => button.classList.toggle('active', button.dataset.preset === name));
+    }
+
+    function connectionState() {
+      const ready = Boolean(apiKey);
+      connectionButton.classList.toggle('ready', ready);
+      connectionLabel.textContent = ready ? '연결 준비됨' : '연결 설정';
+      apiKeyInput.value = apiKey || '';
+    }
+
+    function evidencePreview(item) {
+      const rows = [
+        ['match', '일치', item.matched_conditions],
+        ['caution', '주의', item.caution_conditions],
+        ['unknown', '확인 필요', item.unknown_conditions]
+      ];
+      return rows.filter(([, , values]) => Array.isArray(values) && values.length).map(([type, label, values]) => `
+        <div class="evidence-line ${type}">
+          <span class="evidence-kind">${label}</span>
+          <span class="evidence-message">${escapeHtml(values[0])}${values.length > 1 ? ` 외 ${values.length - 1}건` : ''}</span>
+        </div>`).join('');
+    }
+
+    function evidenceGroup(title, type, values) {
+      if (!Array.isArray(values) || !values.length) return '';
+      return `<section class="evidence-group ${type}"><h4>${escapeHtml(title)} <span>${values.length}</span></h4><ul>${values.map(value => `<li>${escapeHtml(value)}</li>`).join('')}</ul></section>`;
+    }
+
+    function rankChange(dogId, rank) {
+      if (!canComparePrevious || !previousRanks.size) return '';
+      if (!previousRanks.has(dogId)) return `<span class="rank-change">새로 진입</span>`;
+      const previous = previousRanks.get(dogId);
+      const difference = previous - rank;
+      if (difference > 0) return `<span class="rank-change">↑ ${difference}단계 먼저 보기</span>`;
+      if (difference < 0) return `<span class="rank-change down">↓ ${Math.abs(difference)}단계</span>`;
+      return `<span class="rank-change">순위 유지</span>`;
+    }
+
+    function dogCard(item, index) {
+      const rank = index + 1;
+      const meta = item.meta || {};
+      const breed = known(meta.breed) ? meta.breed : '품종 정보 없음';
+      const imageUrl = safeUrl(meta.image_url);
+      const sourceUrl = safeUrl(item.source_url || meta.source_url);
+      const statusKnown = meta.notice_status === 'active';
+      const statusText = statusKnown ? '보호 중 공고' : '상태 재확인 필요';
+      const shelter = known(meta.care_name) ? meta.care_name : (known(meta.org_name) ? meta.org_name : '보호소 정보 없음');
+      const region = known(meta.region) ? meta.region : '지역 미상';
+      const sex = labels.sex[meta.sex] || '성별 미상';
+      const neuter = labels.neutered[meta.neutered];
+      const mixed = meta.mixed_breed === true ? '믹스견' : '';
+      const chips = [region, formatAge(meta), formatWeight(meta), sex, neuter, mixed].filter(Boolean);
+      const panelId = `detail-panel-${rank}`;
+      const evaluated = Number(item.evaluated_count || 0);
+      const applicable = Number(item.applicable_count || 0);
+      const coverage = Number.isFinite(Number(item.evidence_coverage)) ? Math.round(Number(item.evidence_coverage) * 100) : 0;
+      const reason = item.recommendation_reason || '기존 검색 결과에서 먼저 확인할 후보입니다.';
+      return `<li>
+        <article class="dog-card" aria-labelledby="dog-title-${rank}">
+          <div class="image-shell">
+            <div class="image-fallback" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><path d="M18 24c-8-2-11-9-8-14 3-5 10-7 16-1 3-7 8-10 15-10s13 4 16 11c6-6 13-4 16 1 2 6-1 12-9 14" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><path d="M17 25c0-14 9-23 24-23s24 9 24 23c0 18-9 30-24 30S17 43 17 25Z" stroke="currentColor" stroke-width="3.5"/><circle cx="32" cy="28" r="2.5" fill="currentColor"/><circle cx="50" cy="28" r="2.5" fill="currentColor"/><path d="M34 40c5 4 10 4 15 0M41.5 35v8" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/></svg></div>
+            ${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(breed)} 유기견 공고 사진" loading="lazy" referrerpolicy="no-referrer" />` : ''}
+            <span class="rank-badge">${rank}위</span>
+            ${rankChange(item.dog_id, rank)}
+          </div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="dog-title"><h3 id="dog-title-${rank}">${escapeHtml(breed)}</h3><p>${escapeHtml(shelter)} · ${escapeHtml(meta.notice_no || item.dog_id || '')}</p></div>
+              <span class="notice-badge ${statusKnown ? '' : 'unknown'}">${statusText}</span>
+            </div>
+            <div class="meta-chips">${chips.map(value => `<span class="meta-chip">${escapeHtml(value)}</span>`).join('')}</div>
+            <div class="reason-box">
+              <div class="reason-label"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 18h6M10 21h4M8.5 14.5C7 13.3 6 11.4 6 9.3A6 6 0 0 1 18 9.3c0 2.1-1 4-2.5 5.2-.8.7-1.2 1.3-1.3 2.2H9.8c-.1-.9-.5-1.5-1.3-2.2Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>왜 먼저 볼 후보인가요?</div>
+              <p class="reason-text">${escapeHtml(reason)}</p>
+            </div>
+            <div class="evidence-preview">${evidencePreview(item)}</div>
+            <div class="score-panel" id="${panelId}" hidden>
+              <div class="evidence-full">
+                ${evidenceGroup('조건 일치', 'match', item.matched_conditions)}
+                ${evidenceGroup('주의해서 확인', 'caution', item.caution_conditions)}
+                ${evidenceGroup('보호소에 확인', 'unknown', item.unknown_conditions)}
+              </div>
+              <p class="score-note">정렬 점수는 후보 순서를 정하기 위한 값이며 입양 적합 확률이 아닙니다.</p>
+              <div class="score-grid">
+                <div class="score-item"><span>기존 검색</span><strong>${formatScore(item.retrieval_score)}</strong></div>
+                <div class="score-item"><span>생활조건</span><strong>${formatScore(item.compatibility_score)}</strong></div>
+                <div class="score-item"><span>사진 품질</span><strong>${item.quality_score === null || item.quality_score === undefined ? '미상' : formatScore(item.quality_score)}</strong></div>
+                <div class="score-item"><span>최종 정렬</span><strong>${formatScore(item.final_score)}</strong></div>
+              </div>
+              <div class="coverage">공고로 확인된 조건 ${evaluated}/${applicable} · 근거 커버리지 ${coverage}%</div>
+            </div>
+            <div class="card-footer">
+              <div class="verified"><strong>마지막 상태 확인</strong>${escapeHtml(formatDate(meta.last_verified_at))}${meta.notice_end ? ` · 공고 종료 ${escapeHtml(formatDate(meta.notice_end))}` : ''}</div>
+              <div class="card-actions">
+                <button class="score-button" type="button" data-panel="${panelId}" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>근거·점수</button>
+                ${sourceUrl ? `<a class="notice-link" href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener noreferrer">실제 공고 보기<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 5h5v5M12 12l7-7M19 14v5H5V5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>` : '<span class="notice-link" aria-disabled="true">공고 링크 없음</span>'}
+              </div>
+            </div>
+          </div>
+        </article>
+      </li>`;
+    }
+
+    function showLoading() {
+      form.setAttribute('aria-busy', 'true');
+      resultsList.setAttribute('aria-busy', 'true');
+      searchButton.disabled = true;
+      searchButton.querySelector('span').textContent = '후보를 살펴보는 중…';
+      emptyState.hidden = true;
+      errorState.hidden = true;
+      resultsList.innerHTML = '';
+      loadingState.hidden = false;
+      resultCount.hidden = true;
+      compareNote.hidden = true;
+      resultsDescription.textContent = '기존 검색 후보를 찾고 생활조건 근거를 비교하고 있어요.';
+    }
+
+    function finishLoading() {
+      form.removeAttribute('aria-busy');
+      resultsList.setAttribute('aria-busy', 'false');
+      searchButton.disabled = false;
+      searchButton.querySelector('span').textContent = '방문 후보 찾아보기';
+      loadingState.hidden = true;
+    }
+
+    function renderResults(data, profile, searchSignature) {
+      const results = Array.isArray(data.results) ? data.results : [];
+      const hadPrevious = previousRanks.size > 0 && previousSearchSignature === searchSignature;
+      canComparePrevious = hadPrevious;
+      resultsList.innerHTML = results.map(dogCard).join('');
+      resultsList.querySelectorAll('.image-shell img').forEach(image => image.addEventListener('error', () => { image.hidden = true; }));
+      compareNote.hidden = !hadPrevious;
+      resultCount.hidden = false;
+      resultCount.querySelector('strong').textContent = `${results.length}마리`;
+      resultsDescription.textContent = `검색 후보 ${Number(data.candidate_count || results.length)}건 중 ${profileSummary(profile)}을 반영했어요.`;
+      disclaimerText.textContent = data.disclaimer || disclaimerText.textContent;
+      previousRanks = new Map(results.map((item, index) => [item.dog_id, index + 1]));
+      previousSearchSignature = searchSignature;
+      hasRenderedResults = results.length > 0;
+      emptyState.hidden = results.length > 0;
+      if (!results.length) {
+        emptyState.querySelector('h3').textContent = '조건에 맞는 활성 공고를 찾지 못했어요';
+        emptyState.querySelector('p').textContent = '검색어나 희망 지역을 조금 넓혀 다시 찾아보세요.';
+      }
+      if (window.innerWidth <= 820) document.getElementById('resultsTitle').scrollIntoView({behavior:'smooth', block:'start'});
+    }
+
+    function formatApiError(payload, status) {
+      if (Array.isArray(payload?.detail)) return payload.detail.map(item => item.msg || String(item)).join(' ');
+      if (payload?.detail) return String(payload.detail);
+      if (payload?.error) return String(payload.error);
+      return `요청을 처리하지 못했습니다. (HTTP ${status})`;
+    }
+
+    async function runSearch() {
+      if (!form.reportValidity()) return;
+      const profile = profilePayload();
+      const requestBody = {query:queryInput.value.trim(), profile, topk:Number(document.getElementById('topk').value)};
+      const searchSignature = JSON.stringify({query:requestBody.query, topk:requestBody.topk});
+      showLoading();
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 60000);
+      try {
+        const response = await fetch('/search/profile', {
+          method:'POST',
+          headers:{'content-type':'application/json', 'x-api-key':apiKey},
+          body:JSON.stringify(requestBody),
+          signal:controller.signal
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          const error = new Error(formatApiError(payload, response.status));
+          error.status = response.status;
+          throw error;
+        }
+        renderResults(payload, profile, searchSignature);
+      } catch (error) {
+        errorState.hidden = false;
+        errorMessage.textContent = error.name === 'AbortError' ? '검색 시간이 길어 연결을 종료했습니다. 서버 상태를 확인해 주세요.' : error.message;
+        resultsDescription.textContent = '연결 또는 입력 조건을 확인해 주세요.';
+        if (error.status === 403 && typeof connectionDialog.showModal === 'function') connectionDialog.showModal();
+      } finally {
+        window.clearTimeout(timeout);
+        finishLoading();
+      }
+    }
+
+    form.addEventListener('submit', event => { event.preventDefault(); runSearch(); });
+    absenceHours.addEventListener('input', () => { absenceOutput.textContent = `${absenceHours.value}시간`; });
+    document.querySelectorAll('[data-preset]').forEach(button => button.addEventListener('click', () => {
+      applyPreset(button.dataset.preset);
+      if (hasRenderedResults) runSearch();
+    }));
+
+    resultsList.addEventListener('click', event => {
+      const button = event.target.closest('[data-panel]');
+      if (!button) return;
+      const panel = document.getElementById(button.dataset.panel);
+      if (!panel) return;
+      const willOpen = panel.hidden;
+      panel.hidden = !willOpen;
+      button.setAttribute('aria-expanded', String(willOpen));
+      button.lastChild.textContent = willOpen ? ' 접기' : ' 근거·점수';
+    });
+
+    connectionButton.addEventListener('click', () => { apiKeyInput.value = apiKey; connectionDialog.showModal(); });
+    document.getElementById('closeDialogButton').addEventListener('click', () => connectionDialog.close());
+    document.getElementById('cancelConnectionButton').addEventListener('click', () => connectionDialog.close());
+    document.getElementById('saveConnectionButton').addEventListener('click', () => {
+      apiKey = apiKeyInput.value.trim();
+      if (apiKey) sessionStorage.setItem('meongtamjeongApiKey', apiKey);
+      else sessionStorage.removeItem('meongtamjeongApiKey');
+      connectionState();
+      connectionDialog.close();
+    });
+
+    connectionState();
+    applyPreset(activePreset);
+    if (urlParams.get('autostart') === '1') runSearch();
+  </script>
+</body>
+</html>
