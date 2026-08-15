@@ -3,7 +3,7 @@ import re
 import argparse
 from collections import Counter
 from pathlib import Path
-from typing import Any, Dict, List, Iterable, Optional
+from typing import Any, Dict, Iterable, List
 
 import pandas as pd
 

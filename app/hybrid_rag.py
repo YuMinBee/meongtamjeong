@@ -4,6 +4,7 @@ from collections import Counter, defaultdict
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 from app.dog_attributes import normalize_vlm_attrs, summarize_vlm_attrs_ko
+from app.graph_rag import infer_age_hint
 from app.notice_status import is_searchable_notice
 
 
@@ -42,8 +43,8 @@ EAR_TERMS = {
 }
 
 SEX_TERMS = {
-    "M": ("수컷", "남아", "남자", "male", "수"),
-    "F": ("암컷", "여아", "여자", "female", "암"),
+    "M": ("수컷", "남아", "남자", "male"),
+    "F": ("암컷", "여아", "여자", "female"),
 }
 
 PERSONALITY_TERMS = (
@@ -60,9 +61,9 @@ PERSONALITY_TERMS = (
 )
 
 AGE_TERMS = {
-    "puppy": ("강아지", "새끼", "어린", "개월", "puppy"),
+    "puppy": ("어린 강아지", "새끼", "어린 개", "생후", "개월", "puppy"),
     "adult": ("성견", "adult"),
-    "senior": ("노견", "고령", "senior"),
+    "senior": ("노령", "노견", "고령", "senior"),
 }
 
 
@@ -87,6 +88,30 @@ def clean_text(value: Any) -> str:
     return str(value).strip()
 
 
+def _searchable_field_text(value: Any) -> str:
+    """Flatten source metadata without indexing Python container syntax."""
+
+    if value is None:
+        return ""
+    if isinstance(value, dict):
+        values = value.values()
+    elif isinstance(value, (list, tuple)):
+        values = value
+    elif isinstance(value, (set, frozenset)):
+        values = sorted(value, key=lambda item: clean_text(item))
+    else:
+        return clean_text(value)
+    return " ".join(text for item in values if (text := _searchable_field_text(item)))
+
+
+def _first_searchable_field(meta: Dict[str, Any], *keys: str) -> str:
+    for key in keys:
+        text = _searchable_field_text(meta.get(key))
+        if text:
+            return text
+    return ""
+
+
 def tokenize(text: str) -> List[str]:
     return [token.lower() for token in TOKEN_RE.findall(clean_text(text))]
 
@@ -98,6 +123,26 @@ def _contains_any(text: str, terms: Iterable[str]) -> bool:
 
 def _collect_terms(text: str, mapping: Dict[str, Iterable[str]]) -> List[str]:
     return [key for key, terms in mapping.items() if _contains_any(text, terms)]
+
+
+def _drop_substring_only_match(
+    text: str,
+    matches: List[str],
+    *,
+    specific: str,
+    broader: str,
+    mapping: Dict[str, Iterable[str]],
+) -> List[str]:
+    """Drop a broad label found only inside a more-specific Korean term."""
+
+    if specific not in matches or broader not in matches:
+        return matches
+    remaining = text
+    for term in mapping.get(specific, ()):
+        remaining = re.sub(re.escape(term), " ", remaining, flags=re.IGNORECASE)
+    if not _contains_any(remaining, mapping.get(broader, ())):
+        return [value for value in matches if value != broader]
+    return matches
 
 
 def _append_unique(values: List[str], additions: Iterable[str]) -> None:
@@ -129,7 +174,16 @@ def normalize_structured_query(value: Any, raw_query: str = "") -> Dict[str, Any
     if not isinstance(value, dict):
         return query
 
-    for key in ("coat_color", "fur_length", "ear_shape", "body_size_hint", "sex", "age_hint", "personality", "keywords"):
+    for key in (
+        "coat_color",
+        "fur_length",
+        "ear_shape",
+        "body_size_hint",
+        "sex",
+        "age_hint",
+        "personality",
+        "keywords",
+    ):
         current = value.get(key, [])
         if isinstance(current, list):
             query[key] = [clean_text(item) for item in current if clean_text(item)]
@@ -157,10 +211,21 @@ def normalize_structured_query(value: Any, raw_query: str = "") -> Dict[str, Any
     return query
 
 
-def merge_structured_query(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
+def merge_structured_query(
+    base: Dict[str, Any], override: Dict[str, Any]
+) -> Dict[str, Any]:
     merged = normalize_structured_query(base, base.get("raw_query", ""))
     other = normalize_structured_query(override, merged.get("raw_query", ""))
-    for key in ("coat_color", "fur_length", "ear_shape", "body_size_hint", "sex", "age_hint", "personality", "keywords"):
+    for key in (
+        "coat_color",
+        "fur_length",
+        "ear_shape",
+        "body_size_hint",
+        "sex",
+        "age_hint",
+        "personality",
+        "keywords",
+    ):
         _append_unique(merged[key], other.get(key, []))
     for key in ("face_visible", "whole_body_visible", "min_photo_quality"):
         if other.get(key) is not None:
@@ -170,24 +235,48 @@ def merge_structured_query(base: Dict[str, Any], override: Dict[str, Any]) -> Di
     return merged
 
 
-def parse_structured_query(text: str, survey: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+def parse_structured_query(
+    text: str, survey: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]:
     query = empty_structured_query(text)
     combined = clean_text(text)
     if survey:
-        combined = " ".join([combined] + [clean_text(value) for value in survey.values()])
+        combined = " ".join(
+            [combined] + [clean_text(value) for value in survey.values()]
+        )
 
-    _append_unique(query["coat_color"], _collect_terms(combined, COLOR_TERMS))
+    color_terms = _drop_substring_only_match(
+        combined,
+        _collect_terms(combined, COLOR_TERMS),
+        specific="tan",
+        broader="brown",
+        mapping=COLOR_TERMS,
+    )
+    _append_unique(query["coat_color"], color_terms)
     _append_unique(query["fur_length"], _collect_terms(combined, FUR_TERMS))
     _append_unique(query["ear_shape"], _collect_terms(combined, EAR_TERMS))
-    _append_unique(query["body_size_hint"], _collect_terms(combined, SIZE_TERMS))
+    size_terms = _drop_substring_only_match(
+        combined,
+        _collect_terms(combined, SIZE_TERMS),
+        specific="tiny",
+        broader="small",
+        mapping=SIZE_TERMS,
+    )
+    _append_unique(query["body_size_hint"], size_terms)
     _append_unique(query["sex"], _collect_terms(combined, SEX_TERMS))
     _append_unique(query["age_hint"], _collect_terms(combined, AGE_TERMS))
+    # ``어린 소형견``처럼 명사 앞에 단독으로 쓰이는 표현도 지원하되,
+    # 생활조건인 ``어린이``를 puppy 신호로 오인하지 않는다.
+    if re.search(r"어린(?!이)", combined):
+        _append_unique(query["age_hint"], ("puppy",))
 
     for term in PERSONALITY_TERMS:
         if term in combined and term not in query["personality"]:
             query["personality"].append(term)
 
-    if _contains_any(combined, ("얼굴 잘", "얼굴이 잘", "정면", "눈이 잘", "face visible")):
+    if _contains_any(
+        combined, ("얼굴 잘", "얼굴이 잘", "정면", "눈이 잘", "face visible")
+    ):
         query["face_visible"] = True
     if _contains_any(combined, ("얼굴 안", "얼굴 가려", "얼굴이 안", "face hidden")):
         query["face_visible"] = False
@@ -196,8 +285,22 @@ def parse_structured_query(text: str, survey: Optional[Dict[str, Any]] = None) -
     if _contains_any(combined, ("사진 선명", "사진 잘", "잘 보이는 사진", "고화질")):
         query["min_photo_quality"] = 0.65
 
-    stopwords = {"강아지", "유기견", "추천", "찾아줘", "원해", "좋아", "가능", "사진", "조건"}
-    query["keywords"] = [token for token in tokenize(combined) if len(token) > 1 and token not in stopwords][:20]
+    stopwords = {
+        "강아지",
+        "유기견",
+        "추천",
+        "찾아줘",
+        "원해",
+        "좋아",
+        "가능",
+        "사진",
+        "조건",
+    }
+    query["keywords"] = [
+        token
+        for token in tokenize(combined)
+        if len(token) > 1 and token not in stopwords
+    ][:20]
     return query
 
 
@@ -241,9 +344,17 @@ def weight_to_size_hint(weight: Any) -> str:
 def resolve_doc_text(meta: Dict[str, Any]) -> str:
     attrs_summary = summarize_vlm_attrs_ko(meta.get("vlm_attrs"))
     bits = [
-        clean_text(meta.get("breed")),
-        clean_text(meta.get("breed_name")),
-        clean_text(meta.get("breed_code")),
+        _first_searchable_field(
+            meta,
+            "breed_source_label",
+            "breed_name",
+            "breed_full_name",
+            "kindNm",
+            "kindFullNm",
+            "breed",
+        ),
+        _first_searchable_field(meta, "breed_code", "breedCd", "kindCd"),
+        _first_searchable_field(meta, "color", "colorCd"),
         clean_text(meta.get("sex")),
         clean_text(meta.get("age")),
         clean_text(meta.get("weight")),
@@ -254,13 +365,19 @@ def resolve_doc_text(meta: Dict[str, Any]) -> str:
         clean_text(meta.get("vlm_desc")),
         clean_text(meta.get("merged_desc")),
         clean_text(meta.get("vlm_attr_text")),
+        _first_searchable_field(meta, "health_checks", "healthChk"),
+        _first_searchable_field(meta, "vaccinations", "vaccinationChk"),
+        _first_searchable_field(meta, "safety_health_note", "sfeHealth"),
+        _first_searchable_field(meta, "safety_social_note", "sfeSoci"),
         attrs_summary,
-        " ".join(clean_text(item) for item in meta.get("photo_advice", []) if clean_text(item)) if isinstance(meta.get("photo_advice"), list) else "",
+        _searchable_field_text(meta.get("photo_advice")),
     ]
     return " ".join(bit for bit in bits if bit)
 
 
-def build_hybrid_documents(metas: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], Dict[int, int]]:
+def build_hybrid_documents(
+    metas: List[Dict[str, Any]],
+) -> Tuple[List[Dict[str, Any]], Dict[int, int]]:
     by_id: Dict[str, Dict[str, Any]] = {}
     vector_to_doc: Dict[int, int] = {}
 
@@ -312,7 +429,9 @@ class BM25Index:
             self.doc_lengths.append(sum(counts.values()))
             for token in counts:
                 self.doc_freq[token] += 1
-        self.avgdl = (sum(self.doc_lengths) / len(self.doc_lengths)) if self.doc_lengths else 0.0
+        self.avgdl = (
+            (sum(self.doc_lengths) / len(self.doc_lengths)) if self.doc_lengths else 0.0
+        )
 
     def score_doc(self, query_tokens: List[str], doc_index: int) -> float:
         if not query_tokens or not self.docs:
@@ -326,7 +445,9 @@ class BM25Index:
                 continue
             df = self.doc_freq.get(token, 0)
             idf = math.log(1.0 + (len(self.docs) - df + 0.5) / (df + 0.5))
-            denom = freq + self.k1 * (1.0 - self.b + self.b * doc_len / (self.avgdl or 1.0))
+            denom = freq + self.k1 * (
+                1.0 - self.b + self.b * doc_len / (self.avgdl or 1.0)
+            )
             score += idf * (freq * (self.k1 + 1.0)) / denom
         return score
 
@@ -334,7 +455,10 @@ class BM25Index:
         query_tokens = tokenize(query_text)
         if not query_tokens:
             return {}
-        scored = [(index, self.score_doc(query_tokens, index)) for index in range(len(self.docs))]
+        scored = [
+            (index, self.score_doc(query_tokens, index))
+            for index in range(len(self.docs))
+        ]
         scored = [(index, score) for index, score in scored if score > 0]
         scored.sort(key=lambda item: item[1], reverse=True)
         return dict(scored[:limit])
@@ -444,9 +568,12 @@ def vector_hits_to_doc_modality_scores(
         }
     return aggregated, details
 
+
 def _text_contains_any(doc_text: str, terms: Iterable[str]) -> bool:
     lowered = doc_text.lower()
-    return any(clean_text(term).lower() in lowered for term in terms if clean_text(term))
+    return any(
+        clean_text(term).lower() in lowered for term in terms if clean_text(term)
+    )
 
 
 def _as_float(value: Any) -> Optional[float]:
@@ -495,7 +622,9 @@ def visual_attr_score(meta: Dict[str, Any]) -> float:
         score += (1.0 if detected is True else 0.0) * 0.18
         weight += 0.18
 
-    area = _as_float(image_attrs.get("dog_area_ratio") or image_attrs.get("target_area_ratio"))
+    area = _as_float(
+        image_attrs.get("dog_area_ratio") or image_attrs.get("target_area_ratio")
+    )
     if area is not None:
         if area <= 0.0:
             area_score = 0.0
@@ -525,7 +654,10 @@ def visual_attr_score(meta: Dict[str, Any]) -> float:
 
     return score / weight if weight else 0.5
 
-def condition_score(doc: Dict[str, Any], structured: Dict[str, Any]) -> Tuple[float, List[str], List[str], List[str]]:
+
+def condition_score(
+    doc: Dict[str, Any], structured: Dict[str, Any]
+) -> Tuple[float, List[str], List[str], List[str]]:
     meta = doc.get("meta") or {}
     attrs = normalize_vlm_attrs(meta.get("vlm_attrs"))
     text = doc.get("text", "")
@@ -535,38 +667,106 @@ def condition_score(doc: Dict[str, Any], structured: Dict[str, Any]) -> Tuple[fl
     total = 0
     points = 0.0
 
-    def check(name: str, desired: List[str], actual: Any, text_terms: Optional[List[str]] = None) -> None:
+    def check(
+        name: str,
+        desired: List[str],
+        actual: Any,
+        text_terms: Optional[List[str]] = None,
+    ) -> None:
         nonlocal total, points
         if not desired:
             return
         total += 1
-        actual_values = actual if isinstance(actual, list) else ([actual] if actual else [])
-        actual_values = [clean_text(value).lower() for value in actual_values if clean_text(value)]
-        desired_values = [clean_text(value).lower() for value in desired if clean_text(value)]
-        if any(value in actual_values for value in desired_values) or (text_terms and _text_contains_any(text, text_terms)):
+        actual_values = (
+            actual if isinstance(actual, list) else ([actual] if actual else [])
+        )
+        actual_values = [
+            clean_text(value).lower() for value in actual_values if clean_text(value)
+        ]
+        desired_values = [
+            clean_text(value).lower() for value in desired if clean_text(value)
+        ]
+        if any(value in actual_values for value in desired_values) or (
+            text_terms and _text_contains_any(text, text_terms)
+        ):
             points += 1.0
             matched.append(f"{name}: {', '.join(desired)}")
         elif actual_values:
-            mismatched.append(f"{name}: requested {', '.join(desired)}, found {', '.join(actual_values)}")
+            mismatched.append(
+                f"{name}: requested {', '.join(desired)}, found {', '.join(actual_values)}"
+            )
         else:
             points += 0.2
             missing.append(f"{name}: metadata missing")
 
-    color_terms = [term for color in structured.get("coat_color", []) for term in COLOR_TERMS.get(color, (color,))]
-    check("coat_color", structured.get("coat_color", []), attrs.get("coat_color"), color_terms)
-    fur_terms = [term for fur in structured.get("fur_length", []) for term in FUR_TERMS.get(fur, (fur,))]
-    check("fur_length", structured.get("fur_length", []), attrs.get("fur_length"), fur_terms)
-    ear_terms = [term for ear in structured.get("ear_shape", []) for term in EAR_TERMS.get(ear, (ear,))]
-    check("ear_shape", structured.get("ear_shape", []), attrs.get("ear_shape"), ear_terms)
+    color_terms = [
+        term
+        for color in structured.get("coat_color", [])
+        for term in COLOR_TERMS.get(color, (color,))
+    ]
+    check(
+        "coat_color",
+        structured.get("coat_color", []),
+        attrs.get("coat_color"),
+        color_terms,
+    )
+    fur_terms = [
+        term
+        for fur in structured.get("fur_length", [])
+        for term in FUR_TERMS.get(fur, (fur,))
+    ]
+    check(
+        "fur_length",
+        structured.get("fur_length", []),
+        attrs.get("fur_length"),
+        fur_terms,
+    )
+    ear_terms = [
+        term
+        for ear in structured.get("ear_shape", [])
+        for term in EAR_TERMS.get(ear, (ear,))
+    ]
+    check(
+        "ear_shape", structured.get("ear_shape", []), attrs.get("ear_shape"), ear_terms
+    )
 
-    inferred_size = attrs.get("body_size_hint") if attrs.get("body_size_hint") != "unknown" else weight_to_size_hint(meta.get("weight"))
-    size_terms = [term for size in structured.get("body_size_hint", []) for term in SIZE_TERMS.get(size, (size,))]
+    inferred_size = clean_text(attrs.get("body_size_hint")).lower()
+    if not inferred_size or inferred_size == "unknown":
+        inferred_size = weight_to_size_hint(meta.get("weight"))
+    size_terms = [
+        term
+        for size in structured.get("body_size_hint", [])
+        for term in SIZE_TERMS.get(size, (size,))
+    ]
     check("body_size", structured.get("body_size_hint", []), inferred_size, size_terms)
-    check("sex", structured.get("sex", []), clean_text(meta.get("sex") or meta.get("sexCd")))
-    check("age", structured.get("age_hint", []), "", [term for age in structured.get("age_hint", []) for term in AGE_TERMS.get(age, (age,))])
-    check("personality", structured.get("personality", []), "", structured.get("personality", []))
+    check(
+        "sex",
+        structured.get("sex", []),
+        clean_text(meta.get("sex") or meta.get("sexCd")),
+    )
+    actual_age = infer_age_hint(meta.get("age"))
+    age_terms = [
+        term
+        for age in structured.get("age_hint", [])
+        for term in AGE_TERMS.get(age, (age,))
+    ]
+    check(
+        "age",
+        structured.get("age_hint", []),
+        actual_age,
+        None if actual_age else age_terms,
+    )
+    check(
+        "personality",
+        structured.get("personality", []),
+        "",
+        structured.get("personality", []),
+    )
 
-    for key, label in (("face_visible", "face_visible"), ("whole_body_visible", "whole_body_visible")):
+    for key, label in (
+        ("face_visible", "face_visible"),
+        ("whole_body_visible", "whole_body_visible"),
+    ):
         desired_bool = structured.get(key)
         if desired_bool is None:
             continue
@@ -592,7 +792,9 @@ def condition_score(doc: Dict[str, Any], structured: Dict[str, Any]) -> Tuple[fl
             points += 1.0
             matched.append(f"photo_quality_score: {quality:.2f}")
         else:
-            mismatched.append(f"photo_quality_score: requested >= {min_quality:.2f}, found {quality:.2f}")
+            mismatched.append(
+                f"photo_quality_score: requested >= {min_quality:.2f}, found {quality:.2f}"
+            )
 
     if total == 0:
         return 0.0, matched, missing, mismatched
@@ -610,8 +812,10 @@ def rank_hybrid_documents(
     rerank_depth: int = 80,
     strict_filters: bool = False,
     extra_candidate_indices: Optional[Iterable[int]] = None,
+    extra_candidate_scores: Optional[Dict[int, float]] = None,
     filter_inactive_notices: bool = True,
     include_unknown_notices: bool = True,
+    visual_metadata_enabled: bool = True,
 ) -> List[Dict[str, Any]]:
     bm25_scores = bm25.top_scores(query_text, max(rerank_depth, topk * 5))
     candidate_indices = set(vector_scores) | set(bm25_scores)
@@ -621,27 +825,55 @@ def rank_hybrid_documents(
             for doc_index in extra_candidate_indices
             if 0 <= doc_index < len(docs)
         )
+    if extra_candidate_scores:
+        candidate_indices.update(
+            doc_index
+            for doc_index in extra_candidate_scores
+            if 0 <= doc_index < len(docs)
+        )
     if not candidate_indices:
         candidate_indices = set(range(min(len(docs), rerank_depth)))
 
     max_bm25 = max(bm25_scores.values(), default=0.0) or 1.0
+    max_extra_candidate_score = (
+        max(extra_candidate_scores.values(), default=0.0)
+        if extra_candidate_scores
+        else 0.0
+    ) or 1.0
     ranked: List[Dict[str, Any]] = []
     for doc_index in candidate_indices:
         doc = docs[doc_index]
         meta = doc.get("meta") or {}
-        if filter_inactive_notices and not is_searchable_notice(meta, include_unknown=include_unknown_notices):
+        if filter_inactive_notices and not is_searchable_notice(
+            meta, include_unknown=include_unknown_notices
+        ):
             continue
         cond_score, matched, missing, mismatched = condition_score(doc, structured)
         if strict_filters and mismatched:
             continue
-        quality = resolve_photo_quality_score(meta)
+        quality = resolve_photo_quality_score(meta) if visual_metadata_enabled else None
         photo_score = quality if quality is not None else 0.5
-        visual_score = visual_attr_score(meta)
+        visual_score = visual_attr_score(meta) if visual_metadata_enabled else 0.0
         vector_score = vector_scores.get(doc_index, 0.0)
         vector_detail = (vector_score_details or {}).get(doc_index, {})
-        modality_scores = vector_detail.get("modalities") if isinstance(vector_detail.get("modalities"), dict) else {}
+        modality_scores = (
+            vector_detail.get("modalities")
+            if isinstance(vector_detail.get("modalities"), dict)
+            else {}
+        )
         bm25_norm = bm25_scores.get(doc_index, 0.0) / max_bm25
-        final_score = (0.50 * vector_score) + (0.20 * bm25_norm) + (0.22 * cond_score) + (0.08 * visual_score)
+        candidate_prior = max(
+            0.0,
+            float((extra_candidate_scores or {}).get(doc_index, 0.0))
+            / max_extra_candidate_score,
+        )
+        final_score = (
+            (0.44 * vector_score)
+            + (0.18 * bm25_norm)
+            + (0.20 * cond_score)
+            + ((0.06 * visual_score) if visual_metadata_enabled else 0.0)
+            + (0.12 * candidate_prior)
+        )
         ranked.append(
             {
                 "doc": doc,
@@ -649,21 +881,39 @@ def rank_hybrid_documents(
                 "score": final_score,
                 "score_parts": {
                     "vector": round(vector_score, 4),
-                    "vector_modalities": {key: round(value, 4) for key, value in modality_scores.items()},
-                    "vector_available_weight": round(float(vector_detail.get("available_weight") or 0.0), 4),
-                    "vector_best_modality": clean_text(vector_detail.get("best_modality")),
+                    "vector_modalities": {
+                        key: round(value, 4) for key, value in modality_scores.items()
+                    },
+                    "vector_available_weight": round(
+                        float(vector_detail.get("available_weight") or 0.0), 4
+                    ),
+                    "vector_best_modality": clean_text(
+                        vector_detail.get("best_modality")
+                    ),
                     "bm25": round(bm25_norm, 4),
                     "conditions": round(cond_score, 4),
-                    "photo_quality": round(photo_score, 4),
-                    "visual_attrs": round(visual_score, 4),
+                    "candidate_prior": round(candidate_prior, 4),
+                    "photo_quality": (
+                        round(photo_score, 4) if visual_metadata_enabled else None
+                    ),
+                    "visual_attrs": (
+                        round(visual_score, 4) if visual_metadata_enabled else None
+                    ),
                 },
                 "evidence": {
                     "matched_conditions": matched,
                     "missing_conditions": missing,
                     "mismatched_conditions": mismatched,
                     "bm25_terms": tokenize(query_text)[:12],
-                    "missing_vector_modalities": vector_detail.get("missing_modalities", []),
+                    "missing_vector_modalities": vector_detail.get(
+                        "missing_modalities", []
+                    ),
                     "vector_hit_count": vector_detail.get("hit_count", 0),
+                    "vector_evidence": (
+                        vector_detail.get("evidence")
+                        if isinstance(vector_detail.get("evidence"), dict)
+                        else {}
+                    ),
                 },
             }
         )

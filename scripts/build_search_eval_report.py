@@ -16,7 +16,7 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
 
-from app.query_expansion import expand_query_text
+from app.query_expansion import expand_query_text  # noqa: E402
 
 
 DATA_DIR = BASE_DIR / "data"

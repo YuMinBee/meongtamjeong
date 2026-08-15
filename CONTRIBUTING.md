@@ -5,14 +5,12 @@
 Python 3.10을 기준으로 합니다. 테스트와 정적 검사만 수행할 때는 GPU·VLM 패키지를 설치할 필요가 없습니다.
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -r requirements-dev.txt
+conda env create -f environment.yml
+conda activate dog-rag
 python -m pytest -q
 ```
 
-Windows PowerShell에서는 `.venv\Scripts\Activate.ps1`을 사용합니다. 전체 애플리케이션 실행은 `requirements.txt` 또는 `environment.yml`을 참고하세요.
+이미 환경을 만든 경우 `conda env update -n dog-rag -f environment.yml --prune`으로 맞춥니다. 선택 Gemma/VLM 기능은 기본 기여 환경에 포함하지 않으며 필요할 때만 `requirements-vlm.txt`를 별도로 설치합니다.
 
 ## 변경 원칙
 
@@ -27,11 +25,18 @@ Windows PowerShell에서는 `.venv\Scripts\Activate.ps1`을 사용합니다. 전
 
 ```bash
 python -m pytest -q
-ruff check app/profile_rerank.py app/notice_status.py app/graph_rag.py scripts/fetch_live_dogs.py scripts/enrich_image_crops.py scripts/merge_dog_metadata.py scripts/check_contest_readiness.py tests
+ruff check app scripts tests
 python scripts/check_contest_readiness.py --metas data/dog_metas.json --index data/dog_faiss.index --strict
+python scripts/smoke_full_runtime.py
 ```
 
 데이터 readiness의 strict 실패를 무시한 채 운영 또는 대회 시연용 릴리스를 만들지 마세요.
+
+릴리스 후보는 clean commit과 태그에서 다음 단일 게이트도 통과해야 합니다. `--skip-slow` 결과는 제출 PASS로 사용할 수 없습니다.
+
+```bash
+python scripts/verify_contest_release.py --required-tag <RELEASE_TAG>
+```
 
 ## Pull request
 

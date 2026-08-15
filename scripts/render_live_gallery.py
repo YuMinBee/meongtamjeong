@@ -10,7 +10,10 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
 
-from app.dog_attributes import build_photo_advice, summarize_vlm_attrs_ko
+from app.dog_attributes import (  # noqa: E402
+    build_photo_advice,
+    summarize_vlm_attrs_ko,
+)
 
 DATA_DIR = BASE_DIR / "data"
 DEFAULT_INPUT_PATH = DATA_DIR / "local_dog_cache.json"

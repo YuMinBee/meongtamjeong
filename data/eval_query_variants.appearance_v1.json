@@ -1,0 +1,131 @@
+{
+  "schema_version": "appearance-query-robustness-variants.v1",
+  "base_query_set": "appearance-query-set.v1",
+  "design_status": "development_regression_after_first_measurement",
+  "evaluation_role": "development_regression_set",
+  "independent_holdout_required": true,
+  "tuning_disclosure": "The v1 sentences were fixed before their first measurement and remain unchanged, but observed v1 failures informed the current query-normalization code.",
+  "tuning_policy": "Treat these unchanged v1 sentences as development regression cases only; create and freeze an unseen holdout before making generalization claims.",
+  "queries": [
+    {
+      "base_id": "brown-small",
+      "variants": {
+        "synonym_paraphrase": "갈색의 작은 강아지를 보여줘",
+        "word_order": "소형견 중에서 갈색인 아이를 찾아줘",
+        "conservative_typo": "갈색 소형겐을 찾아줘",
+        "lifestyle_personality_noise": "차분한 갈색 소형견을 찾아줘",
+        "negation_diagnostic": "갈색은 아닌 소형견을 찾아줘"
+      }
+    },
+    {
+      "base_id": "white-tiny",
+      "variants": {
+        "synonym_paraphrase": "흰색의 아주 작은 강아지를 보여줘",
+        "word_order": "초소형 강아지 중 흰색인 아이를 찾아줘",
+        "conservative_typo": "작고 흰색인 초소형 강아쥐",
+        "lifestyle_personality_noise": "활동량이 많은 작고 흰색인 초소형 강아지",
+        "negation_diagnostic": "흰색이 아닌 초소형 강아지를 찾아줘"
+      }
+    },
+    {
+      "base_id": "black-medium",
+      "variants": {
+        "synonym_paraphrase": "검은색 중간 크기 강아지를 보여줘",
+        "word_order": "중형견 중에서 검정색인 아이를 보고 싶어",
+        "conservative_typo": "검정색 중형견을 보거 싶어",
+        "lifestyle_personality_noise": "다른 반려동물과 잘 지내는 검정색 중형견을 보고 싶어",
+        "negation_diagnostic": "검정색이 아닌 중형견을 보고 싶어"
+      }
+    },
+    {
+      "base_id": "cream-small",
+      "variants": {
+        "synonym_paraphrase": "연한 크림빛의 작은 강아지를 보여줘",
+        "word_order": "소형견 중에서 크림색인 아이를 찾아줘",
+        "conservative_typo": "크림색 소형겐을 찾아줘",
+        "lifestyle_personality_noise": "아파트에서 키우기 좋은 크림색 소형견을 찾아줘",
+        "negation_diagnostic": "크림색이 아닌 소형견을 찾아줘"
+      }
+    },
+    {
+      "base_id": "gyeonggi-small-adult",
+      "variants": {
+        "synonym_paraphrase": "경기 지역에서 보호 중인 작은 성견",
+        "word_order": "소형 성견 중에서 경기도에 있는 아이",
+        "conservative_typo": "경기도에 있는 소형 성갼",
+        "lifestyle_personality_noise": "하루 8시간 혼자 있어도 괜찮은 경기도에 있는 소형 성견",
+        "negation_diagnostic": "경기도가 아닌 지역의 소형 성견"
+      }
+    },
+    {
+      "base_id": "seoul-small-puppy",
+      "variants": {
+        "synonym_paraphrase": "서울에서 보호 중인 작은 어린 강아지",
+        "word_order": "어린 소형견 중에서 서울에 있는 아이",
+        "conservative_typo": "서울의 어링 소형견",
+        "lifestyle_personality_noise": "아이들과 잘 지내는 서울의 어린 소형견",
+        "negation_diagnostic": "서울이 아닌 지역의 어린 소형견"
+      }
+    },
+    {
+      "base_id": "jeju-white-puppy",
+      "variants": {
+        "synonym_paraphrase": "제주 지역의 하얀 어린 강아지",
+        "word_order": "흰색 어린 강아지 중에서 제주에 있는 아이",
+        "conservative_typo": "제주에서 보호 중인 흰색 어링 강아지",
+        "lifestyle_personality_noise": "초보자가 키우기 쉬운 제주에서 보호 중인 흰색 어린 강아지",
+        "negation_diagnostic": "제주가 아닌 곳에서 보호 중인 흰색 어린 강아지"
+      }
+    },
+    {
+      "base_id": "jeonbuk-brown-large",
+      "variants": {
+        "synonym_paraphrase": "전라북도에서 보호 중인 갈색 큰 강아지",
+        "word_order": "갈색 대형견 중에서 전북에 있는 아이",
+        "conservative_typo": "전북에 있는 갈색 대형겐",
+        "lifestyle_personality_noise": "아파트에서 키우기 좋은 전북에 있는 갈색 대형견",
+        "negation_diagnostic": "전북이 아닌 지역의 갈색 대형견"
+      }
+    },
+    {
+      "base_id": "gyeongnam-black-small",
+      "variants": {
+        "synonym_paraphrase": "경상남도의 검은색 작은 강아지",
+        "word_order": "검정색 소형견 중에서 경남에 있는 아이",
+        "conservative_typo": "경남의 검정색 소형겐",
+        "lifestyle_personality_noise": "다른 반려동물과 잘 지내는 경남의 검정색 소형견",
+        "negation_diagnostic": "경남이 아닌 지역의 검정색 소형견"
+      }
+    },
+    {
+      "base_id": "gyeonggi-tan-medium",
+      "variants": {
+        "synonym_paraphrase": "경기 지역의 황갈빛 중간 크기 강아지",
+        "word_order": "황갈색 중형견 중에서 경기도에 있는 아이",
+        "conservative_typo": "경기도에 있는 황갈섹 중형견",
+        "lifestyle_personality_noise": "하루 8시간 혼자 있어도 괜찮은 경기도에 있는 황갈색 중형견",
+        "negation_diagnostic": "황갈색이 아닌 경기도의 중형견"
+      }
+    },
+    {
+      "base_id": "adult-3-to-8kg",
+      "variants": {
+        "synonym_paraphrase": "몸무게 3~8kg인 다 자란 강아지",
+        "word_order": "성견 중에서 몸무게가 3kg 이상 8kg 이하인 아이",
+        "conservative_typo": "3kg에서 8kg 사이의 성갼",
+        "lifestyle_personality_noise": "활동량이 많은 3kg에서 8kg 사이의 성견",
+        "negation_diagnostic": "3kg 미만 또는 8kg 초과인 성견"
+      }
+    },
+    {
+      "base_id": "senior-under-8kg",
+      "variants": {
+        "synonym_paraphrase": "몸무게 8kg 이하인 나이 든 작은 강아지",
+        "word_order": "노령 소형견 중에서 8kg 이하인 아이",
+        "conservative_typo": "8kg 이하의 노령 소형겐",
+        "lifestyle_personality_noise": "차분한 8kg 이하의 노령 소형견",
+        "negation_diagnostic": "8kg을 초과하는 노령 소형견"
+      }
+    }
+  ]
+}

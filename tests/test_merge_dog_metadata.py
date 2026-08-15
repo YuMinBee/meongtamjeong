@@ -164,3 +164,127 @@ def test_required_metas_missing_is_an_error(
 
     assert exit_code == 1
     assert "[ERROR] required metas file not found" in capsys.readouterr().err
+
+
+def test_public_notice_fields_are_propagated_without_breed_guessing() -> None:
+    source = {
+        "desertionNo": "NOTICE-1",
+        "upKindCd": "417000",
+        "kindCd": "000114",
+        "kindNm": "믹스견",
+        "kindFullNm": "[개] 믹스견",
+        "colorCd": "흰색/갈색",
+        "happenDt": "20260723",
+        "popfile1": "https://example.test/one.jpg",
+        "popfile2": "https://example.test/two.jpg",
+        "popfile3": "https://example.test/three.jpg",
+        "updTm": "2026-07-23 12:34:56",
+        "healthChk": "심장사상충 검사, 피부 검사",
+        "vaccinationChk": "종합백신; 광견병",
+        "sfeHealth": "공고 기재 건강 메모",
+        "sfeSoci": "공고 기재 사회성 메모",
+    }
+
+    merged, _ = merge.merge_dog_metadata(
+        [{"type": "text", "desertionNo": "NOTICE-1"}],
+        [source],
+        [],
+    )
+    item = merged[0]
+
+    assert item["upkind"] == "417000"
+    assert item["breed"] == "믹스견"
+    assert item["breed_code"] == "000114"
+    assert item["breed_name"] == "믹스견"
+    assert item["breed_full_name"] == "[개] 믹스견"
+    assert item["breed_source_label"] == "믹스견"
+    assert item["breed_source"] == "public_notice_reported"
+    assert item["mixed_breed"] is True
+    assert item["color"] == "흰색/갈색"
+    assert item["happen_date"] == "20260723"
+    assert item["image_url"] == "https://example.test/one.jpg"
+    assert item["image_urls"] == [
+        "https://example.test/one.jpg",
+        "https://example.test/two.jpg",
+        "https://example.test/three.jpg",
+    ]
+    assert item["upstream_updated_at"] == "2026-07-23 12:34:56"
+    assert item["health_checks"] == ["심장사상충 검사", "피부 검사"]
+    assert item["vaccinations"] == ["종합백신", "광견병"]
+    assert item["safety_health_note"] == "공고 기재 건강 메모"
+    assert item["safety_social_note"] == "공고 기재 사회성 메모"
+    # Raw source values remain available; no outcome is inferred from them.
+    assert item["healthChk"] == source["healthChk"]
+    assert item["vaccinationChk"] == source["vaccinationChk"]
+
+    specific = merge.with_canonical_fields(
+        {
+            "desertionNo": "NOTICE-2",
+            "kindCd": "000128",
+            "kindNm": "말티즈",
+            "kindFullNm": "[개] 말티즈",
+        }
+    )
+    assert specific["breed_name"] == "말티즈"
+    assert specific["mixed_breed"] is None
+
+
+def test_newer_specific_label_clears_stale_mixed_classification() -> None:
+    merged, _ = merge.merge_dog_metadata(
+        [
+            {
+                "type": "text",
+                "desertionNo": "NOTICE-STALE-MIX",
+                "mixed_breed": True,
+            }
+        ],
+        [
+            {
+                "desertionNo": "NOTICE-STALE-MIX",
+                "kindCd": "000128",
+                "kindNm": "말티즈",
+            }
+        ],
+        [],
+    )
+
+    assert merged[0]["mixed_breed"] is None
+
+
+def test_image_urls_are_unioned_across_metadata_layers() -> None:
+    merged, _ = merge.merge_dog_metadata(
+        [
+            {
+                "type": "image",
+                "desertionNo": "NOTICE-PHOTOS",
+                "image_url": "https://example.test/one.jpg",
+                "image_urls": [
+                    "https://example.test/one.jpg",
+                    "https://example.test/two.jpg",
+                ],
+            }
+        ],
+        [
+            {
+                "desertionNo": "NOTICE-PHOTOS",
+                "image_url": "https://example.test/one.jpg",
+                "image_urls": ["https://example.test/one.jpg"],
+            }
+        ],
+        [
+            {
+                "desertionNo": "NOTICE-PHOTOS",
+                "image_url": "https://example.test/one.jpg",
+                "image_urls": [
+                    "https://example.test/one.jpg",
+                    "https://example.test/three.jpg",
+                ],
+            }
+        ],
+    )
+
+    assert merged[0]["image_urls"] == [
+        "https://example.test/one.jpg",
+        "https://example.test/three.jpg",
+        "https://example.test/two.jpg",
+    ]

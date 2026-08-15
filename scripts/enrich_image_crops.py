@@ -6,16 +6,19 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Sequence, Tuple
-from urllib.parse import quote
 
-import requests
 from PIL import Image
-from io import BytesIO
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
 
+from app.notice_metadata import extract_image_urls  # noqa: E402
+from app.public_image_download import (  # noqa: E402
+    DEFAULT_ALLOWED_IMAGE_HOSTS,
+    PublicImageDownloader,
+    parse_public_image_hostname,
+)
 from app.species import clean_species  # noqa: E402
 
 DATA_DIR = BASE_DIR / "data"
@@ -39,32 +42,9 @@ def clean_text(value: Any) -> str:
     return str(value).strip()
 
 
-def safe_url(url: str) -> str:
-    return quote(str(url), safe=":/?&=#[]%")
-
-
 def extract_image_url(rec: Dict[str, Any]) -> str:
-    for key in (
-        "image_url",
-        "url",
-        "popfile",
-        "popfile1",
-        "popfile2",
-        "fileName",
-        "thumb",
-        "image",
-        "img",
-    ):
-        value = clean_text(rec.get(key))
-        if value.startswith("http"):
-            return value
-    for key, value in rec.items():
-        text = clean_text(value)
-        if text.startswith("http") and any(
-            token in str(key).lower() for token in ("pop", "file", "img", "thumb")
-        ):
-            return text
-    return ""
+    image_urls = extract_image_urls(rec)
+    return image_urls[0] if image_urls else ""
 
 
 def load_records(path: Path) -> Tuple[Any, List[Dict[str, Any]]]:
@@ -93,19 +73,30 @@ def save_records(
     )
 
 
-def download_image(url: str, timeout: int = 20) -> Image.Image:
-    headers = {
-        "Accept": "image/*",
-        "Referer": "https://www.animal.go.kr/",
-        "User-Agent": "Mozilla/5.0",
-    }
-    resp = requests.get(safe_url(url), timeout=timeout, headers=headers)
-    if resp.status_code != 200 and url.startswith("http://"):
-        resp = requests.get(
-            safe_url("https://" + url[7:]), timeout=timeout, headers=headers
-        )
-    resp.raise_for_status()
-    return Image.open(BytesIO(resp.content)).convert("RGB")
+class ImageDownloadError(RuntimeError):
+    """A public image could not be downloaded under the safe contract."""
+
+
+def download_image(
+    url: str,
+    timeout: int = 20,
+    *,
+    downloader: PublicImageDownloader | None = None,
+    allowed_hosts: Sequence[str] = DEFAULT_ALLOWED_IMAGE_HOSTS,
+) -> Image.Image:
+    owns_downloader = downloader is None
+    runtime_downloader = downloader or PublicImageDownloader(
+        timeout=timeout,
+        allowed_hosts=allowed_hosts,
+    )
+    try:
+        image = runtime_downloader(url)
+    finally:
+        if owns_downloader:
+            runtime_downloader.close()
+    if image is None:
+        raise ImageDownloadError("image_download_failed")
+    return image
 
 
 @dataclass
@@ -362,6 +353,13 @@ def process_records(args: argparse.Namespace) -> Dict[str, Any]:
         work_records = records
 
     detector = load_torchvision_detector(args.model, args.device)
+    allowed_image_hosts = tuple(
+        getattr(args, "allowed_image_hosts", None) or DEFAULT_ALLOWED_IMAGE_HOSTS
+    )
+    image_downloader = PublicImageDownloader(
+        timeout=20,
+        allowed_hosts=allowed_image_hosts,
+    )
     crop_dir = args.crop_dir / species
     crop_dir.mkdir(parents=True, exist_ok=True)
 
@@ -383,6 +381,7 @@ def process_records(args: argparse.Namespace) -> Dict[str, Any]:
         "no_detection": 0,
         "errors": 0,
         "retry_missing_only": bool(args.retry_missing_only),
+        "allowed_image_hosts": list(allowed_image_hosts),
         "conf": args.conf,
         "imgsz": args.imgsz,
         "device": detector.device,
@@ -406,6 +405,8 @@ def process_records(args: argparse.Namespace) -> Dict[str, Any]:
             or previous_attrs.get("dog_detected") is True
         )
         previous_error = clean_text(previous_attrs.get("error"))
+        if previous_error:
+            previous_error = "previous_image_processing_failed"
         if args.retry_missing_only and previous_detected:
             stats["skipped_existing_detected"] += 1
             maybe_checkpoint()
@@ -439,7 +440,7 @@ def process_records(args: argparse.Namespace) -> Dict[str, Any]:
             continue
 
         try:
-            image = download_image(url)
+            image = download_image(url, downloader=image_downloader)
             stats["downloaded"] += 1
             width, height = image.size
             attrs.update(compute_photo_quality(image))
@@ -500,12 +501,18 @@ def process_records(args: argparse.Namespace) -> Dict[str, Any]:
             rec["image_attrs"] = attrs
             stats["detected"] += 1
             maybe_checkpoint()
-        except Exception as exc:
-            attrs["error"] = f"{exc.__class__.__name__}: {exc}"
+        except ImageDownloadError:
+            attrs["error"] = "image_download_failed"
+            rec["image_attrs"] = attrs
+            stats["errors"] += 1
+            maybe_checkpoint()
+        except Exception:
+            attrs["error"] = "image_processing_failed"
             rec["image_attrs"] = attrs
             stats["errors"] += 1
             maybe_checkpoint()
 
+    image_downloader.close()
     save_records(payload, records, args.output, stats)
     return stats
 
@@ -577,6 +584,16 @@ def parse_args() -> argparse.Namespace:
         "--retry-missing-only",
         action="store_true",
         help="Preserve existing successful detections and retry only records without a detected crop.",
+    )
+    parser.add_argument(
+        "--allowed-image-host",
+        action="append",
+        type=parse_public_image_hostname,
+        dest="allowed_image_hosts",
+        help=(
+            "Exact public hostname allowed for image downloads. Repeat for multiple "
+            "hosts. Defaults to openapi.animal.go.kr. Redirects are not followed."
+        ),
     )
     return parser.parse_args()
 

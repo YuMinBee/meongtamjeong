@@ -1,0 +1,184 @@
+{
+  "artifacts": {
+    "inputs": {
+      "existing_index": {
+        "bytes": 8169517,
+        "path": "previous_snapshot/data/dog_faiss.index",
+        "sha256": "a7bbf5ed341429f63d0755283a0d24c050595325281a615134c0e8fb44ed8dfc"
+      },
+      "existing_metas": {
+        "bytes": 15320937,
+        "path": "previous_snapshot/data/dog_metas.json",
+        "sha256": "658051ff0f8ae8380a6da9e1675008e17f7e1469400ee7b2e85fec5f9e10536a"
+      },
+      "fresh_cache": {
+        "bytes": 4604073,
+        "path": "local_untracked/fresh_active_cache.json",
+        "sha256": "54b26fe78cbb2a6e154fafa01123ce5d68a4cd1f686d003956e1e8f6f6db0ede"
+      }
+    },
+    "outputs": {
+      "index": {
+        "bytes": 7671853,
+        "path": "data/dog_faiss.index",
+        "sha256": "2722aef8257b8748bd2cdd00d4224e7b4dee3d1d552a235439eb4c97c71aface"
+      },
+      "metas": {
+        "bytes": 12943774,
+        "path": "data/dog_metas.json",
+        "sha256": "723a4df01e2802ad5d42bd276eefbded097a0a6e72900784395c4c19626b6c00"
+      }
+    }
+  },
+  "content_hashes": {
+    "metas_canonical_sha256": "17cb5ec03b9c099b23df77fb0a3739700adf1c9ff8b6913e6b5d1fc8ecf71a57",
+    "vectors_float32_sha256": "22b135f93532aeef3c08df0b4c1b236dda4b466fa7cf49a3c05ef27c016024e2"
+  },
+  "policy": {
+    "active_notice_vector_coverage": "at_least_one_vector_and_one_text_vector",
+    "changed_image_url": "old_image_and_crop_rows_removed; original_image_reembedded",
+    "changed_text": "old_text_row_removed_and_reembedded",
+    "existing_active_vectors": "retained_only_when_embedding_source_provenance_matches",
+    "image_failure": "text_only_allowed_when_public_text_vector_succeeds",
+    "missing_fresh_ids": "removed",
+    "new_image_source": "original_notice_image",
+    "new_text_source": "public_notice_fields_without_reported_breed",
+    "notice_metadata": "fresh_cache_authoritative",
+    "public_text_failure": "abort_without_writing_outputs",
+    "unchanged_crop": "retained; crops_are_never_regenerated",
+    "vlm_or_personality_inference": "prohibited"
+  },
+  "promotion_validation": {
+    "active_notice_count": 1516,
+    "artifact_integrity_passed": true,
+    "checked_at": "2026-07-26T04:38:58+09:00",
+    "dimension": 512,
+    "faiss_metric": "L2",
+    "forbidden_derived_field_occurrence_count": 0,
+    "non_unit_norm_vector_count": 0,
+    "nonfinite_vector_count": 0,
+    "reference_date": "2026-07-26",
+    "strict_readiness_passed": true,
+    "unique_ids_missing_public_text_count": 0,
+    "unique_notice_count": 1516,
+    "unknown_or_inactive_notice_count": 0,
+    "vector_count": 3746,
+    "zero_norm_vector_count": 0
+  },
+  "runtime_provenance": {
+    "incremental_embedding": {
+      "device": "cuda",
+      "environment": "local Windows GPU refresh environment; not distributed",
+      "faiss_version": "1.14.3",
+      "installed_distribution": "openai-clip 1.0.1",
+      "model": "OpenAI CLIP ViT-B/32",
+      "torch_version": "2.11.0+cu128",
+      "torchvision_version": "0.26.0+cu128"
+    },
+    "note": "The incremental refresh ran in the stated GPU environment. The submitted runtime pins the official OpenAI CLIP commit; no claim is made that package labels alone prove bitwise equivalence.",
+    "submission_runtime": {
+      "clip_source": "https://github.com/openai/CLIP",
+      "clip_source_commit": "dcba3cb2e2827b402d2701e7e1c7d9fed8a20ef1",
+      "faiss_version_in_clean_validation": "1.14.3",
+      "installed_distribution_in_clean_validation": "clip 1.0",
+      "lockfile": "requirements.lock.txt",
+      "torch_version_in_clean_validation": "2.13.0+cpu",
+      "torchvision_version_in_clean_validation": "0.28.0+cpu"
+    }
+  },
+  "safety_gates": {
+    "max_removed_id_fraction": {
+      "configured_maximum": 0.25,
+      "observed_existing_unique_ids": 1358,
+      "observed_removed_existing_unique_ids": 297,
+      "observed_removed_fraction": 0.2187039764359352,
+      "passed": true
+    },
+    "min_active_notices": {
+      "configured_minimum": 1500,
+      "observed_active_unique_ids": 1516,
+      "passed": true
+    },
+    "policy": "fail_closed_before_encoding"
+  },
+  "schema_version": 1,
+  "source": {
+    "authoritative_fetch": {
+      "cache_distributed": false,
+      "cache_sha256": "497f0c16746906e82e20b131017fbf5ece49bdcf1cbbb944fae8b8639bb2070a",
+      "kept_active_items": 1516,
+      "lookback_days": 365,
+      "pages_fetched": 61,
+      "raw_items": 60085,
+      "skipped_closed": 58568,
+      "skipped_duplicate": 0,
+      "skipped_no_image": 1
+    },
+    "fresh_fetched_at": "2026-07-26T00:34:47+09:00",
+    "reference_date": "2026-07-26"
+  },
+  "stats": {
+    "active_ids_without_public_text_vectors": 0,
+    "active_ids_without_vectors": 0,
+    "active_unique_ids": 1516,
+    "dimension": 512,
+    "existing_missing_id_rows": 0,
+    "existing_unique_ids": 1358,
+    "existing_vectors": 3989,
+    "fresh_duplicate_active_id_records": 0,
+    "fresh_input_records": 1516,
+    "fresh_missing_id_records": 0,
+    "fresh_status_records": {
+      "active": 1516,
+      "closed": 0,
+      "expired": 0,
+      "unknown": 0
+    },
+    "include_unknown": false,
+    "new_ids_without_vectors": 0,
+    "new_ids_without_vectors_sample": [],
+    "new_image_download_failures": 273,
+    "new_image_encoding_failures": 0,
+    "new_image_failures": 273,
+    "new_image_missing_urls": 0,
+    "new_image_vectors": 182,
+    "new_text_failures": 0,
+    "new_text_vectors": 455,
+    "new_unique_ids": 455,
+    "output_unique_ids": 1516,
+    "output_vectors": 3746,
+    "photo_quality_failures": 0,
+    "reference_date": "2026-07-26",
+    "refresh_image_required_unique_ids": 18,
+    "refresh_required_unique_ids": 1061,
+    "refresh_text_required_unique_ids": 1061,
+    "refreshed_image_download_failures": 15,
+    "refreshed_image_encoding_failures": 0,
+    "refreshed_image_failures": 15,
+    "refreshed_image_missing_urls": 0,
+    "refreshed_image_vectors": 3,
+    "refreshed_text_failures": 0,
+    "refreshed_text_vectors": 1061,
+    "refreshed_unique_ids": 1061,
+    "refreshes_without_replacement_vectors": 0,
+    "refreshes_without_replacement_vectors_sample": [],
+    "removed_changed_crop_vectors": 9,
+    "removed_changed_image_vectors": 10,
+    "removed_changed_text_vectors": 1061,
+    "removed_existing_unique_ids": 297,
+    "removed_existing_vectors": 1944,
+    "removed_stale_vectors": 864,
+    "removed_unrecognized_vectors": 0,
+    "retained_crop_vectors": 1002,
+    "retained_image_vectors": 1043,
+    "retained_text_vectors": 0,
+    "retained_unique_ids": 1043,
+    "retained_vectors": 2045
+  },
+  "warnings": [
+    "image_vectors_refreshed",
+    "text_vectors_refreshed",
+    "new_image_failures",
+    "refreshed_image_failures"
+  ]
+}

@@ -1,0 +1,2906 @@
+{
+  "schema_version": "heldout-image-retrieval.v1",
+  "evaluation_id": "heldout-secondary-photo.appearance.v1",
+  "reference_date": "2026-07-26",
+  "scope": {
+    "query": "one distinct secondary public-notice photo per sampled notice",
+    "candidate_vectors": [
+      "full_image",
+      "crop_image"
+    ],
+    "excluded_vectors": [
+      "text"
+    ],
+    "deduplication": "maximum CLIP cosine score per notice",
+    "ground_truth": "same public notice ID",
+    "default_payload_audit": "each evaluable query requires its own primary SHA and is compared with the successfully downloaded sampled-primary SHA set",
+    "transport_policy": "upgrade initial HTTP image URLs to HTTPS and reject HTTPS-to-HTTP redirects"
+  },
+  "artifacts": {
+    "index": {
+      "path": "data/dog_faiss.index",
+      "sha256": "2722aef8257b8748bd2cdd00d4224e7b4dee3d1d552a235439eb4c97c71aface",
+      "bytes": 7671853
+    },
+    "metas": {
+      "path": "data/dog_metas.json",
+      "sha256": "723a4df01e2802ad5d42bd276eefbded097a0a6e72900784395c4c19626b6c00",
+      "bytes": 12943774,
+      "rows": 3746
+    },
+    "snapshot_manifest": {
+      "path": "data/snapshot_manifest.json",
+      "sha256": "f79a4b3010b52c9584525af99b1acd4007fc6376fc8244deab18058b74fa7413",
+      "bytes": 4205
+    },
+    "active_index_sync_report": {
+      "path": "data/active_index_sync_report.json",
+      "sha256": "924a3d657a9bb09d063a13a6c329f0b9965a4d772ed51d539dbdcd61f02d28ae",
+      "bytes": 6670
+    },
+    "requirements_lock": {
+      "path": "requirements.lock.txt",
+      "sha256": "6d89251f5851a0b38a66b0ed1109f0e4f556d7f6a8440e5282f2c5f937fb267e",
+      "bytes": 1622
+    }
+  },
+  "runtime": {
+    "clip_model": "ViT-B/32",
+    "device": "cpu",
+    "network_executed": true,
+    "declared_index_provenance_consistent": true,
+    "query_encoder_commit_verified": true,
+    "index_encoder_verified": false,
+    "index_encoder_provenance": "artifact-bound declaration only; no per-vector encoder fingerprint",
+    "declared_clip_source_commit": "dcba3cb2e2827b402d2701e7e1c7d9fed8a20ef1",
+    "query_encoder_commit": "dcba3cb2e2827b402d2701e7e1c7d9fed8a20ef1",
+    "retained_vector_count": 2045,
+    "index_dimension": 512,
+    "index_vector_count": 3746,
+    "torch_version": "2.13.0+cpu",
+    "faiss_metric_type": 1,
+    "similarity": "cosine over normalized reconstructed index vectors",
+    "timeout_seconds": 45.0,
+    "max_image_bytes": 12582912,
+    "max_image_pixels": 25000000,
+    "max_redirects": 3,
+    "retries": 1,
+    "allowed_hosts": [
+      "openapi.animal.go.kr"
+    ],
+    "download_client": "httpx",
+    "download_workers": 1,
+    "environment_proxy_enabled": false,
+    "environment_proxy_values_persisted": false,
+    "audit_all_indexed_sources": false,
+    "transport_policy": "upgrade initial HTTP to HTTPS; reject HTTPS-to-HTTP redirects"
+  },
+  "sample_policy": {
+    "seed": "20260726-heldout-secondary-photo-v1",
+    "hash": "SHA-256(seed, notice_id, indexed_url, secondary_url)",
+    "max_samples": 120,
+    "stratification": "one per region|size stratum when capacity allows, then global SHA-256 order",
+    "sample_sha256": "62b8f34190bb543f9e146373c62511e3d78f0780580874b842bc240301b57ba8"
+  },
+  "corpus": {
+    "metadata_rows": 3746,
+    "unique_notices": 1516,
+    "active_notices": 1516,
+    "full_image_vectors": 1228,
+    "crop_image_vectors": 1002,
+    "text_vectors": 1516,
+    "visual_indexed_notices": 1228,
+    "eligible_pairs": 1228,
+    "selected_pairs": 120,
+    "visual_index_coverage": 0.810026
+  },
+  "exclusion_reasons": {
+    "no_indexed_full_image": 288
+  },
+  "distributions": {
+    "eligible": {
+      "region": {
+        "강원": 62,
+        "경기": 231,
+        "경남": 102,
+        "경북": 114,
+        "대구": 20,
+        "대전": 5,
+        "부산": 26,
+        "서울": 52,
+        "세종": 2,
+        "울산": 19,
+        "인천": 41,
+        "전남": 183,
+        "전북": 139,
+        "제주": 89,
+        "충남": 92,
+        "충북": 51
+      },
+      "size": {
+        "large": 83,
+        "medium": 282,
+        "small": 437,
+        "tiny": 426
+      },
+      "region_size_strata": {
+        "강원|large": 2,
+        "강원|medium": 9,
+        "강원|small": 29,
+        "강원|tiny": 22,
+        "경기|large": 41,
+        "경기|medium": 79,
+        "경기|small": 69,
+        "경기|tiny": 42,
+        "경남|large": 1,
+        "경남|medium": 17,
+        "경남|small": 48,
+        "경남|tiny": 36,
+        "경북|large": 3,
+        "경북|medium": 33,
+        "경북|small": 38,
+        "경북|tiny": 40,
+        "대구|large": 2,
+        "대구|medium": 3,
+        "대구|small": 6,
+        "대구|tiny": 9,
+        "대전|small": 3,
+        "대전|tiny": 2,
+        "부산|large": 1,
+        "부산|medium": 5,
+        "부산|small": 11,
+        "부산|tiny": 9,
+        "서울|large": 3,
+        "서울|medium": 13,
+        "서울|small": 23,
+        "서울|tiny": 13,
+        "세종|small": 2,
+        "울산|medium": 6,
+        "울산|small": 5,
+        "울산|tiny": 8,
+        "인천|large": 3,
+        "인천|medium": 8,
+        "인천|small": 15,
+        "인천|tiny": 15,
+        "전남|large": 8,
+        "전남|medium": 31,
+        "전남|small": 83,
+        "전남|tiny": 61,
+        "전북|large": 5,
+        "전북|medium": 24,
+        "전북|small": 36,
+        "전북|tiny": 74,
+        "제주|large": 9,
+        "제주|medium": 21,
+        "제주|small": 14,
+        "제주|tiny": 45,
+        "충남|large": 2,
+        "충남|medium": 19,
+        "충남|small": 35,
+        "충남|tiny": 36,
+        "충북|large": 3,
+        "충북|medium": 14,
+        "충북|small": 20,
+        "충북|tiny": 14
+      }
+    },
+    "sample": {
+      "region": {
+        "강원": 7,
+        "경기": 22,
+        "경남": 11,
+        "경북": 10,
+        "대구": 4,
+        "대전": 2,
+        "부산": 6,
+        "서울": 5,
+        "세종": 1,
+        "울산": 3,
+        "인천": 6,
+        "전남": 15,
+        "전북": 8,
+        "제주": 7,
+        "충남": 7,
+        "충북": 6
+      },
+      "size": {
+        "large": 16,
+        "medium": 29,
+        "small": 37,
+        "tiny": 38
+      },
+      "region_size_strata": {
+        "강원|large": 1,
+        "강원|medium": 1,
+        "강원|small": 3,
+        "강원|tiny": 2,
+        "경기|large": 4,
+        "경기|medium": 11,
+        "경기|small": 3,
+        "경기|tiny": 4,
+        "경남|large": 1,
+        "경남|medium": 1,
+        "경남|small": 5,
+        "경남|tiny": 4,
+        "경북|large": 1,
+        "경북|medium": 1,
+        "경북|small": 4,
+        "경북|tiny": 4,
+        "대구|large": 1,
+        "대구|medium": 1,
+        "대구|small": 1,
+        "대구|tiny": 1,
+        "대전|small": 1,
+        "대전|tiny": 1,
+        "부산|large": 1,
+        "부산|medium": 1,
+        "부산|small": 3,
+        "부산|tiny": 1,
+        "서울|large": 1,
+        "서울|medium": 1,
+        "서울|small": 2,
+        "서울|tiny": 1,
+        "세종|small": 1,
+        "울산|medium": 1,
+        "울산|small": 1,
+        "울산|tiny": 1,
+        "인천|large": 1,
+        "인천|medium": 1,
+        "인천|small": 1,
+        "인천|tiny": 3,
+        "전남|large": 1,
+        "전남|medium": 2,
+        "전남|small": 5,
+        "전남|tiny": 7,
+        "전북|large": 1,
+        "전북|medium": 1,
+        "전북|small": 1,
+        "전북|tiny": 5,
+        "제주|large": 1,
+        "제주|medium": 4,
+        "제주|small": 1,
+        "제주|tiny": 1,
+        "충남|large": 1,
+        "충남|medium": 1,
+        "충남|small": 3,
+        "충남|tiny": 2,
+        "충북|large": 1,
+        "충북|medium": 2,
+        "충북|small": 2,
+        "충북|tiny": 1
+      }
+    }
+  },
+  "sample": [
+    {
+      "sample_order": 1,
+      "notice_id": "426326202600286",
+      "region": "부산",
+      "size": "medium",
+      "stratum": "부산|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "2ee92484d729d990d3a4cf26dcf89673f133e7a0a94d28af7dfd1fc227539292",
+      "secondary_url_sha256": "dec3c68a0ed0bf630b263c6401f07e65f6773248cde1ace0bad34c6f4e1a8215"
+    },
+    {
+      "sample_order": 2,
+      "notice_id": "431373202601199",
+      "region": "울산",
+      "size": "tiny",
+      "stratum": "울산|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "4d427fe5b815645d3502e67b5a02d4f92d84b26800f2e2e6957a9cbf5bb1fafc",
+      "secondary_url_sha256": "6c00cd7d482e51ea4b3335a87ad6f5f9b268c6f9329457fcade39800e8b55e89"
+    },
+    {
+      "sample_order": 3,
+      "notice_id": "430366202600378",
+      "region": "대전",
+      "size": "tiny",
+      "stratum": "대전|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "aca980c10b5532bfe312e92afa746d684c4a2e7191eb9534d3bd90cb494c1b8e",
+      "secondary_url_sha256": "56d27f2b715392261d76ded89dafa90bd03d1ef086fdb7ca161c5e0885a86d11"
+    },
+    {
+      "sample_order": 4,
+      "notice_id": "444451202600699",
+      "region": "충남",
+      "size": "small",
+      "stratum": "충남|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "388372d5c6ebe4020dea68ef3e4c86dba9cef55ae722077982acc56cb2d44c06",
+      "secondary_url_sha256": "236de07243d7379b946e1380082240966e2d5cee420983e2b610175fea4ebf37"
+    },
+    {
+      "sample_order": 5,
+      "notice_id": "442422202600068",
+      "region": "강원",
+      "size": "small",
+      "stratum": "강원|small",
+      "indexed_vector_count": 1,
+      "modalities": [
+        "full_image"
+      ],
+      "indexed_url_sha256": "742b2af8900b13adab24d95765f51db9118f1fea3082908d4e4d3a91a1f8f79e",
+      "secondary_url_sha256": "beabac9c2c7c2d71567b8d49d71eb7dcd29eefe3ffb59b1b156617a9be6274c8"
+    },
+    {
+      "sample_order": 6,
+      "notice_id": "431370202600707",
+      "region": "울산",
+      "size": "small",
+      "stratum": "울산|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "19e6cfbaf4c1f36b2ec3df50a5481a82c2b359f8ec971b0923a45863df393854",
+      "secondary_url_sha256": "7ae12912c77b3d4432f58030e9b2aa3ab338e2f27d1e3e1746d2774684b87c10"
+    },
+    {
+      "sample_order": 7,
+      "notice_id": "447508202601145",
+      "region": "경북",
+      "size": "medium",
+      "stratum": "경북|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "f54b892c0e69fc05f5e2470d7d02891ce89f1c1d647efeb0f118a023e56c75a8",
+      "secondary_url_sha256": "b67c8038d64385645f81a29c10cc5bbb43e00dd7c1a992a608584499582a2416"
+    },
+    {
+      "sample_order": 8,
+      "notice_id": "450650202601831",
+      "region": "제주",
+      "size": "medium",
+      "stratum": "제주|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "af6575e6d99e2b01b502d1994c2e133978a20b72f8b421932a557567942b0dd1",
+      "secondary_url_sha256": "9d8b4df554d93b636cb398d3f3a1a607f05e8f69882ee62038741c9cc8d45db6"
+    },
+    {
+      "sample_order": 9,
+      "notice_id": "430364202600471",
+      "region": "대전",
+      "size": "small",
+      "stratum": "대전|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "714d776188a60a18b6454a7cd8381acce209f86f15f7801e6569c805dc42c189",
+      "secondary_url_sha256": "7e2e838212b598c43f751300cefe7cd7eaf9a244c7512ecdc405d5f33a3bb4ee"
+    },
+    {
+      "sample_order": 10,
+      "notice_id": "448536202600620",
+      "region": "경남",
+      "size": "medium",
+      "stratum": "경남|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "5b624b372dd80a55c4a4b8f9656dd70d4503e0ea5441a16b8d7a6358c91c9b1c",
+      "secondary_url_sha256": "5f5d222657966a70f8bbfa0cb3d60cef8611b2f17ca35a9c877d337b60e653ce"
+    },
+    {
+      "sample_order": 11,
+      "notice_id": "448567202601052",
+      "region": "경남",
+      "size": "large",
+      "stratum": "경남|large",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "eeaefbc2220c79b86925518eb3615d6571f712e8fde513b897045452306187a4",
+      "secondary_url_sha256": "bdf0efe5170e00bd3afffb616e570b3fc386f12dbbcab0c79f97f447392fda7d"
+    },
+    {
+      "sample_order": 12,
+      "notice_id": "447522202600289",
+      "region": "경북",
+      "size": "tiny",
+      "stratum": "경북|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "3110bd14880392ca325eeaefb18b5f300de3ccde7f8e71cd8f60905b8eab2e0d",
+      "secondary_url_sha256": "5f3d55acb3976a11613e5a3b3535796b8d7f3e2e8d83c1adf5938242ba06708c"
+    },
+    {
+      "sample_order": 13,
+      "notice_id": "413591202600165",
+      "region": "전남",
+      "size": "small",
+      "stratum": "전남|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "43cc420d17f179092375a5dd9df36763ba2c9c6cfcddaf0886b2364b8903e1ca",
+      "secondary_url_sha256": "132e9360a8b1a49b6732d4f8ad90392f2b759c4ccddb9410ed611596413dfa72"
+    },
+    {
+      "sample_order": 14,
+      "notice_id": "443439202600442",
+      "region": "충북",
+      "size": "large",
+      "stratum": "충북|large",
+      "indexed_vector_count": 1,
+      "modalities": [
+        "full_image"
+      ],
+      "indexed_url_sha256": "f52377b72964323286d0461eb911fafdd1be48621d2ab9cc6c218e17e8016cb5",
+      "secondary_url_sha256": "0b440214a617561efeb75fd7907e96c4f50b59d40cda98e266055793734cbeeb"
+    },
+    {
+      "sample_order": 15,
+      "notice_id": "411300202600483",
+      "region": "서울",
+      "size": "tiny",
+      "stratum": "서울|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "8f92621ff5ed65515f05ae7c581623908569df566a64d47e1b21e2a2c5848e82",
+      "secondary_url_sha256": "6472549f9accc3d3d0ab8b22de75cca8428ec2852d9a4b88d3a69f117ad7fa93"
+    },
+    {
+      "sample_order": 16,
+      "notice_id": "443571202601629",
+      "region": "충북",
+      "size": "small",
+      "stratum": "충북|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "2319d25552130392209a9c770cad95b3361d96ce0558d7af84d99528e1ae2714",
+      "secondary_url_sha256": "6163c0a09d3da8d5da0b1584437dfc2c69721de39ca687b16fe046299a71b6ad"
+    },
+    {
+      "sample_order": 17,
+      "notice_id": "426336202600368",
+      "region": "부산",
+      "size": "tiny",
+      "stratum": "부산|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "40935759b59fc5095da2f4a7283b63472bf38f3906e0b7f46172e344fe540b2c",
+      "secondary_url_sha256": "9c67ce9b0341087e02ac66380a16d962b79aa6a8cbdd41503c2b5d84f4bfd1cd"
+    },
+    {
+      "sample_order": 18,
+      "notice_id": "428356202600960",
+      "region": "인천",
+      "size": "medium",
+      "stratum": "인천|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "bda4fa9d55092590660228536f51ff8c1ace4117597bb4b76ca226971a7e2deb",
+      "secondary_url_sha256": "6851485d0a8353126f80c826cbc2fd184dcbc878f64ef043680f28369400fd1d"
+    },
+    {
+      "sample_order": 19,
+      "notice_id": "413583202600219",
+      "region": "전남",
+      "size": "medium",
+      "stratum": "전남|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "f9c89ecde063445546fc6d57054afd916706158f975b7501fd9f40307a8df25d",
+      "secondary_url_sha256": "8d841293ab92cebc21a981ffb5f3df1bc912185cee648d752316b03df1c3f88e"
+    },
+    {
+      "sample_order": 20,
+      "notice_id": "431369202600475",
+      "region": "울산",
+      "size": "medium",
+      "stratum": "울산|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "03ea55ee973cd5602bcbe375061734d9eb7b8f3dc84cca63c8708738024a812a",
+      "secondary_url_sha256": "ecc507ba190376aeba4deca58b8e1af46cc466fcead9ca04c2dbb061bd345f1e"
+    },
+    {
+      "sample_order": 21,
+      "notice_id": "413578202600899",
+      "region": "전남",
+      "size": "tiny",
+      "stratum": "전남|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "7c9f2cc42340e0d0a963e8480a19a35e8761d4dd2581f06b0aebb107704d642a",
+      "secondary_url_sha256": "04200afd6ba2f86056ed1622c161b97a0d19e34142b814ba890c3c68605a0011"
+    },
+    {
+      "sample_order": 22,
+      "notice_id": "445478202600383",
+      "region": "전북",
+      "size": "large",
+      "stratum": "전북|large",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "2678338e6259704445640828307152a7554466989f1d53922b845a72e14cc6c1",
+      "secondary_url_sha256": "f9b90dfb70fd4476e4adb42caf9a3a99bad642626af4c0e1f74ffad88f57341a"
+    },
+    {
+      "sample_order": 23,
+      "notice_id": "426334202600715",
+      "region": "부산",
+      "size": "small",
+      "stratum": "부산|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "f27bf37fe3eb077c8c2f27c4af21dc5a363be1c0af8f2653ec6318181237c877",
+      "secondary_url_sha256": "e5aab6942efd9e2e0c55fe92a3f24ee0237217a5c6572c1a2bb80247716b5568"
+    },
+    {
+      "sample_order": 24,
+      "notice_id": "442430202600124",
+      "region": "강원",
+      "size": "tiny",
+      "stratum": "강원|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "a589762377e84c6dff28504bea40e4702386be3bb1dc01011ebffe0086113e93",
+      "secondary_url_sha256": "de073751e28b4bf9ae5b82683ca9214f4afc1e933ffa3837c46685079e1a9c02"
+    },
+    {
+      "sample_order": 25,
+      "notice_id": "445476202600245",
+      "region": "전북",
+      "size": "small",
+      "stratum": "전북|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "b028e71f70e5aaa5951a03e3049ec707e84410a94b85b6547bd14107a6230932",
+      "secondary_url_sha256": "dd8fb7775bda7de6b989b2c49c7cb6e733a5f2eff5cdaeb3f926c2a76b71d844"
+    },
+    {
+      "sample_order": 26,
+      "notice_id": "427344202600311",
+      "region": "대구",
+      "size": "medium",
+      "stratum": "대구|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "547c489538a4d35bc26a61692d5fb97abd526f146591c38d482166442c9c8e69",
+      "secondary_url_sha256": "92d8d9996f6236cc3af2b56566b832a6add0bf89557ede10ba428b95d4fa20cf"
+    },
+    {
+      "sample_order": 27,
+      "notice_id": "445476202600243",
+      "region": "전북",
+      "size": "medium",
+      "stratum": "전북|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "41851eb169722f643cc25b78b9f4345aa7b0a0dd17e1f0dcec8bf082373204b9",
+      "secondary_url_sha256": "7f123402d8c4c0ca7512e02b3585c6c6e05f8288f27e966bec27d525c0794b83"
+    },
+    {
+      "sample_order": 28,
+      "notice_id": "447505202600735",
+      "region": "경북",
+      "size": "small",
+      "stratum": "경북|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "14fe9426f575afe400d4524f2694ba56bef1ef82477edce9be9f23d30e746e2d",
+      "secondary_url_sha256": "fd3f45846c0f5a370772400c3ea99c1582199fd7985f03e2d1e55747ccd6160b"
+    },
+    {
+      "sample_order": 29,
+      "notice_id": "428353202600727",
+      "region": "인천",
+      "size": "small",
+      "stratum": "인천|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "6f0537f673bfa357f835bc42b435a1c1f8988cd2d1935193f6a0a424cee320da",
+      "secondary_url_sha256": "5f30d691f73fdaf04b5a5c2f8c33d657bd1840cf2bbe8f0e8d46abf2e7c40c13"
+    },
+    {
+      "sample_order": 30,
+      "notice_id": "441553202602295",
+      "region": "경기",
+      "size": "small",
+      "stratum": "경기|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "e01b58497f0118ef04edef0a4a370f988dc96d9dac8ae271085130ff95a7cab8",
+      "secondary_url_sha256": "aa4fbf1746290d2473cc2b43620da2cc7117008cfd5c7381226cac2b03bbbcff"
+    },
+    {
+      "sample_order": 31,
+      "notice_id": "441374202600995",
+      "region": "경기",
+      "size": "tiny",
+      "stratum": "경기|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "b6385a0841c65abb5cad72859257039cfed76c9d2759f507f7b492537992bb0d",
+      "secondary_url_sha256": "e49137d9110c0a7c1be7e939ab1f305abdbc762dee619941c4e06516fdef668c"
+    },
+    {
+      "sample_order": 32,
+      "notice_id": "413585202600174",
+      "region": "전남",
+      "size": "large",
+      "stratum": "전남|large",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "4a0a216e8d6aecee8a1406f6c2636f81a399064ad6e7f39c3c5b0e71e7f1868d",
+      "secondary_url_sha256": "e03cd8660f6c2d833f5c7d85e481f4b11e7807795c2ce59581e97804fdf6acde"
+    },
+    {
+      "sample_order": 33,
+      "notice_id": "411317202600327",
+      "region": "서울",
+      "size": "large",
+      "stratum": "서울|large",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "0902ac6078f1ca71065592e7cf95df7fb1164bf909b7f01ffb5810fcc38a4d1a",
+      "secondary_url_sha256": "1035077b33ba80fdf5d2fcf635e6320243c35c0ee0b1dbf43caa1cc12edbf423"
+    },
+    {
+      "sample_order": 34,
+      "notice_id": "444449202601324",
+      "region": "충남",
+      "size": "tiny",
+      "stratum": "충남|tiny",
+      "indexed_vector_count": 1,
+      "modalities": [
+        "full_image"
+      ],
+      "indexed_url_sha256": "6e522a608ed995292dfa23e07c32164314e7b7499ba4d183e5f5727fbbf4d7eb",
+      "secondary_url_sha256": "f6d11c879bbd20e2428aec6a067540d0178369a69936e117d9060b211d725fb0"
+    },
+    {
+      "sample_order": 35,
+      "notice_id": "443447202600381",
+      "region": "충북",
+      "size": "tiny",
+      "stratum": "충북|tiny",
+      "indexed_vector_count": 1,
+      "modalities": [
+        "full_image"
+      ],
+      "indexed_url_sha256": "7f9a5883b54d1e5004f9d27f3e44eaaf529832a4296b7aa5abf00de8f0633133",
+      "secondary_url_sha256": "8a02052716bf6b9ad9c0a51b772ac52d9e11485d5234920e647d02be7b024f23"
+    },
+    {
+      "sample_order": 36,
+      "notice_id": "428357202601148",
+      "region": "인천",
+      "size": "large",
+      "stratum": "인천|large",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "e26341f639996a7973d361d3569f851b7de1a73f642312bff4fc8711fd0d5340",
+      "secondary_url_sha256": "c74f70d469b97b0f804cef11d6e589a1a067a8d80cb52222f98c62f8e4e5724a"
+    },
+    {
+      "sample_order": 37,
+      "notice_id": "441417202601061",
+      "region": "경기",
+      "size": "medium",
+      "stratum": "경기|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "60cc7423c9178af44e0e3b729b989d6a7644fe154dcc05e151e889712ec35aff",
+      "secondary_url_sha256": "5c1d2273c46a663b7279d10697c9cabca65f6a5fd2a80515090714bee038d7a9"
+    },
+    {
+      "sample_order": 38,
+      "notice_id": "447518202600172",
+      "region": "경북",
+      "size": "large",
+      "stratum": "경북|large",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "a05ff8b45a5acda35c1a7c115759cc1ab211e2d5717360df36c51925e00a7759",
+      "secondary_url_sha256": "c61717ba23114f92a8e46db29a77f1f0ff51514c72913b5bf1c5b6c0226b765d"
+    },
+    {
+      "sample_order": 39,
+      "notice_id": "448536202600618",
+      "region": "경남",
+      "size": "small",
+      "stratum": "경남|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "f4796f885af26b70c0776bec975f431dc91062a9063f93c4c1a3577fb4319568",
+      "secondary_url_sha256": "72dd31246e8bae8acef10348a22d991a2d0300cf27a99be89c6db08c2cbc7b06"
+    },
+    {
+      "sample_order": 40,
+      "notice_id": "469569202600566",
+      "region": "세종",
+      "size": "small",
+      "stratum": "세종|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "8d0618948b64cab88b10e60864f08a8b622585b102c4a773e758b365b9958f46",
+      "secondary_url_sha256": "4b0e24829e540ce34520fb3cd0f7d47183489e79858c25bb1a5ae27af97aa049"
+    },
+    {
+      "sample_order": 41,
+      "notice_id": "450650202601771",
+      "region": "제주",
+      "size": "large",
+      "stratum": "제주|large",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "0e39eb263ef59f837f52102b1d6bc0f8ce1c51bf73c86a2d74fb896508f98f46",
+      "secondary_url_sha256": "8d224b1fb9734ba47b2d7eae53b26500324641da20751b086f68b38e1f3b9398"
+    },
+    {
+      "sample_order": 42,
+      "notice_id": "428353202600728",
+      "region": "인천",
+      "size": "tiny",
+      "stratum": "인천|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "24ed9a75e71da9219337b158ccc6b7ec5d1c0e36e8cdfc02fbacba4c55a2b1f2",
+      "secondary_url_sha256": "6e145c51367fbcc8a417b9d1f05456db899c2146d58c0faae440ee265a9f9326"
+    },
+    {
+      "sample_order": 43,
+      "notice_id": "450650202601839",
+      "region": "제주",
+      "size": "tiny",
+      "stratum": "제주|tiny",
+      "indexed_vector_count": 1,
+      "modalities": [
+        "full_image"
+      ],
+      "indexed_url_sha256": "25e6a60b725bc075e382900f7dfd0ed6b8e5fc310eeb9e5be845ba197afa85f6",
+      "secondary_url_sha256": "c0cae4b833e8b33785740cf14c2f30a2301089d203cc0bfdbec8d1f2c7618778"
+    },
+    {
+      "sample_order": 44,
+      "notice_id": "442419202600618",
+      "region": "강원",
+      "size": "medium",
+      "stratum": "강원|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "4b46116881ee2246a67cabd820c07040417614e39a0c954a3e40286e035cdebc",
+      "secondary_url_sha256": "60e55690ab53ab44287d9849898d5c0bccac2728f7f12777dd10035c65a66ce6"
+    },
+    {
+      "sample_order": 45,
+      "notice_id": "443571202601603",
+      "region": "충북",
+      "size": "medium",
+      "stratum": "충북|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "0e23989fe191359f51020fc950d9bff096b85ec0f7b4b3bf666e236be1851820",
+      "secondary_url_sha256": "b384ce455624614599cb90f6cfa3cf0fcfcf35ae466f47da71f7a218b99967f2"
+    },
+    {
+      "sample_order": 46,
+      "notice_id": "444452202601607",
+      "region": "충남",
+      "size": "medium",
+      "stratum": "충남|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "b81eac3470a1db0922f2b1072c6f9d9c139cc3d7146df5f94fcadc63a54ea2f7",
+      "secondary_url_sha256": "e51f621d12ba187bda9bee9a26cc967d26c356150f7371eabc3d02d34925eee4"
+    },
+    {
+      "sample_order": 47,
+      "notice_id": "411316202600516",
+      "region": "서울",
+      "size": "small",
+      "stratum": "서울|small",
+      "indexed_vector_count": 1,
+      "modalities": [
+        "full_image"
+      ],
+      "indexed_url_sha256": "936d65c82e9aa9b99a5892705bd2b9125e19491dafdf512a71ff6166ee12c6a7",
+      "secondary_url_sha256": "dfa8175f122a82b8e7081edb4d9b162eff2524040f68c7387c3307d062ee13e8"
+    },
+    {
+      "sample_order": 48,
+      "notice_id": "450650202601782",
+      "region": "제주",
+      "size": "small",
+      "stratum": "제주|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "bdf698e3e132563aced36d9dce0d0d403d38004e690f12bd164601e83038b3f9",
+      "secondary_url_sha256": "85db8617457a9369c0ebb6377229bd718d47e31da91ec8311b2b14a6710df388"
+    },
+    {
+      "sample_order": 49,
+      "notice_id": "411307202600343",
+      "region": "서울",
+      "size": "medium",
+      "stratum": "서울|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "cb857b6e656ac6684d56f9b9c93e835613f5aa01221987660b7ca26ead5a79c0",
+      "secondary_url_sha256": "f98cfb121d7f027235e4d458fd01817d61b3d1aa804e7d0f48262d45a5ac8a74"
+    },
+    {
+      "sample_order": 50,
+      "notice_id": "427341202600473",
+      "region": "대구",
+      "size": "tiny",
+      "stratum": "대구|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "a9cecdcfdbea8d4945df45cb20cb986d8d8dc3bd538d63480da18dffdf3af337",
+      "secondary_url_sha256": "058f7ea399bac299ed6e179115c4df20a1b185ba2bd07dac1d1bbe2ac3850bfa"
+    },
+    {
+      "sample_order": 51,
+      "notice_id": "427347202600635",
+      "region": "대구",
+      "size": "large",
+      "stratum": "대구|large",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "a7b5223892ce499d8ab870c54edc8767a0a78997ed71b88273b812325df37383",
+      "secondary_url_sha256": "11989be2af6ad8144ef0100db3fdcebf7348ee9804f000b4fce1ff6aab0eecf7"
+    },
+    {
+      "sample_order": 52,
+      "notice_id": "427514202600195",
+      "region": "대구",
+      "size": "small",
+      "stratum": "대구|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "e9aa6733f6c3ddbacd32ae86c5fdbe1d27c1e230c2563b93a708fe3fa65e376d",
+      "secondary_url_sha256": "0250bef320e0676e50c3d26367f1d1068144a16133ec264339b0b9e5aca5a0bf"
+    },
+    {
+      "sample_order": 53,
+      "notice_id": "441390202600335",
+      "region": "경기",
+      "size": "large",
+      "stratum": "경기|large",
+      "indexed_vector_count": 1,
+      "modalities": [
+        "full_image"
+      ],
+      "indexed_url_sha256": "ab60d0ce886729a898373a040ffbfbfc5411a5287a3c573d20f542726cd40ea9",
+      "secondary_url_sha256": "12dc7ad92bafbf0896f204023ed2200fd074699a45b039afee1b997ea3e2b603"
+    },
+    {
+      "sample_order": 54,
+      "notice_id": "445478202600407",
+      "region": "전북",
+      "size": "tiny",
+      "stratum": "전북|tiny",
+      "indexed_vector_count": 1,
+      "modalities": [
+        "full_image"
+      ],
+      "indexed_url_sha256": "ed57cafca053bb69db2e72d9c15abbfb8b5ffa03fd284809c57bc22c6ea03e69",
+      "secondary_url_sha256": "bc7cabc542daa18c5a061780ad554027797726b99a0b82997022004afd616302"
+    },
+    {
+      "sample_order": 55,
+      "notice_id": "448567202601067",
+      "region": "경남",
+      "size": "tiny",
+      "stratum": "경남|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "bffdb121bef6a6033da9ea7b50ef1ab4f989ee85deee6d80193616d3a1bcc2cb",
+      "secondary_url_sha256": "8954858841399e55d774fe8321fdbdc33f8e4b96fddd4e0dfb95455599dbf12a"
+    },
+    {
+      "sample_order": 56,
+      "notice_id": "426338202600306",
+      "region": "부산",
+      "size": "large",
+      "stratum": "부산|large",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "a9dce4459ca835a0f531d91a0bd4f80c0967ea13eafdd352d42fa41181fe60f5",
+      "secondary_url_sha256": "361dedc40e6f3181e6d9924e1dbbc4bc32f14f95ba6537fed21d9e86a79b4bac"
+    },
+    {
+      "sample_order": 57,
+      "notice_id": "442420202600412",
+      "region": "강원",
+      "size": "large",
+      "stratum": "강원|large",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "72770f85421153db619980912816eb740793725cb3f3e3970a548a87b3e364a4",
+      "secondary_url_sha256": "69c81135c8f9be40002e6bde14b17685f01281ea809386c3116f23d539e0aada"
+    },
+    {
+      "sample_order": 58,
+      "notice_id": "444449202601298",
+      "region": "충남",
+      "size": "large",
+      "stratum": "충남|large",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "ca66418b0723dc82742ab624256f64b16a4cd95d0a3b0c4d816e263fa475ac67",
+      "secondary_url_sha256": "4cbe98ea7d4b8b6623f4a7a0a5320b0878c5f6d622d81e1130bf5ca36d3f3234"
+    },
+    {
+      "sample_order": 59,
+      "notice_id": "448539202600211",
+      "region": "경남",
+      "size": "small",
+      "stratum": "경남|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "234a27bc864be68b075d0656648f8f7ac9daaad72f90d604fc5e683d9d5efb4d",
+      "secondary_url_sha256": "ee354bfbeab9a359bddd7198a6923a56f8b889b5f43b47a72e56804ba9c31471"
+    },
+    {
+      "sample_order": 60,
+      "notice_id": "447508202601156",
+      "region": "경북",
+      "size": "small",
+      "stratum": "경북|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "d1bb3349621ad53707c032dd0edf4cbba75306765d51dce3f166ceace3cefaa5",
+      "secondary_url_sha256": "f194e834420c1860e71193ab9443cfb2c86ad3b6b0613a3dbb0141a970554ae7"
+    },
+    {
+      "sample_order": 61,
+      "notice_id": "441383202600294",
+      "region": "경기",
+      "size": "medium",
+      "stratum": "경기|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "77d5e5c7a794187d96a498206d52547a1863f23f55e295d7b00e84b4c08b1480",
+      "secondary_url_sha256": "1921709f103965c87d7f0030e1cb8c9fe972e30b55d5bfe0daae9885254eb0a4"
+    },
+    {
+      "sample_order": 62,
+      "notice_id": "450650202601763",
+      "region": "제주",
+      "size": "medium",
+      "stratum": "제주|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "60530f04d88b7b1b3e444e0f6a017f4870b12548a689dbe2301ccb81fe7e7d41",
+      "secondary_url_sha256": "3d4df4f2283268b6452cb64b996e7c6b5db68846a8ba8ec8bac537000440d1e0"
+    },
+    {
+      "sample_order": 63,
+      "notice_id": "441560202600793",
+      "region": "경기",
+      "size": "medium",
+      "stratum": "경기|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "e679ae9c6d75adc6e231a6e22c33179733453a419438e78f9cb46a2bd3c17b0b",
+      "secondary_url_sha256": "ae4a9813a89a1d65cf181bd6271afe98e2e5fef99ba60b8d948dcb727a90fde4"
+    },
+    {
+      "sample_order": 64,
+      "notice_id": "441570202600353",
+      "region": "경기",
+      "size": "small",
+      "stratum": "경기|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "06e44c5856a7487c6b324ad8d3febc65298e0663adaca5dd245ff86b1fbe0c0d",
+      "secondary_url_sha256": "4e313dbb97d2ca12bd548f81532a43d6cf5c3d1253d1e31d948ec2c977ff8259"
+    },
+    {
+      "sample_order": 65,
+      "notice_id": "441406202600820",
+      "region": "경기",
+      "size": "medium",
+      "stratum": "경기|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "79633983157929e82c7640e1db38de8b991c389f33bc139877c516b466edad82",
+      "secondary_url_sha256": "f79f49df27a6ad0c6c653c52be6a6f3e8e13b44e260b29fad640f701b2ea941f"
+    },
+    {
+      "sample_order": 66,
+      "notice_id": "441382202600544",
+      "region": "경기",
+      "size": "medium",
+      "stratum": "경기|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "db2a658217c5ffa76cc8bc68b4c9b38e9b614d0c1bd0c1035a06003c749623a2",
+      "secondary_url_sha256": "a7d65c22cb85f3e8b296f3f69d3a0ff2cfc1436b8861088942929e503e9705c1"
+    },
+    {
+      "sample_order": 67,
+      "notice_id": "444457202600438",
+      "region": "충남",
+      "size": "tiny",
+      "stratum": "충남|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "d61b11b62e466dbb30ac0d3e7d4bf1650d0279a7ca17bd0965e157bc6234119f",
+      "secondary_url_sha256": "85504acee49a2e7bbcf8d4759f495c4ddc2b878741ff0f5dacb771b59329bafd"
+    },
+    {
+      "sample_order": 68,
+      "notice_id": "442431202600159",
+      "region": "강원",
+      "size": "small",
+      "stratum": "강원|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "67b5c99cd26591862266540eadc3b0563218270b177fa5d2efb27d6684bf9f36",
+      "secondary_url_sha256": "93cfacc9423b0566c10d00d745c64ecce38026949673abb020f5fe88b34dbadb"
+    },
+    {
+      "sample_order": 69,
+      "notice_id": "444457202600442",
+      "region": "충남",
+      "size": "small",
+      "stratum": "충남|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "fcf0e9cc66b2939fc876109f296c8eb5c706051f2473c43a4b97463db006fa12",
+      "secondary_url_sha256": "94b0d86ad3592a4abba307c4daee2207b41b4c72af449cb1f52725938206acdb"
+    },
+    {
+      "sample_order": 70,
+      "notice_id": "413587202600319",
+      "region": "전남",
+      "size": "tiny",
+      "stratum": "전남|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "a30b3f65c2ec3b84fc368566a683e29d7eb33cc344eaee626973c0474a6373f2",
+      "secondary_url_sha256": "f73a7b6c09cda5b6307090ef5cf318dd36a98aa76b3358dae5c07f80b04879a2"
+    },
+    {
+      "sample_order": 71,
+      "notice_id": "441391202601261",
+      "region": "경기",
+      "size": "tiny",
+      "stratum": "경기|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "0f2e61fbbbafddf7387b9f777ebf4deffc002e711855f7fc7699f4da16b8f689",
+      "secondary_url_sha256": "5080ff68219be903073613d24e7376459d3667a8b92c8c924c5995536f007146"
+    },
+    {
+      "sample_order": 72,
+      "notice_id": "448542202600776",
+      "region": "경남",
+      "size": "small",
+      "stratum": "경남|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "1d0446d0f0f03cb65e4c1ee806e0c4392814af95a0678579a6265504b51fbbad",
+      "secondary_url_sha256": "64d6955d6cc0bb6b19155bd67e82ea52092e6f14a8550136ac4930312ac76b9e"
+    },
+    {
+      "sample_order": 73,
+      "notice_id": "441406202600823",
+      "region": "경기",
+      "size": "medium",
+      "stratum": "경기|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "56846d6aea51f45d3651fc90be2d401a2840e976e2ada9f7d0a894c872cf5984",
+      "secondary_url_sha256": "5776b2c47156db4e6c31a94b213662b68eb93d17e3d2f4930b8b7c7ff347d043"
+    },
+    {
+      "sample_order": 74,
+      "notice_id": "447502202600523",
+      "region": "경북",
+      "size": "small",
+      "stratum": "경북|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "58cbe0383563cace66bfea46685a93958ebe0ef1d501b3807f38cbcb9aaefb52",
+      "secondary_url_sha256": "7c813a94fa0387b80c8f666552795b477dd5710d88c23c9d2a6cd700cd89b122"
+    },
+    {
+      "sample_order": 75,
+      "notice_id": "441570202600354",
+      "region": "경기",
+      "size": "large",
+      "stratum": "경기|large",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "d09fb5d674253dc24b5ddbaefac3d4dd2cd5b7282eb41aad77624b4522f87038",
+      "secondary_url_sha256": "c44e102ce951cbfc1aebb20ff88778256fc2795a3b597e994a85da78bc1e341d"
+    },
+    {
+      "sample_order": 76,
+      "notice_id": "413591202600174",
+      "region": "전남",
+      "size": "tiny",
+      "stratum": "전남|tiny",
+      "indexed_vector_count": 1,
+      "modalities": [
+        "full_image"
+      ],
+      "indexed_url_sha256": "459ba684d06cc2c109b95e79d5c86a0578448d7df8d669994fc83d30704e4844",
+      "secondary_url_sha256": "1fa12c3b3e6e8e3da844dabb8bd3504804c374c38f89402f57a7683c427b243a"
+    },
+    {
+      "sample_order": 77,
+      "notice_id": "441382202600550",
+      "region": "경기",
+      "size": "medium",
+      "stratum": "경기|medium",
+      "indexed_vector_count": 1,
+      "modalities": [
+        "full_image"
+      ],
+      "indexed_url_sha256": "c007cbf42b062697cce4296ec7f7ea642943df369f2d56aa1caf255544044960",
+      "secondary_url_sha256": "bdf091ee58cefe7a7571a18baac08ed64625b5a56f21340623d733ff1a21436e"
+    },
+    {
+      "sample_order": 78,
+      "notice_id": "426340202600321",
+      "region": "부산",
+      "size": "small",
+      "stratum": "부산|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "78492ba591275bf365b3949bb2c79a1d701f17d0a137ea9fb9d6bb48963571a1",
+      "secondary_url_sha256": "6ce2c6be37886d0a3b546130ac48ac4564364df4241cf028218a5568d2adb8d5"
+    },
+    {
+      "sample_order": 79,
+      "notice_id": "413579202601120",
+      "region": "전남",
+      "size": "small",
+      "stratum": "전남|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "159cc9cd878f96b4cda5a228120ad94d48cf048df42cacb9d8e72f37e11f4b1d",
+      "secondary_url_sha256": "9d4e6acf2f3da628f2dd1516bc7fbd5ccba7e12babb004c7c583e5b2f63f8c01"
+    },
+    {
+      "sample_order": 80,
+      "notice_id": "444457202600441",
+      "region": "충남",
+      "size": "small",
+      "stratum": "충남|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "c0364989c63c57209bc2f0ddf4d82396a1079b7aa8970b0c1ccb3525b014b8a6",
+      "secondary_url_sha256": "7c335d6197db6e9091041dd67bc4a56d3a6df15b8062185cc6ad4164c6e35fb9"
+    },
+    {
+      "sample_order": 81,
+      "notice_id": "413587202600318",
+      "region": "전남",
+      "size": "small",
+      "stratum": "전남|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "3a004675c0a1e673439b45c687c222777ad3a74cadc1cc715985e504959315b2",
+      "secondary_url_sha256": "c81230bc8936838e7ed0ec2591345f92644b13f91a041a5c53c2fc0563227e6c"
+    },
+    {
+      "sample_order": 82,
+      "notice_id": "428356202600967",
+      "region": "인천",
+      "size": "tiny",
+      "stratum": "인천|tiny",
+      "indexed_vector_count": 1,
+      "modalities": [
+        "full_image"
+      ],
+      "indexed_url_sha256": "700431b109bf431a470f700c55de71467908e684959cfd6cf80e52153b408ba8",
+      "secondary_url_sha256": "642e8c8e1efdbe7575ce4ec141d81871e4c4ed78e83a45843a5325133d212d87"
+    },
+    {
+      "sample_order": 83,
+      "notice_id": "447511202600981",
+      "region": "경북",
+      "size": "tiny",
+      "stratum": "경북|tiny",
+      "indexed_vector_count": 1,
+      "modalities": [
+        "full_image"
+      ],
+      "indexed_url_sha256": "2bce7ed160270d4769e3c9d456ea0361b12751c650d3cfd5ec5fa52c4519b5ea",
+      "secondary_url_sha256": "29829df2b7db10ece16024b70d44f50e29a40505113442ce9e78e7ca46d2251a"
+    },
+    {
+      "sample_order": 84,
+      "notice_id": "413582202600589",
+      "region": "전남",
+      "size": "tiny",
+      "stratum": "전남|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "9f61563d24e700faf0a958a8c810f0af20710c0da11c817d79377fe1bb7cd9d2",
+      "secondary_url_sha256": "5f2a3f5c3c99fbce0be851425a9050366ac6cb51ae1511c35e73d554bcf135ae"
+    },
+    {
+      "sample_order": 85,
+      "notice_id": "448539202600213",
+      "region": "경남",
+      "size": "small",
+      "stratum": "경남|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "85cc1eae7ec29ef3f1635e78f2fe94ba8ab42e6c6acb7038648a393dd449b26c",
+      "secondary_url_sha256": "c3423326f7c38e76815a144fd6fa6de87c7d42ef1d64a0d7647386cf525c0b23"
+    },
+    {
+      "sample_order": 86,
+      "notice_id": "448531202601112",
+      "region": "경남",
+      "size": "tiny",
+      "stratum": "경남|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "638776f9fbbc9d6df1e5aefdc7d02803a2fc06e9f977a3e8ce516782d2ee047e",
+      "secondary_url_sha256": "5c2b5119bd098080972a8df7a605e05a6c3e5e01131d70fac944db9949ab4860"
+    },
+    {
+      "sample_order": 87,
+      "notice_id": "448535202600590",
+      "region": "경남",
+      "size": "small",
+      "stratum": "경남|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "7101b39d21c4019341dcad5fcc79696f3f91ac32cc405a577b3154c45a3be41f",
+      "secondary_url_sha256": "b041c007eafbf132b307478f86807808c82476e1813c9af3a636e0b9b137eaf4"
+    },
+    {
+      "sample_order": 88,
+      "notice_id": "428356202600980",
+      "region": "인천",
+      "size": "tiny",
+      "stratum": "인천|tiny",
+      "indexed_vector_count": 1,
+      "modalities": [
+        "full_image"
+      ],
+      "indexed_url_sha256": "53be0ca403921a66e2739f0e1ce3a765458797b40a5a83dbc5305fa267810edf",
+      "secondary_url_sha256": "0a1bda2480c2197da28869d320e75e95e479043eebb821081ed334d175fe046c"
+    },
+    {
+      "sample_order": 89,
+      "notice_id": "413587202600317",
+      "region": "전남",
+      "size": "tiny",
+      "stratum": "전남|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "2ae7d2dd2b1a51f3c11352d542dad57a1ccceb3a3c0514ac29ae05795a167983",
+      "secondary_url_sha256": "2975e901eaca8bd017e406a898ce4636f136ba579cabcab478783e93cec040e7"
+    },
+    {
+      "sample_order": 90,
+      "notice_id": "443439202600441",
+      "region": "충북",
+      "size": "medium",
+      "stratum": "충북|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "78f76c2792e34f62478084783153d77875abaeeefe358c277773cc6a87d2a2f0",
+      "secondary_url_sha256": "53d53429b8a532bb8772e1b5fb4b684ac300aae45fcf53ece77b565b53dc8794"
+    },
+    {
+      "sample_order": 91,
+      "notice_id": "441560202600778",
+      "region": "경기",
+      "size": "medium",
+      "stratum": "경기|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "edfcc5cb08a17c48b1543ff3aaf2744e06e8851f787877adb21a99c6737381c0",
+      "secondary_url_sha256": "de11f9e2cf32df4c56c0c6c70234235da0a7f100c52a24204d6a3adf12c06288"
+    },
+    {
+      "sample_order": 92,
+      "notice_id": "411320202600321",
+      "region": "서울",
+      "size": "small",
+      "stratum": "서울|small",
+      "indexed_vector_count": 1,
+      "modalities": [
+        "full_image"
+      ],
+      "indexed_url_sha256": "f0a206c6723a4252f0f8e71b922416dced0f25c478890b78ce4c39bbbdda9b50",
+      "secondary_url_sha256": "a3482bc3b525decf670aa765f9bb974db0ff3ed4236883120a31d2181ced0b98"
+    },
+    {
+      "sample_order": 93,
+      "notice_id": "441390202600330",
+      "region": "경기",
+      "size": "large",
+      "stratum": "경기|large",
+      "indexed_vector_count": 1,
+      "modalities": [
+        "full_image"
+      ],
+      "indexed_url_sha256": "a03ace8af12ed4c5cde1b65285ed625fade526eb159ed5c1aa263ff435e83fcd",
+      "secondary_url_sha256": "f3ff362945fd938eee4101078fc7f9bd6096d6564a1821bafa4c69e42deb8bff"
+    },
+    {
+      "sample_order": 94,
+      "notice_id": "448534202600832",
+      "region": "경남",
+      "size": "tiny",
+      "stratum": "경남|tiny",
+      "indexed_vector_count": 1,
+      "modalities": [
+        "full_image"
+      ],
+      "indexed_url_sha256": "53aa381bfdd0ef516c674e07c026f9b7d9e5b70ffa3675d770816bb39568b967",
+      "secondary_url_sha256": "ed5e5f8babc9eb498da703fd267c405812dc6b0b817e1dbb13eafe367be6e0a5"
+    },
+    {
+      "sample_order": 95,
+      "notice_id": "450650202601792",
+      "region": "제주",
+      "size": "medium",
+      "stratum": "제주|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "6e5ef838f3de6a843462862e9883ff6b6f00f399f4ab862129b57386d2d57c93",
+      "secondary_url_sha256": "43acd47984b14a290c2a2efcedd1a306c2141932b5a3b8543ce5e217963a8e4f"
+    },
+    {
+      "sample_order": 96,
+      "notice_id": "441391202601249",
+      "region": "경기",
+      "size": "tiny",
+      "stratum": "경기|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "7811c25151efc8f136cdaceb044638f1403dc2fb8ee39e43efe2338207890438",
+      "secondary_url_sha256": "212edfad61411590a187e0038613a23778c9132b202ac79bc63ae9ac8bca39fa"
+    },
+    {
+      "sample_order": 97,
+      "notice_id": "441400202600262",
+      "region": "경기",
+      "size": "medium",
+      "stratum": "경기|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "80f4fed37a764997e6c7a806b38ced1d04f8aaede506857e40353c5af9c0f9bf",
+      "secondary_url_sha256": "11d356dcf380f5b882a2a28cf1d1da8ff96a95488223cf948e631e5fee379a57"
+    },
+    {
+      "sample_order": 98,
+      "notice_id": "441391202601271",
+      "region": "경기",
+      "size": "large",
+      "stratum": "경기|large",
+      "indexed_vector_count": 1,
+      "modalities": [
+        "full_image"
+      ],
+      "indexed_url_sha256": "3011cae940319961abc92d44948e7b955ef3e8b93bb39fcb20087323d28f958e",
+      "secondary_url_sha256": "9d00fa133959ad3ab6a5ae790c8e8edeadda22a8883bfff2215b930c1f0e59cd"
+    },
+    {
+      "sample_order": 99,
+      "notice_id": "413578202600887",
+      "region": "전남",
+      "size": "tiny",
+      "stratum": "전남|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "b77e3d44d5906f22b1f9091eabc70ef608c56000ae78e020b9102ec45e4c3aeb",
+      "secondary_url_sha256": "a327b8c0ded044ac69ce5a6b5e3ba2d45fd486d7eeeead7b11d7b875ed820642"
+    },
+    {
+      "sample_order": 100,
+      "notice_id": "442422202600063",
+      "region": "강원",
+      "size": "small",
+      "stratum": "강원|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "96997ecec25bdf0751bf5cb5d60853cc3da2991a15a48ec43aafcad936a134f3",
+      "secondary_url_sha256": "f46af8f1dcca21d0bd9e9da0289a355b19e2555b0b561a4e07dc3397710a41a8"
+    },
+    {
+      "sample_order": 101,
+      "notice_id": "445470202600856",
+      "region": "전북",
+      "size": "tiny",
+      "stratum": "전북|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "dcefb11464c710a49080244ee031595a3a6c96b02cda35ea344ab9f15b91fc3a",
+      "secondary_url_sha256": "802a0f18e0f0bebf18d26a76c6c742b07ecdef0f99f9938fbb090ab3a7570c5b"
+    },
+    {
+      "sample_order": 102,
+      "notice_id": "441408202601470",
+      "region": "경기",
+      "size": "medium",
+      "stratum": "경기|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "35cd93973ac888ba7d8fa0bf029124eaa8a369cee3fbb809980e82031f9a3012",
+      "secondary_url_sha256": "d1e2906e113b4e703880b9d107cd8db78be533d939f2d0a77f7e96ee434dad95"
+    },
+    {
+      "sample_order": 103,
+      "notice_id": "445478202600386",
+      "region": "전북",
+      "size": "tiny",
+      "stratum": "전북|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "97d68454cb43d04d88fecf6a91acaeb66a1da22cb02c029b9703cbe6648a4626",
+      "secondary_url_sha256": "972f7b15a46f47c3696f93da356f33b7089795ea8c052e7a2516b8fd5ad6cd1e"
+    },
+    {
+      "sample_order": 104,
+      "notice_id": "447516202600167",
+      "region": "경북",
+      "size": "tiny",
+      "stratum": "경북|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "3401ae30af14c1990cd384dd362c4e5f62cc5b256d61172f5f27334252d6a44e",
+      "secondary_url_sha256": "c2dc79aeea54456cfec349bb9f28cc0ace05c1436baa6331de4d6e650cee3055"
+    },
+    {
+      "sample_order": 105,
+      "notice_id": "450650202601799",
+      "region": "제주",
+      "size": "medium",
+      "stratum": "제주|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "6065b4dff6741d3cb8aec4b51a594243db0b990df96122dcfab389bbe6c54139",
+      "secondary_url_sha256": "e4e3ec4a20eacf04e65cbb0be09eefd66caf2f6b8e248331f8a587baf2af08c0"
+    },
+    {
+      "sample_order": 106,
+      "notice_id": "445478202600396",
+      "region": "전북",
+      "size": "tiny",
+      "stratum": "전북|tiny",
+      "indexed_vector_count": 1,
+      "modalities": [
+        "full_image"
+      ],
+      "indexed_url_sha256": "114d35bf890ef22813ca9d59acc337049e5b77e7b71acb8efd71002c591db22f",
+      "secondary_url_sha256": "3fcf3cd034b65a9c1a99760e80b713f7daff8d0dce174f29af51f68f99644a86"
+    },
+    {
+      "sample_order": 107,
+      "notice_id": "413578202600953",
+      "region": "전남",
+      "size": "small",
+      "stratum": "전남|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "9ae9b35092f953e45514fba8a45cba91c2c969083ed234c1be7da51bf4114fd8",
+      "secondary_url_sha256": "8cb3ee703c6eadf8d4d26384d1d98669e80653b95bbedb64a60ca5b3492c478a"
+    },
+    {
+      "sample_order": 108,
+      "notice_id": "426336202600374",
+      "region": "부산",
+      "size": "small",
+      "stratum": "부산|small",
+      "indexed_vector_count": 1,
+      "modalities": [
+        "full_image"
+      ],
+      "indexed_url_sha256": "4a04b0f15d29439d81802455646c19c936ddf2d5c5893ec5990c631fd64cdc9e",
+      "secondary_url_sha256": "7f7d01ee870a5b28a0bbacf1a8cf5dbef06d59f0ed330d6bfaada5f34d5be91a"
+    },
+    {
+      "sample_order": 109,
+      "notice_id": "443443202600556",
+      "region": "충북",
+      "size": "small",
+      "stratum": "충북|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "ada89438c2a3bf8a009d35368e210825dea23109827a727845c6d8321efa8c46",
+      "secondary_url_sha256": "41b8cd5d9c853fb48b0db2ee09011a78bc73ab5348430e7dede7f07503c60260"
+    },
+    {
+      "sample_order": 110,
+      "notice_id": "447525202600282",
+      "region": "경북",
+      "size": "small",
+      "stratum": "경북|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "c28fbd08cbc7a2bb00dbc972192d74c54975baefd092d9de35d9e2fa9c43a471",
+      "secondary_url_sha256": "c9c41dd379b6a64dc4bf75d58838aa8b995db469f243d2ece848a0c3c8bc61f4"
+    },
+    {
+      "sample_order": 111,
+      "notice_id": "441414202600559",
+      "region": "경기",
+      "size": "small",
+      "stratum": "경기|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "6b3ac5a1ad0809e8702ab10e2da338341878af1e9865181d84481b00a8cf4afb",
+      "secondary_url_sha256": "2ecf06f7abacc24fd39fff09ec01c160b2c19c11e6f81172c2f0afd35e603b8b"
+    },
+    {
+      "sample_order": 112,
+      "notice_id": "413581202600454",
+      "region": "전남",
+      "size": "medium",
+      "stratum": "전남|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "2edea0e935d7f669ee9e39080f70bffa6f5d22b24ac6895740248a7eae461acf",
+      "secondary_url_sha256": "9c9fa0f059ed07ec59b86e245293cf2762e76b3b72df33c630004a7ee4a335e6"
+    },
+    {
+      "sample_order": 113,
+      "notice_id": "447508202601161",
+      "region": "경북",
+      "size": "tiny",
+      "stratum": "경북|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "3d701151bf7ae03aa672c53f10d322ba02b1463ec99fb5d660142a195b75ee5c",
+      "secondary_url_sha256": "0bfda99efdc78245ea1fafb9b7eb6656e8f975fa418d07c225e5e4534a156272"
+    },
+    {
+      "sample_order": 114,
+      "notice_id": "441382202600545",
+      "region": "경기",
+      "size": "medium",
+      "stratum": "경기|medium",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "c219de6642b4199acdc8f6ceb20876e025f2ff37ffb94119c4140cc36da303bc",
+      "secondary_url_sha256": "a2b0ed4b4fe7cfa794b80ee1b166d130a44c5fe57e8f50409185874d050f49e7"
+    },
+    {
+      "sample_order": 115,
+      "notice_id": "413582202600594",
+      "region": "전남",
+      "size": "tiny",
+      "stratum": "전남|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "738b457db5c2226a5c2e4e9b79e83a664dfd775087835286725ecba74fe0a495",
+      "secondary_url_sha256": "d395a5da745a1ca4b88b533149e68887c203673a5b6df6173293af3b12caebbe"
+    },
+    {
+      "sample_order": 116,
+      "notice_id": "413579202601129",
+      "region": "전남",
+      "size": "small",
+      "stratum": "전남|small",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "43cbc0c0b9c263a684c600696a0cb461cf0f4a8a85c40bc67fd69a949777a5de",
+      "secondary_url_sha256": "2f09934ca843cc1e5d805edf54022671e710b52ec11710340cfab868021a3645"
+    },
+    {
+      "sample_order": 117,
+      "notice_id": "448536202600627",
+      "region": "경남",
+      "size": "tiny",
+      "stratum": "경남|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "febd19345f619d0155c49c7373495cc69632237e42db87e317331b37a1c21c72",
+      "secondary_url_sha256": "ad6dec972ea133d1e65f121d250a19bc2f7e7f91d4d325aa6e5590c38e8ce582"
+    },
+    {
+      "sample_order": 118,
+      "notice_id": "442429202600266",
+      "region": "강원",
+      "size": "tiny",
+      "stratum": "강원|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "0458c7847bbf248ac5822d031f23e688ffdbcd674610f20a9572eb5abdebdf15",
+      "secondary_url_sha256": "6b8efef53c897087cc27c0c7b04d9275672eea5ab58c4d6c8e5f9461f147be7c"
+    },
+    {
+      "sample_order": 119,
+      "notice_id": "445478202600388",
+      "region": "전북",
+      "size": "tiny",
+      "stratum": "전북|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "1d4f625c390b7ba0aa5534e963d17447554c702eb44b8c2d72392b074504c8d0",
+      "secondary_url_sha256": "a76dc0f1b6dd001ae90a21180bd372d1bac7bdfa2eea4d0c33a60bfd65176203"
+    },
+    {
+      "sample_order": 120,
+      "notice_id": "441391202601260",
+      "region": "경기",
+      "size": "tiny",
+      "stratum": "경기|tiny",
+      "indexed_vector_count": 2,
+      "modalities": [
+        "crop_image",
+        "full_image"
+      ],
+      "indexed_url_sha256": "a9d9276f5c0e1c1dbb5c5d91197f4cf0977380a330c8cc75d80233a592f03887",
+      "secondary_url_sha256": "5d8c2176404f90f9b7fd0852c0c7ee91f69c7a0dafc5464a98bac6b8142c56a7"
+    }
+  ],
+  "execution": {
+    "status": "completed",
+    "coverage_status": "partial",
+    "metrics_available": true,
+    "network_requested": true,
+    "images_persisted": false,
+    "payload_leakage_audit_complete": true,
+    "payload_leakage_audit_scope": "successfully_downloaded_sampled_primary_sources",
+    "primary_sha_scope": "every evaluable query has its own primary SHA; secondary payloads matching any successfully audited source in the declared payload_leakage_audit_scope are excluded"
+  },
+  "limitations": [
+    "This cross-photo same-notice task measures a visual identity retrieval proxy, not subjective similarity between different dogs.",
+    "It does not measure temperament, health, adoption suitability, child friendliness, or compatibility with other animals.",
+    "URL inequality is checked before sampling; exact payload SHA-256 leakage and duplicate-query checks occur only during network execution.",
+    "In the default sampled audit, missing primary downloads reduce payload audit coverage and are disclosed. An evaluable query is checked against its own primary SHA and all successfully downloaded sampled-primary SHAs, but duplication against an unavailable primary cannot be ruled out.",
+    "A corpus-wide audit requires --audit-all-indexed-sources, may be slow, and is complete only when every declared active visual source is successfully downloaded.",
+    "Image transport upgrades initial HTTP metadata URLs to HTTPS and rejects redirects that downgrade HTTPS back to HTTP.",
+    "Generated crop bytes are not retained with the index, so exact raw-byte comparison covers their public source photo rather than the crop payload.",
+    "Public image URLs can change or disappear, so download and evaluable coverage must be reported with retrieval metrics.",
+    "The raw CLIP visual-index result is not the full production API, which can apply additional filtering and reranking.",
+    "The refreshed index retained image and crop vectors from earlier snapshots. It has no per-vector encoder sidecar fingerprint, so artifact-bound declarations do not prove the encoder of every vector."
+  ],
+  "candidate_index": {
+    "candidate_vectors": 2230,
+    "crop_image": 1002,
+    "excluded_text_or_unknown": 1516,
+    "full_image": 1228,
+    "source_active_visual_rows": 2230,
+    "source_unique_source_urls": 1228,
+    "unique_notices": 1228,
+    "text_vectors_in_ranking": 0
+  },
+  "metrics": {
+    "attempted_count": 120,
+    "downloaded_count": 55,
+    "evaluable_count": 29,
+    "duplicate_count": 26,
+    "download_coverage": 0.458333,
+    "evaluable_coverage": 0.241667,
+    "hit@1": 0.827586,
+    "hit@5": 0.965517,
+    "hit@10": 0.965517,
+    "MRR": 0.891171,
+    "median_rank": 1.0,
+    "max_rank": 94,
+    "primary_downloaded_count": 85,
+    "payload_audit_source_count": 120,
+    "payload_audit_downloaded_count": 85,
+    "payload_audit_coverage": 0.708333,
+    "embedded_count": 29,
+    "primary_download_coverage": 0.708333,
+    "end_to_end_hit@1": 0.2,
+    "end_to_end_hit@5": 0.233333,
+    "end_to_end_hit@10": 0.233333
+  },
+  "failure_reasons": {
+    "indexed_source_request_timeout": 1,
+    "indexed_source_total_timeout": 34,
+    "primary_unavailable": 35,
+    "query_matches_indexed_primary_bytes": 26,
+    "secondary_http_status_404": 3,
+    "secondary_total_timeout": 27
+  },
+  "queries": [
+    {
+      "notice_id": "450650202601831",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.96162713,
+      "target_best_modality": "full_image",
+      "top_ids": [
+        "450650202601831",
+        "447502202600514",
+        "450650202601810",
+        "413588202600266",
+        "450650202601798",
+        "445467202601510",
+        "450650202601771",
+        "413583202600515",
+        "450650202601776",
+        "450650202601772"
+      ],
+      "sample_order": 8,
+      "query_payload_sha256": "5e6bd8e8beb716f34e48036a4806677ae4f7ea56ac689071b2c986f36a17f967",
+      "indexed_payload_sha256": "b3c456cfbab1dc19f32bd43f51fc73c79463fb3dcbdcc353076db3cde12eed63",
+      "query_bytes": 58965,
+      "query_format": "JPEG",
+      "query_width": 493,
+      "query_height": 500,
+      "region": "제주",
+      "size": "medium"
+    },
+    {
+      "notice_id": "448567202601052",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.94873917,
+      "target_best_modality": "full_image",
+      "top_ids": [
+        "448567202601052",
+        "444462202600531",
+        "448567202601050",
+        "411319202600337",
+        "445479202600741",
+        "413585202600174",
+        "445479202600739",
+        "441394202601405",
+        "448541202601073",
+        "413578202600977"
+      ],
+      "sample_order": 11,
+      "query_payload_sha256": "39d64ce857bc16985bba9041fc9cf1a1f7e05c4837ad897cbc566f92c114eb7f",
+      "indexed_payload_sha256": "5b23e379ee30e6ba92e7e8ef9168fe421ae64035c959e3118a18a49fcb3ce71c",
+      "query_bytes": 264869,
+      "query_format": "JPEG",
+      "query_width": 1000,
+      "query_height": 750,
+      "region": "경남",
+      "size": "large"
+    },
+    {
+      "notice_id": "426336202600368",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.95956206,
+      "target_best_modality": "crop_image",
+      "top_ids": [
+        "426336202600368",
+        "441374202600990",
+        "448535202600913",
+        "447509202600184",
+        "426339202600306",
+        "442421202600080",
+        "413588202600264",
+        "447510202600502",
+        "413587202600163",
+        "441391202601243"
+      ],
+      "sample_order": 17,
+      "query_payload_sha256": "e812509ca80dfa47a25784b345cc89fe4fa626f8958e8c0b6431fe5648e9c40e",
+      "indexed_payload_sha256": "0e8b59bf4bb1acadd42841faede82acffdc364661a8b021039e0ceaf15254467",
+      "query_bytes": 80621,
+      "query_format": "JPEG",
+      "query_width": 583,
+      "query_height": 592,
+      "region": "부산",
+      "size": "tiny"
+    },
+    {
+      "notice_id": "413583202600219",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.94347721,
+      "target_best_modality": "crop_image",
+      "top_ids": [
+        "413583202600219",
+        "445468202602054",
+        "448548202600648",
+        "445467202601509",
+        "427348202600762",
+        "447502202600525",
+        "447510202600508",
+        "443447202600356",
+        "441391202601243",
+        "445471202600266"
+      ],
+      "sample_order": 19,
+      "query_payload_sha256": "2a462e65b62687f26e23ad1f50490a4eedc54a0dcd4f234d3a0bceeb44a4e51c",
+      "indexed_payload_sha256": "b0e4b26139e852bc87946baf33370329753def363429e26461887e5cff5f046b",
+      "query_bytes": 291044,
+      "query_format": "JPEG",
+      "query_width": 1005,
+      "query_height": 1172,
+      "region": "전남",
+      "size": "medium"
+    },
+    {
+      "notice_id": "426334202600715",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.93926233,
+      "target_best_modality": "full_image",
+      "top_ids": [
+        "426334202600715",
+        "426336202600367",
+        "444452202601607",
+        "445469202600891",
+        "441553202602326",
+        "441399202601312",
+        "441399202601313",
+        "413587202600163",
+        "441553202602302",
+        "441553202602305"
+      ],
+      "sample_order": 23,
+      "query_payload_sha256": "8cf61d1f777089ae2ad2d87d50abd8197746157619f3f6f48a584b6feb66a1b7",
+      "indexed_payload_sha256": "63e8c7d03992964b36c1d047a6cf6034bbdeba38f1d9cf1fb1920ee970f41201",
+      "query_bytes": 201943,
+      "query_format": "JPEG",
+      "query_width": 1006,
+      "query_height": 1276,
+      "region": "부산",
+      "size": "small"
+    },
+    {
+      "notice_id": "441374202600995",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.96548957,
+      "target_best_modality": "full_image",
+      "top_ids": [
+        "441374202600995",
+        "441374202601001",
+        "445464202602321",
+        "441390202600310",
+        "445464202602300",
+        "447525202600282",
+        "426334202600729",
+        "428356202600980",
+        "426326202600285",
+        "447508202601163"
+      ],
+      "sample_order": 31,
+      "query_payload_sha256": "b4a7ff203ff2e860999d937620080f362d4c487c0c825a64c949bc05db389211",
+      "indexed_payload_sha256": "acdb7897a7a50b6c59483750f934ca2d5e514600a3ba52cab6fbd516b1e35c36",
+      "query_bytes": 148763,
+      "query_format": "JPEG",
+      "query_width": 897,
+      "query_height": 858,
+      "region": "경기",
+      "size": "tiny"
+    },
+    {
+      "notice_id": "450650202601771",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.94989717,
+      "target_best_modality": "crop_image",
+      "top_ids": [
+        "450650202601771",
+        "450650202601800",
+        "450650202601799",
+        "450650202601794",
+        "450650202601801",
+        "450650202601772",
+        "450650202601798",
+        "450650202601836",
+        "450650202601828",
+        "450650202601810"
+      ],
+      "sample_order": 41,
+      "query_payload_sha256": "a98f2be54bd276ff7da8bacffaf72cc195697b3f5c1e0f7ba6bc39959100bc98",
+      "indexed_payload_sha256": "5900444c4f69c1f62db42526777768e0e33f631682886dfdb1f1f62fc50f4749",
+      "query_bytes": 75135,
+      "query_format": "JPEG",
+      "query_width": 599,
+      "query_height": 500,
+      "region": "제주",
+      "size": "large"
+    },
+    {
+      "notice_id": "428353202600728",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.96197122,
+      "target_best_modality": "crop_image",
+      "top_ids": [
+        "428353202600728",
+        "441402202600304",
+        "411320202600321",
+        "428352202600434",
+        "428357202601130",
+        "442423202600278",
+        "427341202600473",
+        "441408202601473",
+        "445464202602287",
+        "413582202600522"
+      ],
+      "sample_order": 42,
+      "query_payload_sha256": "6a03e77a83393dfdfe3b2c6691824da42633aaa54e1f0c09a5df250c83c544eb",
+      "indexed_payload_sha256": "d1ccbfb2f03aab116fb6831e90993d06746c4513b86d31d9837804710cf74f34",
+      "query_bytes": 182344,
+      "query_format": "JPEG",
+      "query_width": 1300,
+      "query_height": 1733,
+      "region": "인천",
+      "size": "tiny"
+    },
+    {
+      "notice_id": "450650202601839",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.9590956,
+      "target_best_modality": "full_image",
+      "top_ids": [
+        "450650202601839",
+        "450650202601838",
+        "450650202601837",
+        "450650202601869",
+        "450650202601779",
+        "450650202601782",
+        "450650202601841",
+        "450650202601803",
+        "450650202601842",
+        "450650202601840"
+      ],
+      "sample_order": 43,
+      "query_payload_sha256": "13d5a89ff407196ad03ba025931e72124e6cc5938f2de0c4fa7f7db2edfd92fb",
+      "indexed_payload_sha256": "2c1a53e31531e136dca4707c98b9426763267ae2e18f0c3662930510c08a7391",
+      "query_bytes": 60958,
+      "query_format": "JPEG",
+      "query_width": 524,
+      "query_height": 500,
+      "region": "제주",
+      "size": "tiny"
+    },
+    {
+      "notice_id": "450650202601782",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.9662329,
+      "target_best_modality": "full_image",
+      "top_ids": [
+        "450650202601782",
+        "450650202601862",
+        "450650202601840",
+        "450650202601838",
+        "450650202601846",
+        "450650202601869",
+        "450650202601806",
+        "450650202601864",
+        "442419202600610",
+        "450650202601803"
+      ],
+      "sample_order": 48,
+      "query_payload_sha256": "62ed2d4776d4149abf3db815497b360181bcaa49778c82a95ab322e4d90d257d",
+      "indexed_payload_sha256": "f8ce6143c82995120a7c0fad02c8f1d0694ccc645d7aa846d2b02205c8dd622a",
+      "query_bytes": 86295,
+      "query_format": "JPEG",
+      "query_width": 578,
+      "query_height": 480,
+      "region": "제주",
+      "size": "small"
+    },
+    {
+      "notice_id": "427514202600195",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.95346665,
+      "target_best_modality": "full_image",
+      "top_ids": [
+        "427514202600195",
+        "448567202601055",
+        "413582202600520",
+        "441570202600360",
+        "441570202600354",
+        "441391202601259",
+        "441570202600364",
+        "444451202600699",
+        "413588202600266",
+        "442418202600687"
+      ],
+      "sample_order": 52,
+      "query_payload_sha256": "c1a278f5282716158c7c8f0d7d18bffc4b5c26ac02151be75138d0b6be23e884",
+      "indexed_payload_sha256": "4ca7f78a7cd7c1ebeee5ffb87e336e1eea433419286adca757d9486b72a14f68",
+      "query_bytes": 181343,
+      "query_format": "JPEG",
+      "query_width": 750,
+      "query_height": 1000,
+      "region": "대구",
+      "size": "small"
+    },
+    {
+      "notice_id": "441390202600335",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.9785369,
+      "target_best_modality": "full_image",
+      "top_ids": [
+        "441390202600335",
+        "441390202600334",
+        "442422202600061",
+        "448536202600632",
+        "441390202600338",
+        "441390202600336",
+        "448536202600633",
+        "447505202600730",
+        "447525202600283",
+        "447513202600895"
+      ],
+      "sample_order": 53,
+      "query_payload_sha256": "22c27abae085f098df03118be39ac1715c009a8f3cfa287acfe0e2182624dfb9",
+      "indexed_payload_sha256": "a4ccc6623f06d1909943281454d2e5980af5aa318bb07b4324c6d6090418aea1",
+      "query_bytes": 210737,
+      "query_format": "JPEG",
+      "query_width": 960,
+      "query_height": 720,
+      "region": "경기",
+      "size": "large"
+    },
+    {
+      "notice_id": "445478202600407",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.92200637,
+      "target_best_modality": "full_image",
+      "top_ids": [
+        "445478202600407",
+        "445478202600405",
+        "413582202600589",
+        "445478202600404",
+        "413579202601131",
+        "441394202601390",
+        "441394202601384",
+        "413579202601132",
+        "445478202600400",
+        "445478202600379"
+      ],
+      "sample_order": 54,
+      "query_payload_sha256": "8f388e1126c0055298f7b349131def22753920450df540fb106e68ded5ca493e",
+      "indexed_payload_sha256": "91001b74f8ab0bf8da36a53c54524a02de5648d2c7a3d4e26eb2c59a1d05602c",
+      "query_bytes": 225813,
+      "query_format": "JPEG",
+      "query_width": 1300,
+      "query_height": 1733,
+      "region": "전북",
+      "size": "tiny"
+    },
+    {
+      "notice_id": "426338202600306",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.94134325,
+      "target_best_modality": "crop_image",
+      "top_ids": [
+        "426338202600306",
+        "444452202601607",
+        "447508202601145",
+        "441405202602304",
+        "413585202600180",
+        "447525202600288",
+        "441399202601310",
+        "426334202600715",
+        "427344202600311",
+        "447525202600287"
+      ],
+      "sample_order": 56,
+      "query_payload_sha256": "a8f8df2af10bdffcbc0eb4033bd9e20ca4f0d1a95e13927ce913bef5cc0093c6",
+      "indexed_payload_sha256": "6dd7afc863dc3f7c7202effdaa697193848909f2c4ca8c8b37466275e3f99ba2",
+      "query_bytes": 24775,
+      "query_format": "JPEG",
+      "query_width": 400,
+      "query_height": 533,
+      "region": "부산",
+      "size": "large"
+    },
+    {
+      "notice_id": "447508202601156",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.91472876,
+      "target_best_modality": "crop_image",
+      "top_ids": [
+        "447508202601156",
+        "448534202600824",
+        "445464202602283",
+        "447510202600503",
+        "443443202600556",
+        "442431202600159",
+        "413587202600163",
+        "413585202600172",
+        "443447202600370",
+        "442420202600419"
+      ],
+      "sample_order": 60,
+      "query_payload_sha256": "982c505fb722f3c8aa048fd1891837c88cf556d58e97299fd9f439897764c6e9",
+      "indexed_payload_sha256": "20b2d8841146b26ff59e1872246b1737d8d4c339f99397bbd73e461c671ca3a6",
+      "query_bytes": 413853,
+      "query_format": "JPEG",
+      "query_width": 1071,
+      "query_height": 1428,
+      "region": "경북",
+      "size": "small"
+    },
+    {
+      "notice_id": "441383202600294",
+      "rank": 94,
+      "reciprocal_rank": 0.0106383,
+      "hit@1": 0,
+      "hit@5": 0,
+      "hit@10": 0,
+      "target_score": 0.77162808,
+      "target_best_modality": "crop_image",
+      "top_ids": [
+        "445470202600852",
+        "447513202600896",
+        "413583202600509",
+        "448548202600649",
+        "444454202600939",
+        "447509202600183",
+        "426340202600320",
+        "427514202600195",
+        "428355202600368",
+        "428356202600958"
+      ],
+      "sample_order": 61,
+      "query_payload_sha256": "d00767ea384089a5849dd43b8df663f7bd92e8d0d815ddc63d0744ae1adc07dc",
+      "indexed_payload_sha256": "27d2c1e2e8a9f2cdd5208ddc0c4cdbe77a177313ca0cfdba5d01c431f4a11a30",
+      "query_bytes": 511061,
+      "query_format": "JPEG",
+      "query_width": 1050,
+      "query_height": 1400,
+      "region": "경기",
+      "size": "medium"
+    },
+    {
+      "notice_id": "450650202601763",
+      "rank": 2,
+      "reciprocal_rank": 0.5,
+      "hit@1": 0,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.91538155,
+      "target_best_modality": "full_image",
+      "top_ids": [
+        "450650202601783",
+        "450650202601763",
+        "450650202601764",
+        "450650202601799",
+        "450650202601863",
+        "450650202601801",
+        "448548202600651",
+        "450650202601794",
+        "450650202601836",
+        "447513202600896"
+      ],
+      "sample_order": 62,
+      "query_payload_sha256": "7ed75138284c6a118ef276f2a2bb0026f15d3471947de2604dcdc51e8a9f4c5f",
+      "indexed_payload_sha256": "75d3e0c1c4c0dc76d6493e84a9838aad6ef6737039d4e6659f72ce243ce8a4f8",
+      "query_bytes": 70043,
+      "query_format": "JPEG",
+      "query_width": 653,
+      "query_height": 500,
+      "region": "제주",
+      "size": "medium"
+    },
+    {
+      "notice_id": "426340202600321",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.95505095,
+      "target_best_modality": "full_image",
+      "top_ids": [
+        "426340202600321",
+        "428353202600727",
+        "426336202600378",
+        "441378202600979",
+        "445470202600848",
+        "445467202601477",
+        "445464202602289",
+        "413579202600281",
+        "448535202600913",
+        "441394202601385"
+      ],
+      "sample_order": 78,
+      "query_payload_sha256": "6c341915263c3e85bffeb53d5011af333276938e8d9422144b59ad3025e0f648",
+      "indexed_payload_sha256": "0a546a087289382910a45cb619afbb191938fa36858d9d22909bfadb2ee99601",
+      "query_bytes": 19480,
+      "query_format": "JPEG",
+      "query_width": 400,
+      "query_height": 300,
+      "region": "부산",
+      "size": "small"
+    },
+    {
+      "notice_id": "447511202600981",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.97332966,
+      "target_best_modality": "full_image",
+      "top_ids": [
+        "447511202600981",
+        "447511202600986",
+        "447511202600985",
+        "447511202600982",
+        "413585202600075",
+        "441394202601389",
+        "441394202601390",
+        "442423202600265",
+        "448547202600668",
+        "413591202600176"
+      ],
+      "sample_order": 83,
+      "query_payload_sha256": "de12d05b79ca15be039c9cd10ec48f533702105225530684652d1740583c71c9",
+      "indexed_payload_sha256": "a9e23364f9c789fc2a684525c98c52c2e70c24e43ebfd207dbf6948b82abde24",
+      "query_bytes": 111070,
+      "query_format": "JPEG",
+      "query_width": 1296,
+      "query_height": 726,
+      "region": "경북",
+      "size": "tiny"
+    },
+    {
+      "notice_id": "413582202600589",
+      "rank": 2,
+      "reciprocal_rank": 0.5,
+      "hit@1": 0,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.93183482,
+      "target_best_modality": "full_image",
+      "top_ids": [
+        "413582202600594",
+        "413582202600589",
+        "447511202600985",
+        "413582202600588",
+        "413582202600593",
+        "413582202600596",
+        "413582202600592",
+        "413579202601130",
+        "413582202600595",
+        "413582202600591"
+      ],
+      "sample_order": 84,
+      "query_payload_sha256": "224a76c3806af2223284d6c301690b03bc9c3638f32d22dee5f508e9d46ce4cd",
+      "indexed_payload_sha256": "a5f1eb2344da917c4e18207650d54fb44281de8dbdb51ee0016a6f151e9932d8",
+      "query_bytes": 305863,
+      "query_format": "JPEG",
+      "query_width": 864,
+      "query_height": 648,
+      "region": "전남",
+      "size": "tiny"
+    },
+    {
+      "notice_id": "428356202600980",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.94814146,
+      "target_best_modality": "full_image",
+      "top_ids": [
+        "428356202600980",
+        "441390202600310",
+        "441374202600995",
+        "441394202601403",
+        "441554202601452",
+        "445464202602321",
+        "444451202600692",
+        "441554202601459",
+        "441405202602281",
+        "428354202600602"
+      ],
+      "sample_order": 88,
+      "query_payload_sha256": "6a15fd4ba574c3ebff9291398b5544df1f63d101442a1e0a1d73b72521732359",
+      "indexed_payload_sha256": "b550a34510507ab7076057d321c64860c7f98d3d5d77ef270a9b86f01006c23f",
+      "query_bytes": 241705,
+      "query_format": "JPEG",
+      "query_width": 1500,
+      "query_height": 1500,
+      "region": "인천",
+      "size": "tiny"
+    },
+    {
+      "notice_id": "441390202600330",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.88939452,
+      "target_best_modality": "full_image",
+      "top_ids": [
+        "441390202600330",
+        "427514202600195",
+        "413587202600171",
+        "448541202601077",
+        "448548202600649",
+        "445469202600890",
+        "447513202600896",
+        "447515202600151",
+        "442422202600065",
+        "447509202600183"
+      ],
+      "sample_order": 93,
+      "query_payload_sha256": "945508d8d600be87079e21fdae5ebceddd70ae91e84715d617a061d838d14b33",
+      "indexed_payload_sha256": "63704580adf0d9fa67e99a2cc912a5541133e217682cc0723fc2678dad79ac75",
+      "query_bytes": 84082,
+      "query_format": "JPEG",
+      "query_width": 960,
+      "query_height": 721,
+      "region": "경기",
+      "size": "large"
+    },
+    {
+      "notice_id": "448534202600832",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.92038321,
+      "target_best_modality": "full_image",
+      "top_ids": [
+        "448534202600832",
+        "448544202600363",
+        "443447202600356",
+        "447507202600137",
+        "447515202600164",
+        "447515202600169",
+        "413591202600160",
+        "441408202601465",
+        "447523202600377",
+        "448531202601098"
+      ],
+      "sample_order": 94,
+      "query_payload_sha256": "e69e639db075499ab585a89ee07cec62d768c5b6aea6c1b42000091040095c19",
+      "indexed_payload_sha256": "67e874ae7fcd8fd37567b2016de499be5ac431348153495b0fd4ebe413af2edb",
+      "query_bytes": 198528,
+      "query_format": "JPEG",
+      "query_width": 1500,
+      "query_height": 1500,
+      "region": "경남",
+      "size": "tiny"
+    },
+    {
+      "notice_id": "450650202601792",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.92646855,
+      "target_best_modality": "crop_image",
+      "top_ids": [
+        "450650202601792",
+        "450650202601827",
+        "450650202601848",
+        "450650202601787",
+        "450650202601786",
+        "450650202601793",
+        "450650202601802",
+        "450650202601785",
+        "450650202601805",
+        "450650202601852"
+      ],
+      "sample_order": 95,
+      "query_payload_sha256": "673bdffff4be2ac36515cc44dfb686091f3a8fb33eec3131336caa63b3a82144",
+      "indexed_payload_sha256": "0620903cc53434baa19602fed5af94b204e68e0be311b6c4a264d04af1bb5b4e",
+      "query_bytes": 71831,
+      "query_format": "JPEG",
+      "query_width": 640,
+      "query_height": 500,
+      "region": "제주",
+      "size": "medium"
+    },
+    {
+      "notice_id": "447516202600167",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.90020281,
+      "target_best_modality": "crop_image",
+      "top_ids": [
+        "447516202600167",
+        "441391202601249",
+        "413580202600374",
+        "413582202600519",
+        "441378202601005",
+        "441391202601266",
+        "445470202600847",
+        "445468202602068",
+        "442419202600611",
+        "428354202600602"
+      ],
+      "sample_order": 104,
+      "query_payload_sha256": "72e7d04ceb62f2f7c6e5b9f9a34fa60d947eea309cc7d4411f3ade3f7012bc60",
+      "indexed_payload_sha256": "f665d5ea44b1dc88b44a3c412a1f9ea1731a0a69fa8ea51b1f6435b39ab76713",
+      "query_bytes": 214134,
+      "query_format": "JPEG",
+      "query_width": 720,
+      "query_height": 960,
+      "region": "경북",
+      "size": "tiny"
+    },
+    {
+      "notice_id": "450650202601799",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.95489478,
+      "target_best_modality": "crop_image",
+      "top_ids": [
+        "450650202601799",
+        "450650202601798",
+        "450650202601836",
+        "450650202601824",
+        "450650202601801",
+        "450650202601772",
+        "448567202601049",
+        "450650202601794",
+        "447513202600891",
+        "413588202600266"
+      ],
+      "sample_order": 105,
+      "query_payload_sha256": "1e8b2ce9f6d449fc58b5e737a52288965f7b4cb842a2653136997b21242fe8fd",
+      "indexed_payload_sha256": "635c05121d73de207762ac2c3733b2066a173fef01e29f50ccf497ec47bdcc60",
+      "query_bytes": 65796,
+      "query_format": "JPEG",
+      "query_width": 615,
+      "query_height": 500,
+      "region": "제주",
+      "size": "medium"
+    },
+    {
+      "notice_id": "426336202600374",
+      "rank": 1,
+      "reciprocal_rank": 1.0,
+      "hit@1": 1,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.93261611,
+      "target_best_modality": "full_image",
+      "top_ids": [
+        "426336202600374",
+        "448535202600914",
+        "445467202601509",
+        "445471202600266",
+        "427514202600197",
+        "413587202600163",
+        "413591202600169",
+        "442425202600316",
+        "413583202600219",
+        "413578202600961"
+      ],
+      "sample_order": 108,
+      "query_payload_sha256": "d4910a833932caf4dd0cc3023abfc60b93f4530d93ab1efb6a31a1177945edc8",
+      "indexed_payload_sha256": "bd8a0712e693e7b6c0a1fb2d8b8793626fde2cacfb13f87b634cd8b7c5da71f5",
+      "query_bytes": 38990,
+      "query_format": "JPEG",
+      "query_width": 545,
+      "query_height": 421,
+      "region": "부산",
+      "size": "small"
+    },
+    {
+      "notice_id": "447508202601161",
+      "rank": 3,
+      "reciprocal_rank": 0.33333333,
+      "hit@1": 0,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.90675133,
+      "target_best_modality": "full_image",
+      "top_ids": [
+        "445464202602295",
+        "413579202601129",
+        "447508202601161",
+        "444457202600439",
+        "448533202600398",
+        "447511202600951",
+        "447508202601145",
+        "442419202600612",
+        "444462202600534",
+        "441408202601476"
+      ],
+      "sample_order": 113,
+      "query_payload_sha256": "64f91288f1fb0f94e1b0a5a788cb0d94fffe949362c720310a88393c822a7bef",
+      "indexed_payload_sha256": "4405302b2ae5512e77a1ef58c19bb0a5c9cac696fca8279e9017e22aa6ff5e70",
+      "query_bytes": 163585,
+      "query_format": "JPEG",
+      "query_width": 1071,
+      "query_height": 1428,
+      "region": "경북",
+      "size": "tiny"
+    },
+    {
+      "notice_id": "413582202600594",
+      "rank": 2,
+      "reciprocal_rank": 0.5,
+      "hit@1": 0,
+      "hit@5": 1,
+      "hit@10": 1,
+      "target_score": 0.86715543,
+      "target_best_modality": "full_image",
+      "top_ids": [
+        "413582202600589",
+        "413582202600594",
+        "447509202600182",
+        "413582202600592",
+        "413579202601129",
+        "413579202601132",
+        "413579202601126",
+        "413582202600596",
+        "413585202600173",
+        "428356202600967"
+      ],
+      "sample_order": 115,
+      "query_payload_sha256": "2d41c050045804c8655b079aa3cc033de6edd022ab5ea6929c7bfc7e010710ef",
+      "indexed_payload_sha256": "674d08c97736825a2ab3ef6a4a56f9c8ef3076dc1086b6ca50520a89c9eb6fab",
+      "query_bytes": 306106,
+      "query_format": "JPEG",
+      "query_width": 857,
+      "query_height": 643,
+      "region": "전남",
+      "size": "tiny"
+    }
+  ],
+  "validation": {
+    "passed": true,
+    "failure_count": 0,
+    "failures": []
+  }
+}

@@ -1,6 +1,6 @@
 -r requirements.txt
 
 # Optional Gemma/VLM recommendation and offline description enrichment.
-transformers>=4.51
-accelerate>=0.34
-sentencepiece>=0.2.0
+transformers>=4.51,<6
+accelerate>=0.34,<2
+sentencepiece>=0.2.0,<1

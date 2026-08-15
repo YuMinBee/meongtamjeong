@@ -1,0 +1,174 @@
+{
+  "schema_version": "appearance-query-holdout.v2",
+  "reference_date": "2026-07-26",
+  "source_query_set": "data/eval_queries.appearance_v1.json",
+  "label_policy": "inherit_source_qrels_by_base_query_id",
+  "freeze_protocol": {
+    "authored_before_first_system_run": true,
+    "authoring_inputs": [
+      "data/eval_queries.appearance_v1.json",
+      "data/dog_metas.json"
+    ],
+    "excluded_authoring_inputs": [
+      "app/appearance_query.py",
+      "data/eval_query_variants.appearance_v1.json",
+      "docs/evaluation/query_robustness.appearance_v1.json",
+      "docs/evaluation/query_robustness.appearance_v1.md",
+      "tests/test_appearance_query.py"
+    ],
+    "independence_scope": "author-independent-but-same-repo"
+  },
+  "semantic_preserving_cases": [
+    {
+      "id": "holdout-brown-small-colloquial",
+      "base_query_id": "brown-small",
+      "query": "쪼꼬만 밤색 강쥐 있나여??",
+      "perturbations": [
+        "color_synonym",
+        "colloquial_noun",
+        "typo",
+        "punctuation_noise"
+      ]
+    },
+    {
+      "id": "holdout-white-tiny-order",
+      "base_query_id": "white-tiny",
+      "query": "하얀 털에 아주 조그마한 개로요",
+      "perturbations": [
+        "color_synonym",
+        "size_paraphrase",
+        "word_order"
+      ]
+    },
+    {
+      "id": "holdout-black-medium-slang",
+      "base_query_id": "black-medium",
+      "query": "중간 덩치의 검은 털 댕댕이 보여주실래요",
+      "perturbations": [
+        "size_paraphrase",
+        "color_paraphrase",
+        "colloquial_noun"
+      ]
+    },
+    {
+      "id": "holdout-cream-small-spacing",
+      "base_query_id": "cream-small",
+      "query": "소형에 크림 빛 털인 강아지 찾아 주세요!!!",
+      "perturbations": [
+        "spacing_noise",
+        "word_order",
+        "punctuation_noise"
+      ]
+    },
+    {
+      "id": "holdout-gyeonggi-small-adult-fragment",
+      "base_query_id": "gyeonggi-small-adult",
+      "query": "다 큰 작은 강아지, 경기 쪽으로요",
+      "perturbations": [
+        "age_paraphrase",
+        "region_abbreviation",
+        "fragment",
+        "word_order"
+      ]
+    },
+    {
+      "id": "holdout-seoul-small-puppy-colloquial",
+      "base_query_id": "seoul-small-puppy",
+      "query": "새끼 강쥐 작은 애로 서울에서 찾아줘용",
+      "perturbations": [
+        "age_synonym",
+        "colloquial_noun",
+        "typo",
+        "word_order"
+      ]
+    },
+    {
+      "id": "holdout-jeju-white-puppy-compound",
+      "base_query_id": "jeju-white-puppy",
+      "query": "흰 털 아기개 제주 보호소꺼 있나요?",
+      "perturbations": [
+        "color_paraphrase",
+        "age_synonym",
+        "spacing_noise",
+        "colloquial_particle"
+      ]
+    },
+    {
+      "id": "holdout-jeonbuk-brown-large-expanded",
+      "base_query_id": "jeonbuk-brown-large",
+      "query": "큰 밤색 개, 전라북도 쪽",
+      "perturbations": [
+        "size_paraphrase",
+        "color_synonym",
+        "region_expansion",
+        "fragment"
+      ]
+    },
+    {
+      "id": "holdout-gyeongnam-black-small-no-space",
+      "base_query_id": "gyeongnam-black-small",
+      "query": "까만털 작은개요.. 경상남도에 있는",
+      "perturbations": [
+        "color_synonym",
+        "spacing_noise",
+        "region_expansion",
+        "punctuation_noise",
+        "word_order"
+      ]
+    },
+    {
+      "id": "holdout-gyeonggi-tan-medium-no-space",
+      "base_query_id": "gyeonggi-tan-medium",
+      "query": "경기쪽 중간덩치 누런갈색 강아지",
+      "perturbations": [
+        "region_spacing_noise",
+        "size_paraphrase",
+        "color_paraphrase",
+        "spacing_noise"
+      ]
+    },
+    {
+      "id": "holdout-adult-3-to-8kg-unit",
+      "base_query_id": "adult-3-to-8kg",
+      "query": "3키로부터 8키로까지, 다 큰 강아지",
+      "perturbations": [
+        "unit_variant",
+        "range_paraphrase",
+        "age_paraphrase",
+        "word_order"
+      ]
+    },
+    {
+      "id": "holdout-senior-under-8kg-no-space",
+      "base_query_id": "senior-under-8kg",
+      "query": "8키로 이하 나이많은 쪼그만 개",
+      "perturbations": [
+        "unit_variant",
+        "age_paraphrase",
+        "size_colloquialism",
+        "spacing_noise",
+        "word_order"
+      ]
+    }
+  ],
+  "negation_diagnostics": [
+    {
+      "id": "negative-exclude-brown-small",
+      "query": "갈색 소형견은 빼고 찾아줘",
+      "negated_base_query_id": "brown-small",
+      "diagnostic_expectation": "must_not_apply_all_negated_constraints_as_positive"
+    },
+    {
+      "id": "negative-exclude-seoul",
+      "query": "서울 말고 어린 소형견을 보여줘",
+      "negated_base_query_id": "seoul-small-puppy",
+      "diagnostic_expectation": "must_not_apply_negated_region_as_positive"
+    },
+    {
+      "id": "negative-exclude-senior-under-8kg",
+      "query": "8kg 이하 노령견은 제외해줘",
+      "negated_base_query_id": "senior-under-8kg",
+      "diagnostic_expectation": "must_not_apply_all_negated_constraints_as_positive"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+# The upstream repository has no explicit license at the pinned commit, so keep
+# its checkout local and record only provenance plus our reproduction harness.
+vendor/
+
+# Downloaded datasets, model weights, caches, and generated outputs.
+runtime/
+*.log
+__pycache__/

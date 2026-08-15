@@ -1,0 +1,180 @@
+{
+  "schema_version": 2,
+  "evaluation_id": "safety_contract.appearance_v1",
+  "reference_date": "2026-07-26",
+  "retrieval_score_start": 0.72,
+  "retrieval_score_step": 0.003,
+  "settings": {
+    "compatibility_weight": 0.25,
+    "quality_weight": 0.05
+  },
+  "query_pairs": [
+    {
+      "id": "temperament_plus_white_small",
+      "mixed_query": "차분한 흰색 소형견",
+      "appearance_query": "흰색 소형견",
+      "required_appearance_terms": [
+        "흰색",
+        "소형견"
+      ],
+      "forbidden_terms": [
+        "차분한"
+      ]
+    },
+    {
+      "id": "children_housing_plus_black_medium",
+      "mixed_query": "아이들과 잘 지내고 아파트에서 키우기 좋은 검정 중형견",
+      "appearance_query": "검정 중형견",
+      "required_appearance_terms": [
+        "검정",
+        "중형견"
+      ],
+      "forbidden_terms": [
+        "아이",
+        "잘 지내",
+        "아파트",
+        "키우기 좋은"
+      ]
+    },
+    {
+      "id": "absence_only_becomes_neutral",
+      "mixed_query": "하루 8시간 혼자 있어도 괜찮은 반려견",
+      "appearance_query": "강아지",
+      "required_appearance_terms": [
+        "강아지"
+      ],
+      "forbidden_terms": [
+        "하루",
+        "8시간",
+        "혼자",
+        "괜찮은"
+      ]
+    }
+  ],
+  "candidate_ids": [
+    "426339202600306",
+    "441570202600363",
+    "411319202600337",
+    "411318202600342",
+    "441570202600362",
+    "411310202600444",
+    "441570202600369",
+    "441570202600361",
+    "411315202600532",
+    "441570202600359",
+    "411315202600531"
+  ],
+  "profiles": {
+    "a": {
+      "housing_type": "apartment",
+      "daily_absence_hours": 8,
+      "activity_level": "low",
+      "dog_experience": "none",
+      "preferred_size": "small",
+      "preferred_age": "adult",
+      "preferred_region": "서울",
+      "has_children": true,
+      "has_other_pets": true
+    },
+    "b": {
+      "housing_type": "house",
+      "daily_absence_hours": 2,
+      "activity_level": "high",
+      "dog_experience": "experienced",
+      "preferred_size": "small",
+      "preferred_age": "adult",
+      "preferred_region": "서울",
+      "has_children": false,
+      "has_other_pets": false
+    }
+  },
+  "inquiry_preferences": {
+    "a": {
+      "desired_temperaments": [
+        "calm",
+        "independent"
+      ],
+      "housing_type": "apartment",
+      "daily_absence_hours": 8,
+      "activity_level": "low",
+      "dog_experience": "none",
+      "has_children": true,
+      "has_other_pets": true
+    },
+    "b": {
+      "desired_temperaments": [
+        "friendly",
+        "active"
+      ],
+      "housing_type": "house",
+      "daily_absence_hours": 2,
+      "activity_level": "high",
+      "dog_experience": "experienced",
+      "has_children": false,
+      "has_other_pets": false
+    }
+  },
+  "inquiry_notice": {
+    "care_name": "평가용 보호소",
+    "notice_no": "SAFETY-CONTRACT-DEMO",
+    "breed": "공고 표기 품종"
+  },
+  "conditions_case": {
+    "raw_conditions": {
+      "coat_color": [
+        "black"
+      ],
+      "body_size_hint": [
+        "medium"
+      ],
+      "face_visible": true,
+      "personality": [
+        "calm",
+        "friendly"
+      ],
+      "keywords": [
+        "아이 친화",
+        "아파트"
+      ],
+      "housing_type": "apartment",
+      "daily_absence_hours": 8,
+      "activity_level": "high",
+      "dog_experience": "none",
+      "has_children": true,
+      "has_other_pets": true
+    },
+    "expected_conditions": {
+      "coat_color": [
+        "black"
+      ],
+      "body_size_hint": [
+        "medium"
+      ],
+      "face_visible": true
+    },
+    "forbidden_keys": [
+      "personality",
+      "keywords",
+      "housing_type",
+      "daily_absence_hours",
+      "activity_level",
+      "dog_experience",
+      "has_children",
+      "has_other_pets"
+    ],
+    "forbidden_terms": [
+      "calm",
+      "friendly",
+      "아이 친화",
+      "아파트",
+      "apartment",
+      "high",
+      "none"
+    ]
+  },
+  "notes": [
+    "This configuration tests a non-inference contract, not adoption suitability.",
+    "The two profiles have identical size, age, and region preferences while every lifestyle field differs.",
+    "Missing fixed candidate IDs are contract failures, never skipped cases."
+  ]
+}

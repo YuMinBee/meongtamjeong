@@ -1,0 +1,587 @@
+{
+  "cases": [
+    {
+      "evidence": {
+        "pairs": [
+          {
+            "appearance_query": "흰색 소형견",
+            "equivalent": true,
+            "expected_literal_query": "흰색 소형견",
+            "forbidden_hits": [],
+            "forbidden_terms": [
+              "차분한"
+            ],
+            "id": "temperament_plus_white_small",
+            "missing_required_appearance_terms": [],
+            "mixed_query": "차분한 흰색 소형견",
+            "nonappearance_exclusion_detected": true,
+            "normalized_appearance_query": "흰색 소형견",
+            "normalized_mixed_query": "흰색 소형견",
+            "required_appearance_terms": [
+              "흰색",
+              "소형견"
+            ]
+          },
+          {
+            "appearance_query": "검정 중형견",
+            "equivalent": true,
+            "expected_literal_query": "검정 중형견",
+            "forbidden_hits": [],
+            "forbidden_terms": [
+              "아이",
+              "잘 지내",
+              "아파트",
+              "키우기 좋은"
+            ],
+            "id": "children_housing_plus_black_medium",
+            "missing_required_appearance_terms": [],
+            "mixed_query": "아이들과 잘 지내고 아파트에서 키우기 좋은 검정 중형견",
+            "nonappearance_exclusion_detected": true,
+            "normalized_appearance_query": "검정 중형견",
+            "normalized_mixed_query": "검정 중형견",
+            "required_appearance_terms": [
+              "검정",
+              "중형견"
+            ]
+          },
+          {
+            "appearance_query": "강아지",
+            "equivalent": true,
+            "expected_literal_query": "강아지",
+            "forbidden_hits": [],
+            "forbidden_terms": [
+              "하루",
+              "8시간",
+              "혼자",
+              "괜찮은"
+            ],
+            "id": "absence_only_becomes_neutral",
+            "missing_required_appearance_terms": [],
+            "mixed_query": "하루 8시간 혼자 있어도 괜찮은 반려견",
+            "nonappearance_exclusion_detected": true,
+            "normalized_appearance_query": "강아지",
+            "normalized_mixed_query": "강아지",
+            "required_appearance_terms": [
+              "강아지"
+            ]
+          }
+        ]
+      },
+      "failures": [],
+      "id": "appearance_query_equivalence",
+      "passed": true,
+      "title": "혼합 질의와 외형 전용 질의가 같은 검색 질의로 정규화됨"
+    },
+    {
+      "evidence": {
+        "appearance_fields": {
+          "preferred_age": "adult",
+          "preferred_region": "서울",
+          "preferred_size": "small"
+        },
+        "appearance_fields_equal": true,
+        "candidate_ids": [
+          "426339202600306",
+          "441570202600363",
+          "411319202600337",
+          "411318202600342",
+          "441570202600362",
+          "411310202600444",
+          "441570202600369",
+          "441570202600361",
+          "411315202600532",
+          "441570202600359",
+          "411315202600531"
+        ],
+        "comparison_fields": [
+          "dog_id",
+          "retrieval_score",
+          "compatibility_score",
+          "applicable_count",
+          "evaluated_count",
+          "evidence_coverage",
+          "quality_score",
+          "final_score",
+          "matched_conditions",
+          "caution_conditions",
+          "unknown_conditions",
+          "recommendation_reason"
+        ],
+        "differing_profile_fields": [
+          "activity_level",
+          "daily_absence_hours",
+          "dog_experience",
+          "has_children",
+          "has_other_pets",
+          "housing_type"
+        ],
+        "filtered_candidate_ids_minimal_profile": [],
+        "filtered_candidate_ids_profile_a": [],
+        "filtered_candidate_ids_profile_b": [],
+        "minimal_profile": {
+          "preferred_age": "adult",
+          "preferred_region": "서울",
+          "preferred_size": "small"
+        },
+        "minimal_profile_fields": [
+          "preferred_age",
+          "preferred_region",
+          "preferred_size"
+        ],
+        "minimal_profile_omitted_lifestyle_fields": [
+          "activity_level",
+          "daily_absence_hours",
+          "dog_experience",
+          "has_children",
+          "has_other_pets",
+          "housing_type"
+        ],
+        "minimal_profile_order": [
+          "411319202600337",
+          "411315202600532",
+          "411310202600444",
+          "411315202600531",
+          "411318202600342",
+          "441570202600363",
+          "426339202600306",
+          "441570202600362",
+          "441570202600361",
+          "441570202600359",
+          "441570202600369"
+        ],
+        "minimal_profile_output": null,
+        "minimal_profile_output_sha256": "7e214ee2b58c8e6ac1c2288233b5722e3ebc16c42483f55f44dec37240bf5832",
+        "minimal_profile_unexpected_fields": [],
+        "missing_candidate_ids": [],
+        "outputs_identical": true,
+        "profile_a_order": [
+          "411319202600337",
+          "411315202600532",
+          "411310202600444",
+          "411315202600531",
+          "411318202600342",
+          "441570202600363",
+          "426339202600306",
+          "441570202600362",
+          "441570202600361",
+          "441570202600359",
+          "441570202600369"
+        ],
+        "profile_a_output": null,
+        "profile_a_output_sha256": "7e214ee2b58c8e6ac1c2288233b5722e3ebc16c42483f55f44dec37240bf5832",
+        "profile_b_order": [
+          "411319202600337",
+          "411315202600532",
+          "411310202600444",
+          "411315202600531",
+          "411318202600342",
+          "441570202600363",
+          "426339202600306",
+          "441570202600362",
+          "441570202600361",
+          "441570202600359",
+          "441570202600369"
+        ],
+        "profile_b_output": null,
+        "profile_b_output_sha256": "7e214ee2b58c8e6ac1c2288233b5722e3ebc16c42483f55f44dec37240bf5832",
+        "ranking_condition_keys": [
+          "preferred_age",
+          "preferred_region",
+          "preferred_size"
+        ],
+        "required_lifestyle_fields": [
+          "housing_type",
+          "daily_absence_hours",
+          "activity_level",
+          "dog_experience",
+          "has_children",
+          "has_other_pets"
+        ],
+        "shared_output": [
+          {
+            "applicable_count": 3,
+            "caution_conditions": [],
+            "compatibility_score": 1.0,
+            "dog_id": "411319202600337",
+            "evaluated_count": 3,
+            "evidence_coverage": 1.0,
+            "final_score": 1.009815,
+            "matched_conditions": [
+              "선호한 소형견 조건과 일치합니다.",
+              "선호한 성견 조건과 일치합니다.",
+              "희망 지역과 일치합니다."
+            ],
+            "quality_score": 0.9163,
+            "recommendation_reason": "확인된 조건 3/3. 선호한 소형견 조건과 일치합니다. 선호한 성견 조건과 일치합니다. 희망 지역과 일치합니다.",
+            "retrieval_score": 0.714,
+            "unknown_conditions": []
+          },
+          {
+            "applicable_count": 3,
+            "caution_conditions": [],
+            "compatibility_score": 1.0,
+            "dog_id": "411315202600532",
+            "evaluated_count": 3,
+            "evidence_coverage": 1.0,
+            "final_score": 0.992665,
+            "matched_conditions": [
+              "선호한 소형견 조건과 일치합니다.",
+              "선호한 성견 조건과 일치합니다.",
+              "희망 지역과 일치합니다."
+            ],
+            "quality_score": 0.9333,
+            "recommendation_reason": "확인된 조건 3/3. 선호한 소형견 조건과 일치합니다. 선호한 성견 조건과 일치합니다. 희망 지역과 일치합니다.",
+            "retrieval_score": 0.696,
+            "unknown_conditions": []
+          },
+          {
+            "applicable_count": 3,
+            "caution_conditions": [],
+            "compatibility_score": 1.0,
+            "dog_id": "411310202600444",
+            "evaluated_count": 3,
+            "evidence_coverage": 1.0,
+            "final_score": 0.98866,
+            "matched_conditions": [
+              "선호한 소형견 조건과 일치합니다.",
+              "선호한 성견 조건과 일치합니다.",
+              "희망 지역과 일치합니다."
+            ],
+            "quality_score": 0.6732,
+            "recommendation_reason": "확인된 조건 3/3. 선호한 소형견 조건과 일치합니다. 선호한 성견 조건과 일치합니다. 희망 지역과 일치합니다.",
+            "retrieval_score": 0.705,
+            "unknown_conditions": []
+          },
+          {
+            "applicable_count": 3,
+            "caution_conditions": [],
+            "compatibility_score": 1.0,
+            "dog_id": "411315202600531",
+            "evaluated_count": 3,
+            "evidence_coverage": 1.0,
+            "final_score": 0.98593,
+            "matched_conditions": [
+              "선호한 소형견 조건과 일치합니다.",
+              "선호한 성견 조건과 일치합니다.",
+              "희망 지역과 일치합니다."
+            ],
+            "quality_score": 0.9186,
+            "recommendation_reason": "확인된 조건 3/3. 선호한 소형견 조건과 일치합니다. 선호한 성견 조건과 일치합니다. 희망 지역과 일치합니다.",
+            "retrieval_score": 0.69,
+            "unknown_conditions": []
+          },
+          {
+            "applicable_count": 3,
+            "caution_conditions": [
+              "공고상 연령대는 어린 개체으로, 선호한 성견과 다릅니다."
+            ],
+            "compatibility_score": 0.666667,
+            "dog_id": "411318202600342",
+            "evaluated_count": 3,
+            "evidence_coverage": 1.0,
+            "final_score": 0.924682,
+            "matched_conditions": [
+              "선호한 소형견 조건과 일치합니다.",
+              "희망 지역과 일치합니다."
+            ],
+            "quality_score": 0.9403,
+            "recommendation_reason": "확인된 조건 3/3. 선호한 소형견 조건과 일치합니다. 희망 지역과 일치합니다. 공고상 연령대는 어린 개체으로, 선호한 성견과 다릅니다.",
+            "retrieval_score": 0.711,
+            "unknown_conditions": []
+          },
+          {
+            "applicable_count": 3,
+            "caution_conditions": [
+              "공고상 크기는 대형견으로, 선호한 소형견과 다릅니다.",
+              "공고 지역은 경기으로 희망 지역 서울과 다릅니다."
+            ],
+            "compatibility_score": 0.333333,
+            "dog_id": "441570202600363",
+            "evaluated_count": 3,
+            "evidence_coverage": 1.0,
+            "final_score": 0.848073,
+            "matched_conditions": [
+              "선호한 성견 조건과 일치합니다."
+            ],
+            "quality_score": 0.9548,
+            "recommendation_reason": "확인된 조건 3/3. 선호한 성견 조건과 일치합니다. 공고상 크기는 대형견으로, 선호한 소형견과 다릅니다. 공고 지역은 경기으로 희망 지역 서울과 다릅니다.",
+            "retrieval_score": 0.717,
+            "unknown_conditions": []
+          },
+          {
+            "applicable_count": 3,
+            "caution_conditions": [
+              "공고상 크기는 중형견으로, 선호한 소형견과 다릅니다.",
+              "공고 지역은 부산으로 희망 지역 서울과 다릅니다."
+            ],
+            "compatibility_score": 0.333333,
+            "dog_id": "426339202600306",
+            "evaluated_count": 3,
+            "evidence_coverage": 1.0,
+            "final_score": 0.846698,
+            "matched_conditions": [
+              "선호한 성견 조건과 일치합니다."
+            ],
+            "quality_score": 0.8673,
+            "recommendation_reason": "확인된 조건 3/3. 선호한 성견 조건과 일치합니다. 공고상 크기는 중형견으로, 선호한 소형견과 다릅니다. 공고 지역은 부산으로 희망 지역 서울과 다릅니다.",
+            "retrieval_score": 0.72,
+            "unknown_conditions": []
+          },
+          {
+            "applicable_count": 3,
+            "caution_conditions": [
+              "공고상 크기는 대형견으로, 선호한 소형견과 다릅니다.",
+              "공고 지역은 경기으로 희망 지역 서울과 다릅니다."
+            ],
+            "compatibility_score": 0.333333,
+            "dog_id": "441570202600362",
+            "evaluated_count": 3,
+            "evidence_coverage": 1.0,
+            "final_score": 0.840223,
+            "matched_conditions": [
+              "선호한 성견 조건과 일치합니다."
+            ],
+            "quality_score": 0.9778,
+            "recommendation_reason": "확인된 조건 3/3. 선호한 성견 조건과 일치합니다. 공고상 크기는 대형견으로, 선호한 소형견과 다릅니다. 공고 지역은 경기으로 희망 지역 서울과 다릅니다.",
+            "retrieval_score": 0.708,
+            "unknown_conditions": []
+          },
+          {
+            "applicable_count": 3,
+            "caution_conditions": [
+              "공고상 크기는 대형견으로, 선호한 소형견과 다릅니다.",
+              "공고 지역은 경기으로 희망 지역 서울과 다릅니다."
+            ],
+            "compatibility_score": 0.333333,
+            "dog_id": "441570202600361",
+            "evaluated_count": 3,
+            "evidence_coverage": 1.0,
+            "final_score": 0.831393,
+            "matched_conditions": [
+              "선호한 성견 조건과 일치합니다."
+            ],
+            "quality_score": 0.9812,
+            "recommendation_reason": "확인된 조건 3/3. 선호한 성견 조건과 일치합니다. 공고상 크기는 대형견으로, 선호한 소형견과 다릅니다. 공고 지역은 경기으로 희망 지역 서울과 다릅니다.",
+            "retrieval_score": 0.699,
+            "unknown_conditions": []
+          },
+          {
+            "applicable_count": 3,
+            "caution_conditions": [
+              "공고상 크기는 대형견으로, 선호한 소형견과 다릅니다.",
+              "공고 지역은 경기으로 희망 지역 서울과 다릅니다."
+            ],
+            "compatibility_score": 0.333333,
+            "dog_id": "441570202600359",
+            "evaluated_count": 3,
+            "evidence_coverage": 1.0,
+            "final_score": 0.824083,
+            "matched_conditions": [
+              "선호한 성견 조건과 일치합니다."
+            ],
+            "quality_score": 0.955,
+            "recommendation_reason": "확인된 조건 3/3. 선호한 성견 조건과 일치합니다. 공고상 크기는 대형견으로, 선호한 소형견과 다릅니다. 공고 지역은 경기으로 희망 지역 서울과 다릅니다.",
+            "retrieval_score": 0.693,
+            "unknown_conditions": []
+          },
+          {
+            "applicable_count": 3,
+            "caution_conditions": [
+              "공고상 크기는 중형견으로, 선호한 소형견과 다릅니다.",
+              "공고상 연령대는 어린 개체으로, 선호한 성견과 다릅니다.",
+              "공고 지역은 경기으로 희망 지역 서울과 다릅니다."
+            ],
+            "compatibility_score": 0.0,
+            "dog_id": "441570202600369",
+            "evaluated_count": 3,
+            "evidence_coverage": 1.0,
+            "final_score": 0.750325,
+            "matched_conditions": [],
+            "quality_score": 0.9665,
+            "recommendation_reason": "확인된 조건 3/3. 공고상 크기는 중형견으로, 선호한 소형견과 다릅니다. 공고상 연령대는 어린 개체으로, 선호한 성견과 다릅니다. 공고 지역은 경기으로 희망 지역 서울과 다릅니다.",
+            "retrieval_score": 0.702,
+            "unknown_conditions": []
+          }
+        ],
+        "shared_retrieval_scores": {
+          "411310202600444": 0.705,
+          "411315202600531": 0.69,
+          "411315202600532": 0.696,
+          "411318202600342": 0.711,
+          "411319202600337": 0.714,
+          "426339202600306": 0.72,
+          "441570202600359": 0.693,
+          "441570202600361": 0.699,
+          "441570202600362": 0.708,
+          "441570202600363": 0.717,
+          "441570202600369": 0.702
+        },
+        "unchanged_lifestyle_fields": [],
+        "unexpected_profile_differences": []
+      },
+      "failures": [],
+      "id": "appearance_rerank_lifestyle_isolation",
+      "passed": true,
+      "title": "생활정보가 외형 범위 순위·점수·근거에 영향을 주지 않음"
+    },
+    {
+      "evidence": {
+        "profile_a_question_count": 9,
+        "profile_a_questions_sha256": "bc41ac631a6d70107eac371ce922d9bf96b4e3799cdb1433766c8b5213666299",
+        "profile_a_unique_questions": [
+          "보호 공간에서 쉴 때와 주변 자극이 있을 때 각각 어떤 행동이 반복해서 관찰되나요?",
+          "선호하는 활동량은 낮은 편입니다. 보호 기간의 산책·놀이·휴식 상황에서 실제로 관찰된 활동량은 어느 정도였나요?",
+          "실내 보호 공간에서 반복적인 짖음이나 생활 소음에 반응한 기록이 있나요?",
+          "초보 보호자가 알 수 있도록 목줄 착용, 접촉, 급식, 이동 과정에서 관찰된 어려움이나 필요한 관리가 있나요?",
+          "하루 평균 약 8시간 집을 비울 예정입니다. 사람이 곁에 없는 상황을 관찰한 기록이 있다면, 관찰한 시간과 짖음·배회·휴식 등의 행동을 알려주실 수 있나요?",
+          "어린이와 같은 공간에 있었던 실제 관찰 기록이 있나요? 기록이 없다면 아직 확인되지 않은 정보인지도 알려주실 수 있나요?",
+          "다른 개나 고양이와 같은 공간에 있었던 실제 관찰 기록이 있나요? 있다면 동물 종류와 당시 상황도 알려주실 수 있나요?"
+        ],
+        "profile_b_question_count": 8,
+        "profile_b_questions_sha256": "76110b57bea08230f26c611bcfc927400318a8d85a3ba9a211f7e93132e17046",
+        "profile_b_unique_questions": [
+          "낯선 사람과 익숙한 보호자를 만났을 때 각각 어떤 반응이 관찰되나요?",
+          "산책이나 놀이 시간의 활동량과 활동 후 안정되는 모습은 어떻게 관찰되나요?",
+          "선호하는 활동량은 높은 편입니다. 보호 기간의 산책·놀이·휴식 상황에서 실제로 관찰된 활동량은 어느 정도였나요?",
+          "실내와 실외 보호 공간에서 행동 차이 또는 문·울타리 주변의 반응이 관찰된 기록이 있나요?",
+          "일상 관리 중 별도의 경험이나 준비가 필요한 행동이 실제로 관찰됐나요?",
+          "하루 평균 약 2시간 집을 비울 예정입니다. 사람이 곁에 없는 상황을 관찰한 기록이 있다면, 관찰한 시간과 짖음·배회·휴식 등의 행동을 알려주실 수 있나요?"
+        ],
+        "profile_to_inquiry_alignment_failures": [],
+        "questions_differ": true,
+        "same_notice_input": {
+          "breed": "공고 표기 품종",
+          "care_name": "평가용 보호소",
+          "notice_no": "SAFETY-CONTRACT-DEMO"
+        }
+      },
+      "failures": [],
+      "id": "inquiry_preferences_change_questions",
+      "passed": true,
+      "title": "생활·성격 선호는 보호소 문의 질문을 바꿈"
+    },
+    {
+      "evidence": {
+        "allowed_condition_keys": [
+          "age_hint",
+          "body_size_hint",
+          "coat_color",
+          "ear_shape",
+          "face_visible",
+          "fur_length",
+          "min_photo_quality",
+          "sex",
+          "whole_body_visible"
+        ],
+        "condition_forbidden_term_hits": [],
+        "expected_conditions": {
+          "body_size_hint": [
+            "medium"
+          ],
+          "coat_color": [
+            "black"
+          ],
+          "face_visible": true
+        },
+        "filtered_conditions": {
+          "body_size_hint": [
+            "medium"
+          ],
+          "coat_color": [
+            "black"
+          ],
+          "face_visible": true
+        },
+        "query_forbidden_term_hits": {},
+        "raw_conditions": {
+          "activity_level": "high",
+          "body_size_hint": [
+            "medium"
+          ],
+          "coat_color": [
+            "black"
+          ],
+          "daily_absence_hours": 8,
+          "dog_experience": "none",
+          "face_visible": true,
+          "has_children": true,
+          "has_other_pets": true,
+          "housing_type": "apartment",
+          "keywords": [
+            "아이 친화",
+            "아파트"
+          ],
+          "personality": [
+            "calm",
+            "friendly"
+          ]
+        },
+        "remaining_forbidden_keys": [],
+        "unsupported_keys": []
+      },
+      "failures": [],
+      "id": "nonappearance_expression_leakage",
+      "passed": true,
+      "title": "금지된 성격·생활 표현이 외형 검색 입력에 남지 않음"
+    }
+  ],
+  "evaluation_id": "safety_contract.appearance_v1",
+  "evaluation_reference_date": "2026-07-26",
+  "inputs": {
+    "available_candidate_count": 11,
+    "candidate_subset_sha256": "d34f286133ec8a62c46e31c3422418157cec63abd90504b0304de0e8154c2e6b",
+    "config": "data/eval_safety_contract.appearance_v1.json",
+    "config_sha256": "9a3966b29d6fc25b4f2ef45fd6001ec3419d4f3be9005bbac6ed7789a31d6a82",
+    "dog_metas": "data/dog_metas.json",
+    "dog_metas_rows": 3746,
+    "dog_metas_sha256": "723a4df01e2802ad5d42bd276eefbded097a0a6e72900784395c4c19626b6c00",
+    "fixed_candidate_ids": [
+      "426339202600306",
+      "441570202600363",
+      "411319202600337",
+      "411318202600342",
+      "441570202600362",
+      "411310202600444",
+      "441570202600369",
+      "441570202600361",
+      "411315202600532",
+      "441570202600359",
+      "411315202600531"
+    ],
+    "unique_notices": 1516
+  },
+  "limitations": [
+    "이 평가는 입양 적합성 성능 평가가 아니라 생활·성격 정보를 외형 검색 순위에 사용하지 않는 비추론 계약 회귀입니다.",
+    "고정 질의와 고정 공고 후보에 대한 결정적 회귀이므로 모든 자연어 표현을 포괄하지 않습니다.",
+    "보호소 문의 질문이 달라지는지만 확인하며, 공고 사진이나 품종으로 성격·아동 친화성·다른 동물과의 사회성을 추정하지 않습니다.",
+    "실제 성격과 생활 적합성은 이 보고서로 확정할 수 없습니다."
+  ],
+  "method": {
+    "adoption_suitability_evaluated": false,
+    "contract_type": "deterministic regression, not predictive performance",
+    "expected_query_policy": "literal NFKC plus whitespace canonicalization; never passed through the production appearance query normalizer",
+    "lifestyle_or_temperament_scored": false,
+    "production_functions": [
+      "app.appearance_query.normalize_appearance_query",
+      "app.appearance_query.appearance_search_conditions",
+      "app.profile_rerank.rerank_candidates",
+      "app.inquiry_helper.build_inquiry_materials"
+    ],
+    "ranking_condition_keys": [
+      "preferred_age",
+      "preferred_region",
+      "preferred_size"
+    ],
+    "required_appearance_terms_must_survive": true
+  },
+  "schema_version": 2,
+  "scope": "appearance_only_non_inference_contract",
+  "summary": {
+    "failed_contract_ids": [],
+    "failed_contracts": 0,
+    "failure_details": [],
+    "passed": true,
+    "passed_contracts": 4,
+    "total_contracts": 4
+  }
+}

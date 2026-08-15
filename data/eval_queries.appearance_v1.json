@@ -1,0 +1,174 @@
+{
+  "schema_version": "appearance-query-set.v1",
+  "reference_date": "2026-07-26",
+  "label_policy": "public_notice_color_weight_age_region_only",
+  "queries": [
+    {
+      "id": "brown-small",
+      "query": "갈색 소형견을 찾아줘",
+      "structured": {
+        "coat_color": ["brown"],
+        "body_size_hint": ["small"]
+      },
+      "criteria": {
+        "colors_any": ["brown"],
+        "sizes_any": ["small"],
+        "active_only": true
+      }
+    },
+    {
+      "id": "white-tiny",
+      "query": "작고 흰색인 초소형 강아지",
+      "structured": {
+        "coat_color": ["white"],
+        "body_size_hint": ["tiny"]
+      },
+      "criteria": {
+        "colors_any": ["white"],
+        "sizes_any": ["tiny"],
+        "active_only": true
+      }
+    },
+    {
+      "id": "black-medium",
+      "query": "검정색 중형견을 보고 싶어",
+      "structured": {
+        "coat_color": ["black"],
+        "body_size_hint": ["medium"]
+      },
+      "criteria": {
+        "colors_any": ["black"],
+        "sizes_any": ["medium"],
+        "active_only": true
+      }
+    },
+    {
+      "id": "cream-small",
+      "query": "크림색 소형견을 찾아줘",
+      "structured": {
+        "coat_color": ["cream"],
+        "body_size_hint": ["small"]
+      },
+      "criteria": {
+        "colors_any": ["cream"],
+        "sizes_any": ["small"],
+        "active_only": true
+      }
+    },
+    {
+      "id": "gyeonggi-small-adult",
+      "query": "경기도에 있는 소형 성견",
+      "structured": {
+        "body_size_hint": ["small"],
+        "age_hint": ["adult"]
+      },
+      "criteria": {
+        "sizes_any": ["small"],
+        "age_hints_any": ["adult"],
+        "regions_any": ["경기"],
+        "active_only": true
+      }
+    },
+    {
+      "id": "seoul-small-puppy",
+      "query": "서울의 어린 소형견",
+      "structured": {
+        "body_size_hint": ["small"],
+        "age_hint": ["puppy"]
+      },
+      "criteria": {
+        "sizes_any": ["small"],
+        "age_hints_any": ["puppy"],
+        "regions_any": ["서울"],
+        "active_only": true
+      }
+    },
+    {
+      "id": "jeju-white-puppy",
+      "query": "제주에서 보호 중인 흰색 어린 강아지",
+      "structured": {
+        "coat_color": ["white"],
+        "age_hint": ["puppy"]
+      },
+      "criteria": {
+        "colors_any": ["white"],
+        "age_hints_any": ["puppy"],
+        "regions_any": ["제주"],
+        "active_only": true
+      }
+    },
+    {
+      "id": "jeonbuk-brown-large",
+      "query": "전북에 있는 갈색 대형견",
+      "structured": {
+        "coat_color": ["brown"],
+        "body_size_hint": ["large"]
+      },
+      "criteria": {
+        "colors_any": ["brown"],
+        "sizes_any": ["large"],
+        "regions_any": ["전북"],
+        "active_only": true
+      }
+    },
+    {
+      "id": "gyeongnam-black-small",
+      "query": "경남의 검정색 소형견",
+      "structured": {
+        "coat_color": ["black"],
+        "body_size_hint": ["small"]
+      },
+      "criteria": {
+        "colors_any": ["black"],
+        "sizes_any": ["small"],
+        "regions_any": ["경남"],
+        "active_only": true
+      }
+    },
+    {
+      "id": "gyeonggi-tan-medium",
+      "query": "경기도에 있는 황갈색 중형견",
+      "structured": {
+        "coat_color": ["tan"],
+        "body_size_hint": ["medium"]
+      },
+      "criteria": {
+        "colors_any": ["tan"],
+        "sizes_any": ["medium"],
+        "regions_any": ["경기"],
+        "active_only": true
+      }
+    },
+    {
+      "id": "adult-3-to-8kg",
+      "query": "3kg에서 8kg 사이의 성견",
+      "structured": {
+        "body_size_hint": ["small"],
+        "age_hint": ["adult"]
+      },
+      "criteria": {
+        "weight_kg": {
+          "min": 3.0,
+          "max": 8.0
+        },
+        "age_hints_any": ["adult"],
+        "active_only": true
+      }
+    },
+    {
+      "id": "senior-under-8kg",
+      "query": "8kg 이하의 노령 소형견",
+      "structured": {
+        "body_size_hint": ["small"],
+        "age_hint": ["senior"]
+      },
+      "criteria": {
+        "weight_kg": {
+          "max": 8.0
+        },
+        "age_hints_any": ["senior"],
+        "active_only": true
+      }
+    }
+  ]
+}

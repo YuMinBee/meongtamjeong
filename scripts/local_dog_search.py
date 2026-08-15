@@ -115,10 +115,13 @@ def _pick_image_meta_if_text(meta: Dict[str, Any]) -> Dict[str, Any]:
     return meta
 
 def search(vec: np.ndarray, topk: int = 5) -> List[Dict[str, Any]]:
-    D, I = index.search(vec, topk)
+    distances, indices = index.search(vec, topk)
 
     results = []
-    for rank, (dist, idx) in enumerate(zip(D[0].tolist(), I[0].tolist()), start=1):
+    for rank, (dist, idx) in enumerate(
+        zip(distances[0].tolist(), indices[0].tolist()),
+        start=1,
+    ):
         if idx < 0:
             continue
 

@@ -1,0 +1,3549 @@
+{
+  "dependencies": [
+    {
+      "canonical_name": "accelerate",
+      "declarations": [
+        {
+          "line": 5,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "accelerate>=0.34,<2",
+          "scope": "vlm",
+          "source_file": "requirements-vlm.txt"
+        }
+      ],
+      "declared_in": [
+        "requirements-vlm.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "accelerate",
+      "installed_version": "1.14.0",
+      "license": "Apache",
+      "license_files": [
+        "accelerate-1.14.0.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License",
+      "name": "accelerate",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Home-page",
+          "url": "https://github.com/huggingface/accelerate"
+        }
+      ],
+      "scopes": [
+        "vlm"
+      ],
+      "source_url": "https://github.com/huggingface/accelerate"
+    },
+    {
+      "canonical_name": "annotated-doc",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "annotated-doc",
+      "installed_version": "0.0.4",
+      "license": "MIT",
+      "license_files": [
+        "annotated_doc-0.0.4.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License-Expression",
+      "name": "annotated-doc",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://github.com/fastapi/annotated-doc/release-notes.md"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://github.com/fastapi/annotated-doc"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://github.com/fastapi/annotated-doc"
+        },
+        {
+          "label": "Issues",
+          "url": "https://github.com/fastapi/annotated-doc/issues"
+        },
+        {
+          "label": "Repository",
+          "url": "https://github.com/fastapi/annotated-doc"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/fastapi/annotated-doc"
+    },
+    {
+      "canonical_name": "annotated-types",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "annotated-types",
+      "installed_version": "0.8.0",
+      "license": "MIT",
+      "license_files": [
+        "annotated_types-0.8.0.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License-Expression",
+      "name": "annotated-types",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://github.com/annotated-types/annotated-types/releases"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://github.com/annotated-types/annotated-types"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/annotated-types/annotated-types"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/annotated-types/annotated-types"
+    },
+    {
+      "canonical_name": "anyio",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "anyio",
+      "installed_version": "4.14.2",
+      "license": "MIT",
+      "license_files": [
+        "anyio-4.14.2.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License-Expression",
+      "name": "anyio",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://anyio.readthedocs.io/en/stable/versionhistory.html"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://anyio.readthedocs.io/en/latest/"
+        },
+        {
+          "label": "Issue tracker",
+          "url": "https://github.com/agronholm/anyio/issues"
+        },
+        {
+          "label": "Source code",
+          "url": "https://github.com/agronholm/anyio"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://anyio.readthedocs.io/en/latest/"
+    },
+    {
+      "canonical_name": "certifi",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "certifi",
+      "installed_version": "2026.7.22",
+      "license": "MPL-2.0",
+      "license_files": [
+        "certifi-2026.7.22.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License",
+      "name": "certifi",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Source",
+          "url": "https://github.com/certifi/python-certifi"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/certifi/python-certifi"
+    },
+    {
+      "canonical_name": "charset-normalizer",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "charset-normalizer",
+      "installed_version": "3.4.9",
+      "license": "MIT",
+      "license_files": [
+        "charset_normalizer-3.4.9.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License",
+      "name": "charset-normalizer",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://github.com/jawah/charset_normalizer/blob/master/CHANGELOG.md"
+        },
+        {
+          "label": "Code",
+          "url": "https://github.com/jawah/charset_normalizer"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://charset-normalizer.readthedocs.io/"
+        },
+        {
+          "label": "Issue tracker",
+          "url": "https://github.com/jawah/charset_normalizer/issues"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/jawah/charset_normalizer"
+    },
+    {
+      "canonical_name": "click",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "click",
+      "installed_version": "8.4.2",
+      "license": "BSD-3-Clause",
+      "license_files": [
+        "click-8.4.2.dist-info/licenses/LICENSE.txt"
+      ],
+      "license_source": "License-Expression",
+      "name": "click",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changes",
+          "url": "https://click.palletsprojects.com/page/changes/"
+        },
+        {
+          "label": "Chat",
+          "url": "https://discord.gg/pallets"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://click.palletsprojects.com/"
+        },
+        {
+          "label": "Donate",
+          "url": "https://palletsprojects.com/donate"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/pallets/click/"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/pallets/click/"
+    },
+    {
+      "canonical_name": "clip",
+      "declarations": [
+        {
+          "line": 22,
+          "manifest": "environment.yml",
+          "requirement": "clip @ git+https://github.com/openai/CLIP.git@dcba3cb2e2827b402d2701e7e1c7d9fed8a20ef1",
+          "scope": "environment",
+          "source_file": "environment.yml"
+        },
+        {
+          "line": 19,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "clip @ git+https://github.com/openai/CLIP.git@dcba3cb2e2827b402d2701e7e1c7d9fed8a20ef1",
+          "scope": "vlm",
+          "source_file": "requirements.txt"
+        },
+        {
+          "line": 19,
+          "manifest": "requirements.txt",
+          "requirement": "clip @ git+https://github.com/openai/CLIP.git@dcba3cb2e2827b402d2701e7e1c7d9fed8a20ef1",
+          "scope": "runtime",
+          "source_file": "requirements.txt"
+        }
+      ],
+      "declared_in": [
+        "environment.yml",
+        "requirements-vlm.txt",
+        "requirements.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "clip",
+      "installed_version": "1.0",
+      "license": "MIT",
+      "license_files": [
+        "clip-1.0.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "license-file-header",
+      "name": "clip",
+      "origin_url": "https://github.com/openai/CLIP.git",
+      "project_urls": [],
+      "scopes": [
+        "environment",
+        "runtime",
+        "vlm"
+      ],
+      "source_url": "git+https://github.com/openai/CLIP.git@dcba3cb2e2827b402d2701e7e1c7d9fed8a20ef1"
+    },
+    {
+      "canonical_name": "colorama",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "colorama",
+      "installed_version": "0.4.6",
+      "license": "BSD (variant unspecified)",
+      "license_files": [
+        "colorama-0.4.6.dist-info/licenses/LICENSE.txt"
+      ],
+      "license_source": "Classifier",
+      "name": "colorama",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Homepage",
+          "url": "https://github.com/tartley/colorama"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/tartley/colorama"
+    },
+    {
+      "canonical_name": "et-xmlfile",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "et_xmlfile",
+      "installed_version": "2.0.0",
+      "license": "MIT",
+      "license_files": [
+        "et_xmlfile-2.0.0.dist-info/LICENCE.python",
+        "et_xmlfile-2.0.0.dist-info/LICENCE.rst"
+      ],
+      "license_source": "License",
+      "name": "et_xmlfile",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Documentation",
+          "url": "https://openpyxl.pages.heptapod.net/et_xmlfile/"
+        },
+        {
+          "label": "Source",
+          "url": "https://foss.heptapod.net/openpyxl/et_xmlfile"
+        },
+        {
+          "label": "Tracker",
+          "url": "https://foss.heptapod.net/openpyxl/et_xmfile/-/issues"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://foss.heptapod.net/openpyxl/et_xmlfile"
+    },
+    {
+      "canonical_name": "exceptiongroup",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "exceptiongroup",
+      "installed_version": "1.3.1",
+      "license": "MIT",
+      "license_files": [
+        "exceptiongroup-1.3.1.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "Classifier",
+      "name": "exceptiongroup",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://github.com/agronholm/exceptiongroup/blob/main/CHANGES.rst"
+        },
+        {
+          "label": "Issue Tracker",
+          "url": "https://github.com/agronholm/exceptiongroup/issues"
+        },
+        {
+          "label": "Source code",
+          "url": "https://github.com/agronholm/exceptiongroup"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/agronholm/exceptiongroup/blob/main/CHANGES.rst"
+    },
+    {
+      "canonical_name": "faiss-cpu",
+      "declarations": [
+        {
+          "line": 19,
+          "manifest": "environment.yml",
+          "requirement": "faiss-cpu>=1.8,<2",
+          "scope": "environment",
+          "source_file": "environment.yml"
+        },
+        {
+          "line": 15,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "faiss-cpu>=1.8,<2",
+          "scope": "vlm",
+          "source_file": "requirements.txt"
+        },
+        {
+          "line": 15,
+          "manifest": "requirements.txt",
+          "requirement": "faiss-cpu>=1.8,<2",
+          "scope": "runtime",
+          "source_file": "requirements.txt"
+        }
+      ],
+      "declared_in": [
+        "environment.yml",
+        "requirements-vlm.txt",
+        "requirements.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "faiss-cpu",
+      "installed_version": "1.14.3",
+      "license": "MIT",
+      "license_files": [
+        "faiss_cpu-1.14.3.dist-info/licenses/LICENSE",
+        "faiss_cpu-1.14.3.dist-info/licenses/THIRD_PARTY_NOTICES"
+      ],
+      "license_source": "License-Expression",
+      "name": "faiss-cpu",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Documentation",
+          "url": "https://github.com/facebookresearch/faiss/wiki"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://github.com/facebookresearch/faiss"
+        },
+        {
+          "label": "Issues",
+          "url": "https://github.com/facebookresearch/faiss/issues"
+        },
+        {
+          "label": "Repository",
+          "url": "https://github.com/facebookresearch/faiss"
+        }
+      ],
+      "scopes": [
+        "environment",
+        "runtime",
+        "vlm"
+      ],
+      "source_url": "https://github.com/facebookresearch/faiss"
+    },
+    {
+      "canonical_name": "fastapi",
+      "declarations": [
+        {
+          "line": 10,
+          "manifest": "environment.yml",
+          "requirement": "fastapi>=0.115",
+          "scope": "environment",
+          "source_file": "environment.yml"
+        },
+        {
+          "line": 3,
+          "manifest": "requirements-analysis.txt",
+          "requirement": "fastapi>=0.115,<1",
+          "scope": "requirements-analysis",
+          "source_file": "requirements-dev.txt"
+        },
+        {
+          "line": 3,
+          "manifest": "requirements-dev.txt",
+          "requirement": "fastapi>=0.115,<1",
+          "scope": "development",
+          "source_file": "requirements-dev.txt"
+        },
+        {
+          "line": 1,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "fastapi>=0.115",
+          "scope": "vlm",
+          "source_file": "requirements.txt"
+        },
+        {
+          "line": 1,
+          "manifest": "requirements.txt",
+          "requirement": "fastapi>=0.115",
+          "scope": "runtime",
+          "source_file": "requirements.txt"
+        }
+      ],
+      "declared_in": [
+        "environment.yml",
+        "requirements-analysis.txt",
+        "requirements-dev.txt",
+        "requirements-vlm.txt",
+        "requirements.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "fastapi",
+      "installed_version": "0.140.0",
+      "license": "MIT",
+      "license_files": [
+        "fastapi-0.140.0.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License-Expression",
+      "name": "fastapi",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://fastapi.tiangolo.com/release-notes/"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://fastapi.tiangolo.com/"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://github.com/fastapi/fastapi"
+        },
+        {
+          "label": "Issues",
+          "url": "https://github.com/fastapi/fastapi/issues"
+        },
+        {
+          "label": "Repository",
+          "url": "https://github.com/fastapi/fastapi"
+        }
+      ],
+      "scopes": [
+        "development",
+        "environment",
+        "requirements-analysis",
+        "runtime",
+        "vlm"
+      ],
+      "source_url": "https://github.com/fastapi/fastapi"
+    },
+    {
+      "canonical_name": "filelock",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "filelock",
+      "installed_version": "3.32.0",
+      "license": "MIT",
+      "license_files": [
+        "filelock-3.32.0.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License-Expression",
+      "name": "filelock",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Documentation",
+          "url": "https://py-filelock.readthedocs.io"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://github.com/tox-dev/py-filelock"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/tox-dev/py-filelock"
+        },
+        {
+          "label": "Tracker",
+          "url": "https://github.com/tox-dev/py-filelock/issues"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/tox-dev/py-filelock"
+    },
+    {
+      "canonical_name": "fsspec",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "fsspec",
+      "installed_version": "2026.6.0",
+      "license": "BSD-3-Clause",
+      "license_files": [
+        "fsspec-2026.6.0.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License-Expression",
+      "name": "fsspec",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://filesystem-spec.readthedocs.io/en/latest/changelog.html"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://filesystem-spec.readthedocs.io/en/latest/"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://github.com/fsspec/filesystem_spec"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/fsspec/filesystem_spec"
+    },
+    {
+      "canonical_name": "ftfy",
+      "declarations": [
+        {
+          "line": 23,
+          "manifest": "environment.yml",
+          "requirement": "ftfy>=6.2",
+          "scope": "environment",
+          "source_file": "environment.yml"
+        },
+        {
+          "line": 20,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "ftfy>=6.2",
+          "scope": "vlm",
+          "source_file": "requirements.txt"
+        },
+        {
+          "line": 20,
+          "manifest": "requirements.txt",
+          "requirement": "ftfy>=6.2",
+          "scope": "runtime",
+          "source_file": "requirements.txt"
+        }
+      ],
+      "declared_in": [
+        "environment.yml",
+        "requirements-vlm.txt",
+        "requirements.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "ftfy",
+      "installed_version": "6.3.1",
+      "license": "Apache-2.0",
+      "license_files": [
+        "ftfy-6.3.1.dist-info/licenses/LICENSE.txt"
+      ],
+      "license_source": "License",
+      "name": "ftfy",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Blog",
+          "url": "https://posts.arborelia.net"
+        },
+        {
+          "label": "Changelog",
+          "url": "https://github.com/rspeer/python-ftfy/blob/main/CHANGELOG.md"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://ftfy.readthedocs.io/en/latest/"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://ftfy.readthedocs.io/en/latest/"
+        },
+        {
+          "label": "Issues",
+          "url": "https://github.com/rspeer/python-ftfy/issues/"
+        },
+        {
+          "label": "Repository",
+          "url": "https://github.com/rspeer/python-ftfy"
+        }
+      ],
+      "scopes": [
+        "environment",
+        "runtime",
+        "vlm"
+      ],
+      "source_url": "https://github.com/rspeer/python-ftfy"
+    },
+    {
+      "canonical_name": "h11",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "h11",
+      "installed_version": "0.16.0",
+      "license": "MIT",
+      "license_files": [
+        "h11-0.16.0.dist-info/licenses/LICENSE.txt"
+      ],
+      "license_source": "License",
+      "name": "h11",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Home-page",
+          "url": "https://github.com/python-hyper/h11"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/python-hyper/h11"
+    },
+    {
+      "canonical_name": "hf-xet",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "hf-xet",
+      "installed_version": "1.5.2",
+      "license": "Apache-2.0",
+      "license_files": [
+        "hf_xet-1.5.2.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License-Expression",
+      "name": "hf-xet",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Documentation",
+          "url": "https://huggingface.co/docs/hub/xet/index"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://github.com/huggingface/xet-core"
+        },
+        {
+          "label": "Issues",
+          "url": "https://github.com/huggingface/xet-core/issues"
+        },
+        {
+          "label": "Repository",
+          "url": "https://github.com/huggingface/xet-core.git"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/huggingface/xet-core.git"
+    },
+    {
+      "canonical_name": "httpcore",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "httpcore",
+      "installed_version": "1.0.9",
+      "license": "BSD-3-Clause",
+      "license_files": [
+        "httpcore-1.0.9.dist-info/licenses/LICENSE.md"
+      ],
+      "license_source": "License-Expression",
+      "name": "httpcore",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Documentation",
+          "url": "https://www.encode.io/httpcore"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://www.encode.io/httpcore/"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/encode/httpcore"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/encode/httpcore"
+    },
+    {
+      "canonical_name": "httptools",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "httptools",
+      "installed_version": "0.8.0",
+      "license": "MIT",
+      "license_files": [
+        "httptools-0.8.0.dist-info/licenses/LICENSE",
+        "httptools-0.8.0.dist-info/licenses/vendor/http-parser/LICENSE-MIT",
+        "httptools-0.8.0.dist-info/licenses/vendor/llhttp/LICENSE"
+      ],
+      "license_source": "License-Expression",
+      "name": "httptools",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Homepage",
+          "url": "https://github.com/MagicStack/httptools"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/MagicStack/httptools"
+    },
+    {
+      "canonical_name": "httpx",
+      "declarations": [
+        {
+          "line": 27,
+          "manifest": "environment.yml",
+          "requirement": "httpx>=0.27,<1",
+          "scope": "environment",
+          "source_file": "environment.yml"
+        },
+        {
+          "line": 4,
+          "manifest": "requirements-analysis.txt",
+          "requirement": "httpx>=0.27,<1",
+          "scope": "requirements-analysis",
+          "source_file": "requirements-dev.txt"
+        },
+        {
+          "line": 4,
+          "manifest": "requirements-dev.txt",
+          "requirement": "httpx>=0.27,<1",
+          "scope": "development",
+          "source_file": "requirements-dev.txt"
+        },
+        {
+          "line": 13,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "httpx>=0.27,<1",
+          "scope": "vlm",
+          "source_file": "requirements.txt"
+        },
+        {
+          "line": 13,
+          "manifest": "requirements.txt",
+          "requirement": "httpx>=0.27,<1",
+          "scope": "runtime",
+          "source_file": "requirements.txt"
+        }
+      ],
+      "declared_in": [
+        "environment.yml",
+        "requirements-analysis.txt",
+        "requirements-dev.txt",
+        "requirements-vlm.txt",
+        "requirements.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "httpx",
+      "installed_version": "0.28.1",
+      "license": "BSD-3-Clause",
+      "license_files": [
+        "httpx-0.28.1.dist-info/licenses/LICENSE.md"
+      ],
+      "license_source": "License",
+      "name": "httpx",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://github.com/encode/httpx/blob/master/CHANGELOG.md"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://www.python-httpx.org"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://github.com/encode/httpx"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/encode/httpx"
+        }
+      ],
+      "scopes": [
+        "development",
+        "environment",
+        "requirements-analysis",
+        "runtime",
+        "vlm"
+      ],
+      "source_url": "https://github.com/encode/httpx"
+    },
+    {
+      "canonical_name": "huggingface-hub",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "huggingface_hub",
+      "installed_version": "1.24.0",
+      "license": "Apache-2.0",
+      "license_files": [
+        "huggingface_hub-1.24.0.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License",
+      "name": "huggingface_hub",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Home-page",
+          "url": "https://github.com/huggingface/huggingface_hub"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/huggingface/huggingface_hub"
+    },
+    {
+      "canonical_name": "idna",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "idna",
+      "installed_version": "3.18",
+      "license": "BSD-3-Clause",
+      "license_files": [
+        "idna-3.18.dist-info/licenses/LICENSE.md"
+      ],
+      "license_source": "License-Expression",
+      "name": "idna",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://github.com/kjd/idna/blob/master/HISTORY.md"
+        },
+        {
+          "label": "Issue tracker",
+          "url": "https://github.com/kjd/idna/issues"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/kjd/idna"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/kjd/idna"
+    },
+    {
+      "canonical_name": "iniconfig",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "iniconfig",
+      "installed_version": "2.3.0",
+      "license": "MIT",
+      "license_files": [
+        "iniconfig-2.3.0.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License-Expression",
+      "name": "iniconfig",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Homepage",
+          "url": "https://github.com/pytest-dev/iniconfig"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/pytest-dev/iniconfig"
+    },
+    {
+      "canonical_name": "jinja2",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "Jinja2",
+      "installed_version": "3.1.6",
+      "license": "BSD (variant unspecified)",
+      "license_files": [
+        "jinja2-3.1.6.dist-info/licenses/LICENSE.txt"
+      ],
+      "license_source": "Classifier",
+      "name": "Jinja2",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changes",
+          "url": "https://jinja.palletsprojects.com/changes/"
+        },
+        {
+          "label": "Chat",
+          "url": "https://discord.gg/pallets"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://jinja.palletsprojects.com/"
+        },
+        {
+          "label": "Donate",
+          "url": "https://palletsprojects.com/donate"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/pallets/jinja/"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/pallets/jinja/"
+    },
+    {
+      "canonical_name": "markdown-it-py",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "markdown-it-py",
+      "installed_version": "4.2.0",
+      "license": "MIT",
+      "license_files": [
+        "markdown_it_py-4.2.0.dist-info/licenses/LICENSE",
+        "markdown_it_py-4.2.0.dist-info/licenses/LICENSE.markdown-it"
+      ],
+      "license_source": "Classifier",
+      "name": "markdown-it-py",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Documentation",
+          "url": "https://markdown-it-py.readthedocs.io"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://github.com/executablebooks/markdown-it-py"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/executablebooks/markdown-it-py"
+    },
+    {
+      "canonical_name": "markupsafe",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "MarkupSafe",
+      "installed_version": "3.0.3",
+      "license": "BSD-3-Clause",
+      "license_files": [
+        "markupsafe-3.0.3.dist-info/licenses/LICENSE.txt"
+      ],
+      "license_source": "License-Expression",
+      "name": "MarkupSafe",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changes",
+          "url": "https://markupsafe.palletsprojects.com/page/changes/"
+        },
+        {
+          "label": "Chat",
+          "url": "https://discord.gg/pallets"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://markupsafe.palletsprojects.com/"
+        },
+        {
+          "label": "Donate",
+          "url": "https://palletsprojects.com/donate"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/pallets/markupsafe/"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/pallets/markupsafe/"
+    },
+    {
+      "canonical_name": "mdurl",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "mdurl",
+      "installed_version": "0.1.2",
+      "license": "MIT",
+      "license_files": [
+        "mdurl-0.1.2.dist-info/LICENSE"
+      ],
+      "license_source": "Classifier",
+      "name": "mdurl",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Homepage",
+          "url": "https://github.com/executablebooks/mdurl"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/executablebooks/mdurl"
+    },
+    {
+      "canonical_name": "mpmath",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "mpmath",
+      "installed_version": "1.3.0",
+      "license": "BSD",
+      "license_files": [
+        "mpmath-1.3.0.dist-info/LICENSE"
+      ],
+      "license_source": "License",
+      "name": "mpmath",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Documentation",
+          "url": "http://mpmath.org/doc/current/"
+        },
+        {
+          "label": "Home-page",
+          "url": "http://mpmath.org/"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/fredrik-johansson/mpmath"
+        },
+        {
+          "label": "Tracker",
+          "url": "https://github.com/fredrik-johansson/mpmath/issues"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/fredrik-johansson/mpmath"
+    },
+    {
+      "canonical_name": "networkx",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "networkx",
+      "installed_version": "3.4.2",
+      "license": "BSD (variant unspecified)",
+      "license_files": [
+        "networkx-3.4.2.dist-info/LICENSE.txt"
+      ],
+      "license_source": "Classifier",
+      "name": "networkx",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Bug Tracker",
+          "url": "https://github.com/networkx/networkx/issues"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://networkx.org/documentation/stable/"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://networkx.org/"
+        },
+        {
+          "label": "Source Code",
+          "url": "https://github.com/networkx/networkx"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://networkx.org/"
+    },
+    {
+      "canonical_name": "numpy",
+      "declarations": [
+        {
+          "line": 13,
+          "manifest": "environment.yml",
+          "requirement": "numpy>=1.26,<3",
+          "scope": "environment",
+          "source_file": "environment.yml"
+        },
+        {
+          "line": 5,
+          "manifest": "requirements-analysis.txt",
+          "requirement": "numpy>=1.26,<3",
+          "scope": "requirements-analysis",
+          "source_file": "requirements-dev.txt"
+        },
+        {
+          "line": 5,
+          "manifest": "requirements-dev.txt",
+          "requirement": "numpy>=1.26,<3",
+          "scope": "development",
+          "source_file": "requirements-dev.txt"
+        },
+        {
+          "line": 6,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "numpy>=1.24,<1.25; python_version < '3.9'",
+          "scope": "vlm",
+          "source_file": "requirements.txt"
+        },
+        {
+          "line": 7,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "numpy>=1.26,<3; python_version >= '3.9'",
+          "scope": "vlm",
+          "source_file": "requirements.txt"
+        },
+        {
+          "line": 6,
+          "manifest": "requirements.txt",
+          "requirement": "numpy>=1.24,<1.25; python_version < '3.9'",
+          "scope": "runtime",
+          "source_file": "requirements.txt"
+        },
+        {
+          "line": 7,
+          "manifest": "requirements.txt",
+          "requirement": "numpy>=1.26,<3; python_version >= '3.9'",
+          "scope": "runtime",
+          "source_file": "requirements.txt"
+        }
+      ],
+      "declared_in": [
+        "environment.yml",
+        "requirements-analysis.txt",
+        "requirements-dev.txt",
+        "requirements-vlm.txt",
+        "requirements.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "numpy",
+      "installed_version": "2.2.6",
+      "license": "BSD (variant unspecified)",
+      "license_files": [
+        "numpy-2.2.6.dist-info/LICENSE.txt",
+        "numpy/_core/include/numpy/random/LICENSE.txt",
+        "numpy/ma/LICENSE",
+        "numpy/random/LICENSE.md"
+      ],
+      "license_source": "Classifier",
+      "name": "numpy",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "documentation",
+          "url": "https://numpy.org/doc/"
+        },
+        {
+          "label": "download",
+          "url": "https://pypi.org/project/numpy/"
+        },
+        {
+          "label": "homepage",
+          "url": "https://numpy.org"
+        },
+        {
+          "label": "release notes",
+          "url": "https://numpy.org/doc/stable/release"
+        },
+        {
+          "label": "source",
+          "url": "https://github.com/numpy/numpy"
+        },
+        {
+          "label": "tracker",
+          "url": "https://github.com/numpy/numpy/issues"
+        }
+      ],
+      "scopes": [
+        "development",
+        "environment",
+        "requirements-analysis",
+        "runtime",
+        "vlm"
+      ],
+      "source_url": "https://github.com/numpy/numpy"
+    },
+    {
+      "canonical_name": "opencv-python-headless",
+      "declarations": [
+        {
+          "line": 15,
+          "manifest": "environment.yml",
+          "requirement": "opencv-python-headless>=4.10,<5",
+          "scope": "environment",
+          "source_file": "environment.yml"
+        },
+        {
+          "line": 10,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "opencv-python-headless>=4.10,<5",
+          "scope": "vlm",
+          "source_file": "requirements.txt"
+        },
+        {
+          "line": 10,
+          "manifest": "requirements.txt",
+          "requirement": "opencv-python-headless>=4.10,<5",
+          "scope": "runtime",
+          "source_file": "requirements.txt"
+        }
+      ],
+      "declared_in": [
+        "environment.yml",
+        "requirements-vlm.txt",
+        "requirements.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "opencv-python-headless",
+      "installed_version": "4.13.0.92",
+      "license": "Apache 2.0",
+      "license_files": [
+        "cv2/LICENSE-3RD-PARTY.txt",
+        "cv2/LICENSE.txt",
+        "cv2/data/haarcascade_license_plate_rus_16stages.xml",
+        "opencv_python_headless-4.13.0.92.dist-info/LICENSE-3RD-PARTY.txt",
+        "opencv_python_headless-4.13.0.92.dist-info/LICENSE.txt"
+      ],
+      "license_source": "License",
+      "name": "opencv-python-headless",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Home-page",
+          "url": "https://github.com/opencv/opencv-python"
+        }
+      ],
+      "scopes": [
+        "environment",
+        "runtime",
+        "vlm"
+      ],
+      "source_url": "https://github.com/opencv/opencv-python"
+    },
+    {
+      "canonical_name": "openpyxl",
+      "declarations": [
+        {
+          "line": 5,
+          "manifest": "requirements-analysis.txt",
+          "requirement": "openpyxl>=3.1,<4",
+          "scope": "requirements-analysis",
+          "source_file": "requirements-analysis.txt"
+        }
+      ],
+      "declared_in": [
+        "requirements-analysis.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "openpyxl",
+      "installed_version": "3.1.5",
+      "license": "MIT",
+      "license_files": [
+        "openpyxl-3.1.5.dist-info/LICENCE.rst"
+      ],
+      "license_source": "License",
+      "name": "openpyxl",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Documentation",
+          "url": "https://openpyxl.readthedocs.io/en/stable/"
+        },
+        {
+          "label": "Home-page",
+          "url": "https://openpyxl.readthedocs.io"
+        },
+        {
+          "label": "Source",
+          "url": "https://foss.heptapod.net/openpyxl/openpyxl"
+        },
+        {
+          "label": "Tracker",
+          "url": "https://foss.heptapod.net/openpyxl/openpyxl/-/issues"
+        }
+      ],
+      "scopes": [
+        "requirements-analysis"
+      ],
+      "source_url": "https://foss.heptapod.net/openpyxl/openpyxl"
+    },
+    {
+      "canonical_name": "packaging",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "packaging",
+      "installed_version": "26.0",
+      "license": "Apache-2.0 OR BSD-2-Clause",
+      "license_files": [
+        "packaging-26.0.dist-info/licenses/LICENSE",
+        "packaging-26.0.dist-info/licenses/LICENSE.APACHE",
+        "packaging-26.0.dist-info/licenses/LICENSE.BSD"
+      ],
+      "license_source": "License-Expression",
+      "name": "packaging",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Documentation",
+          "url": "https://packaging.pypa.io/"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/pypa/packaging"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/pypa/packaging"
+    },
+    {
+      "canonical_name": "pandas",
+      "declarations": [
+        {
+          "line": 4,
+          "manifest": "requirements-analysis.txt",
+          "requirement": "pandas>=2,<4",
+          "scope": "requirements-analysis",
+          "source_file": "requirements-analysis.txt"
+        }
+      ],
+      "declared_in": [
+        "requirements-analysis.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "pandas",
+      "installed_version": "2.3.3",
+      "license": "BSD (variant unspecified)",
+      "license_files": [
+        "pandas-2.3.3.dist-info/LICENSE"
+      ],
+      "license_source": "Classifier",
+      "name": "pandas",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "documentation",
+          "url": "https://pandas.pydata.org/docs/"
+        },
+        {
+          "label": "homepage",
+          "url": "https://pandas.pydata.org"
+        },
+        {
+          "label": "repository",
+          "url": "https://github.com/pandas-dev/pandas"
+        }
+      ],
+      "scopes": [
+        "requirements-analysis"
+      ],
+      "source_url": "https://github.com/pandas-dev/pandas"
+    },
+    {
+      "canonical_name": "pillow",
+      "declarations": [
+        {
+          "line": 14,
+          "manifest": "environment.yml",
+          "requirement": "Pillow>=10.0",
+          "scope": "environment",
+          "source_file": "environment.yml"
+        },
+        {
+          "line": 6,
+          "manifest": "requirements-analysis.txt",
+          "requirement": "Pillow>=10,<13",
+          "scope": "requirements-analysis",
+          "source_file": "requirements-dev.txt"
+        },
+        {
+          "line": 6,
+          "manifest": "requirements-dev.txt",
+          "requirement": "Pillow>=10,<13",
+          "scope": "development",
+          "source_file": "requirements-dev.txt"
+        },
+        {
+          "line": 9,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "Pillow>=10.0",
+          "scope": "vlm",
+          "source_file": "requirements.txt"
+        },
+        {
+          "line": 9,
+          "manifest": "requirements.txt",
+          "requirement": "Pillow>=10.0",
+          "scope": "runtime",
+          "source_file": "requirements.txt"
+        }
+      ],
+      "declared_in": [
+        "environment.yml",
+        "requirements-analysis.txt",
+        "requirements-dev.txt",
+        "requirements-vlm.txt",
+        "requirements.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "pillow",
+      "installed_version": "12.3.0",
+      "license": "MIT-CMU",
+      "license_files": [
+        "pillow-12.3.0.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License-Expression",
+      "name": "Pillow",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://github.com/python-pillow/Pillow/releases"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://pillow.readthedocs.io"
+        },
+        {
+          "label": "Funding",
+          "url": "https://tidelift.com/subscription/pkg/pypi-pillow"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://python-pillow.github.io"
+        },
+        {
+          "label": "Mastodon",
+          "url": "https://fosstodon.org/@pillow"
+        },
+        {
+          "label": "Release notes",
+          "url": "https://pillow.readthedocs.io/en/stable/releasenotes/index.html"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/python-pillow/Pillow"
+        }
+      ],
+      "scopes": [
+        "development",
+        "environment",
+        "requirements-analysis",
+        "runtime",
+        "vlm"
+      ],
+      "source_url": "https://github.com/python-pillow/Pillow"
+    },
+    {
+      "canonical_name": "pip",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "pip",
+      "installed_version": "25.2",
+      "license": "MIT",
+      "license_files": [
+        "pip-25.2.dist-info/licenses/LICENSE.txt",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/cachecontrol/LICENSE.txt",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/certifi/LICENSE",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/dependency_groups/LICENSE.txt",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/distlib/LICENSE.txt",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/distro/LICENSE",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/idna/LICENSE.md",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/msgpack/COPYING",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/packaging/LICENSE",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/packaging/LICENSE.APACHE",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/packaging/LICENSE.BSD",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/pkg_resources/LICENSE",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/platformdirs/LICENSE",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/pygments/LICENSE",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/pyproject_hooks/LICENSE",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/requests/LICENSE",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/resolvelib/LICENSE",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/rich/LICENSE",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/tomli/LICENSE",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/tomli/LICENSE-HEADER",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/tomli_w/LICENSE",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/truststore/LICENSE",
+        "pip-25.2.dist-info/licenses/src/pip/_vendor/urllib3/LICENSE.txt"
+      ],
+      "license_source": "License-Expression",
+      "name": "pip",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://pip.pypa.io/en/stable/news/"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://pip.pypa.io"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://pip.pypa.io/"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/pypa/pip"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/pypa/pip"
+    },
+    {
+      "canonical_name": "pluggy",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "pluggy",
+      "installed_version": "1.6.0",
+      "license": "MIT",
+      "license_files": [
+        "pluggy-1.6.0.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License",
+      "name": "pluggy",
+      "origin_url": null,
+      "project_urls": [],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://pypi.org/project/pluggy/1.6.0/"
+    },
+    {
+      "canonical_name": "psutil",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "psutil",
+      "installed_version": "7.2.2",
+      "license": "BSD-3-Clause",
+      "license_files": [
+        "psutil-7.2.2.dist-info/LICENSE"
+      ],
+      "license_source": "License",
+      "name": "psutil",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Home-page",
+          "url": "https://github.com/giampaolo/psutil"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/giampaolo/psutil"
+    },
+    {
+      "canonical_name": "pydantic",
+      "declarations": [
+        {
+          "line": 12,
+          "manifest": "environment.yml",
+          "requirement": "pydantic>=2",
+          "scope": "environment",
+          "source_file": "environment.yml"
+        },
+        {
+          "line": 7,
+          "manifest": "requirements-analysis.txt",
+          "requirement": "pydantic>=2,<3",
+          "scope": "requirements-analysis",
+          "source_file": "requirements-dev.txt"
+        },
+        {
+          "line": 7,
+          "manifest": "requirements-dev.txt",
+          "requirement": "pydantic>=2,<3",
+          "scope": "development",
+          "source_file": "requirements-dev.txt"
+        },
+        {
+          "line": 3,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "pydantic>=2",
+          "scope": "vlm",
+          "source_file": "requirements.txt"
+        },
+        {
+          "line": 3,
+          "manifest": "requirements.txt",
+          "requirement": "pydantic>=2",
+          "scope": "runtime",
+          "source_file": "requirements.txt"
+        }
+      ],
+      "declared_in": [
+        "environment.yml",
+        "requirements-analysis.txt",
+        "requirements-dev.txt",
+        "requirements-vlm.txt",
+        "requirements.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "pydantic",
+      "installed_version": "2.13.4",
+      "license": "MIT",
+      "license_files": [
+        "pydantic-2.13.4.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License-Expression",
+      "name": "pydantic",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://docs.pydantic.dev/latest/changelog/"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://docs.pydantic.dev"
+        },
+        {
+          "label": "Funding",
+          "url": "https://github.com/sponsors/samuelcolvin"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://github.com/pydantic/pydantic"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/pydantic/pydantic"
+        }
+      ],
+      "scopes": [
+        "development",
+        "environment",
+        "requirements-analysis",
+        "runtime",
+        "vlm"
+      ],
+      "source_url": "https://github.com/pydantic/pydantic"
+    },
+    {
+      "canonical_name": "pydantic-core",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "pydantic_core",
+      "installed_version": "2.46.4",
+      "license": "MIT",
+      "license_files": [
+        "pydantic_core-2.46.4.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License-Expression",
+      "name": "pydantic_core",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Funding",
+          "url": "https://github.com/sponsors/samuelcolvin"
+        },
+        {
+          "label": "Home-page",
+          "url": "https://github.com/pydantic/pydantic"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://github.com/pydantic"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/pydantic/pydantic/tree/main/pydantic-core"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/pydantic/pydantic/tree/main/pydantic-core"
+    },
+    {
+      "canonical_name": "pygments",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "Pygments",
+      "installed_version": "2.20.0",
+      "license": "BSD-2-Clause",
+      "license_files": [
+        "pygments-2.20.0.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License-Expression",
+      "name": "Pygments",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Bug Tracker",
+          "url": "https://github.com/pygments/pygments/issues"
+        },
+        {
+          "label": "Changelog",
+          "url": "https://github.com/pygments/pygments/blob/master/CHANGES"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://pygments.org/docs"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://pygments.org"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/pygments/pygments"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/pygments/pygments"
+    },
+    {
+      "canonical_name": "pytest",
+      "declarations": [
+        {
+          "line": 28,
+          "manifest": "environment.yml",
+          "requirement": "pytest>=9.0.3,<10",
+          "scope": "environment",
+          "source_file": "environment.yml"
+        },
+        {
+          "line": 11,
+          "manifest": "requirements-analysis.txt",
+          "requirement": "pytest>=9.0.3,<10",
+          "scope": "requirements-analysis",
+          "source_file": "requirements-dev.txt"
+        },
+        {
+          "line": 11,
+          "manifest": "requirements-dev.txt",
+          "requirement": "pytest>=9.0.3,<10",
+          "scope": "development",
+          "source_file": "requirements-dev.txt"
+        }
+      ],
+      "declared_in": [
+        "environment.yml",
+        "requirements-analysis.txt",
+        "requirements-dev.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "pytest",
+      "installed_version": "9.0.3",
+      "license": "MIT",
+      "license_files": [
+        "pytest-9.0.3.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License-Expression",
+      "name": "pytest",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://docs.pytest.org/en/stable/changelog.html"
+        },
+        {
+          "label": "Contact",
+          "url": "https://docs.pytest.org/en/stable/contact.html"
+        },
+        {
+          "label": "Funding",
+          "url": "https://docs.pytest.org/en/stable/sponsor.html"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://docs.pytest.org/en/latest/"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/pytest-dev/pytest"
+        },
+        {
+          "label": "Tracker",
+          "url": "https://github.com/pytest-dev/pytest/issues"
+        }
+      ],
+      "scopes": [
+        "development",
+        "environment",
+        "requirements-analysis"
+      ],
+      "source_url": "https://github.com/pytest-dev/pytest"
+    },
+    {
+      "canonical_name": "python-dateutil",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "python-dateutil",
+      "installed_version": "2.9.0.post0",
+      "license": "Dual License",
+      "license_files": [
+        "python_dateutil-2.9.0.post0.dist-info/LICENSE"
+      ],
+      "license_source": "License",
+      "name": "python-dateutil",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Documentation",
+          "url": "https://dateutil.readthedocs.io/en/stable/"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/dateutil/dateutil"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/dateutil/dateutil"
+    },
+    {
+      "canonical_name": "python-dotenv",
+      "declarations": [
+        {
+          "line": 16,
+          "manifest": "environment.yml",
+          "requirement": "python-dotenv>=1.0",
+          "scope": "environment",
+          "source_file": "environment.yml"
+        },
+        {
+          "line": 8,
+          "manifest": "requirements-analysis.txt",
+          "requirement": "python-dotenv>=1,<2",
+          "scope": "requirements-analysis",
+          "source_file": "requirements-dev.txt"
+        },
+        {
+          "line": 8,
+          "manifest": "requirements-dev.txt",
+          "requirement": "python-dotenv>=1,<2",
+          "scope": "development",
+          "source_file": "requirements-dev.txt"
+        },
+        {
+          "line": 11,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "python-dotenv>=1.0",
+          "scope": "vlm",
+          "source_file": "requirements.txt"
+        },
+        {
+          "line": 11,
+          "manifest": "requirements.txt",
+          "requirement": "python-dotenv>=1.0",
+          "scope": "runtime",
+          "source_file": "requirements.txt"
+        }
+      ],
+      "declared_in": [
+        "environment.yml",
+        "requirements-analysis.txt",
+        "requirements-dev.txt",
+        "requirements-vlm.txt",
+        "requirements.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "python-dotenv",
+      "installed_version": "1.2.2",
+      "license": "BSD-3-Clause",
+      "license_files": [
+        "python_dotenv-1.2.2.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License",
+      "name": "python-dotenv",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Source",
+          "url": "https://github.com/theskumar/python-dotenv"
+        }
+      ],
+      "scopes": [
+        "development",
+        "environment",
+        "requirements-analysis",
+        "runtime",
+        "vlm"
+      ],
+      "source_url": "https://github.com/theskumar/python-dotenv"
+    },
+    {
+      "canonical_name": "python-multipart",
+      "declarations": [
+        {
+          "line": 26,
+          "manifest": "environment.yml",
+          "requirement": "python-multipart>=0.0.9",
+          "scope": "environment",
+          "source_file": "environment.yml"
+        },
+        {
+          "line": 9,
+          "manifest": "requirements-analysis.txt",
+          "requirement": "python-multipart>=0.0.9,<1",
+          "scope": "requirements-analysis",
+          "source_file": "requirements-dev.txt"
+        },
+        {
+          "line": 9,
+          "manifest": "requirements-dev.txt",
+          "requirement": "python-multipart>=0.0.9,<1",
+          "scope": "development",
+          "source_file": "requirements-dev.txt"
+        },
+        {
+          "line": 23,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "python-multipart>=0.0.9",
+          "scope": "vlm",
+          "source_file": "requirements.txt"
+        },
+        {
+          "line": 23,
+          "manifest": "requirements.txt",
+          "requirement": "python-multipart>=0.0.9",
+          "scope": "runtime",
+          "source_file": "requirements.txt"
+        }
+      ],
+      "declared_in": [
+        "environment.yml",
+        "requirements-analysis.txt",
+        "requirements-dev.txt",
+        "requirements-vlm.txt",
+        "requirements.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "python-multipart",
+      "installed_version": "0.0.32",
+      "license": "Apache-2.0",
+      "license_files": [
+        "python_multipart-0.0.32.dist-info/licenses/LICENSE.txt"
+      ],
+      "license_source": "License-Expression",
+      "name": "python-multipart",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://github.com/Kludex/python-multipart/blob/master/CHANGELOG.md"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://kludex.github.io/python-multipart/"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://github.com/Kludex/python-multipart"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/Kludex/python-multipart"
+        }
+      ],
+      "scopes": [
+        "development",
+        "environment",
+        "requirements-analysis",
+        "runtime",
+        "vlm"
+      ],
+      "source_url": "https://github.com/Kludex/python-multipart"
+    },
+    {
+      "canonical_name": "pytz",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "pytz",
+      "installed_version": "2026.3.post1",
+      "license": "MIT",
+      "license_files": [
+        "pytz-2026.3.post1.dist-info/LICENSE.txt"
+      ],
+      "license_source": "License",
+      "name": "pytz",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Home-page",
+          "url": "http://pythonhosted.org/pytz"
+        },
+        {
+          "label": "Issues",
+          "url": "https://github.com/stub42/pytz/issues"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/stub42/pytz.git"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/stub42/pytz.git"
+    },
+    {
+      "canonical_name": "pyyaml",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "PyYAML",
+      "installed_version": "6.0.3",
+      "license": "MIT",
+      "license_files": [
+        "pyyaml-6.0.3.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License",
+      "name": "PyYAML",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Bug Tracker",
+          "url": "https://github.com/yaml/pyyaml/issues"
+        },
+        {
+          "label": "CI",
+          "url": "https://github.com/yaml/pyyaml/actions"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://pyyaml.org/wiki/PyYAMLDocumentation"
+        },
+        {
+          "label": "Home-page",
+          "url": "https://pyyaml.org/"
+        },
+        {
+          "label": "Mailing lists",
+          "url": "http://lists.sourceforge.net/lists/listinfo/yaml-core"
+        },
+        {
+          "label": "Source Code",
+          "url": "https://github.com/yaml/pyyaml"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://pyyaml.org/wiki/PyYAMLDocumentation"
+    },
+    {
+      "canonical_name": "regex",
+      "declarations": [
+        {
+          "line": 24,
+          "manifest": "environment.yml",
+          "requirement": "regex>=2024.0",
+          "scope": "environment",
+          "source_file": "environment.yml"
+        },
+        {
+          "line": 21,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "regex>=2024.0",
+          "scope": "vlm",
+          "source_file": "requirements.txt"
+        },
+        {
+          "line": 21,
+          "manifest": "requirements.txt",
+          "requirement": "regex>=2024.0",
+          "scope": "runtime",
+          "source_file": "requirements.txt"
+        }
+      ],
+      "declared_in": [
+        "environment.yml",
+        "requirements-vlm.txt",
+        "requirements.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "regex",
+      "installed_version": "2026.7.19",
+      "license": "Apache-2.0 AND CNRI-Python",
+      "license_files": [
+        "regex-2026.7.19.dist-info/licenses/LICENSE.txt"
+      ],
+      "license_source": "License-Expression",
+      "name": "regex",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Homepage",
+          "url": "https://github.com/mrabarnett/mrab-regex"
+        }
+      ],
+      "scopes": [
+        "environment",
+        "runtime",
+        "vlm"
+      ],
+      "source_url": "https://github.com/mrabarnett/mrab-regex"
+    },
+    {
+      "canonical_name": "requests",
+      "declarations": [
+        {
+          "line": 17,
+          "manifest": "environment.yml",
+          "requirement": "requests>=2.31",
+          "scope": "environment",
+          "source_file": "environment.yml"
+        },
+        {
+          "line": 10,
+          "manifest": "requirements-analysis.txt",
+          "requirement": "requests>=2.31,<3",
+          "scope": "requirements-analysis",
+          "source_file": "requirements-dev.txt"
+        },
+        {
+          "line": 10,
+          "manifest": "requirements-dev.txt",
+          "requirement": "requests>=2.31,<3",
+          "scope": "development",
+          "source_file": "requirements-dev.txt"
+        },
+        {
+          "line": 12,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "requests>=2.31",
+          "scope": "vlm",
+          "source_file": "requirements.txt"
+        },
+        {
+          "line": 12,
+          "manifest": "requirements.txt",
+          "requirement": "requests>=2.31",
+          "scope": "runtime",
+          "source_file": "requirements.txt"
+        }
+      ],
+      "declared_in": [
+        "environment.yml",
+        "requirements-analysis.txt",
+        "requirements-dev.txt",
+        "requirements-vlm.txt",
+        "requirements.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "requests",
+      "installed_version": "2.34.2",
+      "license": "Apache-2.0",
+      "license_files": [
+        "requests-2.34.2.dist-info/licenses/LICENSE",
+        "requests-2.34.2.dist-info/licenses/NOTICE"
+      ],
+      "license_source": "License",
+      "name": "requests",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Documentation",
+          "url": "https://requests.readthedocs.io"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/psf/requests"
+        }
+      ],
+      "scopes": [
+        "development",
+        "environment",
+        "requirements-analysis",
+        "runtime",
+        "vlm"
+      ],
+      "source_url": "https://github.com/psf/requests"
+    },
+    {
+      "canonical_name": "rich",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "rich",
+      "installed_version": "15.0.0",
+      "license": "MIT",
+      "license_files": [
+        "rich-15.0.0.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License",
+      "name": "rich",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Documentation",
+          "url": "https://rich.readthedocs.io/en/latest/"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://github.com/Textualize/rich"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/Textualize/rich"
+    },
+    {
+      "canonical_name": "ruff",
+      "declarations": [
+        {
+          "line": 29,
+          "manifest": "environment.yml",
+          "requirement": "ruff==0.15.21",
+          "scope": "environment",
+          "source_file": "environment.yml"
+        },
+        {
+          "line": 12,
+          "manifest": "requirements-analysis.txt",
+          "requirement": "ruff==0.15.21",
+          "scope": "requirements-analysis",
+          "source_file": "requirements-dev.txt"
+        },
+        {
+          "line": 12,
+          "manifest": "requirements-dev.txt",
+          "requirement": "ruff==0.15.21",
+          "scope": "development",
+          "source_file": "requirements-dev.txt"
+        }
+      ],
+      "declared_in": [
+        "environment.yml",
+        "requirements-analysis.txt",
+        "requirements-dev.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "ruff",
+      "installed_version": "0.15.21",
+      "license": "MIT",
+      "license_files": [
+        "ruff-0.15.21.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License-Expression",
+      "name": "ruff",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://github.com/astral-sh/ruff/blob/main/CHANGELOG.md"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://docs.astral.sh/ruff/"
+        },
+        {
+          "label": "Home-page",
+          "url": "https://docs.astral.sh/ruff"
+        },
+        {
+          "label": "Repository",
+          "url": "https://github.com/astral-sh/ruff"
+        }
+      ],
+      "scopes": [
+        "development",
+        "environment",
+        "requirements-analysis"
+      ],
+      "source_url": "https://github.com/astral-sh/ruff"
+    },
+    {
+      "canonical_name": "safetensors",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "safetensors",
+      "installed_version": "0.8.0",
+      "license": "Apache-2.0",
+      "license_files": [
+        "safetensors-0.8.0.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "Classifier",
+      "name": "safetensors",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Homepage",
+          "url": "https://github.com/huggingface/safetensors"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/huggingface/safetensors"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/huggingface/safetensors"
+    },
+    {
+      "canonical_name": "sentencepiece",
+      "declarations": [
+        {
+          "line": 6,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "sentencepiece>=0.2.0,<1",
+          "scope": "vlm",
+          "source_file": "requirements-vlm.txt"
+        }
+      ],
+      "declared_in": [
+        "requirements-vlm.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "sentencepiece",
+      "installed_version": "0.2.2",
+      "license": "Apache-2.0",
+      "license_files": [],
+      "license_source": "License-Expression",
+      "name": "sentencepiece",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Homepage",
+          "url": "https://github.com/google/sentencepiece"
+        }
+      ],
+      "scopes": [
+        "vlm"
+      ],
+      "source_url": "https://github.com/google/sentencepiece"
+    },
+    {
+      "canonical_name": "setuptools",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "setuptools",
+      "installed_version": "80.10.2",
+      "license": "MIT",
+      "license_files": [
+        "LICENSE",
+        "setuptools/_vendor/autocommand-2.2.2.dist-info/LICENSE",
+        "setuptools/_vendor/backports.tarfile-1.2.0.dist-info/LICENSE",
+        "setuptools/_vendor/importlib_metadata-8.7.1.dist-info/licenses/LICENSE",
+        "setuptools/_vendor/jaraco.text-4.0.0.dist-info/LICENSE",
+        "setuptools/_vendor/jaraco_context-6.1.0.dist-info/licenses/LICENSE",
+        "setuptools/_vendor/jaraco_functools-4.4.0.dist-info/licenses/LICENSE",
+        "setuptools/_vendor/more_itertools-10.8.0.dist-info/licenses/LICENSE",
+        "setuptools/_vendor/packaging-26.0.dist-info/licenses/LICENSE",
+        "setuptools/_vendor/packaging-26.0.dist-info/licenses/LICENSE.APACHE",
+        "setuptools/_vendor/packaging-26.0.dist-info/licenses/LICENSE.BSD",
+        "setuptools/_vendor/platformdirs-4.4.0.dist-info/licenses/LICENSE",
+        "setuptools/_vendor/tomli-2.4.0.dist-info/licenses/LICENSE",
+        "setuptools/_vendor/wheel-0.46.3.dist-info/licenses/LICENSE.txt",
+        "setuptools/_vendor/zipp-3.23.0.dist-info/licenses/LICENSE",
+        "setuptools/config/NOTICE",
+        "setuptools/config/_validate_pyproject/NOTICE"
+      ],
+      "license_source": "License-Expression",
+      "name": "setuptools",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://setuptools.pypa.io/en/stable/history.html"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://setuptools.pypa.io/"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/pypa/setuptools"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/pypa/setuptools"
+    },
+    {
+      "canonical_name": "shellingham",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "shellingham",
+      "installed_version": "1.5.4",
+      "license": "ISC License",
+      "license_files": [
+        "shellingham-1.5.4.dist-info/LICENSE"
+      ],
+      "license_source": "License",
+      "name": "shellingham",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Home-page",
+          "url": "https://github.com/sarugaku/shellingham"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/sarugaku/shellingham"
+    },
+    {
+      "canonical_name": "six",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "six",
+      "installed_version": "1.17.0",
+      "license": "MIT",
+      "license_files": [
+        "six-1.17.0.dist-info/LICENSE"
+      ],
+      "license_source": "License",
+      "name": "six",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Home-page",
+          "url": "https://github.com/benjaminp/six"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/benjaminp/six"
+    },
+    {
+      "canonical_name": "starlette",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "starlette",
+      "installed_version": "1.3.1",
+      "license": "BSD-3-Clause",
+      "license_files": [
+        "starlette-1.3.1.dist-info/licenses/LICENSE.md"
+      ],
+      "license_source": "License-Expression",
+      "name": "starlette",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://starlette.dev/release-notes/"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://starlette.dev/"
+        },
+        {
+          "label": "Funding",
+          "url": "https://github.com/sponsors/Kludex"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://github.com/Kludex/starlette"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/Kludex/starlette"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/Kludex/starlette"
+    },
+    {
+      "canonical_name": "sympy",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "sympy",
+      "installed_version": "1.14.0",
+      "license": "BSD",
+      "license_files": [
+        "sympy-1.14.0.dist-info/licenses/LICENSE",
+        "sympy/parsing/latex/LICENSE.txt"
+      ],
+      "license_source": "License",
+      "name": "sympy",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Home-page",
+          "url": "https://sympy.org"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/sympy/sympy"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/sympy/sympy"
+    },
+    {
+      "canonical_name": "tokenizers",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "tokenizers",
+      "installed_version": "0.22.2",
+      "license": "Apache-2.0",
+      "license_files": [],
+      "license_source": "Classifier",
+      "name": "tokenizers",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Homepage",
+          "url": "https://github.com/huggingface/tokenizers"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/huggingface/tokenizers"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/huggingface/tokenizers"
+    },
+    {
+      "canonical_name": "tomli",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "tomli",
+      "installed_version": "2.4.1",
+      "license": "MIT",
+      "license_files": [
+        "tomli-2.4.1.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License-Expression",
+      "name": "tomli",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://github.com/hukkin/tomli/blob/master/CHANGELOG.md"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://github.com/hukkin/tomli"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/hukkin/tomli"
+    },
+    {
+      "canonical_name": "torch",
+      "declarations": [
+        {
+          "line": 20,
+          "manifest": "environment.yml",
+          "requirement": "torch",
+          "scope": "environment",
+          "source_file": "environment.yml"
+        },
+        {
+          "line": 17,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "torch",
+          "scope": "vlm",
+          "source_file": "requirements.txt"
+        },
+        {
+          "line": 17,
+          "manifest": "requirements.txt",
+          "requirement": "torch",
+          "scope": "runtime",
+          "source_file": "requirements.txt"
+        }
+      ],
+      "declared_in": [
+        "environment.yml",
+        "requirements-vlm.txt",
+        "requirements.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "torch",
+      "installed_version": "2.13.0",
+      "license": "Apache-2.0 AND Apache-2.0 WITH LLVM-exception AND BSD-2-Clause AND BSD-3-Clause AND BSL-1.0 AND MIT",
+      "license_files": [
+        "torch-2.13.0.dist-info/licenses/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/FP16/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/FXdiv/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/NNPACK/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/NVTX/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/NVTX/docs/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/NVTX/python/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/NVTX/tools/docs/github-markdown-css/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/VulkanMemoryAllocator/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/XNNPACK/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/aiter/3rdparty/composable_kernel/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/aiter/3rdparty/composable_kernel/docs/LICENSE.rst",
+        "torch-2.13.0.dist-info/licenses/third_party/aiter/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/benchmark/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/composable_kernel/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/composable_kernel/docs/LICENSE.rst",
+        "torch-2.13.0.dist-info/licenses/third_party/cpp-httplib/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/cpuinfo/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/cpuinfo/deps/clog/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/cudnn_frontend/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/cutlass/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/cutlass/python/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/fbgemm/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/fbgemm/external/composable_kernel/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/fbgemm/external/composable_kernel/docs/LICENSE.rst",
+        "torch-2.13.0.dist-info/licenses/third_party/fbgemm/external/cpuinfo/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/fbgemm/external/cpuinfo/deps/clog/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/fbgemm/external/cutlass/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/fbgemm/external/cutlass/python/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/fbgemm/external/googletest/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/fbgemm/external/hipify_torch/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/fbgemm/fbgemm_gpu/docs/src/general/LICENSE.rst",
+        "torch-2.13.0.dist-info/licenses/third_party/fbgemm/fbgemm_gpu/experimental/hstu/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/fbgemm/fbgemm_gpu/src/quantize_ops/mx/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/fbgemm/fbgemm_gpu/test/quantize/mx/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/flash-attention/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/flash-attention/csrc/composable_kernel/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/flash-attention/csrc/composable_kernel/docs/LICENSE.rst",
+        "torch-2.13.0.dist-info/licenses/third_party/flash-attention/csrc/cutlass/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/flash-attention/csrc/cutlass/python/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/flash-attention/flash_attn/cute/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/flash-attention/third_party/aiter/3rdparty/composable_kernel/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/flash-attention/third_party/aiter/3rdparty/composable_kernel/docs/LICENSE.rst",
+        "torch-2.13.0.dist-info/licenses/third_party/flash-attention/third_party/aiter/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/flatbuffers/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/flatbuffers/dart/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/flatbuffers/swift/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/fmt/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/gemmlowp/gemmlowp/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/gloo/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/googletest/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/ideep/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/ideep/mkl-dnn/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/ideep/mkl-dnn/third_party/gtest/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/ideep/mkl-dnn/third_party/opencl/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/kineto/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/kineto/libkineto/third_party/dynolog/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/kineto/libkineto/third_party/dynolog/third_party/DCGM/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/kineto/libkineto/third_party/dynolog/third_party/DCGM/testing/python3/libs_3rdparty/colorama/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/kineto/libkineto/third_party/dynolog/third_party/cpr/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/kineto/libkineto/third_party/dynolog/third_party/cpr/test/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/kineto/libkineto/third_party/dynolog/third_party/fmt/LICENSE.rst",
+        "torch-2.13.0.dist-info/licenses/third_party/kineto/libkineto/third_party/dynolog/third_party/googletest/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/kineto/libkineto/third_party/dynolog/third_party/json/test/thirdparty/doctest/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/kineto/libkineto/third_party/dynolog/third_party/json/third_party/cpplint/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/kineto/libkineto/third_party/dynolog/third_party/pfs/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/kineto/libkineto/third_party/dynolog/third_party/prometheus-cpp/3rdparty/civetweb/examples/rest/cJSON/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/kineto/libkineto/third_party/dynolog/third_party/prometheus-cpp/3rdparty/civetweb/src/third_party/duktape-1.5.2/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/kineto/libkineto/third_party/dynolog/third_party/prometheus-cpp/3rdparty/civetweb/src/third_party/duktape-1.8.0/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/kineto/libkineto/third_party/dynolog/third_party/prometheus-cpp/3rdparty/googletest/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/kineto/libkineto/third_party/dynolog/third_party/prometheus-cpp/3rdparty/googletest/googlemock/scripts/generator/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/kineto/libkineto/third_party/dynolog/third_party/prometheus-cpp/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/kineto/libkineto/third_party/fmt/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/kineto/libkineto/third_party/googletest/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/llvm-openmp/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/mimalloc/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/miniz-3.0.2/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/mslk/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/mslk/external/composable_kernel/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/mslk/external/composable_kernel/docs/LICENSE.rst",
+        "torch-2.13.0.dist-info/licenses/third_party/mslk/external/cutlass/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/mslk/external/cutlass/python/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/mslk/external/googletest/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/mslk/external/hipify_torch/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/mslk/mslk/attention/flash_attn/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/onnx/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/onnx/third_party/pybind11/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/protobuf/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/protobuf/third_party/benchmark/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/protobuf/third_party/googletest/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/protobuf/third_party/googletest/googlemock/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/protobuf/third_party/googletest/googlemock/scripts/generator/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/protobuf/third_party/googletest/googletest/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/psimd/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/pthreadpool/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/pybind11/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/python-peachpy/LICENSE.rst",
+        "torch-2.13.0.dist-info/licenses/third_party/sleef/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/tensorpipe/LICENSE.txt",
+        "torch-2.13.0.dist-info/licenses/third_party/tensorpipe/third_party/googletest/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/tensorpipe/third_party/googletest/googlemock/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/tensorpipe/third_party/googletest/googlemock/scripts/generator/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/tensorpipe/third_party/googletest/googletest/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/tensorpipe/third_party/libnop/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/tensorpipe/third_party/libuv/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/tensorpipe/third_party/pybind11/LICENSE",
+        "torch-2.13.0.dist-info/licenses/third_party/tensorpipe/third_party/pybind11/tools/clang/LICENSE.txt"
+      ],
+      "license_source": "License-Expression",
+      "name": "torch",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Documentation",
+          "url": "https://pytorch.org/docs"
+        },
+        {
+          "label": "Forum",
+          "url": "https://discuss.pytorch.org"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://pytorch.org"
+        },
+        {
+          "label": "Issue Tracker",
+          "url": "https://github.com/pytorch/pytorch/issues"
+        },
+        {
+          "label": "Repository",
+          "url": "https://github.com/pytorch/pytorch"
+        }
+      ],
+      "scopes": [
+        "environment",
+        "runtime",
+        "vlm"
+      ],
+      "source_url": "https://github.com/pytorch/pytorch"
+    },
+    {
+      "canonical_name": "torchvision",
+      "declarations": [
+        {
+          "line": 21,
+          "manifest": "environment.yml",
+          "requirement": "torchvision",
+          "scope": "environment",
+          "source_file": "environment.yml"
+        },
+        {
+          "line": 18,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "torchvision",
+          "scope": "vlm",
+          "source_file": "requirements.txt"
+        },
+        {
+          "line": 18,
+          "manifest": "requirements.txt",
+          "requirement": "torchvision",
+          "scope": "runtime",
+          "source_file": "requirements.txt"
+        }
+      ],
+      "declared_in": [
+        "environment.yml",
+        "requirements-vlm.txt",
+        "requirements.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "torchvision",
+      "installed_version": "0.28.0",
+      "license": "BSD",
+      "license_files": [
+        "torchvision-0.28.0.dist-info/LICENSE"
+      ],
+      "license_source": "License",
+      "name": "torchvision",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Home-page",
+          "url": "https://github.com/pytorch/vision"
+        }
+      ],
+      "scopes": [
+        "environment",
+        "runtime",
+        "vlm"
+      ],
+      "source_url": "https://github.com/pytorch/vision"
+    },
+    {
+      "canonical_name": "tqdm",
+      "declarations": [
+        {
+          "line": 25,
+          "manifest": "environment.yml",
+          "requirement": "tqdm>=4.66",
+          "scope": "environment",
+          "source_file": "environment.yml"
+        },
+        {
+          "line": 22,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "tqdm>=4.66",
+          "scope": "vlm",
+          "source_file": "requirements.txt"
+        },
+        {
+          "line": 22,
+          "manifest": "requirements.txt",
+          "requirement": "tqdm>=4.66",
+          "scope": "runtime",
+          "source_file": "requirements.txt"
+        }
+      ],
+      "declared_in": [
+        "environment.yml",
+        "requirements-vlm.txt",
+        "requirements.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "tqdm",
+      "installed_version": "4.69.1",
+      "license": "MPL-2.0 AND MIT",
+      "license_files": [
+        "tqdm-4.69.1.dist-info/licenses/LICENCE"
+      ],
+      "license_source": "License",
+      "name": "tqdm",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "changelog",
+          "url": "https://tqdm.github.io/releases"
+        },
+        {
+          "label": "homepage",
+          "url": "https://tqdm.github.io"
+        },
+        {
+          "label": "repository",
+          "url": "https://github.com/tqdm/tqdm"
+        },
+        {
+          "label": "wiki",
+          "url": "https://github.com/tqdm/tqdm/wiki"
+        }
+      ],
+      "scopes": [
+        "environment",
+        "runtime",
+        "vlm"
+      ],
+      "source_url": "https://github.com/tqdm/tqdm"
+    },
+    {
+      "canonical_name": "transformers",
+      "declarations": [
+        {
+          "line": 4,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "transformers>=4.51,<6",
+          "scope": "vlm",
+          "source_file": "requirements-vlm.txt"
+        }
+      ],
+      "declared_in": [
+        "requirements-vlm.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "transformers",
+      "installed_version": "5.14.1",
+      "license": "Apache 2.0 License",
+      "license_files": [
+        "transformers-5.14.1.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License",
+      "name": "transformers",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Home-page",
+          "url": "https://github.com/huggingface/transformers"
+        }
+      ],
+      "scopes": [
+        "vlm"
+      ],
+      "source_url": "https://github.com/huggingface/transformers"
+    },
+    {
+      "canonical_name": "typer",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "typer",
+      "installed_version": "0.27.0",
+      "license": "MIT",
+      "license_files": [
+        "typer-0.27.0.dist-info/licenses/LICENSE",
+        "typer/_click/LICENSE.txt"
+      ],
+      "license_source": "License-Expression",
+      "name": "typer",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://typer.tiangolo.com/release-notes/"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://typer.tiangolo.com"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://github.com/fastapi/typer"
+        },
+        {
+          "label": "Issues",
+          "url": "https://github.com/fastapi/typer/issues"
+        },
+        {
+          "label": "Repository",
+          "url": "https://github.com/fastapi/typer"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/fastapi/typer"
+    },
+    {
+      "canonical_name": "typing-extensions",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "typing_extensions",
+      "installed_version": "4.16.0",
+      "license": "PSF-2.0",
+      "license_files": [
+        "typing_extensions-4.16.0.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License-Expression",
+      "name": "typing_extensions",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Bug Tracker",
+          "url": "https://github.com/python/typing_extensions/issues"
+        },
+        {
+          "label": "Changes",
+          "url": "https://github.com/python/typing_extensions/blob/main/CHANGELOG.md"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://typing-extensions.readthedocs.io/"
+        },
+        {
+          "label": "Home",
+          "url": "https://github.com/python/typing_extensions"
+        },
+        {
+          "label": "Q & A",
+          "url": "https://github.com/python/typing/discussions"
+        },
+        {
+          "label": "Repository",
+          "url": "https://github.com/python/typing_extensions"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/python/typing_extensions"
+    },
+    {
+      "canonical_name": "typing-inspection",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "typing-inspection",
+      "installed_version": "0.4.2",
+      "license": "MIT",
+      "license_files": [
+        "typing_inspection-0.4.2.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License-Expression",
+      "name": "typing-inspection",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://github.com/pydantic/typing-inspection/blob/main/HISTORY.md"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://pydantic.github.io/typing-inspection/dev/"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://github.com/pydantic/typing-inspection"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/pydantic/typing-inspection"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/pydantic/typing-inspection"
+    },
+    {
+      "canonical_name": "tzdata",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "tzdata",
+      "installed_version": "2026.3",
+      "license": "Apache-2.0",
+      "license_files": [
+        "tzdata-2026.3.dist-info/licenses/LICENSE",
+        "tzdata-2026.3.dist-info/licenses/licenses/LICENSE_APACHE"
+      ],
+      "license_source": "License",
+      "name": "tzdata",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Bug Reports",
+          "url": "https://github.com/python/tzdata/issues"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://tzdata.python.org"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/python/tzdata"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/python/tzdata"
+    },
+    {
+      "canonical_name": "urllib3",
+      "declarations": [
+        {
+          "line": 18,
+          "manifest": "environment.yml",
+          "requirement": "urllib3>=2.2,<3",
+          "scope": "environment",
+          "source_file": "environment.yml"
+        },
+        {
+          "line": 14,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "urllib3>=2.2,<3",
+          "scope": "vlm",
+          "source_file": "requirements.txt"
+        },
+        {
+          "line": 14,
+          "manifest": "requirements.txt",
+          "requirement": "urllib3>=2.2,<3",
+          "scope": "runtime",
+          "source_file": "requirements.txt"
+        }
+      ],
+      "declared_in": [
+        "environment.yml",
+        "requirements-vlm.txt",
+        "requirements.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "urllib3",
+      "installed_version": "2.7.0",
+      "license": "MIT",
+      "license_files": [
+        "urllib3-2.7.0.dist-info/licenses/LICENSE.txt"
+      ],
+      "license_source": "License-Expression",
+      "name": "urllib3",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://github.com/urllib3/urllib3/blob/main/CHANGES.rst"
+        },
+        {
+          "label": "Code",
+          "url": "https://github.com/urllib3/urllib3"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://urllib3.readthedocs.io"
+        },
+        {
+          "label": "Issue tracker",
+          "url": "https://github.com/urllib3/urllib3/issues"
+        }
+      ],
+      "scopes": [
+        "environment",
+        "runtime",
+        "vlm"
+      ],
+      "source_url": "https://github.com/urllib3/urllib3"
+    },
+    {
+      "canonical_name": "uvicorn",
+      "declarations": [
+        {
+          "line": 11,
+          "manifest": "environment.yml",
+          "requirement": "uvicorn[standard]>=0.30",
+          "scope": "environment",
+          "source_file": "environment.yml"
+        },
+        {
+          "line": 2,
+          "manifest": "requirements-vlm.txt",
+          "requirement": "uvicorn[standard]>=0.30",
+          "scope": "vlm",
+          "source_file": "requirements.txt"
+        },
+        {
+          "line": 2,
+          "manifest": "requirements.txt",
+          "requirement": "uvicorn[standard]>=0.30",
+          "scope": "runtime",
+          "source_file": "requirements.txt"
+        }
+      ],
+      "declared_in": [
+        "environment.yml",
+        "requirements-vlm.txt",
+        "requirements.txt"
+      ],
+      "direct": true,
+      "installed": true,
+      "installed_name": "uvicorn",
+      "installed_version": "0.51.0",
+      "license": "BSD-3-Clause",
+      "license_files": [
+        "uvicorn-0.51.0.dist-info/licenses/LICENSE.md"
+      ],
+      "license_source": "License-Expression",
+      "name": "uvicorn",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://uvicorn.dev/release-notes"
+        },
+        {
+          "label": "Funding",
+          "url": "https://github.com/sponsors/encode"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://uvicorn.dev/"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/Kludex/uvicorn"
+        }
+      ],
+      "scopes": [
+        "environment",
+        "runtime",
+        "vlm"
+      ],
+      "source_url": "https://github.com/Kludex/uvicorn"
+    },
+    {
+      "canonical_name": "watchfiles",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "watchfiles",
+      "installed_version": "1.2.0",
+      "license": "MIT",
+      "license_files": [
+        "watchfiles-1.2.0.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License",
+      "name": "watchfiles",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://github.com/samuelcolvin/watchfiles/releases"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://watchfiles.helpmanual.io"
+        },
+        {
+          "label": "Funding",
+          "url": "https://github.com/sponsors/samuelcolvin"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://github.com/samuelcolvin/watchfiles"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/samuelcolvin/watchfiles"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/samuelcolvin/watchfiles"
+    },
+    {
+      "canonical_name": "wcwidth",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "wcwidth",
+      "installed_version": "0.8.2",
+      "license": "MIT",
+      "license_files": [
+        "wcwidth-0.8.2.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License-Expression",
+      "name": "wcwidth",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Homepage",
+          "url": "https://github.com/jquast/wcwidth"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/jquast/wcwidth"
+    },
+    {
+      "canonical_name": "websockets",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "websockets",
+      "installed_version": "16.1.1",
+      "license": "BSD-3-Clause",
+      "license_files": [
+        "websockets-16.1.1.dist-info/licenses/LICENSE"
+      ],
+      "license_source": "License-Expression",
+      "name": "websockets",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://websockets.readthedocs.io/en/stable/project/changelog.html"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://websockets.readthedocs.io/"
+        },
+        {
+          "label": "Funding",
+          "url": "https://tidelift.com/subscription/pkg/pypi-websockets"
+        },
+        {
+          "label": "Homepage",
+          "url": "https://github.com/python-websockets/websockets"
+        },
+        {
+          "label": "Tracker",
+          "url": "https://github.com/python-websockets/websockets/issues"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/python-websockets/websockets"
+    },
+    {
+      "canonical_name": "wheel",
+      "declarations": [],
+      "declared_in": [],
+      "direct": false,
+      "installed": true,
+      "installed_name": "wheel",
+      "installed_version": "0.47.0",
+      "license": "MIT",
+      "license_files": [
+        "wheel-0.47.0.dist-info/licenses/LICENSE.txt"
+      ],
+      "license_source": "License-Expression",
+      "name": "wheel",
+      "origin_url": null,
+      "project_urls": [
+        {
+          "label": "Changelog",
+          "url": "https://wheel.readthedocs.io/en/stable/news.html"
+        },
+        {
+          "label": "Documentation",
+          "url": "https://wheel.readthedocs.io/"
+        },
+        {
+          "label": "Issue Tracker",
+          "url": "https://github.com/pypa/wheel/issues"
+        },
+        {
+          "label": "Source",
+          "url": "https://github.com/pypa/wheel"
+        }
+      ],
+      "scopes": [
+        "installed-environment"
+      ],
+      "source_url": "https://github.com/pypa/wheel"
+    }
+  ],
+  "environment": {
+    "machine": "AMD64",
+    "operating_system": "Windows",
+    "python_implementation": "CPython",
+    "python_version": "3.10.20"
+  },
+  "inputs": [
+    "environment.yml",
+    "requirements-analysis.txt",
+    "requirements-dev.txt",
+    "requirements-vlm.txt",
+    "requirements.txt"
+  ],
+  "limitations": [
+    "The complete clean validation environment is inventoried, but dependency graph edges are not resolved.",
+    "License values come from installed distribution metadata and are not legal conclusions.",
+    "Binary wheels and models may contain additional components governed by separate terms."
+  ],
+  "missing_dependencies": [],
+  "report_type": "installed-environment-python-dependency-inventory",
+  "schema_version": 1,
+  "summary": {
+    "components": 75,
+    "direct_dependencies": 25,
+    "installed": 25,
+    "installed_environment_components": 75,
+    "installed_environment_only_components": 50,
+    "missing": 0,
+    "unknown_license": 0
+  },
+  "unknown_license_dependencies": []
+}

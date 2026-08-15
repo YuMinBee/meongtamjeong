@@ -1,4 +1,4 @@
-﻿import argparse
+import argparse
 import hashlib
 import json
 import os
@@ -16,20 +16,32 @@ import requests
 import torch
 from dotenv import load_dotenv
 from PIL import Image
-from io import BytesIO
 from tqdm import tqdm
 from datetime import datetime, timedelta
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
-from urllib.parse import quote
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
 
-from app.dog_attributes import build_photo_advice, format_vlm_attrs_for_embedding, summarize_vlm_attrs_ko
-from app.notice_status import is_searchable_notice
-from app.species import clean_species, species_config, species_from_upkind
+from app.dog_attributes import (  # noqa: E402
+    build_photo_advice,
+    format_vlm_attrs_for_embedding,
+    summarize_vlm_attrs_ko,
+)
+from app.notice_metadata import (  # noqa: E402
+    extract_image_urls,
+    normalize_additional_notice_fields,
+    normalize_breed_fields as normalize_reported_breed_fields,
+)
+from app.notice_status import is_searchable_notice  # noqa: E402
+from app.public_image_download import (  # noqa: E402
+    DEFAULT_ALLOWED_IMAGE_HOSTS,
+    PublicImageDownloader,
+    parse_public_image_hostname,
+)
+from app.species import clean_species, species_config, species_from_upkind  # noqa: E402
 
 DATA_DIR = BASE_DIR / "data"
 load_dotenv(BASE_DIR / ".env")
@@ -60,20 +72,20 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 model, preprocess = clip.load("ViT-B/32", device=device)
 print(f"[INFO] device={device}")
 
-BASE = "https://apis.data.go.kr/1543061/abandonmentPublicService_v2/abandonmentPublic_v2"
+BASE = (
+    "https://apis.data.go.kr/1543061/abandonmentPublicService_v2/abandonmentPublic_v2"
+)
 API_KEY = os.getenv("ANIMAL_API_KEY", "")
 
 session = requests.Session()
-retries = Retry(total=5, backoff_factor=1,
-                status_forcelist=[429, 500, 502, 503, 504])
+retries = Retry(total=5, backoff_factor=1, status_forcelist=[429, 500, 502, 503, 504])
 session.mount("http://", HTTPAdapter(max_retries=retries))
 session.headers.update({"Accept": "application/json", "User-Agent": "Mozilla/5.0"})
+image_downloader: PublicImageDownloader | None = None
+
 
 def slowdown():
     time.sleep(max(0.01, BASE_SLEEP + random.uniform(-JITTER, JITTER)))
-
-def safe_url(u: str) -> str:
-    return quote(u, safe=":/?&=#[]%")
 
 
 def clean_text(value) -> str:
@@ -95,12 +107,22 @@ def resolve_embedding_desc(rec: dict) -> str:
     vlm_desc = first_text(rec, "vlm_desc")
     base_desc = first_text(rec, "desc", "base_desc", "specialMark")
     merged_desc = first_text(rec, "merged_desc")
-    desc_full = first_text(rec, "desc_full")
 
-    parts = [text for text in (attrs_text, f"사진 보강 설명: {vlm_desc}" if vlm_desc else "", f"기존 설명: {base_desc}" if base_desc else "") if text]
+    parts = [
+        text
+        for text in (
+            attrs_text,
+            f"사진 보강 설명: {vlm_desc}" if vlm_desc else "",
+            f"기존 설명: {base_desc}" if base_desc else "",
+        )
+        if text
+    ]
     if parts:
         return "\n".join(parts)
-    return merged_desc or desc_full
+    # `desc_full` is a previously generated CLIP input and may contain the old
+    # reported-breed token. It must never be recycled into a rebuilt index.
+    return merged_desc
+
 
 def load_input_records(path: Path):
     payload = json.loads(path.read_text(encoding="utf-8"))
@@ -109,31 +131,75 @@ def load_input_records(path: Path):
     else:
         records = payload
     if not isinstance(records, list):
-        raise ValueError(f"input records must be a list or an object with items: {path}")
+        raise ValueError(
+            f"input records must be a list or an object with items: {path}"
+        )
     return records
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Build FAISS embeddings for animal search.")
+    parser = argparse.ArgumentParser(
+        description="Build FAISS embeddings for animal search."
+    )
     parser.add_argument(
         "--input",
         type=Path,
         default=None,
         help="Local JSON cache to index. Defaults to data/local_{species}_cache_enriched.json or data/local_{species}_cache.json when present.",
     )
-    parser.add_argument("--species", default="dog", choices=("dog", "cat", "other"), help="Animal species namespace for default files and metadata.")
-    parser.add_argument("--target", type=int, default=TARGET, help="Maximum records to process.")
-    parser.add_argument("--text-only", action="store_true", help="Skip image downloads and build only text embeddings.")
-    parser.add_argument("--include-closed", action="store_true", help="Include closed or expired notices in the rebuilt FAISS index.")
+    parser.add_argument(
+        "--species",
+        default="dog",
+        choices=("dog", "cat", "other"),
+        help="Animal species namespace for default files and metadata.",
+    )
+    parser.add_argument(
+        "--target", type=int, default=TARGET, help="Maximum records to process."
+    )
+    parser.add_argument(
+        "--text-only",
+        action="store_true",
+        help="Skip image downloads and build only text embeddings.",
+    )
+    parser.add_argument(
+        "--include-closed",
+        action="store_true",
+        help="Include closed or expired notices in the rebuilt FAISS index.",
+    )
     parser.add_argument(
         "--exclude-unknown",
         action="store_true",
         help="Exclude notices whose active status cannot be verified.",
     )
-    parser.add_argument("--index-out", type=Path, default=None, help="Output FAISS index path. Defaults to data/{species}_faiss.index.")
-    parser.add_argument("--metas-out", type=Path, default=None, help="Output metadata path. Defaults to data/{species}_metas.json.")
-    parser.add_argument("--upkind", default="", help="Override public API upkind code when fetching without --input.")
+    parser.add_argument(
+        "--index-out",
+        type=Path,
+        default=None,
+        help="Output FAISS index path. Defaults to data/{species}_faiss.index.",
+    )
+    parser.add_argument(
+        "--metas-out",
+        type=Path,
+        default=None,
+        help="Output metadata path. Defaults to data/{species}_metas.json.",
+    )
+    parser.add_argument(
+        "--upkind",
+        default="",
+        help="Override public API upkind code when fetching without --input.",
+    )
+    parser.add_argument(
+        "--allowed-image-host",
+        action="append",
+        type=parse_public_image_hostname,
+        dest="allowed_image_hosts",
+        help=(
+            "Exact public hostname allowed for image downloads. Repeat for multiple "
+            "hosts. Defaults to openapi.animal.go.kr. Redirects are not followed."
+        ),
+    )
     return parser.parse_args()
+
 
 def fetch_data(page=1, rows=ROWS_PER_PAGE, max_wait=180):
     end = datetime.now()
@@ -158,7 +224,11 @@ def fetch_data(page=1, rows=ROWS_PER_PAGE, max_wait=180):
             resp.raise_for_status()
             try:
                 data = resp.json()
-                body = data.get("response", {}).get("body", {}) if isinstance(data, dict) else {}
+                body = (
+                    data.get("response", {}).get("body", {})
+                    if isinstance(data, dict)
+                    else {}
+                )
                 items = body.get("items", {}).get("item", [])
                 if isinstance(items, dict):
                     items = [items]
@@ -166,8 +236,11 @@ def fetch_data(page=1, rows=ROWS_PER_PAGE, max_wait=180):
             except ValueError:
                 print(f"[WARN] page {page}: JSON 파싱 실패 (시도 {attempt})")
                 print("응답 앞부분:", resp.text[:200])
-        except requests.exceptions.RequestException as e:
-            print(f"[ERROR] page {page}: 요청 실패 (시도 {attempt}) → {e}")
+        except requests.exceptions.RequestException as exc:
+            print(
+                f"[ERROR] page {page}: 요청 실패 (시도 {attempt}) "
+                f"→ {exc.__class__.__name__}"
+            )
 
         # 3분(180초) 넘으면 포기하고 스킵
         if time.time() - start_time > max_wait:
@@ -176,16 +249,11 @@ def fetch_data(page=1, rows=ROWS_PER_PAGE, max_wait=180):
 
         time.sleep(2)  # 재시도 간격 (2초)
 
+
 def extract_image_url(rec: dict):
-    if not isinstance(rec, dict): return None
-    for k in ["image_url", "url", "popfile", "popfile1", "popfile2", "fileName", "thumb", "image", "img"]:
-        v = rec.get(k)
-        if isinstance(v, str) and v.startswith("http"):
-            return v
-    for k, v in rec.items():
-        if isinstance(v, str) and any(s in k.lower() for s in ["pop", "img", "thumb"]):
-            if v.startswith("http"): return v
-    return None
+    image_urls = extract_image_urls(rec)
+    return image_urls[0] if image_urls else None
+
 
 # =========================
 # 임베딩 함수
@@ -198,18 +266,22 @@ def encode_clip_image(img: Image.Image):
     return feat.cpu().numpy()[0]
 
 
-def get_clip_embedding_from_url(url: str):
+def get_clip_embedding_from_url(
+    url: str, downloader: PublicImageDownloader | None = None
+):
+    runtime_downloader = downloader or image_downloader
+    if runtime_downloader is None:
+        return None
     try:
         slowdown()
-        headers = {"Accept": "image/*", "Referer": "https://www.animal.go.kr/", "User-Agent": session.headers["User-Agent"]}
-        r = session.get(safe_url(url), timeout=10, headers=headers)
-        if r.status_code != 200 and url.startswith("http://"):
-            r = session.get("https://" + url[7:], timeout=10, headers=headers)
-        if r.status_code != 200:
+        image = runtime_downloader(url)
+        if image is None:
             return None
-        img = Image.open(BytesIO(r.content)).convert("RGB")
-        return encode_clip_image(img)
-    except:
+        try:
+            return encode_clip_image(image)
+        finally:
+            image.close()
+    except Exception:
         return None
 
 
@@ -227,7 +299,7 @@ def get_clip_embedding_from_path(path: Path):
     try:
         img = Image.open(path).convert("RGB")
         return encode_clip_image(img)
-    except:
+    except Exception:
         return None
 
 
@@ -238,23 +310,22 @@ def get_clip_text_embedding(text: str):
             feat = model.encode_text(tokens)
             feat /= feat.norm(dim=-1, keepdim=True)
         return feat.cpu().numpy()[0]
-    except:
+    except Exception:
         return None
 
+
 def build_dog_text(rec: dict) -> str:
-    """Create the CLIP text input, prioritizing VLM-enriched descriptions."""
-    kind = first_text(rec, "breed_name", "kindCd", "breed", "breed_code", "breedCd")
+    """Create CLIP text without using a reported breed as a behaviour proxy."""
     sex = first_text(rec, "sexCd", "sex")
     age = first_text(rec, "age")
     weight = first_text(rec, "weight")
     neuter = first_text(rec, "neuterYn", "neuter")
+    color = first_text(rec, "color", "colorCd")
     desc = resolve_embedding_desc(rec)
 
     parts = []
     if desc:
         parts.append(f"설명: {desc}")
-    if kind:
-        parts.append(f"품종 {kind}")
     if sex:
         parts.append(f"성별 {sex}")
     if age:
@@ -263,18 +334,15 @@ def build_dog_text(rec: dict) -> str:
         parts.append(f"체중 {weight}")
     if neuter:
         parts.append(f"중성화 {neuter}")
+    if color:
+        parts.append(f"색상 {color}")
     return ", ".join(parts)
 
 
 def normalize_breed_fields(rec: dict):
-    raw_kind = first_text(rec, "kindCd", "breed", "breed_name")
-    raw_breed_code = first_text(rec, "breedCd", "breed_code")
+    fields = normalize_reported_breed_fields(rec)
+    return fields["breed"], fields["breed_code"], fields["breed_name"]
 
-    breed_code = raw_breed_code or (raw_kind if raw_kind.isdigit() else "")
-    breed_name = raw_kind if raw_kind and not raw_kind.isdigit() else first_text(rec, "breed_name")
-    breed_value = breed_name or breed_code or "Unknown"
-
-    return breed_value, breed_code, breed_name
 
 # =========================
 def _safe_faiss_path(path: Path) -> Path:
@@ -295,22 +363,32 @@ def safe_write_faiss_index(index_obj, path: Path) -> None:
         faiss.write_index(index_obj, str(safe_path))
         shutil.copy2(safe_path, path)
 
+
 # FAISS 준비
 # =========================
 d = 512  # ViT-B/32 output dimension
 index = faiss.IndexFlatL2(d)
 metas = []
 
+
 def save_ckpt(index, metas, tag="final"):
     safe_write_faiss_index(index, FAISS_INDEX_PATH)
-    with META_PATH.open("w", encoding="utf-8") as f:
+    with META_PATH.open("w", encoding="utf-8", newline="\n") as f:
         json.dump(metas, f, ensure_ascii=False, indent=2)
+        f.write("\n")
     print(f"[{tag}] 저장 완료 → {FAISS_INDEX_PATH}, {META_PATH}")
+
 
 # =========================
 # 실행
 # =========================
 args = parse_args()
+allowed_image_hosts = tuple(args.allowed_image_hosts or DEFAULT_ALLOWED_IMAGE_HOSTS)
+if not args.text_only:
+    image_downloader = PublicImageDownloader(
+        timeout=10,
+        allowed_hosts=allowed_image_hosts,
+    )
 ACTIVE_SPECIES = clean_species(args.species)
 species_meta = species_config(ACTIVE_SPECIES)
 FETCH_UPKIND = str(args.upkind or species_meta["upkind"])
@@ -332,7 +410,9 @@ if args.input:
     source_records = load_input_records(args.input)
     target = min(target, len(source_records))
     page_sources = [(f"input {args.input}", source_records)]
-    print(f"[INFO] local input={args.input} records={len(source_records)} target={target}")
+    print(
+        f"[INFO] local input={args.input} records={len(source_records)} target={target}"
+    )
 else:
     page_sources = None
     print("[INFO] local input not provided; fetching records from public API")
@@ -376,6 +456,7 @@ while ok < target:
             f"?desertionNo={did}&menuNo=1000000055"
         )
 
+        source_fields = normalize_additional_notice_fields(rec)
         breed_value, breed_code, breed_name = normalize_breed_fields(rec)
         sex = first_text(rec, "sexCd", "sex")
         age = first_text(rec, "age")
@@ -384,10 +465,11 @@ while ok < target:
         desc = resolve_embedding_desc(rec)
         special_mark = first_text(rec, "specialMark") or first_text(rec, "desc")
         desc_full = build_dog_text(rec)
-        url = extract_image_url(rec)
+        url = source_fields["image_url"] or extract_image_url(rec)
 
-        upkind = first_text(rec, "upkind", "upkindCd") or FETCH_UPKIND
+        upkind = first_text(rec, "upkind", "upkindCd", "upKindCd") or FETCH_UPKIND
         common_meta = {
+            **source_fields,
             "desertionNo": did,
             "species": species_from_upkind(upkind, ACTIVE_SPECIES),
             "upkind": upkind,
@@ -406,10 +488,17 @@ while ok < target:
             "base_desc": first_text(rec, "base_desc"),
             "vlm_desc": first_text(rec, "vlm_desc"),
             "merged_desc": first_text(rec, "merged_desc"),
-            "vlm_attrs": rec.get("vlm_attrs") if isinstance(rec.get("vlm_attrs"), dict) else {},
-            "vlm_attr_text": first_text(rec, "vlm_attr_text") or summarize_vlm_attrs_ko(rec.get("vlm_attrs")),
-            "photo_advice": rec.get("photo_advice") if isinstance(rec.get("photo_advice"), list) else build_photo_advice(rec.get("vlm_attrs")),
-            "image_attrs": dict(rec.get("image_attrs")) if isinstance(rec.get("image_attrs"), dict) else {},
+            "vlm_attrs": rec.get("vlm_attrs")
+            if isinstance(rec.get("vlm_attrs"), dict)
+            else {},
+            "vlm_attr_text": first_text(rec, "vlm_attr_text")
+            or summarize_vlm_attrs_ko(rec.get("vlm_attrs")),
+            "photo_advice": rec.get("photo_advice")
+            if isinstance(rec.get("photo_advice"), list)
+            else build_photo_advice(rec.get("vlm_attrs")),
+            "image_attrs": dict(rec.get("image_attrs"))
+            if isinstance(rec.get("image_attrs"), dict)
+            else {},
             "care_name": first_text(rec, "care_name", "careNm"),
             "care_tel": first_text(rec, "care_tel", "careTel"),
             "care_addr": first_text(rec, "care_addr", "careAddr"),
@@ -418,16 +507,24 @@ while ok < target:
             "notice_start": first_text(rec, "notice_start", "noticeSdt"),
             "notice_end": first_text(rec, "notice_end", "noticeEdt"),
             "process_state": first_text(rec, "process_state", "processState"),
-            "last_verified_at": first_text(rec, "last_verified_at", "fetched_at", "collected_at"),
+            "last_verified_at": first_text(
+                rec, "last_verified_at", "fetched_at", "collected_at"
+            ),
             "image_url": url or "",
         }
 
         full_image_vec = None
         crop_image_vec = None
-        image_attrs = common_meta.get("image_attrs") if isinstance(common_meta.get("image_attrs"), dict) else {}
+        image_attrs = (
+            common_meta.get("image_attrs")
+            if isinstance(common_meta.get("image_attrs"), dict)
+            else {}
+        )
         if url and not args.text_only:
             full_image_vec = get_clip_embedding_from_url(url)
-        crop_path = resolve_local_path(image_attrs.get("crop_path")) if image_attrs else None
+        crop_path = (
+            resolve_local_path(image_attrs.get("crop_path")) if image_attrs else None
+        )
         if crop_path is not None and not args.text_only:
             crop_image_vec = get_clip_embedding_from_path(crop_path)
         if full_image_vec is not None and crop_image_vec is not None:
@@ -445,7 +542,9 @@ while ok < target:
         if crop_image_vec is not None:
             crop_meta = dict(common_meta)
             crop_meta["type"] = "crop_image"
-            crop_meta["embedding_source"] = "dog_crop" if ACTIVE_SPECIES == "dog" else "animal_crop"
+            crop_meta["embedding_source"] = (
+                "dog_crop" if ACTIVE_SPECIES == "dog" else "animal_crop"
+            )
             index.add(np.expand_dims(crop_image_vec, axis=0))
             metas.append(crop_meta)
 
@@ -468,5 +567,9 @@ while ok < target:
     time.sleep(PAGE_SLEEP)
 
 overall.close()
+if image_downloader is not None:
+    image_downloader.close()
 save_ckpt(index, metas, tag="FINAL")
-print(f"완료! records={ok}, vectors={index.ntotal}, metas={len(metas)}, skipped_inactive={skipped_inactive}")
+print(
+    f"완료! records={ok}, vectors={index.ntotal}, metas={len(metas)}, skipped_inactive={skipped_inactive}"
+)

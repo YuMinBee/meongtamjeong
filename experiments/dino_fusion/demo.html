@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DINO + CLIP 검색 비교</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-soft: #1d2530;
+      --border: #30363d;
+      --text: #f0f3f6;
+      --muted: #9da7b3;
+      --accent: #62d6a8;
+      --accent-soft: rgba(98, 214, 168, .12);
+      --clip: #d4a65a;
+      --danger: #ff7b72;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Pretendard, Inter, "Noto Sans KR", system-ui, sans-serif;
+    }
+    button, input, textarea, select { font: inherit; }
+    .shell { width: min(1400px, calc(100% - 32px)); margin: 34px auto 64px; }
+    header { display: flex; justify-content: space-between; gap: 20px; align-items: end; margin-bottom: 24px; }
+    h1 { margin: 0 0 8px; font-size: clamp(24px, 4vw, 38px); letter-spacing: -.03em; }
+    h2 { margin: 0; font-size: 20px; }
+    p { margin: 0; }
+    .subtitle, .help, .meta, .status { color: var(--muted); }
+    .status { display: flex; align-items: center; gap: 8px; white-space: nowrap; font-size: 14px; }
+    .status-dot { width: 9px; height: 9px; border-radius: 999px; background: var(--clip); }
+    .status.ready .status-dot { background: var(--accent); }
+    .status.error .status-dot { background: var(--danger); }
+    .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; }
+    .query { display: grid; grid-template-columns: minmax(220px, .72fr) minmax(300px, 1.28fr); gap: 22px; padding: 22px; }
+    .upload {
+      min-height: 260px;
+      position: relative;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 1px dashed #56606c;
+      border-radius: 12px;
+      background: var(--panel-soft);
+      cursor: pointer;
+    }
+    .upload:hover { border-color: var(--accent); }
+    .upload input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .upload img { width: 100%; height: 100%; object-fit: contain; display: none; position: absolute; inset: 0; background: var(--panel-soft); }
+    .upload.has-image img { display: block; }
+    .upload-copy { text-align: center; padding: 24px; }
+    .upload-copy strong { display: block; margin-bottom: 7px; }
+    .fields { display: flex; flex-direction: column; gap: 16px; }
+    label { display: block; font-weight: 650; margin-bottom: 8px; }
+    textarea, select {
+      width: 100%;
+      color: var(--text);
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 13px;
+      outline: none;
+    }
+    textarea { min-height: 108px; resize: vertical; }
+    textarea:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+    .settings { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .actions { display: flex; align-items: center; gap: 14px; margin-top: auto; }
+    .search {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 20px;
+      color: #07120e;
+      background: var(--accent);
+      font-weight: 750;
+      cursor: pointer;
+    }
+    .search:disabled { opacity: .55; cursor: wait; }
+    .error { color: var(--danger); font-size: 14px; }
+    .summary { margin: 22px 0 14px; min-height: 22px; color: var(--muted); }
+    .comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+    .system { padding: 18px; min-width: 0; }
+    .system-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+    .system-head .tag { font-size: 13px; color: var(--muted); }
+    .clip-title { color: var(--clip); }
+    .dino-title { color: var(--accent); }
+    .results { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+    .empty { grid-column: 1 / -1; display: grid; place-items: center; min-height: 250px; color: var(--muted); text-align: center; }
+    .result { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--panel-soft); }
+    .result:first-child { border-color: color-mix(in srgb, var(--accent) 55%, var(--border)); }
+    .result img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: var(--bg); }
+    .result-copy { padding: 11px; }
+    .rank { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 7px; }
+    .rank strong { font-size: 18px; }
+    .score { color: var(--muted); font-size: 12px; }
+    .animal { font-weight: 650; overflow-wrap: anywhere; }
+    .meta { margin-top: 5px; font-size: 13px; line-height: 1.45; overflow-wrap: anywhere; }
+    .notice { margin-top: 7px; color: var(--muted); font-size: 11px; }
+    footer { margin-top: 18px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    @media (max-width: 900px) {
+      .query, .comparison { grid-template-columns: 1fr; }
+      .upload { min-height: 230px; }
+    }
+    @media (max-width: 520px) {
+      .shell { width: min(100% - 20px, 1400px); margin-top: 20px; }
+      header { align-items: start; flex-direction: column; }
+      .query { padding: 14px; }
+      .settings, .results { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <h1>CLIP vs DINO + 정렬 CLIP</h1>
+        <p class="subtitle">내 사진과 문장을 같은 후보 1,002마리에 검색해 직접 비교합니다.</p>
+      </div>
+      <div class="status" id="modelStatus"><span class="status-dot"></span><span>모델 대기 중</span></div>
+    </header>
+
+    <section class="query panel" aria-label="검색 입력">
+      <label class="upload" id="uploadBox">
+        <input id="imageInput" type="file" accept="image/jpeg,image/png,image/webp">
+        <img id="preview" alt="선택한 검색 이미지 미리보기">
+        <span class="upload-copy"><strong>사진 선택</strong><span class="help">클릭해서 JPG, PNG 또는 WebP 업로드</span></span>
+      </label>
+      <div class="fields">
+        <div>
+          <label for="textInput">검색 문장</label>
+          <textarea id="textInput" placeholder="예: 검정색과 흰색 털이 섞인 작은 강아지를 찾아줘"></textarea>
+          <p class="help">사진만, 문장만 입력해도 검색할 수 있습니다.</p>
+        </div>
+        <div class="settings">
+          <div>
+            <label for="textWeight">텍스트 반영 비율</label>
+            <select id="textWeight">
+              <option value="0">0% · 이미지만</option>
+              <option value="0.1">10%</option>
+              <option value="0.2" selected>20% · 파일럿 설정</option>
+              <option value="0.3">30%</option>
+              <option value="0.5">50%</option>
+            </select>
+          </div>
+          <div>
+            <label for="topk">표시 결과</label>
+            <select id="topk">
+              <option value="3">상위 3개</option>
+              <option value="5" selected>상위 5개</option>
+              <option value="10">상위 10개</option>
+            </select>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="search" id="searchButton" type="button">두 모델로 검색</button>
+          <span class="error" id="errorText" role="alert"></span>
+        </div>
+      </div>
+    </section>
+
+    <div class="summary" id="summary">사진과 문장을 넣고 검색하면 결과가 여기에 나옵니다.</div>
+    <section class="comparison" aria-label="모델별 검색 결과 비교">
+      <article class="system panel">
+        <div class="system-head">
+          <h2 class="clip-title">CLIP 이미지 + CLIP 텍스트</h2>
+          <span class="tag">기존 방식 · 같은 CLIP 공간</span>
+        </div>
+        <div class="results" id="clipResults"><div class="empty">검색 전</div></div>
+      </article>
+      <article class="system panel">
+        <div class="system-head">
+          <h2 class="dino-title">DINO 이미지 + 정렬된 CLIP 텍스트</h2>
+          <span class="tag">실험 방식 · flow 정렬 공간</span>
+        </div>
+        <div class="results" id="dinoResults"><div class="empty">검색 전</div></div>
+      </article>
+    </section>
+    <footer>두 열의 점수 척도는 서로 달라 숫자를 직접 비교하면 안 됩니다. 결과 이미지와 순위를 보고 판단하세요.</footer>
+  </main>
+
+  <script>
+    const imageInput = document.getElementById('imageInput');
+    const uploadBox = document.getElementById('uploadBox');
+    const preview = document.getElementById('preview');
+    const textInput = document.getElementById('textInput');
+    const textWeight = document.getElementById('textWeight');
+    const topk = document.getElementById('topk');
+    const searchButton = document.getElementById('searchButton');
+    const errorText = document.getElementById('errorText');
+    const summary = document.getElementById('summary');
+    const clipResults = document.getElementById('clipResults');
+    const dinoResults = document.getElementById('dinoResults');
+    const modelStatus = document.getElementById('modelStatus');
+    let imageDataUrl = null;
+
+    const setStatus = (state, label) => {
+      modelStatus.className = `status ${state}`;
+      modelStatus.querySelector('span:last-child').textContent = label;
+    };
+
+    imageInput.addEventListener('change', () => {
+      const file = imageInput.files[0];
+      if (!file) {
+        imageDataUrl = null;
+        uploadBox.classList.remove('has-image');
+        return;
+      }
+      const reader = new FileReader();
+      reader.addEventListener('load', () => {
+        imageDataUrl = reader.result;
+        preview.src = imageDataUrl;
+        uploadBox.classList.add('has-image');
+      });
+      reader.readAsDataURL(file);
+    });
+
+    const renderResults = (container, rows) => {
+      container.replaceChildren(...rows.map((row) => {
+        const card = document.createElement('article');
+        card.className = 'result';
+        const image = document.createElement('img');
+        image.src = `${row.image_url}?v=${encodeURIComponent(row.notice_id)}`;
+        image.alt = `${row.rank}위 ${row.breed || '강아지'} 검색 결과`;
+        const copy = document.createElement('div');
+        copy.className = 'result-copy';
+        const rank = document.createElement('div');
+        rank.className = 'rank';
+        const strong = document.createElement('strong');
+        strong.textContent = `${row.rank}위`;
+        const score = document.createElement('span');
+        score.className = 'score';
+        score.textContent = `점수 ${row.score.toFixed(3)}`;
+        rank.append(strong, score);
+        const animal = document.createElement('div');
+        animal.className = 'animal';
+        animal.textContent = row.breed || '품종 미상';
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        meta.textContent = [row.color, row.weight, row.age, row.region].filter(Boolean).join(' · ') || '세부 정보 없음';
+        const notice = document.createElement('div');
+        notice.className = 'notice';
+        notice.textContent = `공고 ${row.notice_id}`;
+        copy.append(rank, animal, meta, notice);
+        card.append(image, copy);
+        return card;
+      }));
+    };
+
+    searchButton.addEventListener('click', async () => {
+      errorText.textContent = '';
+      if (!imageDataUrl && !textInput.value.trim()) {
+        errorText.textContent = '사진이나 문장을 입력해 주세요.';
+        return;
+      }
+      searchButton.disabled = true;
+      searchButton.textContent = '모델 실행 중…';
+      setStatus('loading', '모델 로드·검색 중');
+      summary.textContent = '첫 실행은 모델을 메모리에 올리느라 조금 더 걸립니다.';
+      try {
+        const response = await fetch('/api/compare', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            image_data_url: imageDataUrl,
+            text: textInput.value,
+            text_weight: Number(textWeight.value),
+            topk: Number(topk.value),
+          }),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || '검색에 실패했습니다.');
+        renderResults(clipResults, data.clip);
+        renderResults(dinoResults, data.dino);
+        summary.textContent = `${data.models.candidates.toLocaleString()}마리 검색 · ${data.latency_ms.total.toLocaleString()}ms · 텍스트 ${Math.round(Number(textWeight.value) * 100)}%`;
+        setStatus('ready', `${data.models.dino.split('/').pop()} · ${data.models.alignment}`);
+      } catch (error) {
+        errorText.textContent = error.message;
+        summary.textContent = '검색하지 못했습니다.';
+        setStatus('error', '오류 발생');
+      } finally {
+        searchButton.disabled = false;
+        searchButton.textContent = '두 모델로 검색';
+      }
+    });
+
+    fetch('/api/status').then((response) => response.json()).then((data) => {
+      if (data.ready) setStatus('ready', `준비됨 · ${data.device.toUpperCase()}`);
+    }).catch(() => setStatus('error', '서버 연결 실패'));
+  </script>
+</body>
+</html>

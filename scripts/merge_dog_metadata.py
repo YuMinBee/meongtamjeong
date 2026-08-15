@@ -21,6 +21,11 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, 
 
 
 BASE_DIR = Path(__file__).resolve().parents[1]
+if str(BASE_DIR) not in sys.path:
+    sys.path.insert(0, str(BASE_DIR))
+
+from app.notice_metadata import normalize_additional_notice_fields  # noqa: E402
+
 DATA_DIR = BASE_DIR / "data"
 
 DEFAULT_METAS_PATH = DATA_DIR / "dog_metas.json"
@@ -56,7 +61,7 @@ CANONICAL_FIELD_ALIASES: Mapping[str, Sequence[str]] = {
     "desertionNo": ("desertionNo", "desertion_no"),
     "notice_no": ("notice_no", "noticeNo"),
     "species": ("species", "animal_species"),
-    "upkind": ("upkind", "upkindCd"),
+    "upkind": ("upkind", "upkindCd", "upKindCd"),
     "region": ("region", "region_name", "sido", "sido_name", "upr_name", "uprNm"),
     "org_name": ("org_name", "orgNm"),
     "care_name": ("care_name", "careNm"),
@@ -66,9 +71,15 @@ CANONICAL_FIELD_ALIASES: Mapping[str, Sequence[str]] = {
     "process_state": ("process_state", "processState", "status"),
     "notice_start": ("notice_start", "noticeSdt"),
     "notice_end": ("notice_end", "noticeEdt"),
-    "breed": ("breed", "kindCd"),
+    "breed": ("breed", "kindNm", "kindFullNm", "kindCd"),
     "breed_code": ("breed_code", "breedCd"),
-    "breed_name": ("breed_name",),
+    "breed_name": ("breed_name", "kindNm"),
+    "breed_full_name": ("breed_full_name", "kindFullNm"),
+    "breed_source_label": ("breed_source_label", "kindNm", "kindFullNm"),
+    "breed_source": ("breed_source",),
+    "mixed_breed": ("mixed_breed", "is_mixed", "isMixed"),
+    "color": ("color", "colorCd"),
+    "happen_date": ("happen_date", "happenDt"),
     "sex": ("sex", "sexCd"),
     "age": ("age",),
     "weight": ("weight",),
@@ -80,11 +91,18 @@ CANONICAL_FIELD_ALIASES: Mapping[str, Sequence[str]] = {
         "popfile",
         "popfile1",
         "popfile2",
+        "popfile3",
         "fileName",
         "thumb",
         "image",
         "img",
     ),
+    "image_urls": ("image_urls",),
+    "upstream_updated_at": ("upstream_updated_at", "updTm"),
+    "health_checks": ("health_checks", "healthChk"),
+    "vaccinations": ("vaccinations", "vaccinationChk"),
+    "safety_health_note": ("safety_health_note", "sfeHealth"),
+    "safety_social_note": ("safety_social_note", "sfeSoci"),
     "detail_url": ("detail_url",),
     "active": ("active", "is_active", "searchable"),
     "vlm_desc": ("vlm_desc",),
@@ -142,6 +160,35 @@ def with_canonical_fields(record: Mapping[str, Any]) -> Dict[str, Any]:
         value = first_non_empty(record, aliases)
         if not is_empty_value(value):
             prepared[canonical] = copy.deepcopy(value)
+
+    # Apply the same conservative public-notice semantics as the live/cache
+    # builders. This also collects every distinct source image URL while the
+    # vector row itself continues to point at only the first image.
+    normalized_notice = normalize_additional_notice_fields(record)
+    for canonical, value in normalized_notice.items():
+        if canonical == "mixed_breed":
+            # Keep an explicit unknown for specific labels and contradictions;
+            # a reported breed name is not evidence of pure ancestry.
+            has_breed_evidence = any(
+                key in record
+                for key in ("mixed_breed", "is_mixed", "isMixed")
+            ) or any(
+                not is_empty_value(record.get(key))
+                for key in (
+                    "breed",
+                    "breed_code",
+                    "breed_name",
+                    "breed_full_name",
+                    "breedCd",
+                    "kindCd",
+                    "kindNm",
+                    "kindFullNm",
+                )
+            )
+            if has_breed_evidence:
+                prepared[canonical] = value
+        elif not is_empty_value(value):
+            prepared[canonical] = copy.deepcopy(value)
     return prepared
 
 
@@ -162,10 +209,39 @@ def merge_non_empty(
     changed: Set[str] = set()
 
     for key, source_value in source.items():
-        if key in protected or is_empty_value(source_value):
+        if key in protected:
             continue
 
         current_value = result.get(key)
+        if key == "mixed_breed" and source_value is None:
+            if key not in result or current_value is not None:
+                result[key] = None
+                changed.add(key)
+            continue
+
+        if is_empty_value(source_value):
+            continue
+
+        if key == "image_urls":
+            source_items = (
+                list(source_value)
+                if isinstance(source_value, (list, tuple, set, frozenset))
+                else [source_value]
+            )
+            current_items = (
+                list(current_value)
+                if isinstance(current_value, (list, tuple, set, frozenset))
+                else ([current_value] if not is_empty_value(current_value) else [])
+            )
+            merged_items: List[Any] = []
+            for item in source_items + current_items:
+                if not is_empty_value(item) and item not in merged_items:
+                    merged_items.append(copy.deepcopy(item))
+            if current_value != merged_items:
+                result[key] = merged_items
+                changed.add(key)
+            continue
+
         if isinstance(current_value, Mapping) and isinstance(source_value, Mapping):
             merged_value, nested_changes = merge_non_empty(current_value, source_value)
             if nested_changes:

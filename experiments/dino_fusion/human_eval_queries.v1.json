@@ -1,0 +1,284 @@
+{
+  "schema_version": "dino-fusion-multimodal-query-set.v1",
+  "created_at": "2026-08-15",
+  "locale": "ko-KR",
+  "purpose": "모든 질의에 기준 이미지와 자연어를 함께 넣는 CLIP 대 DINO 융합 블라인드 평가",
+  "design": {
+    "paired_cases": 10,
+    "conditions_per_case": 3,
+    "total_queries": 30,
+    "conditions": [
+      "image_appearance",
+      "image_personality",
+      "image_appearance_personality"
+    ],
+    "control": "같은 CC0 기준 이미지를 세 조건에서 반복해 텍스트 조건의 영향을 비교한다."
+  },
+  "selection_basis": {
+    "user_frequency": "실제 검색 로그가 없는 상태에서 입양 탐색에 자주 쓰일 법한 표현을 고른 휴리스틱",
+    "corpus_snapshot": "2026-08-15 활성 공고 1,212건",
+    "behavior_silver_labels": {
+      "gentle_handling": {"positive": 341, "negative": 37, "unknown": 760},
+      "people_social": {"positive": 121, "negative": 19, "unknown": 998},
+      "activity": {"positive": 41, "negative": 94, "unknown": 1003}
+    },
+    "limitations": [
+      "자주 쓰인다는 판단은 실제 서비스 검색 로그가 아니라 휴리스틱이다.",
+      "외형은 기준 이미지와 후보 사진에서 직접 확인할 수 있는 단서만 평가한다.",
+      "성격은 공개 공고 원문에 명시된 표현만 증거로 인정하며 실제 성격의 확정값으로 보지 않는다."
+    ]
+  },
+  "category_counts": {
+    "image_appearance": 10,
+    "image_personality": 10,
+    "image_appearance_personality": 10
+  },
+  "evaluation_rubric": {
+    "image_appearance": {
+      "input": "image_and_text",
+      "dimensions": ["reference_image_similarity", "appearance_text_match"],
+      "instruction": "기준 이미지와 닮았는지, 외형 문장의 색·털·귀·체형 조건을 만족하는지를 함께 평가한다."
+    },
+    "image_personality": {
+      "input": "image_and_text",
+      "dimensions": ["reference_image_similarity", "explicit_notice_evidence"],
+      "instruction": "기준 이미지와의 외형 유사도와 공고 원문의 성격 근거를 함께 평가한다. 성격은 사진에서 추정하지 않는다."
+    },
+    "image_appearance_personality": {
+      "input": "image_and_text",
+      "dimensions": ["reference_image_similarity", "appearance_text_match", "explicit_notice_evidence"],
+      "instruction": "기준 이미지, 외형 문장, 공고 성격 근거의 세 조건을 모두 보고 평가한다."
+    }
+  },
+  "reference_image_policy": {
+    "source": "Wikimedia Commons",
+    "license": "CC0",
+    "manifest": "experiments/dino_fusion/artifacts/cc0_dog_photos_diverse/manifest.json",
+    "note": "서로 다른 CC0 사진 10장을 세 조건에 반복 사용한다."
+  },
+  "reference_images": [
+    {
+      "id": "case-01",
+      "path": "experiments/dino_fusion/artifacts/cc0_dog_photos_diverse/images/commons_15957924.jpg",
+      "title": "File:Bavaria Dog 2011 005.JPG",
+      "license": "CC0",
+      "appearance": "작고 밝은색 털이 복슬복슬한 외형"
+    },
+    {
+      "id": "case-02",
+      "path": "experiments/dino_fusion/artifacts/cc0_dog_photos_diverse/images/commons_26592914.jpg",
+      "title": "File:Dog in Chacachacare.jpg",
+      "license": "CC0",
+      "appearance": "짙은 갈색의 짧은 털과 날씬한 체형"
+    },
+    {
+      "id": "case-03",
+      "path": "experiments/dino_fusion/artifacts/cc0_dog_photos_diverse/images/commons_61369169.jpg",
+      "title": "File:Dog at Nørre Vorupør Strand.jpg",
+      "license": "CC0",
+      "appearance": "작고 하얀 털이 풍성한 외형"
+    },
+    {
+      "id": "case-04",
+      "path": "experiments/dino_fusion/artifacts/cc0_dog_photos_diverse/images/commons_67379828.jpg",
+      "title": "File:Chinese TianYuan Dog Sleeping.jpg",
+      "license": "CC0",
+      "appearance": "황갈색의 짧은 털과 쫑긋 선 귀"
+    },
+    {
+      "id": "case-05",
+      "path": "experiments/dino_fusion/artifacts/cc0_dog_photos_diverse/images/commons_116675279.jpg",
+      "title": "File:Boxer dog in iran.jpg",
+      "license": "CC0",
+      "appearance": "갈색의 짧은 털과 아래로 처진 귀"
+    },
+    {
+      "id": "case-06",
+      "path": "experiments/dino_fusion/artifacts/cc0_dog_photos_diverse/images/commons_123228797.jpg",
+      "title": "File:Anatolian Shepherd Dog Laying.jpg",
+      "license": "CC0",
+      "appearance": "덩치가 크고 황갈색이며 귀가 처진 외형"
+    },
+    {
+      "id": "case-07",
+      "path": "experiments/dino_fusion/artifacts/cc0_dog_photos_diverse/images/commons_123858522.jpg",
+      "title": "File:Dog on a beach.jpg",
+      "license": "CC0",
+      "appearance": "검정·갈색·흰색이 섞인 길고 풍성한 털"
+    },
+    {
+      "id": "case-08",
+      "path": "experiments/dino_fusion/artifacts/cc0_dog_photos_diverse/images/commons_130631649.jpg",
+      "title": "File:A Peruvian Hairless Dog in Germany 2.jpg",
+      "license": "CC0",
+      "appearance": "털이 매우 짧고 날씬하며 귀가 쫑긋한 외형"
+    },
+    {
+      "id": "case-09",
+      "path": "experiments/dino_fusion/artifacts/cc0_dog_photos_diverse/images/commons_131640573.jpg",
+      "title": "File:Picography-dog-yawning-1.jpg",
+      "license": "CC0",
+      "appearance": "황갈색 털과 쫑긋 선 귀를 가진 중간 체형"
+    },
+    {
+      "id": "case-10",
+      "path": "experiments/dino_fusion/artifacts/cc0_dog_photos_diverse/images/commons_131641155.jpg",
+      "title": "File:Picography-shiba-inu-dog-forest-walk-sm-1.jpg",
+      "license": "CC0",
+      "appearance": "황갈색과 흰색 털이 섞이고 귀가 쫑긋한 외형"
+    }
+  ],
+  "queries": [
+    {
+      "id": "appearance-01", "reference_image_id": "case-01", "category": "image_appearance", "frequency_tier": "high",
+      "query": "이 사진처럼 작고 밝은색 털이 복슬복슬한 강아지를 찾아줘",
+      "appearance_query": "작고 밝은색 털이 복슬복슬한 강아지", "behavior_targets": []
+    },
+    {
+      "id": "appearance-02", "reference_image_id": "case-02", "category": "image_appearance", "frequency_tier": "medium",
+      "query": "이 사진처럼 짙은 갈색의 짧은 털에 날씬한 강아지를 보여줘",
+      "appearance_query": "짙은 갈색의 짧은 털에 날씬한 강아지", "behavior_targets": []
+    },
+    {
+      "id": "appearance-03", "reference_image_id": "case-03", "category": "image_appearance", "frequency_tier": "high",
+      "query": "이 사진처럼 작고 하얀 털이 풍성한 강아지를 찾고 싶어",
+      "appearance_query": "작고 하얀 털이 풍성한 강아지", "behavior_targets": []
+    },
+    {
+      "id": "appearance-04", "reference_image_id": "case-04", "category": "image_appearance", "frequency_tier": "high",
+      "query": "이 사진처럼 황갈색 짧은 털에 귀가 쫑긋한 강아지",
+      "appearance_query": "황갈색 짧은 털에 귀가 쫑긋한 강아지", "behavior_targets": []
+    },
+    {
+      "id": "appearance-05", "reference_image_id": "case-05", "category": "image_appearance", "frequency_tier": "high",
+      "query": "이 사진처럼 갈색의 짧은 털과 처진 귀를 가진 강아지를 찾아줘",
+      "appearance_query": "갈색의 짧은 털과 처진 귀를 가진 강아지", "behavior_targets": []
+    },
+    {
+      "id": "appearance-06", "reference_image_id": "case-06", "category": "image_appearance", "frequency_tier": "high",
+      "query": "이 사진처럼 덩치가 크고 황갈색이며 귀가 처진 강아지를 보여줘",
+      "appearance_query": "덩치가 크고 황갈색이며 귀가 처진 강아지", "behavior_targets": []
+    },
+    {
+      "id": "appearance-07", "reference_image_id": "case-07", "category": "image_appearance", "frequency_tier": "medium",
+      "query": "이 사진처럼 검정·갈색·흰색이 섞인 긴 털의 강아지를 찾아줘",
+      "appearance_query": "검정 갈색 흰색이 섞인 긴 털의 강아지", "behavior_targets": []
+    },
+    {
+      "id": "appearance-08", "reference_image_id": "case-08", "category": "image_appearance", "frequency_tier": "medium",
+      "query": "이 사진처럼 털이 매우 짧고 날씬하며 귀가 쫑긋한 강아지",
+      "appearance_query": "털이 매우 짧고 날씬하며 귀가 쫑긋한 강아지", "behavior_targets": []
+    },
+    {
+      "id": "appearance-09", "reference_image_id": "case-09", "category": "image_appearance", "frequency_tier": "high",
+      "query": "이 사진처럼 황갈색 털과 쫑긋한 귀를 가진 중간 크기 강아지",
+      "appearance_query": "황갈색 털과 쫑긋한 귀를 가진 중간 크기 강아지", "behavior_targets": []
+    },
+    {
+      "id": "appearance-10", "reference_image_id": "case-10", "category": "image_appearance", "frequency_tier": "high",
+      "query": "이 사진처럼 황갈색과 흰색 털이 섞이고 귀가 쫑긋한 강아지를 찾아줘",
+      "appearance_query": "황갈색과 흰색 털이 섞이고 귀가 쫑긋한 강아지", "behavior_targets": []
+    },
+    {
+      "id": "personality-01", "reference_image_id": "case-01", "category": "image_personality", "frequency_tier": "high",
+      "query": "이 사진과 닮았으면서 온순하고 순한 성격의 강아지를 찾아줘", "appearance_query": "", "query_role": "preference",
+      "behavior_targets": ["gentle_handling:positive"]
+    },
+    {
+      "id": "personality-02", "reference_image_id": "case-02", "category": "image_personality", "frequency_tier": "high",
+      "query": "이 사진과 닮았고 사람을 좋아하며 잘 따르는 강아지를 보여줘", "appearance_query": "", "query_role": "preference",
+      "behavior_targets": ["people_social:positive"]
+    },
+    {
+      "id": "personality-03", "reference_image_id": "case-03", "category": "image_personality", "frequency_tier": "high",
+      "query": "이 사진과 닮았으면서 차분하고 조용한 강아지를 찾고 싶어", "appearance_query": "", "query_role": "preference",
+      "behavior_targets": ["activity:negative"]
+    },
+    {
+      "id": "personality-04", "reference_image_id": "case-04", "category": "image_personality", "frequency_tier": "high",
+      "query": "이 사진과 닮았고 활발하며 산책이나 놀이를 좋아하는 강아지를 찾아줘", "appearance_query": "", "query_role": "preference",
+      "behavior_targets": ["activity:positive"]
+    },
+    {
+      "id": "personality-05", "reference_image_id": "case-05", "category": "image_personality", "frequency_tier": "high",
+      "query": "이 사진과 닮았고 애교가 많으며 사람에게 친근한 강아지를 보여줘", "appearance_query": "", "query_role": "preference",
+      "behavior_targets": ["people_social:positive"]
+    },
+    {
+      "id": "personality-06", "reference_image_id": "case-06", "category": "image_personality", "frequency_tier": "high",
+      "query": "이 사진과 닮았으면서 온순하고 사람을 잘 따르는 강아지를 찾아줘", "appearance_query": "", "query_role": "preference",
+      "behavior_targets": ["gentle_handling:positive", "people_social:positive"]
+    },
+    {
+      "id": "personality-07", "reference_image_id": "case-07", "category": "image_personality", "frequency_tier": "high",
+      "query": "이 사진과 닮았고 차분하면서 온순한 강아지를 보고 싶어", "appearance_query": "", "query_role": "preference",
+      "behavior_targets": ["gentle_handling:positive", "activity:negative"]
+    },
+    {
+      "id": "personality-08", "reference_image_id": "case-08", "category": "image_personality", "frequency_tier": "high",
+      "query": "이 사진과 닮았고 사람을 좋아하면서 활발한 강아지를 찾아줘", "appearance_query": "", "query_role": "preference",
+      "behavior_targets": ["people_social:positive", "activity:positive"]
+    },
+    {
+      "id": "personality-09", "reference_image_id": "case-09", "category": "image_personality", "frequency_tier": "medium",
+      "query": "이 사진과 닮은 후보 중 낯가림이나 사람 경계가 있다고 적힌 강아지도 보여줘", "appearance_query": "", "query_role": "evidence_review",
+      "behavior_targets": ["people_social:negative"]
+    },
+    {
+      "id": "personality-10", "reference_image_id": "case-10", "category": "image_personality", "frequency_tier": "medium",
+      "query": "이 사진과 닮은 후보 중 입질이나 방어 행동 주의가 적힌 경우를 먼저 알려줘", "appearance_query": "", "query_role": "safety_evidence_review",
+      "behavior_targets": ["gentle_handling:negative"]
+    },
+    {
+      "id": "mixed-01", "reference_image_id": "case-01", "category": "image_appearance_personality", "frequency_tier": "high",
+      "query": "이 사진처럼 작고 밝은색 털이 복슬복슬하면서 온순한 강아지를 찾아줘",
+      "appearance_query": "작고 밝은색 털이 복슬복슬한 강아지", "behavior_targets": ["gentle_handling:positive"]
+    },
+    {
+      "id": "mixed-02", "reference_image_id": "case-02", "category": "image_appearance_personality", "frequency_tier": "high",
+      "query": "이 사진처럼 짙은 갈색의 짧은 털에 날씬하고 사람을 잘 따르는 강아지",
+      "appearance_query": "짙은 갈색의 짧은 털에 날씬한 강아지", "behavior_targets": ["people_social:positive"]
+    },
+    {
+      "id": "mixed-03", "reference_image_id": "case-03", "category": "image_appearance_personality", "frequency_tier": "high",
+      "query": "이 사진처럼 작고 하얀 털이 풍성하면서 차분한 강아지를 찾아줘",
+      "appearance_query": "작고 하얀 털이 풍성한 강아지", "behavior_targets": ["activity:negative"]
+    },
+    {
+      "id": "mixed-04", "reference_image_id": "case-04", "category": "image_appearance_personality", "frequency_tier": "high",
+      "query": "이 사진처럼 황갈색 짧은 털에 귀가 쫑긋하고 활발한 강아지",
+      "appearance_query": "황갈색 짧은 털에 귀가 쫑긋한 강아지", "behavior_targets": ["activity:positive"]
+    },
+    {
+      "id": "mixed-05", "reference_image_id": "case-05", "category": "image_appearance_personality", "frequency_tier": "high",
+      "query": "이 사진처럼 갈색의 짧은 털과 처진 귀를 가졌고 사람에게 친화적인 강아지",
+      "appearance_query": "갈색의 짧은 털과 처진 귀를 가진 강아지", "behavior_targets": ["people_social:positive"]
+    },
+    {
+      "id": "mixed-06", "reference_image_id": "case-06", "category": "image_appearance_personality", "frequency_tier": "high",
+      "query": "이 사진처럼 덩치가 크고 황갈색이며 온순하고 사람을 잘 따르는 강아지",
+      "appearance_query": "덩치가 크고 황갈색이며 귀가 처진 강아지", "behavior_targets": ["gentle_handling:positive", "people_social:positive"]
+    },
+    {
+      "id": "mixed-07", "reference_image_id": "case-07", "category": "image_appearance_personality", "frequency_tier": "high",
+      "query": "이 사진처럼 검정·갈색·흰색의 긴 털을 가졌고 차분하며 온순한 강아지",
+      "appearance_query": "검정 갈색 흰색이 섞인 긴 털의 강아지", "behavior_targets": ["gentle_handling:positive", "activity:negative"]
+    },
+    {
+      "id": "mixed-08", "reference_image_id": "case-08", "category": "image_appearance_personality", "frequency_tier": "high",
+      "query": "이 사진처럼 털이 매우 짧고 날씬하며 사람을 좋아하고 활발한 강아지",
+      "appearance_query": "털이 매우 짧고 날씬하며 귀가 쫑긋한 강아지", "behavior_targets": ["people_social:positive", "activity:positive"]
+    },
+    {
+      "id": "mixed-09", "reference_image_id": "case-09", "category": "image_appearance_personality", "frequency_tier": "medium",
+      "query": "이 사진처럼 황갈색에 귀가 쫑긋하고 낯가림이 있다고 공고에 적힌 강아지",
+      "appearance_query": "황갈색 털과 쫑긋한 귀를 가진 중간 크기 강아지", "behavior_targets": ["people_social:negative"]
+    },
+    {
+      "id": "mixed-10", "reference_image_id": "case-10", "category": "image_appearance_personality", "frequency_tier": "high",
+      "query": "이 사진처럼 황갈색과 흰색 털에 귀가 쫑긋한 강아지를 찾아줘. 성격 정보가 없으면 추측하지 말아줘",
+      "appearance_query": "황갈색과 흰색 털이 섞이고 귀가 쫑긋한 강아지", "behavior_targets": [],
+      "safety_control": "unknown_behavior_must_abstain"
+    }
+  ]
+}

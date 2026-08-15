@@ -1,5 +1,7 @@
 .venv/
 __pycache__/
+.ruff_cache/
+tests/.runtime/
 .env
 *.pyc
 *.pyo
@@ -9,6 +11,12 @@ __pycache__/
 archive/
 dog_embedding/
 dog_similarity_api/
+
+# Local research downloads, generated previews, and disposable workspaces
+/tmp/
+/.tmp_*/
+/.codex/visualizations/
+/docs/portfolio/
 
 data/*.log
 data/*.html
@@ -29,3 +37,4 @@ data/*_faiss*.index
 data/image_crops*/
 data/reports/
 logs/
+dist/

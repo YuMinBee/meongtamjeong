@@ -11,6 +11,8 @@ from pydantic import ValidationError
 from app import profile_rerank
 from app.notice_status import classify_notice as shared_classify_notice
 from app.profile_rerank import (
+    APPEARANCE_CONDITION_KEYS,
+    AppearanceProfile,
     ProfileRerankSettings,
     ProfileSearchRequest,
     UserProfile,
@@ -96,7 +98,19 @@ def small_active_candidate() -> dict[str, object]:
         "sexCd": "F",
         "neuterYn": "Y",
         "careAddr": "서울특별시 마포구",
-        "kindCd": "[개] 믹스견",
+        "kindCd": "000114",
+        "kindNm": "믹스견",
+        "kindFullNm": "[개] 믹스견",
+        "colorCd": "흰색",
+        "happenDt": "20260716",
+        "popfile1": "https://example.test/images/small-active-1.jpg",
+        "popfile2": "https://example.test/images/small-active-2.jpg",
+        "updTm": "2026-07-17 10:00:00",
+        "healthChk": "심장사상충 검사",
+        "vaccinationChk": "종합백신, 광견병",
+        "sfeHealth": "건강 상태는 원문 기록을 확인하세요.",
+        "sfeSoci": "사회성은 원문 기록을 확인하세요.",
+        "behavior_evidence_source": "shelter_reported",
         "merged_desc": "차분하고 아이와 생활 가능한 개체",
         "vlm_attrs": {
             "body_size_hint": "small",
@@ -128,6 +142,7 @@ def large_active_candidate() -> dict[str, object]:
         "careAddr": "부산광역시 해운대구",
         "kindCd": "[개] 대형 믹스견",
         "desc": "활발하고 다른 반려동물과 생활 가능한 개체",
+        "behavior_evidence_source": "shelter_reported",
         "vlm_attrs": {
             "body_size_hint": "large",
             "photo_quality_score": 0.8,
@@ -164,6 +179,17 @@ def test_user_profile_and_search_request_contract(
 
     with pytest.raises(ValidationError):
         UserProfile.model_validate({**small_profile_payload, "unexpected": "value"})
+
+    default_request = ProfileSearchRequest(query="소형견", profile=profile)
+    appearance_request = ProfileSearchRequest(
+        query="소형견",
+        profile=profile,
+        ranking_scope="appearance",
+    )
+    assert default_request.ranking_scope == "profile"
+    assert appearance_request.ranking_scope == "appearance"
+    with pytest.raises(ValidationError):
+        ProfileSearchRequest(profile=profile, ranking_scope="personality")
     with pytest.raises(ValidationError):
         UserProfile.model_validate({**small_profile_payload, "has_children": "true"})
     with pytest.raises(ValidationError):
@@ -210,6 +236,79 @@ def test_user_profile_and_search_request_contract(
         ProfileSearchRequest(query="소형견", profile=profile, topk=21)
 
 
+def test_appearance_profile_is_minimal_scope_safe_and_reranks_identically(
+    small_profile: UserProfile,
+    small_active_candidate: dict[str, object],
+    reference_date: datetime,
+) -> None:
+    minimal = AppearanceProfile(
+        preferred_size="small",
+        preferred_age="adult",
+        preferred_region="  서울  ",
+    )
+    without_region = AppearanceProfile(
+        preferred_size="small",
+        preferred_age="adult",
+    )
+
+    assert minimal.model_dump(mode="json", exclude_unset=True) == {
+        "preferred_size": "small",
+        "preferred_age": "adult",
+        "preferred_region": "서울",
+    }
+    assert without_region.model_dump(mode="json", exclude_unset=True) == {
+        "preferred_size": "small",
+        "preferred_age": "adult",
+    }
+    with pytest.raises(ValidationError):
+        AppearanceProfile.model_validate(
+            {
+                "preferred_size": "small",
+                "preferred_age": "adult",
+                "housing_type": "apartment",
+            }
+        )
+
+    request = ProfileSearchRequest(
+        query="소형견",
+        profile=minimal,
+        ranking_scope="appearance",
+    )
+    assert isinstance(request.profile, AppearanceProfile)
+    with pytest.raises(ValidationError):
+        ProfileSearchRequest(query="소형견", profile=minimal)
+
+    settings = ProfileRerankSettings()
+    common_kwargs = {
+        "settings": settings,
+        "topk": 1,
+        "include_unknown_notices": False,
+        "reference_date": reference_date,
+        "condition_keys": APPEARANCE_CONDITION_KEYS,
+    }
+    full_results = rerank_candidates(
+        [small_active_candidate],
+        small_profile,
+        **common_kwargs,
+    )
+    minimal_results = rerank_candidates(
+        [small_active_candidate],
+        minimal,
+        **common_kwargs,
+    )
+    assert minimal_results == full_results
+
+    with pytest.raises(ValueError, match="외형 조건 재정렬"):
+        rerank_candidates(
+            [small_active_candidate],
+            minimal,
+            settings,
+            topk=1,
+            include_unknown_notices=False,
+            reference_date=reference_date,
+        )
+
+
 def test_normalize_dog_maps_public_aliases_to_canonical_evidence(
     small_active_candidate: dict[str, object],
     reference_date: datetime,
@@ -224,8 +323,15 @@ def test_normalize_dog_maps_public_aliases_to_canonical_evidence(
     assert dog.sex == "female"
     assert dog.neutered == "yes"
     assert dog.region == "서울"
-    assert dog.breed == "[개] 믹스견"
+    assert dog.breed == "믹스견"
+    assert dog.breed_code == "000114"
+    assert dog.breed_name == "믹스견"
+    assert dog.breed_full_name == "[개] 믹스견"
+    assert dog.breed_source_label == "믹스견"
+    assert dog.breed_source == "public_notice_reported"
     assert dog.mixed_breed is True
+    assert dog.color == "흰색"
+    assert dog.happen_date == "20260716"
     assert dog.description == "차분하고 아이와 생활 가능한 개체"
     assert dog.vlm_attributes["body_size_hint"] == "small"
     assert dog.vlm_attributes["coat_color"] == ["white"]
@@ -233,7 +339,127 @@ def test_normalize_dog_maps_public_aliases_to_canonical_evidence(
     assert dog.notice_status == "active"
     assert dog.notice_end == "20261231"
     assert dog.last_verified_at == "2026-07-17T03:00:00"
+    assert dog.upstream_updated_at == "2026-07-17 10:00:00"
     assert dog.source_url == "https://example.test/small-active"
+    assert dog.image_url.endswith("small-active-1.jpg")
+    assert dog.image_urls == [
+        "https://example.test/images/small-active-1.jpg",
+        "https://example.test/images/small-active-2.jpg",
+    ]
+    assert dog.health_checks == ["심장사상충 검사"]
+    assert dog.vaccinations == ["종합백신", "광견병"]
+    assert dog.safety_health_note == "건강 상태는 원문 기록을 확인하세요."
+    assert dog.safety_social_note == "사회성은 원문 기록을 확인하세요."
+    assert dog.behavior_evidence_source == "shelter_reported"
+
+
+def test_reported_breed_and_mixed_flag_do_not_affect_compatibility(
+    small_profile: UserProfile,
+    reference_date: datetime,
+) -> None:
+    common = {
+        "score": 0.5,
+        "processState": "보호중",
+        "noticeEdt": "20261231",
+    }
+    candidates = [
+        {
+            **common,
+            "desertionNo": "reported-specific-breed",
+            "kindCd": "000128",
+            "kindNm": "말티즈",
+            "kindFullNm": "[개] 말티즈",
+        },
+        {
+            **common,
+            "desertionNo": "reported-mixed-breed",
+            "kindCd": "000114",
+            "kindNm": "믹스견",
+            "kindFullNm": "[개] 믹스견",
+        },
+    ]
+
+    specific = normalize_dog(candidates[0], reference_date=reference_date)
+    mixed = normalize_dog(candidates[1], reference_date=reference_date)
+    assert specific.mixed_breed is None
+    assert mixed.mixed_breed is True
+    assert specific.activity_level_hint is None
+    assert mixed.activity_level_hint is None
+
+    results = rerank_candidates(
+        candidates,
+        small_profile,
+        ProfileRerankSettings(compatibility_weight=1, quality_weight=0),
+        topk=2,
+        reference_date=reference_date,
+    )
+    by_id = {result["dog_id"]: result for result in results}
+    specific_result = by_id["reported-specific-breed"]
+    mixed_result = by_id["reported-mixed-breed"]
+
+    assert specific_result["compatibility_score"] == pytest.approx(
+        mixed_result["compatibility_score"]
+    )
+    assert specific_result["final_score"] == pytest.approx(mixed_result["final_score"])
+    assert specific_result["matched_conditions"] == mixed_result["matched_conditions"]
+    assert specific_result["caution_conditions"] == mixed_result["caution_conditions"]
+    assert specific_result["unknown_conditions"] == mixed_result["unknown_conditions"]
+    assert any("활동" in message for message in specific_result["unknown_conditions"])
+
+
+def test_source_social_note_is_used_only_when_it_states_behavior_explicitly(
+    reference_date: datetime,
+) -> None:
+    stated = normalize_dog(
+        {
+            "processState": "보호중",
+            "noticeEdt": "20261231",
+            "sfeSoci": "활동량 많음, 다른 반려동물과 생활 가능",
+        },
+        reference_date=reference_date,
+    )
+    vague = normalize_dog(
+        {
+            "processState": "보호중",
+            "noticeEdt": "20261231",
+            "sfeSoci": "사회성 정보는 원문 확인 필요",
+        },
+        reference_date=reference_date,
+    )
+
+    assert stated.activity_level_hint == "high"
+    assert stated.other_pets_compatible is True
+    assert vague.activity_level_hint is None
+    assert vague.other_pets_compatible is None
+
+
+def test_unverified_structured_behavior_and_vlm_display_text_are_not_scored(
+    reference_date: datetime,
+) -> None:
+    unverified = normalize_dog(
+        {
+            "activity_level": "high",
+            "children_compatible": True,
+            "other_pets_compatible": True,
+        },
+        reference_date=reference_date,
+    )
+    derived_display = normalize_dog(
+        {
+            "desc": "활동량 많음, 아이와 생활 가능, 합사 가능",
+            "notice_behavior_text": "",
+            "vlm_desc": "활동적인 성격으로 보임",
+        },
+        reference_date=reference_date,
+    )
+
+    assert unverified.behavior_evidence_source == ""
+    assert unverified.activity_level_hint is None
+    assert unverified.children_compatible is None
+    assert unverified.other_pets_compatible is None
+    assert derived_display.activity_level_hint is None
+    assert derived_display.children_compatible is None
+    assert derived_display.other_pets_compatible is None
 
 
 def test_same_candidates_reverse_order_for_different_profiles(
@@ -282,6 +508,63 @@ def test_same_candidates_reverse_order_for_different_profiles(
     )
     assert {item["retrieval_score"] for item in small_results} == {0.52}
     assert {item["retrieval_score"] for item in large_results} == {0.52}
+
+
+def test_appearance_scope_ignores_lifestyle_and_behavior_fields(
+    small_profile: UserProfile,
+    reference_date: datetime,
+) -> None:
+    common = {
+        "score": 0.5,
+        "age": "2022(년생)",
+        "weight": "7(Kg)",
+        "careAddr": "서울특별시 마포구",
+        "behavior_evidence_source": "shelter_reported",
+        "processState": "보호중",
+        "noticeEdt": "20261231",
+    }
+    candidates = [
+        {
+            **common,
+            "desertionNo": "lifestyle-match",
+            "housing_types": ["apartment"],
+            "activity_level": "low",
+            "max_absence_hours": 10,
+            "recommended_experience": "none",
+            "children_compatible": True,
+        },
+        {
+            **common,
+            "desertionNo": "lifestyle-mismatch",
+            "housing_types": ["house"],
+            "activity_level": "high",
+            "max_absence_hours": 2,
+            "recommended_experience": "experienced",
+            "children_compatible": False,
+        },
+    ]
+
+    results = rerank_candidates(
+        candidates,
+        small_profile,
+        ProfileRerankSettings(compatibility_weight=1, quality_weight=0),
+        topk=2,
+        reference_date=reference_date,
+        condition_keys=APPEARANCE_CONDITION_KEYS,
+    )
+
+    assert {item["compatibility_score"] for item in results} == {1.0}
+    assert {item["applicable_count"] for item in results} == {3}
+    assert all(not item["caution_conditions"] for item in results)
+    assert all(not item["unknown_conditions"] for item in results)
+    assert all(
+        all(
+            token not in message
+            for token in ("주거", "활동", "부재", "반려 경험", "아동")
+        )
+        for item in results
+        for message in item["matched_conditions"]
+    )
 
 
 def test_unknown_evidence_is_neutral_and_explicitly_reported(
@@ -394,6 +677,41 @@ def test_verified_weight_takes_precedence_over_vlm_size_observation(
     assert dog.weight == pytest.approx(25.0)
     assert dog.size == "large"
     assert dog.vlm_attributes["body_size_hint"] == "small"
+
+
+def test_vlm_only_size_observation_is_not_promoted_to_appearance_score(
+    reference_date: datetime,
+) -> None:
+    candidate = {
+        "score": 0.5,
+        "desertionNo": "vlm-size-only",
+        "processState": "보호중",
+        "noticeEdt": "20261231",
+        "vlm_attrs": {"body_size_hint": "small"},
+    }
+
+    dog = normalize_dog(candidate, reference_date=reference_date)
+    result = rerank_candidates(
+        [candidate],
+        AppearanceProfile(
+            preferred_size="small",
+            preferred_age="any",
+        ),
+        ProfileRerankSettings(compatibility_weight=0.25, quality_weight=0),
+        topk=1,
+        include_unknown_notices=False,
+        reference_date=reference_date,
+        condition_keys=APPEARANCE_CONDITION_KEYS,
+    )[0]
+
+    assert dog.size == "unknown"
+    assert dog.vlm_attributes["body_size_hint"] == "small"
+    assert result["compatibility_score"] == 0.0
+    assert result["matched_conditions"] == []
+    assert result["caution_conditions"] == []
+    assert result["unknown_conditions"] == [
+        "선호 크기와 일치하는지는 공고 정보만으로 확인할 수 없습니다."
+    ]
 
 
 def test_closed_and_expired_are_excluded_while_unknown_policy_is_configurable(
@@ -541,7 +859,7 @@ def test_notice_status_age_and_activity_are_conservative(
         reference_date=reference_date,
     )
     assert fallback.age_group == "adult"
-    assert fallback.breed == "[개] 믹스견"
+    assert fallback.breed == "믹스견"
     invalid_numbers = normalize_dog(
         {"age": -1, "weight": "-7(Kg)", "description": "Unknown"},
         reference_date=reference_date,
@@ -716,6 +1034,7 @@ def test_raw_meta_is_merged_and_candidate_fields_take_precedence(
         "size": "small",
         "region": "서울",
         "photo_quality_score": 0.9,
+        "behavior_evidence_source": "manual_verified",
         "housing_types": ["house"],
         "activity_level": "high",
         "max_absence_hours": 4,

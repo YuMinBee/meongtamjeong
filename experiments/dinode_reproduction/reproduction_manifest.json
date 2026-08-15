@@ -1,0 +1,52 @@
+{
+  "experiment": "DINOde official checkpoint reproduction on VOC20",
+  "upstream": {
+    "repository": "https://github.com/yoon307/DINOde.git",
+    "commit": "0a2c5182c44107fdd8c786b2192fcc3c5e5bebd1",
+    "license_at_commit": null,
+    "license_note": "No LICENSE, COPYING, or NOTICE file was present at the pinned commit; the checkout is ignored and is not redistributed."
+  },
+  "scope": {
+    "mode": "official released-checkpoint evaluation",
+    "protocol": "voc20",
+    "dataset": "PASCAL VOC 2012 train/val",
+    "dataset_mirror": "https://huggingface.co/datasets/DerrickUnleashed/Pascal_VOC",
+    "dataset_archive_md5": "6cd6e144f989b92b3379bac3b3de84fd",
+    "processed_train_samples": 1464,
+    "processed_validation_samples": 1449,
+    "feature_cache": false,
+    "expected_miou_percent": 91.1495,
+    "expected_cached_miou_percent": 91.1494
+  },
+  "models": {
+    "vision": "facebook/dinov3-vitl16-pretrain-lvd1689m",
+    "text": "OpenCLIP ViT-L-14 / laion2b_s32b_b82k",
+    "checkpoint_google_drive_id": "1W0aw1JAY8oqN5NaZCYkdCF1BvETvYo_T",
+    "checkpoint_sha256": "494354fe148a278a99c8186a59d9fa5ef14cf6254e312195eb08cac69cac1377"
+  },
+  "reported_environment": {
+    "python": "3.10",
+    "torch": "2.6.0+cu118",
+    "torchvision": "0.21.0",
+    "transformers": "4.56.2"
+  },
+  "platform_adjustments": [
+    {
+      "setting": "data.num_workers",
+      "official": 4,
+      "local": 0,
+      "reason": "The upstream local collate_val function is not pickleable under Windows spawn multiprocessing; this changes data loading only."
+    }
+  ],
+  "local_result": {
+    "status": "exact_match",
+    "miou_percent": 91.1495,
+    "absolute_delta_from_expected": 0.0,
+    "evaluation_batches": 91,
+    "evaluation_loop_seconds": 97,
+    "python_pipeline_seconds_approx": 103,
+    "hardware": "NVIDIA GeForce RTX 4090 24 GB",
+    "completed_at": "2026-08-14T16:17:54+09:00",
+    "upstream_log_directory": "vendor/DINOde/outputs/0814_161611_eval_voc20_no_cache"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": "notice-provider.local-json.v1",
+  "description": "Synthetic contract example. It is not a real notice and contains no real photo or personal information.",
+  "items": [
+    {
+      "notice_id": "SYNTH-DOG-001",
+      "source_status": "active",
+      "species": "dog",
+      "upkind": "417000",
+      "notice_no": "SYNTH-2026-001",
+      "breed": "합성 믹스견",
+      "breed_source": "synthetic_example",
+      "mixed_breed": true,
+      "sex": "M",
+      "age": "2024(년생)",
+      "weight": "7.5(Kg)",
+      "neuter": "U",
+      "color": "갈색",
+      "desc": "provider 연결 시험을 위한 합성 공고입니다.",
+      "image_urls": [
+        "https://example.invalid/assets/synthetic-dog-001.jpg"
+      ],
+      "notice_start": "20260701",
+      "notice_end": "20991231",
+      "detail_url": "https://example.invalid/notices/SYNTH-DOG-001"
+    }
+  ]
+}

@@ -1,47 +1,79 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-17T13:29:49+09:00",
+  "generated_at": "2026-07-26T04:40:26+09:00",
   "source": {
-    "provider": "농림축산식품부 국가동물보호정보시스템",
+    "provider": "농림축산식품부 농림축산검역본부",
     "dataset_url": "https://www.data.go.kr/data/15098931/openapi.do",
-    "fetched_at": "2026-07-17T12:25:15+09:00",
+    "fetched_at": "2026-07-26T00:34:47+09:00",
     "species": "dog",
     "upkind": "417000",
     "lookback_days": 365,
     "pages_fetched": 61,
-    "raw_items": 60527,
-    "closed_items_skipped": 59133,
-    "active_notices": 1394
+    "raw_items": 60085,
+    "closed_items_skipped": 58568,
+    "no_image_items_skipped": 1,
+    "duplicate_items_skipped": 0,
+    "active_notices": 1516,
+    "source_cache_distributed": false,
+    "source_cache_sha256": "497f0c16746906e82e20b131017fbf5ece49bdcf1cbbb944fae8b8639bb2070a"
   },
   "enrichment": {
-    "detector": "fasterrcnn_mobilenet_v3_large_fpn",
-    "detector_weights": "FasterRCNN_MobileNet_V3_Large_FPN_Weights.COCO_V1",
-    "confidence_threshold": 0.25,
-    "images_downloaded": 1380,
-    "images_with_photo_quality": 1380,
-    "dog_crops": 1326,
-    "no_detection": 54,
-    "download_errors": 14
+    "policy": "incremental_same_source_retention; new_crops_not_generated",
+    "detector_for_retained_crops": "fasterrcnn_mobilenet_v3_large_fpn",
+    "detector_weights_for_retained_crops": "FasterRCNN_MobileNet_V3_Large_FPN_Weights.COCO_V1",
+    "retained_crop_vectors": 1002,
+    "full_image_vectors": 1228,
+    "notices_with_photo_quality": 1228,
+    "image_download_or_refresh_failures": 288,
+    "photo_quality_failures": 0
   },
   "embedding": {
     "model": "OpenAI CLIP ViT-B/32",
-    "clip_source_commit": "dcba3cb2e2827b402d2701e7e1c7d9fed8a20ef1",
     "dimension": 512,
-    "vectors": 4100,
+    "vectors": 3746,
     "vector_types": {
-      "image": 1380,
-      "crop_image": 1326,
-      "text": 1394
+      "image": 1228,
+      "crop_image": 1002,
+      "text": 1516
     },
-    "faiss_version": "1.14.3",
-    "torch_version": "2.11.0+cu128",
-    "torchvision_version": "0.26.0+cu128"
+    "incremental_runtime": {
+      "installed_distribution": "openai-clip 1.0.1",
+      "device": "cuda",
+      "faiss_version": "1.14.3",
+      "torch_version": "2.11.0+cu128",
+      "torchvision_version": "0.26.0+cu128"
+    },
+    "submission_runtime": {
+      "clip_source_commit": "dcba3cb2e2827b402d2701e7e1c7d9fed8a20ef1",
+      "lockfile": "requirements.lock.txt",
+      "validated_device": "cpu",
+      "faiss_version": "1.14.3",
+      "torch_version": "2.13.0+cpu",
+      "torchvision_version": "0.28.0+cpu"
+    }
+  },
+  "synchronization": {
+    "report": "data/active_index_sync_report.json",
+    "existing_vectors": 3989,
+    "retained_vectors": 2045,
+    "removed_existing_vectors": 1944,
+    "new_unique_ids": 455,
+    "refreshed_unique_ids": 1061,
+    "new_image_vectors": 182,
+    "refreshed_image_vectors": 3,
+    "new_text_vectors": 455,
+    "refreshed_text_vectors": 1061,
+    "image_failures": 288,
+    "text_failures": 0,
+    "active_ids_without_vectors": 0,
+    "active_ids_without_public_text_vectors": 0
   },
   "readiness": {
     "strict_passed": true,
-    "reference_date": "2026-07-17",
+    "artifact_integrity_passed": true,
+    "reference_date": "2026-07-26",
     "status_distribution": {
-      "active": 1394,
+      "active": 1516,
       "closed": 0,
       "expired": 0,
       "unknown": 0
@@ -51,22 +83,40 @@
     "region_coverage": 1.0,
     "shelter_coverage": 1.0,
     "last_verified_coverage": 1.0,
-    "photo_quality_notice_coverage": 0.989957
+    "photo_quality_notice_coverage": 0.810026,
+    "forbidden_derived_field_occurrence_count": 0,
+    "unique_ids_missing_public_text_count": 0,
+    "nonfinite_vector_count": 0,
+    "zero_norm_vector_count": 0,
+    "non_unit_norm_vector_count": 0
+  },
+  "breed_labels": {
+    "provenance": "public_notice_reported",
+    "reported_labels": 1516,
+    "explicit_mixed": 1248,
+    "ancestry_unknown": 268,
+    "verified_non_mixed": 0
   },
   "artifacts": {
     "data/dog_faiss.index": {
-      "size_bytes": 8396845,
-      "sha256": "ec354c615611fc5ceb5d21a312fc9693782bbcb38600a1009163deff74c1e96f"
+      "size_bytes": 7671853,
+      "sha256": "2722aef8257b8748bd2cdd00d4224e7b4dee3d1d552a235439eb4c97c71aface"
     },
     "data/dog_metas.json": {
-      "rows": 4100,
-      "size_bytes": 13000357,
-      "sha256": "1e22fd296769f2a4c331f0a08fbe1ece8f25b347a30e5967df4c4c55027275a7"
+      "rows": 3746,
+      "size_bytes": 12943774,
+      "sha256": "723a4df01e2802ad5d42bd276eefbded097a0a6e72900784395c4c19626b6c00"
+    },
+    "data/active_index_sync_report.json": {
+      "size_bytes": 6670,
+      "sha256": "924a3d657a9bb09d063a13a6c329f0b9965a4d772ed51d539dbdcd61f02d28ae"
     }
   },
   "limitations": [
     "The API key and downloaded source cache are not included in the repository.",
+    "Reported breed labels do not verify ancestry and are not used as evidence of behaviour or household compatibility.",
     "Photo and crop quality scores describe image usability, not adoption suitability.",
-    "Notice status can change after fetched_at and must be rechecked before a shelter visit."
+    "Image download failures remain text-searchable but may reduce image-to-image retrieval coverage for those notices.",
+    "Notice status can change after fetched_at and must be rechecked before direct shelter contact."
   ]
 }

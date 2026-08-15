@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "evaluation_id": "profile_rerank.appearance_v1",
+  "reference_date": "2026-07-26",
+  "baseline_score_start": 0.6,
+  "baseline_score_step": 0.002,
+  "settings": {
+    "compatibility_weight": 0.25,
+    "quality_weight": 0.0
+  },
+  "quality_weight_sensitivity": {
+    "control_quality_weight": 0.0,
+    "production_default_quality_weight": 0.05,
+    "top_k": 5
+  },
+  "silver_label_policy": {
+    "source_fields": [
+      "weight",
+      "age",
+      "region/org_name/care_addr/happen_place/care_name"
+    ],
+    "size_thresholds_kg": {
+      "small": "0 < kg <= 8",
+      "medium": "8 < kg <= 18",
+      "large": "kg > 18"
+    },
+    "age_thresholds_years": {
+      "puppy": "0 <= years <= 1",
+      "adult": "1 < years < 8",
+      "senior": "years >= 8"
+    },
+    "binary_relevance": "all selected public-notice fields are known and exactly match",
+    "graded_relevance": "matched selected fields / applicable selected fields",
+    "unknown_policy": "no bonus and no penalty; never infer from breed, photo, VLM, or lifestyle fields"
+  },
+  "candidate_ids": [
+    "426339202600306",
+    "441570202600363",
+    "411319202600337",
+    "411318202600342",
+    "441570202600362",
+    "411310202600444",
+    "441570202600369",
+    "441570202600361",
+    "411315202600532",
+    "441570202600371",
+    "441570202600359",
+    "411315202600531"
+  ],
+  "profiles": [
+    {
+      "id": "profile_a_small_adult_seoul",
+      "label": "A: 서울·소형·성견 선호",
+      "profile": {
+        "housing_type": "apartment",
+        "daily_absence_hours": 8,
+        "activity_level": "low",
+        "dog_experience": "none",
+        "preferred_size": "small",
+        "preferred_age": "adult",
+        "preferred_region": "서울",
+        "has_children": true,
+        "has_other_pets": true
+      }
+    },
+    {
+      "id": "profile_b_large_adult_gyeonggi",
+      "label": "B: 경기·대형·성견 선호",
+      "profile": {
+        "housing_type": "house",
+        "daily_absence_hours": 2,
+        "activity_level": "high",
+        "dog_experience": "experienced",
+        "preferred_size": "large",
+        "preferred_age": "adult",
+        "preferred_region": "경기",
+        "has_children": false,
+        "has_other_pets": false
+      }
+    }
+  ],
+  "notes": [
+    "Both profiles receive the exact same fixed candidate IDs and baseline retrieval scores.",
+    "Lifestyle fields differ deliberately but are excluded by the appearance-only condition key set.",
+    "These are deterministic silver labels, not human adoption-suitability judgments."
+  ]
+}

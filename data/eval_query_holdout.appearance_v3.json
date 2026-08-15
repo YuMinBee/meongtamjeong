@@ -1,0 +1,176 @@
+{
+  "schema_version": "appearance-query-holdout.v3",
+  "reference_date": "2026-07-26",
+  "authoring_protocol": {
+    "independent_blind": true,
+    "authoring_inputs": [
+      "data/eval_queries.appearance_v1.json",
+      "data/dog_metas.json"
+    ],
+    "variants_per_base_intent": 2,
+    "semantic_variant_count": 24,
+    "negative_diagnostic_count": 6,
+    "negative_diagnostics_in_aggregate": false
+  },
+  "base_query_set": "data/eval_queries.appearance_v1.json",
+  "semantic_variants": [
+    {
+      "id": "v3-brown-small-a",
+      "base_id": "brown-small",
+      "query": "갈색 털인 작은 강아지 좀 보여 주세요"
+    },
+    {
+      "id": "v3-brown-small-b",
+      "base_id": "brown-small",
+      "query": "덩치는 작은 편이고 털색은 갈색인 아이 찾아봐줘"
+    },
+    {
+      "id": "v3-white-tiny-a",
+      "base_id": "white-tiny",
+      "query": "하얀 털에 아주 조그마한 강아지 있나요?"
+    },
+    {
+      "id": "v3-white-tiny-b",
+      "base_id": "white-tiny",
+      "query": "초소형이면서 흰색인 아이로 보여줘요"
+    },
+    {
+      "id": "v3-black-medium-a",
+      "base_id": "black-medium",
+      "query": "중간 체격에 까만 털을 가진 강아지 보여 줄래?"
+    },
+    {
+      "id": "v3-black-medium-b",
+      "base_id": "black-medium",
+      "query": "검은색 중형 강아지로 찾아주세요"
+    },
+    {
+      "id": "v3-cream-small-a",
+      "base_id": "cream-small",
+      "query": "작은 체구의 크림빛 강아지 있으면 보여줘"
+    },
+    {
+      "id": "v3-cream-small-b",
+      "base_id": "cream-small",
+      "query": "털색 크림, 크기는 소형인 아이 찾아 주실래요?"
+    },
+    {
+      "id": "v3-gyeonggi-small-adult-a",
+      "base_id": "gyeonggi-small-adult",
+      "query": "다 큰 작은 강아지 중 경기 지역에 있는 아이 보여줘"
+    },
+    {
+      "id": "v3-gyeonggi-small-adult-b",
+      "base_id": "gyeonggi-small-adult",
+      "query": "경기도 보호소의 소형 성견을 찾고 있어요"
+    },
+    {
+      "id": "v3-seoul-small-puppy-a",
+      "base_id": "seoul-small-puppy",
+      "query": "서울에서 보호하는 어린 소형 강아지 보여 주세요"
+    },
+    {
+      "id": "v3-seoul-small-puppy-b",
+      "base_id": "seoul-small-puppy",
+      "query": "작은 애기 강아지로, 지역은 서울이요"
+    },
+    {
+      "id": "v3-jeju-white-puppy-a",
+      "base_id": "jeju-white-puppy",
+      "query": "제주에 있는 아기 강아지 중 하얀 아이 찾아줘요"
+    },
+    {
+      "id": "v3-jeju-white-puppy-b",
+      "base_id": "jeju-white-puppy",
+      "query": "흰 털의 어린 강아지, 제주 지역으로 보여 주세요"
+    },
+    {
+      "id": "v3-jeonbuk-brown-large-a",
+      "base_id": "jeonbuk-brown-large",
+      "query": "전라북도 쪽 갈색 대형 강아지를 찾습니다"
+    },
+    {
+      "id": "v3-jeonbuk-brown-large-b",
+      "base_id": "jeonbuk-brown-large",
+      "query": "덩치 큰 갈색 아이로 전북에 있는 강아지 보여줘"
+    },
+    {
+      "id": "v3-gyeongnam-black-small-a",
+      "base_id": "gyeongnam-black-small",
+      "query": "경상남도에서 보호 중인 까만 소형견 있나요?"
+    },
+    {
+      "id": "v3-gyeongnam-black-small-b",
+      "base_id": "gyeongnam-black-small",
+      "query": "검은 털에 작은 강아지, 경남 지역으로 찾아 줘요"
+    },
+    {
+      "id": "v3-gyeonggi-tan-medium-a",
+      "base_id": "gyeonggi-tan-medium",
+      "query": "경기 지역의 중간 크기 황갈색 강아지 보여주세요"
+    },
+    {
+      "id": "v3-gyeonggi-tan-medium-b",
+      "base_id": "gyeonggi-tan-medium",
+      "query": "털은 누르스름한 갈색이고 중형인 아이, 경기도로 찾아줘"
+    },
+    {
+      "id": "v3-adult-3-to-8kg-a",
+      "base_id": "adult-3-to-8kg",
+      "query": "성견 중 몸무게 3~8 kg인 아이 찾아줘"
+    },
+    {
+      "id": "v3-adult-3-to-8kg-b",
+      "base_id": "adult-3-to-8kg",
+      "query": "다 큰 강아지로 3키로 이상 8키로 이하만 보여 주세요"
+    },
+    {
+      "id": "v3-senior-under-8kg-a",
+      "base_id": "senior-under-8kg",
+      "query": "나이 든 강아지 중 8kg 안 넘는 작은 아이 보여줘요"
+    },
+    {
+      "id": "v3-senior-under-8kg-b",
+      "base_id": "senior-under-8kg",
+      "query": "몸무게 여덟 키로 이하인 노령견을 찾고 있어요"
+    }
+  ],
+  "negative_diagnostics": [
+    {
+      "id": "v3-neg-excluded-color",
+      "query": "갈색은 빼고 작은 강아지 찾아줘",
+      "diagnostic": "negated_color_must_not_become_positive",
+      "aggregate": false
+    },
+    {
+      "id": "v3-neg-contrast-region",
+      "query": "서울 말고 경기의 어린 강아지 보여줘",
+      "diagnostic": "negated_region_must_not_survive_contrast",
+      "aggregate": false
+    },
+    {
+      "id": "v3-neg-opposite-weight",
+      "query": "8kg 이상인 노령견을 찾고 있어요",
+      "diagnostic": "lower_bound_must_not_become_upper_bound",
+      "aggregate": false
+    },
+    {
+      "id": "v3-neg-no-appearance",
+      "query": "강아지 좀 보여줘",
+      "diagnostic": "generic_query_must_not_invent_constraints",
+      "aggregate": false
+    },
+    {
+      "id": "v3-neg-unsupported-traits",
+      "query": "성격이 온순하고 사람을 잘 따르는 아이 찾아줘",
+      "diagnostic": "unsupported_traits_must_not_invent_constraints",
+      "aggregate": false
+    },
+    {
+      "id": "v3-neg-other-species",
+      "query": "고양이를 찾고 있어요",
+      "diagnostic": "other_species_must_not_invent_dog_appearance_constraints",
+      "aggregate": false
+    }
+  ]
+}

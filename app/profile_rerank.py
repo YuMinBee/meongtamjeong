@@ -20,13 +20,26 @@ from pydantic import (
 from app.dog_attributes import normalize_vlm_attrs
 from app.graph_rag import infer_age_hint, infer_region, infer_size_from_weight
 from app.hybrid_rag import resolve_photo_quality_score
+from app.notice_metadata import normalize_additional_notice_fields
 from app.notice_status import classify_notice
 
 
 UNKNOWN = "unknown"
+TRUSTED_BEHAVIOR_EVIDENCE_SOURCES = frozenset(
+    {
+        "public_notice_reported",
+        "shelter_reported",
+        "shelter_verified",
+        "manual_verified",
+        "curated",
+    }
+)
 PROFILE_RESULT_DISCLAIMER = (
     "이 결과는 입양 적합성을 확정하지 않으며, 실제 성격과 생활 적합성은 "
     "보호소 방문 및 상담을 통해 확인해야 합니다."
+)
+APPEARANCE_CONDITION_KEYS = frozenset(
+    {"preferred_size", "preferred_age", "preferred_region"}
 )
 _CONDITION_ENUM_VALUES = {
     "coat_color": {"white", "black", "brown", "tan", "cream", "gray", "spotted"},
@@ -71,6 +84,24 @@ class PreferredAge(str, Enum):
     any = "any"
 
 
+class AppearanceProfile(BaseModel):
+    """Objective preferences used by the contest-facing appearance flow."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    preferred_size: PreferredSize
+    preferred_age: PreferredAge
+    preferred_region: Optional[str] = Field(default=None, max_length=100)
+
+    @field_validator("preferred_region")
+    @classmethod
+    def normalize_region(cls, value: Optional[str]) -> Optional[str]:
+        if value is None:
+            return None
+        normalized = value.strip()
+        return normalized or None
+
+
 class UserProfile(BaseModel):
     """Typed lifestyle information used only for post-retrieval reranking."""
 
@@ -107,8 +138,9 @@ class ProfileSearchRequest(BaseModel):
 
     query: str = Field(default="", max_length=2000)
     conditions: Optional[Dict[str, Any]] = None
-    profile: UserProfile
+    profile: UserProfile | AppearanceProfile
     topk: int = Field(default=5, ge=1, le=20)
+    ranking_scope: Literal["profile", "appearance"] = "profile"
 
     @field_validator("query")
     @classmethod
@@ -186,6 +218,13 @@ class ProfileSearchRequest(BaseModel):
 
     @model_validator(mode="after")
     def require_query_or_conditions(self) -> "ProfileSearchRequest":
+        if self.ranking_scope == "profile" and not isinstance(
+            self.profile, UserProfile
+        ):
+            raise ValueError(
+                "ranking_scope=profile에는 전체 생활 조건 프로필이 필요합니다."
+            )
+
         def has_value(value: Any) -> bool:
             if value is None:
                 return False
@@ -218,7 +257,14 @@ class NormalizedDog(BaseModel):
     neutered: Literal["yes", "no", "unknown"] = UNKNOWN
     region: str = UNKNOWN
     breed: str = UNKNOWN
+    breed_code: str = ""
+    breed_name: str = ""
+    breed_full_name: str = ""
+    breed_source_label: str = ""
+    breed_source: str = ""
     mixed_breed: Optional[bool] = None
+    color: str = ""
+    happen_date: str = ""
     description: str = ""
     vlm_attributes: Dict[str, Any] = Field(default_factory=dict)
     photo_quality_score: Optional[float] = Field(default=None, ge=0, le=1)
@@ -229,6 +275,13 @@ class NormalizedDog(BaseModel):
     last_verified_at: Optional[str] = None
     source_url: str = ""
     image_url: str = ""
+    image_urls: List[str] = Field(default_factory=list)
+    upstream_updated_at: str = ""
+    health_checks: List[str] = Field(default_factory=list)
+    vaccinations: List[str] = Field(default_factory=list)
+    safety_health_note: str = ""
+    safety_social_note: str = ""
+    behavior_evidence_source: str = ""
     care_name: str = UNKNOWN
     care_tel: str = ""
     care_addr: str = ""
@@ -343,6 +396,54 @@ def _first_value(meta: Dict[str, Any], *keys: str) -> Any:
         if _has_known_value(value):
             return value
     return None
+
+
+def _trusted_behavior_evidence_source(meta: Dict[str, Any]) -> str:
+    source = _first_text(
+        meta, "behavior_evidence_source", "compatibility_evidence_source"
+    ).lower()
+    normalized = re.sub(r"[\s-]+", "_", source)
+    return normalized if normalized in TRUSTED_BEHAVIOR_EVIDENCE_SOURCES else ""
+
+
+def resolve_notice_behavior_text(meta: Dict[str, Any]) -> str:
+    """Return only shelter/public text that can support lifestyle evidence."""
+
+    notice_fields = normalize_additional_notice_fields(meta)
+    parts: List[str] = []
+
+    # API formatters set this key even when empty. Its presence means `desc` is
+    # display text and must not be reinterpreted as source behaviour evidence.
+    if "notice_behavior_text" in meta:
+        primary_text = _first_text(meta, "notice_behavior_text")
+    else:
+        primary_text = _first_text(meta, "specialMark")
+        if not primary_text:
+            has_derived_description = any(
+                _has_known_value(meta.get(key))
+                for key in (
+                    "vlm_desc",
+                    "merged_desc",
+                    "vlm_attrs",
+                    "vlm_attributes",
+                    "visual_attrs",
+                )
+            )
+            if not has_derived_description:
+                primary_text = _first_text(meta, "desc", "description")
+
+    if primary_text:
+        parts.append(primary_text)
+
+    if _trusted_behavior_evidence_source(meta):
+        behavior_notes = _first_text(meta, "behavior_notes")
+        if behavior_notes and behavior_notes not in parts:
+            parts.append(behavior_notes)
+
+    safety_social_note = _clean_text(notice_fields["safety_social_note"])
+    if safety_social_note and safety_social_note not in parts:
+        parts.append(safety_social_note)
+    return " ".join(parts)
 
 
 def _parse_float(value: Any) -> Optional[float]:
@@ -555,6 +656,7 @@ def normalize_dog(
 ) -> NormalizedDog:
     if reference_year is None and reference_date is not None:
         reference_year = reference_date.year
+    notice_fields = normalize_additional_notice_fields(meta)
     raw_attrs = meta.get("vlm_attrs") if isinstance(meta.get("vlm_attrs"), dict) else {}
     if not raw_attrs and isinstance(meta.get("vlm_attributes"), dict):
         raw_attrs = meta["vlm_attributes"]
@@ -591,29 +693,21 @@ def normalize_dog(
         weight = None
     explicit_size = _normalize_size(_first_value(meta, "size", "size_hint"))
     inferred_size = _normalize_size(infer_size_from_weight(weight))
-    observed_size = _normalize_size(
-        _first_value(meta, "body_size_hint") or vlm_attributes.get("body_size_hint")
-    )
     if explicit_size != UNKNOWN:
         size = explicit_size
     elif inferred_size != UNKNOWN:
         size = inferred_size
     else:
-        size = observed_size
+        # Keep photo/VLM observations auditable in ``vlm_attributes`` but never
+        # promote them into the size fact used by compatibility scoring.  The
+        # public notice does not provide a provenance-bearing body-size field;
+        # without explicit metadata or a positive weight, size stays unknown.
+        size = UNKNOWN
 
-    breed = (
-        _first_text(meta, "breed_name", "kindCd", "breed", "breed_code", "breedCd")
-        or UNKNOWN
-    )
-    explicit_mixed = _parse_optional_bool(
-        _first_value(meta, "mixed_breed", "is_mixed", "isMixed")
-    )
-    if explicit_mixed is None:
-        lowered_breed = breed.lower()
-        if "믹스" in lowered_breed or "mix" in lowered_breed:
-            explicit_mixed = True
-        elif "순종" in lowered_breed or "purebred" in lowered_breed:
-            explicit_mixed = False
+    # Breed is a shelter-reported retrieval/display field.  It must not be
+    # treated as evidence about activity, temperament, or household fit.
+    breed = _clean_text(notice_fields["breed"]) or UNKNOWN
+    explicit_mixed = notice_fields["mixed_breed"]
 
     description = _first_text(
         meta,
@@ -623,27 +717,26 @@ def normalize_dog(
         "specialMark",
         "vlm_desc",
     )
-    behavior_text = " ".join(
-        part
-        for part in (
-            _first_text(meta, "behavior_notes"),
-            _first_text(meta, "desc", "specialMark"),
-        )
-        if part
-    )
+    behavior_text = resolve_notice_behavior_text(meta)
+    behavior_evidence_source = _trusted_behavior_evidence_source(meta)
+    structured_behavior_meta = meta if behavior_evidence_source else {}
 
     if not description:
         description = _first_text(meta, "description")
 
     explicit_activity = _normalize_activity(
-        _first_value(meta, "activity_level", "activity_level_hint")
+        _first_value(structured_behavior_meta, "activity_level", "activity_level_hint")
     )
     activity_hint = explicit_activity or _infer_activity_from_explicit_text(
         behavior_text
     )
 
     absence_hours = _parse_float(
-        _first_value(meta, "max_absence_hours", "daily_absence_tolerance_hours")
+        _first_value(
+            structured_behavior_meta,
+            "max_absence_hours",
+            "daily_absence_tolerance_hours",
+        )
     )
     if absence_hours is None:
         match = _ABSENCE_RE.search(behavior_text)
@@ -653,7 +746,9 @@ def normalize_dog(
         absence_hours = None
 
     experience = _normalize_experience(
-        _first_value(meta, "recommended_experience", "experience_level")
+        _first_value(
+            structured_behavior_meta, "recommended_experience", "experience_level"
+        )
     ) or _infer_experience_from_explicit_text(behavior_text)
 
     quality = _parse_float(meta.get("photo_quality_score"))
@@ -685,7 +780,12 @@ def normalize_dog(
         or None
     )
     source_url = _first_text(meta, "detail_url", "source_url", "url")
-    image_url = _first_text(meta, "image_url", "popfile", "popfile1")
+    image_url = _clean_text(notice_fields["image_url"]) or _first_text(
+        meta, "image_url", "popfile", "popfile1"
+    )
+    image_urls = list(notice_fields["image_urls"])
+    if image_url and not image_urls:
+        image_urls = [image_url]
     dog_id = _first_text(meta, "desertionNo", "desertion_no", "dog_id") or UNKNOWN
 
     return NormalizedDog(
@@ -700,7 +800,14 @@ def normalize_dog(
         ),
         region=infer_region(meta) or _first_text(meta, "region") or UNKNOWN,
         breed=breed,
+        breed_code=_clean_text(notice_fields["breed_code"]),
+        breed_name=_clean_text(notice_fields["breed_name"]),
+        breed_full_name=_clean_text(notice_fields["breed_full_name"]),
+        breed_source_label=_clean_text(notice_fields["breed_source_label"]),
+        breed_source=_clean_text(notice_fields["breed_source"]),
         mixed_breed=explicit_mixed,
+        color=_clean_text(notice_fields["color"]),
+        happen_date=_clean_text(notice_fields["happen_date"]),
         description=description,
         vlm_attributes=vlm_attributes,
         photo_quality_score=quality,
@@ -711,24 +818,40 @@ def normalize_dog(
         last_verified_at=last_verified_at,
         source_url=source_url,
         image_url=image_url,
+        image_urls=image_urls,
+        upstream_updated_at=_clean_text(notice_fields["upstream_updated_at"]),
+        health_checks=list(notice_fields["health_checks"]),
+        vaccinations=list(notice_fields["vaccinations"]),
+        safety_health_note=_clean_text(notice_fields["safety_health_note"]),
+        safety_social_note=_clean_text(notice_fields["safety_social_note"]),
+        behavior_evidence_source=behavior_evidence_source,
         care_name=_first_text(meta, "care_name", "careNm") or UNKNOWN,
         care_tel=_first_text(meta, "care_tel", "careTel"),
         care_addr=_first_text(meta, "care_addr", "careAddr"),
         org_name=_first_text(meta, "org_name", "orgNm"),
         happen_place=_first_text(meta, "happen_place", "happenPlace"),
         housing_types=_normalize_housing_types(
-            _first_value(meta, "housing_types", "housing_type", "suitable_housing")
+            _first_value(
+                structured_behavior_meta,
+                "housing_types",
+                "housing_type",
+                "suitable_housing",
+            )
         ),
         activity_level_hint=activity_hint,
         max_absence_hours=absence_hours,
         recommended_experience=experience,
-        children_compatible=_explicit_children_compatibility(meta, behavior_text),
-        other_pets_compatible=_explicit_pet_compatibility(meta, behavior_text),
+        children_compatible=_explicit_children_compatibility(
+            structured_behavior_meta, behavior_text
+        ),
+        other_pets_compatible=_explicit_pet_compatibility(
+            structured_behavior_meta, behavior_text
+        ),
     )
 
 
 def compare_size(
-    profile: UserProfile, dog: NormalizedDog
+    profile: UserProfile | AppearanceProfile, dog: NormalizedDog
 ) -> Optional[ConditionAssessment]:
     desired = profile.preferred_size.value
     if desired == "any":
@@ -754,7 +877,7 @@ def compare_size(
 
 
 def compare_age(
-    profile: UserProfile, dog: NormalizedDog
+    profile: UserProfile | AppearanceProfile, dog: NormalizedDog
 ) -> Optional[ConditionAssessment]:
     desired = profile.preferred_age.value
     if desired == "any":
@@ -784,7 +907,7 @@ def _region_key(value: str) -> str:
 
 
 def compare_region(
-    profile: UserProfile, dog: NormalizedDog
+    profile: UserProfile | AppearanceProfile, dog: NormalizedDog
 ) -> Optional[ConditionAssessment]:
     desired = profile.preferred_region
     if not desired:
@@ -960,19 +1083,42 @@ def compare_other_pets(
 
 
 def calculate_compatibility(
-    profile: UserProfile, dog: NormalizedDog
+    profile: UserProfile | AppearanceProfile,
+    dog: NormalizedDog,
+    *,
+    condition_keys: Optional[Iterable[str]] = None,
 ) -> CompatibilityResult:
-    assessments: Sequence[Optional[ConditionAssessment]] = (
-        compare_size(profile, dog),
-        compare_age(profile, dog),
-        compare_region(profile, dog),
-        compare_housing_type(profile, dog),
-        compare_activity_hint(profile, dog),
-        compare_absence_hours(profile, dog),
-        compare_experience_level(profile, dog),
-        compare_children(profile, dog),
-        compare_other_pets(profile, dog),
-    )
+    enabled = set(condition_keys) if condition_keys is not None else None
+    if not isinstance(profile, UserProfile) and (
+        enabled is None or not enabled.issubset(APPEARANCE_CONDITION_KEYS)
+    ):
+        raise ValueError("AppearanceProfile은 외형 조건 재정렬에만 사용할 수 있습니다.")
+
+    def is_enabled(key: str) -> bool:
+        return enabled is None or key in enabled
+
+    assessments: list[Optional[ConditionAssessment]] = []
+    if is_enabled("preferred_size"):
+        assessments.append(compare_size(profile, dog))
+    if is_enabled("preferred_age"):
+        assessments.append(compare_age(profile, dog))
+    if is_enabled("preferred_region"):
+        assessments.append(compare_region(profile, dog))
+
+    if isinstance(profile, UserProfile):
+        if is_enabled("housing_type"):
+            assessments.append(compare_housing_type(profile, dog))
+        if is_enabled("activity_level"):
+            assessments.append(compare_activity_hint(profile, dog))
+        if is_enabled("daily_absence_hours"):
+            assessments.append(compare_absence_hours(profile, dog))
+        if is_enabled("dog_experience"):
+            assessments.append(compare_experience_level(profile, dog))
+        if is_enabled("has_children"):
+            assessments.append(compare_children(profile, dog))
+        if is_enabled("has_other_pets"):
+            assessments.append(compare_other_pets(profile, dog))
+
     present = [assessment for assessment in assessments if assessment is not None]
     known_scores = [
         assessment.score for assessment in present if assessment.score is not None
@@ -1022,12 +1168,13 @@ def _clamp_score(value: Any) -> float:
 
 def rerank_candidates(
     candidates: Sequence[Dict[str, Any]],
-    profile: UserProfile,
+    profile: UserProfile | AppearanceProfile,
     settings: Optional[ProfileRerankSettings] = None,
     *,
     topk: int = 5,
     include_unknown_notices: bool = True,
     reference_date: Optional[datetime] = None,
+    condition_keys: Optional[Iterable[str]] = None,
 ) -> List[Dict[str, Any]]:
     settings = settings or ProfileRerankSettings.from_env()
     reranked: List[tuple[float, float, str, Dict[str, Any]]] = []
@@ -1049,7 +1196,11 @@ def rerank_candidates(
             continue
 
         retrieval_score = _clamp_score(candidate.get("score"))
-        compatibility = calculate_compatibility(profile, dog)
+        compatibility = calculate_compatibility(
+            profile,
+            dog,
+            condition_keys=condition_keys,
+        )
         if dog.notice_status == UNKNOWN:
             compatibility = CompatibilityResult(
                 score=compatibility.score,

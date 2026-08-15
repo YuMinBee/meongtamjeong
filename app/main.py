@@ -3,13 +3,17 @@ import html
 import hashlib
 import json
 import os
+import re
+import secrets
 import shutil
 import tempfile
+import time
+import warnings
 from datetime import datetime, timedelta
 from pathlib import Path
-from threading import Lock
+from threading import BoundedSemaphore, Lock
 from typing import Any, Dict, List, Optional, Tuple
-from urllib.parse import quote
+from urllib.parse import quote, urlencode
 
 import clip
 import faiss
@@ -19,13 +23,22 @@ import torch
 from dotenv import load_dotenv
 from fastapi import Body, FastAPI, File, Form, HTTPException, Query, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
-from PIL import Image
-from pydantic import BaseModel
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
+from PIL import Image, UnidentifiedImageError
+from pydantic import BaseModel, StrictBool
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-from app.dog_attributes import build_photo_advice, extract_json_object, summarize_vlm_attrs_ko
+from app.dog_attributes import (
+    build_photo_advice,
+    extract_json_object,
+    summarize_vlm_attrs_ko,
+)
+from app.dino_fusion import (
+    DinoFusionRuntime,
+    DinoFusionSearchResult,
+    DinoFusionSettings,
+)
 from app.hybrid_rag import (
     BM25Index,
     build_hybrid_documents,
@@ -34,38 +47,208 @@ from app.hybrid_rag import (
     parse_structured_query,
     rank_hybrid_documents,
     resolve_photo_quality_score,
+    resolve_vector_modality,
     vector_hits_to_doc_modality_scores,
 )
 from app.graph_rag import build_dog_graph, rerank_with_graph
-from app.notice_status import classify_notice, is_searchable_notice, notice_filter_reason
+from app.appearance_query import (
+    APPEARANCE_GRAPH_EXCLUDED_FEATURE_PREFIXES,
+    NEUTRAL_DOG_QUERY,
+    analyze_appearance_query,
+    appearance_search_conditions,
+)
+from app.inquiry_helper import InquiryPreferences, build_inquiry_materials
+from app.notice_status import (
+    classify_notice,
+    is_searchable_notice,
+    notice_filter_reason,
+)
+from app.notice_metadata import (
+    extract_image_urls,
+    normalize_additional_notice_fields,
+    normalize_breed_fields as normalize_reported_breed_fields,
+    normalize_http_url,
+)
 from app.profile_rerank import (
+    APPEARANCE_CONDITION_KEYS,
     PROFILE_RESULT_DISCLAIMER,
+    AppearanceProfile,
+    PreferredAge,
+    PreferredSize,
     ProfileRerankSettings,
     ProfileSearchRequest,
+    UserProfile,
     rerank_candidates,
+    resolve_notice_behavior_text,
+)
+from app.public_text_release import (
+    PUBLIC_TEXT_RELEASE_PROFILE,
+    PublicTextReleaseError,
+    validate_public_text_metadata_rows,
 )
 from app.species import clean_species, species_config, species_from_upkind
-from app.query_expansion import expand_query_text
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = BASE_DIR / "data"
 PROFILE_DEMO_PATH = BASE_DIR / "app" / "profile_demo.html"
 ENV_PATH = BASE_DIR / ".env"
 load_dotenv(ENV_PATH)
+
+
+def _env_int(name: str, default: int) -> int:
+    try:
+        return int(os.getenv(name, str(default)))
+    except (TypeError, ValueError):
+        return default
+
+
+def _env_float(name: str, default: float) -> float:
+    try:
+        return float(os.getenv(name, str(default)))
+    except (TypeError, ValueError):
+        return default
+
+
+def _env_csv(name: str, default: str) -> list[str]:
+    values = [value.strip() for value in os.getenv(name, default).split(",")]
+    return [value for value in values if value]
+
+
+SUPPORTED_APP_ENVS = frozenset({"development", "contest", "production"})
+
+
+def _validated_app_env(value: str) -> str:
+    normalized = str(value or "").strip().lower()
+    if normalized not in SUPPORTED_APP_ENVS:
+        raise RuntimeError("APP_ENV must be one of: development, contest, production")
+    return normalized
+
+
+def _validated_api_key(value: str, app_env: str) -> str:
+    normalized = str(value or "").strip()
+    environment = _validated_app_env(app_env)
+    if environment != "development":
+        if normalized in {"", "change-me"}:
+            raise RuntimeError(
+                "API_KEY must be replaced before contest or production startup"
+            )
+        if len(normalized) < 24:
+            raise RuntimeError(
+                "API_KEY must contain at least 24 characters for contest or production"
+            )
+    return normalized or "change-me"
+
+
+def _load_release_profile_marker(path: Path) -> Dict[str, Any]:
+    if not path.exists():
+        return {}
+    try:
+        value = json.loads(path.read_text(encoding="utf-8-sig"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise RuntimeError("release profile marker is unreadable or invalid") from exc
+    if not isinstance(value, dict):
+        raise RuntimeError("release profile marker must contain an object")
+    return value
+
+
+def _resolve_release_profile(
+    marker: Dict[str, Any],
+    requested: str,
+) -> str:
+    aliases = {
+        "": "full",
+        "full": "full",
+        "public-text-only": PUBLIC_TEXT_RELEASE_PROFILE,
+        PUBLIC_TEXT_RELEASE_PROFILE: PUBLIC_TEXT_RELEASE_PROFILE,
+    }
+    requested_value = aliases.get(str(requested or "").strip().lower())
+    if requested_value is None:
+        raise RuntimeError("unsupported RELEASE_PROFILE value")
+    marker_value = aliases.get(str(marker.get("profile") or "").strip().lower())
+    if marker and marker_value is None:
+        raise RuntimeError("unsupported release profile marker")
+    if marker_value and requested_value not in {"full", marker_value}:
+        raise RuntimeError("RELEASE_PROFILE conflicts with the artifact marker")
+    return marker_value or requested_value
+
+
+def _validate_public_text_runtime_artifacts(
+    runtime_index: Any,
+    metas: List[Dict[str, Any]],
+    marker: Dict[str, Any],
+    *,
+    index_path: Path,
+    metas_path: Path,
+) -> Dict[str, Any]:
+    try:
+        summary = validate_public_text_metadata_rows(metas)
+    except PublicTextReleaseError as exc:
+        raise RuntimeError(
+            f"public-text-only runtime metadata contract failed: {exc}"
+        ) from exc
+    marker_output = marker.get("output")
+    if marker and not isinstance(marker_output, dict):
+        raise RuntimeError("release profile marker output contract is missing")
+    if isinstance(marker_output, dict):
+        expected_index_sha = (
+            str(marker_output.get("index_sha256") or "").strip().lower()
+        )
+        expected_metas_sha = (
+            str(marker_output.get("metas_sha256") or "").strip().lower()
+        )
+        actual_index_sha = hashlib.sha256(index_path.read_bytes()).hexdigest()
+        actual_metas_sha = hashlib.sha256(metas_path.read_bytes()).hexdigest()
+        if expected_index_sha != actual_index_sha:
+            raise RuntimeError("release profile marker index SHA-256 is stale")
+        if expected_metas_sha != actual_metas_sha:
+            raise RuntimeError("release profile marker metadata SHA-256 is stale")
+        if int(marker_output.get("vector_count") or -1) != int(runtime_index.ntotal):
+            raise RuntimeError("release profile marker vector count is stale")
+        if int(marker_output.get("dimension") or -1) != int(runtime_index.d):
+            raise RuntimeError("release profile marker dimension is stale")
+    return summary
+
+
+APP_ENV = _validated_app_env(os.getenv("APP_ENV", "development"))
+RELEASE_PROFILE_PATH = Path(
+    os.getenv("RELEASE_PROFILE_PATH", str(DATA_DIR / "release_profile.json"))
+)
+RELEASE_PROFILE_MARKER = _load_release_profile_marker(RELEASE_PROFILE_PATH)
+RELEASE_PROFILE = _resolve_release_profile(
+    RELEASE_PROFILE_MARKER,
+    os.getenv("RELEASE_PROFILE", "full"),
+)
+PUBLIC_TEXT_RELEASE_ACTIVE = RELEASE_PROFILE == PUBLIC_TEXT_RELEASE_PROFILE
+PUBLIC_NOTICE_IMAGES_ENABLED = not PUBLIC_TEXT_RELEASE_ACTIVE
+PUBLIC_NOTICE_VISUAL_ASSETS_ENABLED = not PUBLIC_TEXT_RELEASE_ACTIVE
+CORS_ALLOW_ORIGINS = _env_csv(
+    "CORS_ALLOW_ORIGINS",
+    "http://localhost:8000,http://127.0.0.1:8000",
+)
 app = FastAPI(
     title="멍탐정 (MeongTamjeong)",
     description="유기견 보호소 방문 전 후보를 좁히는 멀티모달 탐색 보조 API",
 )
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=CORS_ALLOW_ORIGINS,
+    allow_methods=["GET", "POST"],
+    allow_headers=["content-type", "x-api-key"],
 )
 
-API_KEY = os.getenv("API_KEY", "change-me")
-NOTICE_FILTER_INACTIVE = os.getenv("NOTICE_FILTER_INACTIVE", "true").lower() in {"1", "true", "yes", "on"}
-NOTICE_INCLUDE_UNKNOWN = os.getenv("NOTICE_INCLUDE_UNKNOWN", "false").lower() in {"1", "true", "yes", "on"}
+API_KEY = _validated_api_key(os.getenv("API_KEY", "change-me"), APP_ENV)
+NOTICE_FILTER_INACTIVE = os.getenv("NOTICE_FILTER_INACTIVE", "true").lower() in {
+    "1",
+    "true",
+    "yes",
+    "on",
+}
+NOTICE_INCLUDE_UNKNOWN = os.getenv("NOTICE_INCLUDE_UNKNOWN", "false").lower() in {
+    "1",
+    "true",
+    "yes",
+    "on",
+}
 PROFILE_INCLUDE_UNKNOWN_NOTICES = os.getenv(
     "PROFILE_INCLUDE_UNKNOWN_NOTICES", "true"
 ).lower() in {"1", "true", "yes", "on"}
@@ -74,18 +257,35 @@ METAS_PATH = Path(os.getenv("METAS_PATH", str(DATA_DIR / "dog_metas.json")))
 CLIP_MODEL = os.getenv("CLIP_MODEL", "ViT-B/32")
 ANIMAL_API_KEY = os.getenv("ANIMAL_API_KEY", "")
 ANIMAL_API_BASE = (
-    "https://apis.data.go.kr/1543061/abandonmentPublicService_v2/"
-    "abandonmentPublic_v2"
+    "https://apis.data.go.kr/1543061/abandonmentPublicService_v2/abandonmentPublic_v2"
 )
 LIVE_DOG_CACHE_PATH = DATA_DIR / "local_dog_cache.json"
-LIVE_FETCH_YEARS = int(os.getenv("LIVE_FETCH_YEARS", "3"))
-LIVE_FETCH_DAYS = int(os.getenv("LIVE_FETCH_DAYS", str(LIVE_FETCH_YEARS * 365)))
-LIVE_FETCH_ROWS = int(os.getenv("LIVE_FETCH_ROWS", "1000"))
-LIVE_FETCH_MAX_PAGES = int(os.getenv("LIVE_FETCH_MAX_PAGES", "500"))
+LIVE_FETCH_YEARS = _env_int("LIVE_FETCH_YEARS", 3)
+LIVE_FETCH_DAYS = _env_int("LIVE_FETCH_DAYS", LIVE_FETCH_YEARS * 365)
+LIVE_FETCH_ROWS = _env_int("LIVE_FETCH_ROWS", 1000)
+LIVE_FETCH_MAX_PAGES = _env_int("LIVE_FETCH_MAX_PAGES", 500)
 LIVE_CACHE_LOCK = Lock()
+NOTICE_LOOKUP_TIMEOUT_SECONDS = max(
+    1.0,
+    _env_float("NOTICE_LOOKUP_TIMEOUT_SECONDS", 12.0),
+)
+NOTICE_LOOKUP_CACHE_TTL_SECONDS = max(
+    0.0,
+    _env_float("NOTICE_LOOKUP_CACHE_TTL_SECONDS", 300.0),
+)
+NOTICE_LOOKUP_MAX_CONCURRENCY = min(
+    8,
+    max(1, _env_int("NOTICE_LOOKUP_MAX_CONCURRENCY", 2)),
+)
+NOTICE_LOOKUP_SEMAPHORE = BoundedSemaphore(NOTICE_LOOKUP_MAX_CONCURRENCY)
+NOTICE_LOOKUP_CACHE_LOCK = Lock()
+NOTICE_LOOKUP_CACHE: Dict[
+    str,
+    Tuple[float, Optional[Dict[str, Any]], str],
+] = {}
 GEMMA3_MODEL_PATH = os.getenv("GEMMA3_MODEL_PATH", "")
 GEMMA3_MODEL_ID = os.getenv("GEMMA3_MODEL_ID", "google/gemma-3-12b-it")
-GEMMA3_ENABLED = os.getenv("GEMMA3_ENABLED", "true").lower() in {
+GEMMA3_ENABLED = os.getenv("GEMMA3_ENABLED", "false").lower() in {
     "1",
     "true",
     "yes",
@@ -93,27 +293,160 @@ GEMMA3_ENABLED = os.getenv("GEMMA3_ENABLED", "true").lower() in {
 }
 GEMMA3_GPU_MAX_MEMORY = os.getenv("GEMMA3_GPU_MAX_MEMORY", "20GiB")
 GEMMA3_CPU_MAX_MEMORY = os.getenv("GEMMA3_CPU_MAX_MEMORY", "96GiB")
-GEMMA3_RECOMMEND_MAX_NEW_TOKENS = int(os.getenv("GEMMA3_RECOMMEND_MAX_NEW_TOKENS", "320"))
-GEMMA3_CHAT_MAX_NEW_TOKENS = int(os.getenv("GEMMA3_CHAT_MAX_NEW_TOKENS", "384"))
+GEMMA3_RECOMMEND_MAX_NEW_TOKENS = _env_int("GEMMA3_RECOMMEND_MAX_NEW_TOKENS", 320)
+GEMMA3_CHAT_MAX_NEW_TOKENS = _env_int("GEMMA3_CHAT_MAX_NEW_TOKENS", 384)
 GEMMA3_GPU_ONLY = os.getenv("GEMMA3_GPU_ONLY", "").lower() in {"1", "true", "yes", "on"}
+IMAGE_UPLOAD_MAX_BYTES = max(
+    1,
+    _env_int("IMAGE_UPLOAD_MAX_BYTES", 8 * 1024 * 1024),
+)
+IMAGE_UPLOAD_MAX_PIXELS = max(
+    1,
+    _env_int("IMAGE_UPLOAD_MAX_PIXELS", 25_000_000),
+)
+IMAGE_UPLOAD_READ_CHUNK_BYTES = 64 * 1024
+APPEARANCE_IMAGE_ALLOWED_FORMATS = frozenset({"JPEG", "PNG", "WEBP"})
 GEMMA_RUNTIME_LOCK = Lock()
 GEMMA_PROCESSOR: Optional[Any] = None
 GEMMA_MODEL: Optional[Any] = None
 GEMMA_MODEL_NAME = ""
 PROFILE_RERANK_SETTINGS = ProfileRerankSettings.from_env()
+if PUBLIC_TEXT_RELEASE_ACTIVE:
+    PROFILE_RERANK_SETTINGS = ProfileRerankSettings(
+        compatibility_weight=PROFILE_RERANK_SETTINGS.compatibility_weight,
+        quality_weight=0.0,
+        candidate_multiplier=PROFILE_RERANK_SETTINGS.candidate_multiplier,
+    )
+DINO_FUSION_SETTINGS = DinoFusionSettings.from_env(BASE_DIR)
+DINO_FUSION_RUNTIME = DinoFusionRuntime(DINO_FUSION_SETTINGS)
 PUBLIC_DEMO_PATHS = {"/demo", "/visualize/profile-search"}
+LEGACY_UI_DISABLED_ENVS = frozenset({"contest", "production"})
+LEGACY_EXPERIMENTAL_UI_PATHS = frozenset(
+    {"/visualize/dashboard", "/visualize/adoption-flow"}
+)
+
+
+def _legacy_ui_redirect() -> Optional[RedirectResponse]:
+    if APP_ENV not in LEGACY_UI_DISABLED_ENVS:
+        return None
+    return RedirectResponse(
+        url="/demo",
+        status_code=307,
+        headers={
+            "Cache-Control": "no-store",
+            "X-Meongtamjeong-Legacy-UI": "disabled",
+        },
+    )
+
+
+async def load_uploaded_image(
+    upload: UploadFile,
+    *,
+    allowed_formats: Optional[set[str] | frozenset[str]] = None,
+) -> Image.Image:
+    """Read and decode one uploaded image within explicit resource limits."""
+
+    payload = io.BytesIO()
+    total = 0
+    while total <= IMAGE_UPLOAD_MAX_BYTES:
+        read_size = min(
+            IMAGE_UPLOAD_READ_CHUNK_BYTES,
+            IMAGE_UPLOAD_MAX_BYTES - total + 1,
+        )
+        chunk = await upload.read(read_size)
+        if not chunk:
+            break
+        total += len(chunk)
+        if total > IMAGE_UPLOAD_MAX_BYTES:
+            raise HTTPException(
+                status_code=413,
+                detail="image upload exceeds the configured size limit",
+            )
+        payload.write(chunk)
+
+    if total == 0:
+        raise HTTPException(status_code=400, detail="image upload is empty")
+
+    payload.seek(0)
+    try:
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", Image.DecompressionBombWarning)
+            with Image.open(payload) as source:
+                image_format = str(source.format or "").upper()
+                if allowed_formats is not None and image_format not in allowed_formats:
+                    raise HTTPException(
+                        status_code=415,
+                        detail="image format must be JPEG, PNG, or WebP",
+                    )
+                width, height = source.size
+                if width <= 0 or height <= 0:
+                    raise HTTPException(
+                        status_code=415,
+                        detail="a valid image file is required",
+                    )
+                if width * height > IMAGE_UPLOAD_MAX_PIXELS:
+                    raise HTTPException(
+                        status_code=413,
+                        detail="image dimensions exceed the configured pixel limit",
+                    )
+                source.load()
+                return source.convert("RGB").copy()
+    except HTTPException:
+        raise
+    except (
+        Image.DecompressionBombError,
+        Image.DecompressionBombWarning,
+        MemoryError,
+    ):
+        raise HTTPException(
+            status_code=413,
+            detail="image dimensions exceed the configured pixel limit",
+        ) from None
+    except (UnidentifiedImageError, OSError, SyntaxError, ValueError, EOFError):
+        raise HTTPException(
+            status_code=415,
+            detail="a valid image file is required",
+        ) from None
+
+
+def _apply_release_response_policy(response: Any) -> Any:
+    if not PUBLIC_TEXT_RELEASE_ACTIVE:
+        return response
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "img-src 'self' data: blob:; "
+        "connect-src 'self'; "
+        "style-src 'self' 'unsafe-inline'; "
+        "script-src 'self' 'unsafe-inline'; "
+        "object-src 'none'; base-uri 'none'; frame-ancestors 'none'"
+    )
+    response.headers["Referrer-Policy"] = "no-referrer"
+    response.headers["X-Meongtamjeong-Release-Profile"] = RELEASE_PROFILE
+    return response
 
 
 @app.middleware("http")
 async def api_key_checker(request: Request, call_next):
-    if request.method == "GET" and request.url.path in PUBLIC_DEMO_PATHS:
-        return await call_next(request)
+    if request.method == "GET":
+        path = request.url.path
+        if path in PUBLIC_DEMO_PATHS or (
+            APP_ENV in LEGACY_UI_DISABLED_ENVS and path in LEGACY_EXPERIMENTAL_UI_PATHS
+        ):
+            return _apply_release_response_policy(await call_next(request))
     key = request.headers.get("x-api-key")
-    if request.method == "GET" and not key:
+    # Query-string credentials can leak through browser history, access logs,
+    # and referrers. Keep this compatibility path for local development only;
+    # contest and production deployments require the header.
+    if request.method == "GET" and not key and APP_ENV == "development":
         key = request.query_params.get("api_key")
-    if key != API_KEY:
-        raise HTTPException(status_code=403, detail="Forbidden")
-    return await call_next(request)
+    if not secrets.compare_digest(key or "", API_KEY):
+        # Exceptions raised from user middleware sit outside FastAPI's route
+        # exception handling and can surface as an HTTP 500. Return the
+        # authentication response directly so missing/wrong keys fail closed.
+        return _apply_release_response_policy(
+            JSONResponse(status_code=403, content={"detail": "Forbidden"})
+        )
+    return _apply_release_response_policy(await call_next(request))
 
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -124,6 +457,7 @@ if not INDEX_PATH.exists():
     raise FileNotFoundError(INDEX_PATH)
 if not METAS_PATH.exists():
     raise FileNotFoundError(METAS_PATH)
+
 
 def read_faiss_index(path: Path) -> Any:
     try:
@@ -150,11 +484,26 @@ with METAS_PATH.open("r", encoding="utf-8") as f:
 if index.ntotal != len(METAS):
     raise ValueError(f"Index({index.ntotal}) != Metas({len(METAS)})")
 
+PUBLIC_TEXT_RUNTIME_SUMMARY: Dict[str, Any] = {}
+if PUBLIC_TEXT_RELEASE_ACTIVE:
+    PUBLIC_TEXT_RUNTIME_SUMMARY = _validate_public_text_runtime_artifacts(
+        index,
+        METAS,
+        RELEASE_PROFILE_MARKER,
+        index_path=INDEX_PATH,
+        metas_path=METAS_PATH,
+    )
+
 
 def load_graph_overlay_metas() -> List[Dict[str, Any]]:
+    if PUBLIC_TEXT_RELEASE_ACTIVE:
+        return []
     overlays: List[Dict[str, Any]] = []
     seen = set()
-    for path in (DATA_DIR / "local_dog_cache_enriched.json", DATA_DIR / "local_dog_cache.json"):
+    for path in (
+        DATA_DIR / "local_dog_cache_enriched.json",
+        DATA_DIR / "local_dog_cache.json",
+    ):
         if not path.exists():
             continue
         try:
@@ -168,11 +517,14 @@ def load_graph_overlay_metas() -> List[Dict[str, Any]]:
         for item in items:
             if not isinstance(item, dict):
                 continue
-            dog_id = str(item.get("desertionNo") or item.get("desertion_no") or "").strip()
+            dog_id = str(
+                item.get("desertionNo") or item.get("desertion_no") or ""
+            ).strip()
             if dog_id and dog_id not in seen:
                 overlays.append(item)
                 seen.add(dog_id)
     return overlays
+
 
 HYBRID_DOCS, HYBRID_VECTOR_TO_DOC = build_hybrid_documents(METAS)
 HYBRID_BM25 = BM25Index(HYBRID_DOCS)
@@ -182,8 +534,11 @@ DOG_GRAPH = build_dog_graph(HYBRID_DOCS, GRAPH_OVERLAY_METAS)
 # live/enriched cache. Build this lookup afterwards so profile reranking sees
 # the same status, region and VLM metadata as the graph layer.
 HYBRID_META_BY_ID = {
-    str(doc.get("doc_id") or "").strip(): doc.get("meta") or {}
-    for doc in HYBRID_DOCS
+    str(doc.get("doc_id") or "").strip(): doc.get("meta") or {} for doc in HYBRID_DOCS
+}
+HYBRID_DOC_INDEX_BY_ID = {
+    str(doc.get("doc_id") or "").strip(): doc_index
+    for doc_index, doc in enumerate(HYBRID_DOCS)
 }
 
 
@@ -215,7 +570,9 @@ def serving_doc_indices() -> List[int]:
     return [
         doc_index
         for doc_index, doc in enumerate(HYBRID_DOCS)
-        if is_searchable_notice(doc.get("meta") or {}, include_unknown=NOTICE_INCLUDE_UNKNOWN)
+        if is_searchable_notice(
+            doc.get("meta") or {}, include_unknown=NOTICE_INCLUDE_UNKNOWN
+        )
     ]
 
 
@@ -223,9 +580,7 @@ def graph_status_summaries() -> Dict[str, Any]:
     status_by_index = notice_status_by_doc_index()
     serving_indices = serving_doc_indices()
     active_indices = [
-        doc_index
-        for doc_index, status in status_by_index.items()
-        if status == "active"
+        doc_index for doc_index, status in status_by_index.items() if status == "active"
     ]
     return {
         "total": DOG_GRAPH.summary(),
@@ -261,6 +616,23 @@ def clean_text(value: Any) -> str:
     if value is None:
         return ""
     return str(value).strip()
+
+
+@torch.no_grad()
+def embed_text_batch(texts: List[str], batch_size: int = 64) -> np.ndarray:
+    """Encode notice text in batches for the optional behavior side branch."""
+
+    values = [clean_text(text) for text in texts]
+    if not values:
+        return np.empty((0, 512), dtype=np.float32)
+    batches: List[np.ndarray] = []
+    size = max(1, int(batch_size))
+    for start in range(0, len(values), size):
+        tokens = clip.tokenize(values[start : start + size], truncate=True).to(device)
+        encoded = model.encode_text(tokens)
+        encoded = encoded / encoded.norm(dim=-1, keepdim=True)
+        batches.append(encoded.detach().cpu().numpy().astype("float32"))
+    return np.concatenate(batches, axis=0)
 
 
 def configure_hf_cache_env() -> None:
@@ -315,7 +687,10 @@ def load_gemma_runtime() -> Tuple[Any, Any]:
         if GEMMA3_GPU_ONLY:
             model_kwargs["device_map"] = {"": 0}
         elif torch.cuda.is_available():
-            model_kwargs["max_memory"] = {0: GEMMA3_GPU_MAX_MEMORY, "cpu": GEMMA3_CPU_MAX_MEMORY}
+            model_kwargs["max_memory"] = {
+                0: GEMMA3_GPU_MAX_MEMORY,
+                "cpu": GEMMA3_CPU_MAX_MEMORY,
+            }
 
         model = Gemma3ForConditionalGeneration.from_pretrained(
             model_path,
@@ -324,7 +699,9 @@ def load_gemma_runtime() -> Tuple[Any, Any]:
 
         GEMMA_PROCESSOR = processor
         GEMMA_MODEL = model
-        GEMMA_MODEL_NAME = clean_text(getattr(model.config, "_name_or_path", "")) or model_path
+        GEMMA_MODEL_NAME = (
+            clean_text(getattr(model.config, "_name_or_path", "")) or model_path
+        )
         return GEMMA_PROCESSOR, GEMMA_MODEL
 
 
@@ -360,27 +737,11 @@ def gemma_generate_text(prompt: str, max_new_tokens: int) -> str:
 
 
 def resolve_breed_code(meta: Dict[str, Any]) -> str:
-    breed_code = clean_text(meta.get("breed_code"))
-    if breed_code:
-        return breed_code
-
-    for key in ("breed", "kindCd"):
-        value = clean_text(meta.get(key))
-        if value.isdigit():
-            return value
-    return ""
+    return clean_text(normalize_reported_breed_fields(meta).get("breed_code"))
 
 
 def resolve_breed_name(meta: Dict[str, Any]) -> str:
-    breed_name = clean_text(meta.get("breed_name"))
-    if breed_name:
-        return breed_name
-
-    for key in ("breed", "kindCd"):
-        value = clean_text(meta.get(key))
-        if value and not value.isdigit():
-            return value
-    return ""
+    return clean_text(normalize_reported_breed_fields(meta).get("breed_name"))
 
 
 def resolve_breed_label(meta: Dict[str, Any]) -> str:
@@ -388,21 +749,22 @@ def resolve_breed_label(meta: Dict[str, Any]) -> str:
 
 
 def resolve_detail_url(meta: Dict[str, Any]) -> str:
-    detail_url = clean_text(meta.get("detail_url"))
+    detail_url = normalize_http_url(meta.get("detail_url"))
     if detail_url:
         detail_url = detail_url.replace("publicDetail.do", "publicDtl.do")
         if "publicDtl.do" in detail_url and "menuNo=" not in detail_url:
             sep = "&" if "?" in detail_url else "?"
             detail_url = f"{detail_url}{sep}menuNo=1000000055"
-        return detail_url
+        return normalize_http_url(detail_url)
 
     desertion_no = clean_text(meta.get("desertionNo"))
     if not desertion_no:
         return ""
-    return (
-        "https://www.animal.go.kr/front/awtis/public/publicDtl.do"
-        f"?desertionNo={desertion_no}&menuNo=1000000055"
+    query = urlencode(
+        {"desertionNo": desertion_no, "menuNo": "1000000055"},
+        quote_via=quote,
     )
+    return f"https://www.animal.go.kr/front/awtis/public/publicDtl.do?{query}"
 
 
 def resolve_desc(meta: Dict[str, Any]) -> str:
@@ -416,47 +778,33 @@ def resolve_desc(meta: Dict[str, Any]) -> str:
     )
 
 
-def normalize_breed_fields(rec: Dict[str, Any]) -> Dict[str, str]:
-    raw_kind = clean_text(rec.get("kindCd") or rec.get("breed") or rec.get("breed_name"))
-    raw_breed_code = clean_text(rec.get("breedCd") or rec.get("breed_code"))
-    breed_code = raw_breed_code or (raw_kind if raw_kind.isdigit() else "")
-    breed_name = raw_kind if raw_kind and not raw_kind.isdigit() else clean_text(rec.get("breed_name"))
-    breed = breed_name or breed_code or "Unknown"
-    return {
-        "breed": breed,
-        "breed_code": breed_code,
-        "breed_name": breed_name,
-    }
+def normalize_breed_fields(rec: Dict[str, Any]) -> Dict[str, Any]:
+    return normalize_reported_breed_fields(rec)
 
 
 def extract_image_url(rec: Dict[str, Any]) -> str:
-    for key in ("image_url", "url", "popfile", "popfile1", "popfile2", "fileName", "thumb", "image", "img"):
-        value = clean_text(rec.get(key))
-        if value.startswith("http"):
-            return value
-
-    for key, value in rec.items():
-        text = clean_text(value)
-        if not text.startswith("http"):
-            continue
-        lower_key = str(key).lower()
-        if any(token in lower_key for token in ("pop", "img", "thumb")):
-            return text
-    return ""
+    if not PUBLIC_NOTICE_IMAGES_ENABLED:
+        return ""
+    image_urls = extract_image_urls(rec)
+    return image_urls[0] if image_urls else ""
 
 
 def infer_species(meta: Dict[str, Any]) -> str:
     explicit = clean_text(meta.get("species") or meta.get("animal_species"))
     if explicit:
         return clean_species(explicit)
-    upkind = clean_text(meta.get("upkind") or meta.get("upkindCd"))
+    upkind = clean_text(
+        meta.get("upkind") or meta.get("upkindCd") or meta.get("upKindCd")
+    )
     if upkind:
         return species_from_upkind(upkind, "dog")
     return "dog"
 
 
 def resolve_upkind(meta: Dict[str, Any]) -> str:
-    upkind = clean_text(meta.get("upkind") or meta.get("upkindCd"))
+    upkind = clean_text(
+        meta.get("upkind") or meta.get("upkindCd") or meta.get("upKindCd")
+    )
     if upkind:
         return upkind
     return str(species_config(infer_species(meta))["upkind"])
@@ -466,6 +814,9 @@ def resolve_contact_fields(meta: Dict[str, Any]) -> Dict[str, str]:
     return {
         "care_name": clean_text(meta.get("care_name") or meta.get("careNm")),
         "care_tel": clean_text(meta.get("care_tel") or meta.get("careTel")),
+        "care_email": normalize_email_address(
+            meta.get("care_email") or meta.get("careEmail") or meta.get("email")
+        ),
         "care_addr": clean_text(meta.get("care_addr") or meta.get("careAddr")),
         "org_name": clean_text(meta.get("org_name") or meta.get("orgNm")),
         "happen_place": clean_text(meta.get("happen_place") or meta.get("happenPlace")),
@@ -475,10 +826,13 @@ def resolve_contact_fields(meta: Dict[str, Any]) -> Dict[str, str]:
 
 
 def build_live_animal_meta(rec: Dict[str, Any], species: str = "dog") -> Dict[str, Any]:
-    breed_fields = normalize_breed_fields(rec)
+    source_fields = normalize_additional_notice_fields(rec)
     desertion_no = clean_text(rec.get("desertionNo")) or "Unknown"
     notice_no = clean_text(rec.get("noticeNo"))
-    upkind = clean_text(rec.get("upkind") or rec.get("upkindCd")) or species_config(species)["upkind"]
+    upkind = (
+        clean_text(rec.get("upkind") or rec.get("upkindCd") or rec.get("upKindCd"))
+        or species_config(species)["upkind"]
+    )
     normalized_species = species_from_upkind(upkind, clean_species(species))
     return {
         "type": "live",
@@ -486,15 +840,14 @@ def build_live_animal_meta(rec: Dict[str, Any], species: str = "dog") -> Dict[st
         "upkind": upkind,
         "desertionNo": desertion_no,
         "notice_no": notice_no,
-        "breed": breed_fields["breed"],
-        "breed_code": breed_fields["breed_code"],
-        "breed_name": breed_fields["breed_name"],
+        **source_fields,
         "sex": clean_text(rec.get("sexCd")) or clean_text(rec.get("sex")) or "Unknown",
         "age": clean_text(rec.get("age")) or "Unknown",
         "weight": clean_text(rec.get("weight")) or "Unknown",
-        "neuter": clean_text(rec.get("neuterYn")) or clean_text(rec.get("neuter")) or "Unknown",
+        "neuter": clean_text(rec.get("neuterYn"))
+        or clean_text(rec.get("neuter"))
+        or "Unknown",
         "desc": clean_text(rec.get("specialMark")) or clean_text(rec.get("desc")) or "",
-        "image_url": extract_image_url(rec),
         "detail_url": (
             "https://www.animal.go.kr/front/awtis/public/publicDtl.do"
             f"?desertionNo={desertion_no}&menuNo=1000000055"
@@ -503,12 +856,17 @@ def build_live_animal_meta(rec: Dict[str, Any], species: str = "dog") -> Dict[st
         ),
         "care_name": clean_text(rec.get("careNm") or rec.get("care_name")),
         "care_tel": clean_text(rec.get("careTel") or rec.get("care_tel")),
+        "care_email": normalize_email_address(
+            rec.get("careEmail") or rec.get("care_email") or rec.get("email")
+        ),
         "care_addr": clean_text(rec.get("careAddr") or rec.get("care_addr")),
         "org_name": clean_text(rec.get("orgNm") or rec.get("org_name")),
         "happen_place": clean_text(rec.get("happenPlace") or rec.get("happen_place")),
         "notice_start": clean_text(rec.get("noticeSdt") or rec.get("notice_start")),
         "notice_end": clean_text(rec.get("noticeEdt") or rec.get("notice_end")),
-        "process_state": clean_text(rec.get("processState") or rec.get("process_state")),
+        "process_state": clean_text(
+            rec.get("processState") or rec.get("process_state")
+        ),
     }
 
 
@@ -561,11 +919,11 @@ def save_live_dog_cache(payload: Dict[str, Any]) -> None:
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
 
-def build_api_session() -> requests.Session:
+def build_api_session(*, retry_total: int = 5) -> requests.Session:
     session = requests.Session()
     retries = Retry(
-        total=5,
-        backoff_factor=1,
+        total=max(0, retry_total),
+        backoff_factor=1 if retry_total > 0 else 0,
         status_forcelist=[429, 500, 502, 503, 504],
     )
     adapter = HTTPAdapter(max_retries=retries)
@@ -596,11 +954,19 @@ def fetch_live_dog_cache(
             "bgnde": start.strftime("%Y%m%d"),
             "endde": end.strftime("%Y%m%d"),
         }
-        resp = session.get(ANIMAL_API_BASE, params=params, timeout=30)
-        resp.raise_for_status()
+        try:
+            resp = session.get(ANIMAL_API_BASE, params=params, timeout=30)
+            resp.raise_for_status()
+        except requests.RequestException as exc:
+            raise RuntimeError(
+                f"public animal API request failed on page {page}: "
+                f"{exc.__class__.__name__}"
+            ) from None
 
         data = resp.json()
-        body = data.get("response", {}).get("body", {}) if isinstance(data, dict) else {}
+        body = (
+            data.get("response", {}).get("body", {}) if isinstance(data, dict) else {}
+        )
         page_items = body.get("items", {}).get("item", [])
         if isinstance(page_items, dict):
             page_items = [page_items]
@@ -628,7 +994,9 @@ def fetch_live_dog_cache(
     return payload
 
 
-def get_live_dog_cache(refresh: bool = False, days: int = LIVE_FETCH_DAYS) -> Dict[str, Any]:
+def get_live_dog_cache(
+    refresh: bool = False, days: int = LIVE_FETCH_DAYS
+) -> Dict[str, Any]:
     with LIVE_CACHE_LOCK:
         cache = load_live_dog_cache()
         if not refresh and cache["items"] and cache.get("days") == days:
@@ -636,10 +1004,24 @@ def get_live_dog_cache(refresh: bool = False, days: int = LIVE_FETCH_DAYS) -> Di
 
         try:
             return fetch_live_dog_cache(days=days)
-        except requests.RequestException:
+        except (requests.RequestException, RuntimeError):
             if cache["items"]:
                 return cache
             raise
+
+
+def require_live_gallery_enabled() -> None:
+    """Keep legacy bulk-refresh routes out of contest/production serving."""
+
+    if APP_ENV in LEGACY_UI_DISABLED_ENVS or not PUBLIC_NOTICE_VISUAL_ASSETS_ENABLED:
+        raise HTTPException(status_code=404, detail="Not Found")
+
+
+def require_public_notice_visual_assets_enabled() -> None:
+    """Fail closed when this profile excludes public-notice visual artifacts."""
+
+    if not PUBLIC_NOTICE_VISUAL_ASSETS_ENABLED:
+        raise HTTPException(status_code=404, detail="Not Found")
 
 
 def _notice_search_window(meta: Dict[str, Any]) -> Tuple[datetime, datetime]:
@@ -653,21 +1035,79 @@ def _notice_search_window(meta: Dict[str, Any]) -> Tuple[datetime, datetime]:
     return end - timedelta(days=365), end
 
 
-def fetch_latest_notice_meta(meta: Dict[str, Any], max_pages: int = 30, rows: int = 1000) -> Tuple[Optional[Dict[str, Any]], str]:
+def _cached_notice_lookup(
+    desertion_no: str,
+) -> Optional[Tuple[Optional[Dict[str, Any]], str]]:
+    now = time.monotonic()
+    with NOTICE_LOOKUP_CACHE_LOCK:
+        cached = NOTICE_LOOKUP_CACHE.get(desertion_no)
+        if cached is None:
+            return None
+        expires_at, latest, status = cached
+        if expires_at <= now:
+            NOTICE_LOOKUP_CACHE.pop(desertion_no, None)
+            return None
+        return (dict(latest) if latest is not None else None), status
+
+
+def _store_notice_lookup(
+    desertion_no: str,
+    latest: Optional[Dict[str, Any]],
+    status: str,
+) -> None:
+    if NOTICE_LOOKUP_CACHE_TTL_SECONDS <= 0:
+        return
+    expires_at = time.monotonic() + NOTICE_LOOKUP_CACHE_TTL_SECONDS
+    with NOTICE_LOOKUP_CACHE_LOCK:
+        NOTICE_LOOKUP_CACHE[desertion_no] = (
+            expires_at,
+            dict(latest) if latest is not None else None,
+            status,
+        )
+
+
+def fetch_latest_notice_meta(
+    meta: Dict[str, Any],
+    max_pages: int = 30,
+    rows: int = 1000,
+    timeout_seconds: Optional[float] = None,
+) -> Tuple[Optional[Dict[str, Any]], str]:
     desertion_no = clean_text(meta.get("desertionNo") or meta.get("desertion_no"))
     if not desertion_no:
         return None, "missing_desertion_no"
     if not ANIMAL_API_KEY:
         return None, "missing_api_key"
 
+    cached = _cached_notice_lookup(desertion_no)
+    if cached is not None:
+        return cached
+
+    budget = (
+        NOTICE_LOOKUP_TIMEOUT_SECONDS
+        if timeout_seconds is None
+        else max(0.0, float(timeout_seconds))
+    )
+    if budget <= 0:
+        return None, "timeout"
+    deadline = time.monotonic() + budget
+
     preferred_species = infer_species(meta)
-    species_order = [preferred_species] + [name for name in ("dog", "cat", "other") if name != preferred_species]
+    species_order = [preferred_species] + [
+        name for name in ("dog", "cat", "other") if name != preferred_species
+    ]
     start, end = _notice_search_window(meta)
-    session = build_api_session()
+    # A Retry adapter can repeat a single timed-out request several times,
+    # exceeding this function's wall-clock budget before control returns.
+    # The contact-card lookup favors a bounded response over background
+    # retries; callers can still retry explicitly.
+    session = build_api_session(retry_total=0)
 
     for species in species_order:
         upkind = species_config(species)["upkind"]
         for page in range(1, max_pages + 1):
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                return None, "timeout"
             params = {
                 "serviceKey": ANIMAL_API_KEY,
                 "numOfRows": rows,
@@ -677,10 +1117,26 @@ def fetch_latest_notice_meta(meta: Dict[str, Any], max_pages: int = 30, rows: in
                 "bgnde": start.strftime("%Y%m%d"),
                 "endde": end.strftime("%Y%m%d"),
             }
-            resp = session.get(ANIMAL_API_BASE, params=params, timeout=30)
-            resp.raise_for_status()
+            try:
+                resp = session.get(
+                    ANIMAL_API_BASE,
+                    params=params,
+                    timeout=max(0.1, min(5.0, remaining)),
+                )
+                resp.raise_for_status()
+            except requests.Timeout:
+                return None, "timeout"
+            except requests.RequestException as exc:
+                raise RuntimeError(
+                    f"public animal API request failed on page {page}: "
+                    f"{exc.__class__.__name__}"
+                ) from None
             data = resp.json()
-            body = data.get("response", {}).get("body", {}) if isinstance(data, dict) else {}
+            body = (
+                data.get("response", {}).get("body", {})
+                if isinstance(data, dict)
+                else {}
+            )
             page_items = body.get("items", {}).get("item", [])
             if isinstance(page_items, dict):
                 page_items = [page_items]
@@ -688,38 +1144,149 @@ def fetch_latest_notice_meta(meta: Dict[str, Any], max_pages: int = 30, rows: in
                 break
             for rec in page_items:
                 if clean_text(rec.get("desertionNo")) == desertion_no:
-                    return build_live_animal_meta(rec, species=species), "found"
+                    latest = build_live_animal_meta(rec, species=species)
+                    _store_notice_lookup(desertion_no, latest, "found")
+                    return latest, "found"
             if len(page_items) < rows:
                 break
+    _store_notice_lookup(desertion_no, None, "not_found")
     return None, "not_found"
 
 
+def normalize_email_address(value: Any) -> str:
+    candidate = clean_text(value)
+    if not candidate or len(candidate) > 254 or candidate.count("@") != 1:
+        return ""
+    if any(character.isspace() or ord(character) < 32 for character in candidate):
+        return ""
+    local, domain = candidate.rsplit("@", 1)
+    if not local or len(local) > 64 or not domain or len(domain) > 253:
+        return ""
+    if not all(character.isalnum() or character in "._%+-" for character in local):
+        return ""
+    labels = domain.split(".")
+    if any(
+        not label
+        or label.startswith("-")
+        or label.endswith("-")
+        or not all(character.isalnum() or character == "-" for character in label)
+        for label in labels
+    ):
+        return ""
+    return candidate
+
+
+TRUSTED_CONTACT_SOURCES = frozenset({"latest_public_api", "server_snapshot"})
+
+
+def normalize_notice_identifier(value: Any) -> str:
+    if not isinstance(value, (str, int)) or isinstance(value, bool):
+        return ""
+    candidate = clean_text(value)
+    if (
+        not candidate
+        or len(candidate) > 100
+        or candidate.casefold() in {"unknown", "none", "null", "미상"}
+        or any(ord(character) < 32 for character in candidate)
+        or re.fullmatch(r"[0-9A-Za-z가-힣._-]+", candidate) is None
+    ):
+        return ""
+    return candidate
+
+
+def official_notice_detail_url(meta: Dict[str, Any]) -> str:
+    """Rebuild an official Animal Protection notice URL from the notice ID."""
+
+    desertion_no = normalize_notice_identifier(
+        meta.get("desertionNo") or meta.get("desertion_no")
+    )
+    if not desertion_no:
+        return ""
+    query = urlencode(
+        {"desertionNo": desertion_no, "menuNo": "1000000055"},
+        quote_via=quote,
+    )
+    return f"https://www.animal.go.kr/front/awtis/public/publicDtl.do?{query}"
+
+
 def tel_href(value: str) -> str:
-    normalized = "".join(ch for ch in clean_text(value) if ch.isdigit() or ch == "+")
-    return f"tel:{normalized}" if normalized else ""
+    raw = clean_text(value)
+    if not raw or "\r" in raw or "\n" in raw:
+        return ""
+    if "+" in raw[1:]:
+        return ""
+    digits = "".join(character for character in raw if character.isdigit())
+    if not 7 <= len(digits) <= 15:
+        return ""
+    normalized = ("+" if raw.startswith("+") else "") + digits
+    return f"tel:{normalized}"
+
+
+def mailto_href(value: Any, subject: str, body: str) -> str:
+    address = normalize_email_address(value)
+    if not address:
+        return ""
+    query = urlencode(
+        {"subject": clean_text(subject), "body": str(body or "")},
+        quote_via=quote,
+    )
+    return f"mailto:{quote(address, safe='@._+-')}?{query}"
 
 
 def build_inquiry_script(meta: Dict[str, Any]) -> str:
-    contact = resolve_contact_fields(meta)
-    breed = resolve_breed_label(meta)
-    notice_no = contact.get("notice_no") or clean_text(meta.get("desertionNo"))
-    care_name = contact.get("care_name") or "보호소"
-    return (
-        f"안녕하세요. {care_name} 맞으실까요? "
-        f"동물보호관리시스템 공고번호 {notice_no}, {breed} 공고를 보고 문의드립니다. "
-        "아직 보호중인지, 방문 가능 시간과 입양 상담 절차를 안내받을 수 있을까요?"
-    )
+    return build_inquiry_materials(meta)["phone_script"]
 
 
-def build_adoption_contact_card(meta: Dict[str, Any], latest_found: bool, lookup_status: str) -> Dict[str, Any]:
+def build_adoption_contact_card(
+    meta: Dict[str, Any],
+    latest_found: bool,
+    lookup_status: str,
+    preferences: Optional[InquiryPreferences] = None,
+    *,
+    contact_source: str = "server_snapshot",
+    trusted_snapshot_found: bool = True,
+) -> Dict[str, Any]:
     contact = resolve_contact_fields(meta)
+    contact["detail_url"] = official_notice_detail_url(meta)
     notice_status = classify_notice(meta)
-    map_query = contact.get("care_addr") or contact.get("care_name")
+    trusted_contact = contact_source in TRUSTED_CONTACT_SOURCES
+    direct_contact_allowed = trusted_contact and notice_status == "active"
+    if notice_status == "closed":
+        direct_contact_block_reason = "notice_closed"
+    elif notice_status == "expired":
+        direct_contact_block_reason = "notice_expired"
+    elif not trusted_contact:
+        direct_contact_block_reason = "trusted_contact_unavailable"
+    elif notice_status == "unknown":
+        direct_contact_block_reason = "notice_status_unknown"
+    else:
+        direct_contact_block_reason = ""
+
+    map_query = (
+        contact.get("care_addr") or contact.get("care_name") if trusted_contact else ""
+    )
     map_url = f"https://map.naver.com/p/search/{quote(map_query)}" if map_query else ""
+    inquiry = build_inquiry_materials(meta, preferences)
+    tel_url = tel_href(contact.get("care_tel", "")) if direct_contact_allowed else ""
+    mailto_url = (
+        mailto_href(
+            contact.get("care_email", ""),
+            inquiry["email_subject"],
+            inquiry["email_body"],
+        )
+        if direct_contact_allowed
+        else ""
+    )
+    status_verified = bool(latest_found)
     return {
         "latest_found": latest_found,
         "lookup_status": lookup_status,
-        "connectable": notice_status == "active",
+        "status_verified": status_verified,
+        "connectable": status_verified and notice_status == "active",
+        "contact_source": contact_source,
+        "trusted_snapshot_found": trusted_snapshot_found,
+        "direct_contact_allowed": direct_contact_allowed,
+        "direct_contact_block_reason": direct_contact_block_reason,
         "notice_status": notice_status,
         "notice_filter_reason": notice_filter_reason(meta),
         "animal": {
@@ -729,18 +1296,45 @@ def build_adoption_contact_card(meta: Dict[str, Any], latest_found: bool, lookup
             "breed": resolve_breed_label(meta),
             "sex": clean_text(meta.get("sex") or meta.get("sexCd")),
             "age": clean_text(meta.get("age")),
-            "notice_start": clean_text(meta.get("notice_start") or meta.get("noticeSdt")),
+            "notice_start": clean_text(
+                meta.get("notice_start") or meta.get("noticeSdt")
+            ),
             "notice_end": clean_text(meta.get("notice_end") or meta.get("noticeEdt")),
-            "process_state": clean_text(meta.get("process_state") or meta.get("processState")),
+            "process_state": clean_text(
+                meta.get("process_state") or meta.get("processState")
+            ),
         },
         "contact": contact,
         "actions": {
-            "tel": tel_href(contact.get("care_tel", "")),
+            "tel": tel_url,
+            "mailto": mailto_url,
             "detail_url": contact.get("detail_url", ""),
             "map_url": map_url,
         },
-        "inquiry_script": build_inquiry_script(meta),
+        "contact_availability": {
+            "phone": bool(tel_url),
+            "email": bool(mailto_url),
+            "detail": bool(contact.get("detail_url")),
+        },
+        "preference_usage": {
+            "ranking": False,
+            "inquiry_questions_only": True,
+            "scored_fields": [],
+        },
+        "manual_contact_only": True,
+        "inquiry_questions": inquiry["questions"],
+        "phone_script": inquiry["phone_script"],
+        "email_subject": inquiry["email_subject"],
+        "email_body": inquiry["email_body"],
+        "email_template": {
+            "subject": inquiry["email_subject"],
+            "body": inquiry["email_body"],
+        },
+        "inquiry_disclaimer": inquiry["disclaimer"],
+        "privacy_notice": inquiry["privacy_notice"],
+        "inquiry_script": inquiry["phone_script"],
     }
+
 
 def build_breed_gallery_index(metas: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
     buckets: Dict[str, Dict[str, Any]] = {}
@@ -782,10 +1376,13 @@ def build_breed_gallery_index(metas: List[Dict[str, Any]]) -> Dict[str, Dict[str
                 "age": clean_text(meta.get("age")) or "Unknown",
                 "sex": clean_text(meta.get("sex") or meta.get("sexCd")) or "Unknown",
                 "weight": clean_text(meta.get("weight")) or "Unknown",
-                "neuter": clean_text(meta.get("neuter") or meta.get("neuterYn")) or "Unknown",
+                "neuter": clean_text(meta.get("neuter") or meta.get("neuterYn"))
+                or "Unknown",
                 "desc": resolve_desc(meta),
                 "visual_attrs": summarize_vlm_attrs_ko(meta.get("vlm_attrs")),
-                "photo_advice": meta.get("photo_advice") if isinstance(meta.get("photo_advice"), list) else build_photo_advice(meta.get("vlm_attrs")),
+                "photo_advice": meta.get("photo_advice")
+                if isinstance(meta.get("photo_advice"), list)
+                else build_photo_advice(meta.get("vlm_attrs")),
                 "image_url": image_url,
                 "detail_url": resolve_detail_url(meta),
                 "care_name": clean_text(meta.get("care_name")),
@@ -857,7 +1454,11 @@ def render_breed_gallery_page(
             f"{summary_path}?breed_code={summary['breed_code']}"
             f"&limit={limit}&api_key={api_key_q}{extra_query}"
         )
-        state_class = "breed-card selected" if summary["breed_code"] == selected_code else "breed-card"
+        state_class = (
+            "breed-card selected"
+            if summary["breed_code"] == selected_code
+            else "breed-card"
+        )
         summary_cards.append(
             f"""
             <a class="{state_class}" href="{href}">
@@ -890,7 +1491,7 @@ def render_breed_gallery_page(
             f"""
             <article class="dog-card">
               <a href="{detail_url}" target="_blank" rel="noreferrer">
-                <img src="{image_url}" alt="{html.escape(item['breed'])}" loading="lazy" />
+                <img src="{image_url}" alt="{html.escape(item["breed"])}" loading="lazy" />
               </a>
               <div class="dog-meta">
                 <strong>{html.escape(item["desertionNo"])}</strong>
@@ -1085,7 +1686,7 @@ def render_breed_gallery_page(
                 <span>{len(summaries)} codes</span>
               </div>
               <div class="breed-list">
-                {''.join(summary_cards) or '<p>표시할 종 코드가 없습니다.</p>'}
+                {"".join(summary_cards) or "<p>표시할 종 코드가 없습니다.</p>"}
               </div>
             </aside>
             <section class="panel">
@@ -1097,7 +1698,7 @@ def render_breed_gallery_page(
                 <a href="{json_link}" target="_blank" rel="noreferrer">JSON 보기</a>
               </div>
               <div class="gallery">
-                {''.join(image_cards) or '<p>선택한 종 코드에 표시할 이미지가 없습니다.</p>'}
+                {"".join(image_cards) or "<p>선택한 종 코드에 표시할 이미지가 없습니다.</p>"}
               </div>
             </section>
           </section>
@@ -1109,10 +1710,10 @@ def render_breed_gallery_page(
 
 
 def search(vec: np.ndarray, topk: int = 5):
-    D, I = index.search(vec, topk)
+    distances, indices = index.search(vec, topk)
     results = []
 
-    for rank, (d, i) in enumerate(zip(D[0].tolist(), I[0].tolist())):
+    for rank, (d, i) in enumerate(zip(distances[0].tolist(), indices[0].tolist())):
         if i == -1:
             continue
         m = METAS[i]
@@ -1131,23 +1732,56 @@ def search(vec: np.ndarray, topk: int = 5):
             if img_meta:
                 merged_meta = dict(text_meta)
                 merged_meta.update(img_meta)
-                for key in ("vlm_attrs", "vlm_attr_text", "photo_advice", "vlm_desc", "merged_desc", "desc_full"):
+                for key in (
+                    "vlm_attrs",
+                    "vlm_attr_text",
+                    "photo_advice",
+                    "vlm_desc",
+                    "merged_desc",
+                    "desc_full",
+                ):
                     if not merged_meta.get(key) and text_meta.get(key):
                         merged_meta[key] = text_meta.get(key)
                 m = merged_meta
 
-        visual_attrs = summarize_vlm_attrs_ko(m.get("vlm_attrs"))
-        photo_advice = m.get("photo_advice") if isinstance(m.get("photo_advice"), list) else build_photo_advice(m.get("vlm_attrs"))
-        image_attrs = m.get("image_attrs") if isinstance(m.get("image_attrs"), dict) else {}
-        photo_quality_score = resolve_photo_quality_score(m)
+        visual_attrs = (
+            summarize_vlm_attrs_ko(m.get("vlm_attrs"))
+            if PUBLIC_NOTICE_IMAGES_ENABLED
+            else ""
+        )
+        photo_advice = (
+            (
+                m.get("photo_advice")
+                if isinstance(m.get("photo_advice"), list)
+                else build_photo_advice(m.get("vlm_attrs"))
+            )
+            if PUBLIC_NOTICE_IMAGES_ENABLED
+            else []
+        )
+        image_attrs = (
+            m.get("image_attrs")
+            if PUBLIC_NOTICE_IMAGES_ENABLED and isinstance(m.get("image_attrs"), dict)
+            else {}
+        )
+        photo_quality_score = (
+            resolve_photo_quality_score(m) if PUBLIC_NOTICE_IMAGES_ENABLED else None
+        )
         desertion_no = m.get("desertionNo", "Unknown")
-        image_url = m.get("image_url") or m.get("url") or ""
-        detail_url = resolve_detail_url(m)
+        source_fields = normalize_additional_notice_fields(m)
+        if not PUBLIC_NOTICE_IMAGES_ENABLED:
+            source_fields["image_url"] = ""
+            source_fields["image_urls"] = []
+        image_url = (
+            source_fields["image_url"] or m.get("image_url") or m.get("url") or ""
+            if PUBLIC_NOTICE_IMAGES_ENABLED
+            else ""
+        )
 
         results.append(
             {
                 "rank": rank + 1,
                 "score": float(1 / (1 + d)),
+                **source_fields,
                 "desertionNo": clean_text(desertion_no) or "Unknown",
                 "breed": resolve_breed_label(m),
                 "breed_code": resolve_breed_code(m),
@@ -1157,6 +1791,7 @@ def search(vec: np.ndarray, topk: int = 5):
                 "weight": clean_text(m.get("weight")) or "Unknown",
                 "neuter": clean_text(m.get("neuter") or m.get("neuterYn")) or "Unknown",
                 "desc": resolve_desc(m),
+                "notice_behavior_text": resolve_notice_behavior_text(m),
                 "visual_attrs": visual_attrs,
                 "photo_advice": photo_advice,
                 "photo_quality_score": photo_quality_score,
@@ -1175,15 +1810,42 @@ def search(vec: np.ndarray, topk: int = 5):
 
 def format_hybrid_result(item: Dict[str, Any], rank: int) -> Dict[str, Any]:
     meta = item["doc"].get("meta") or {}
-    visual_attrs = summarize_vlm_attrs_ko(meta.get("vlm_attrs"))
-    photo_advice = meta.get("photo_advice") if isinstance(meta.get("photo_advice"), list) else build_photo_advice(meta.get("vlm_attrs"))
-    image_attrs = meta.get("image_attrs") if isinstance(meta.get("image_attrs"), dict) else {}
-    photo_quality_score = resolve_photo_quality_score(meta)
+    source_fields = normalize_additional_notice_fields(meta)
+    if not PUBLIC_NOTICE_IMAGES_ENABLED:
+        source_fields["image_url"] = ""
+        source_fields["image_urls"] = []
+    visual_attrs = (
+        summarize_vlm_attrs_ko(meta.get("vlm_attrs"))
+        if PUBLIC_NOTICE_IMAGES_ENABLED
+        else ""
+    )
+    photo_advice = (
+        (
+            meta.get("photo_advice")
+            if isinstance(meta.get("photo_advice"), list)
+            else build_photo_advice(meta.get("vlm_attrs"))
+        )
+        if PUBLIC_NOTICE_IMAGES_ENABLED
+        else []
+    )
+    image_attrs = (
+        meta.get("image_attrs")
+        if PUBLIC_NOTICE_IMAGES_ENABLED and isinstance(meta.get("image_attrs"), dict)
+        else {}
+    )
+    photo_quality_score = (
+        resolve_photo_quality_score(meta) if PUBLIC_NOTICE_IMAGES_ENABLED else None
+    )
     desertion_no = meta.get("desertionNo", "Unknown")
-    image_url = meta.get("image_url") or meta.get("url") or ""
+    image_url = (
+        source_fields["image_url"] or meta.get("image_url") or meta.get("url") or ""
+        if PUBLIC_NOTICE_IMAGES_ENABLED
+        else ""
+    )
     return {
         "rank": rank,
         "score": float(item["score"]),
+        **source_fields,
         "hybrid_scores": item.get("score_parts", {}),
         "retrieval_evidence": item.get("evidence", {}),
         "desertionNo": clean_text(desertion_no) or "Unknown",
@@ -1195,6 +1857,7 @@ def format_hybrid_result(item: Dict[str, Any], rank: int) -> Dict[str, Any]:
         "weight": clean_text(meta.get("weight")) or "Unknown",
         "neuter": clean_text(meta.get("neuter") or meta.get("neuterYn")) or "Unknown",
         "desc": resolve_desc(meta),
+        "notice_behavior_text": resolve_notice_behavior_text(meta),
         "visual_attrs": visual_attrs,
         "photo_advice": photo_advice,
         "photo_quality_score": photo_quality_score,
@@ -1203,7 +1866,9 @@ def format_hybrid_result(item: Dict[str, Any], rank: int) -> Dict[str, Any]:
         "embedding_source": clean_text(meta.get("embedding_source")),
         "notice_status": classify_notice(meta),
         "notice_filter_reason": notice_filter_reason(meta),
-        "process_state": clean_text(meta.get("process_state") or meta.get("processState")),
+        "process_state": clean_text(
+            meta.get("process_state") or meta.get("processState")
+        ),
         "notice_start": clean_text(meta.get("notice_start") or meta.get("noticeSdt")),
         "notice_end": clean_text(meta.get("notice_end") or meta.get("noticeEdt")),
         "image_url": clean_text(image_url),
@@ -1221,54 +1886,207 @@ def hybrid_search(
     strict_filters: bool = False,
     query_vec: Optional[np.ndarray] = None,
     include_unknown_notices: Optional[bool] = None,
+    excluded_graph_feature_prefixes: Tuple[str, ...] = (),
+    vector_scores_override: Optional[Dict[int, float]] = None,
+    vector_score_details_override: Optional[Dict[int, Dict[str, Any]]] = None,
+    vector_override_authoritative: bool = False,
 ) -> List[Dict[str, Any]]:
     topk = max(1, min(int(topk or 10), 50))
     rerank_depth = max(topk, min(int(rerank_depth or 80), max(index.ntotal, topk)))
     search_text = build_search_query_text(query_text, structured_query)
-    vec = query_vec if query_vec is not None else embed_text(search_text or query_text)
-    vector_search_depth = min(index.ntotal, max(rerank_depth * 3, topk * 30))
-    D, I = index.search(vec, vector_search_depth)
-    vector_scores, vector_score_details = vector_hits_to_doc_modality_scores(
-        D[0].tolist(),
-        I[0].tolist(),
-        HYBRID_VECTOR_TO_DOC,
-        METAS,
+    if vector_scores_override is None:
+        vec = query_vec if query_vec is not None else embed_text(search_text or query_text)
+        vector_search_depth = min(index.ntotal, max(rerank_depth * 3, topk * 30))
+        distances, indices = index.search(vec, vector_search_depth)
+        vector_scores, vector_score_details = vector_hits_to_doc_modality_scores(
+            distances[0].tolist(),
+            indices[0].tolist(),
+            HYBRID_VECTOR_TO_DOC,
+            METAS,
+        )
+    else:
+        vector_scores = dict(vector_scores_override)
+        vector_score_details = dict(vector_score_details_override or {})
+    authoritative_vector = bool(
+        vector_override_authoritative and vector_scores_override is not None
     )
-    graph_candidate_scores = DOG_GRAPH.candidate_doc_scores(
-        structured_query,
-        search_text or query_text,
-        limit=0,
-    )
+    if authoritative_vector:
+        # The DINO query already contains the aligned appearance text and the
+        # optional behavior branch. Re-applying BM25, graph, and visual-attribute
+        # priors here would double-count those signals and can erase DINO's top
+        # visual match because adjacent percentile scores are intentionally close.
+        ranking_query = ""
+        ranking_structured: Dict[str, Any] = {}
+        graph_candidate_scores: Dict[int, float] = {}
+    else:
+        ranking_query = search_text or query_text
+        ranking_structured = structured_query
+        graph_candidate_scores = DOG_GRAPH.candidate_doc_scores(
+            structured_query,
+            ranking_query,
+            limit=0,
+            excluded_feature_prefixes=excluded_graph_feature_prefixes,
+        )
     candidate_limit = max(topk, min(rerank_depth, topk * 4))
     ranked = rank_hybrid_documents(
         docs=HYBRID_DOCS,
         bm25=HYBRID_BM25,
-        structured=structured_query,
-        query_text=search_text or query_text,
+        structured=ranking_structured,
+        query_text=ranking_query,
         vector_scores=vector_scores,
         vector_score_details=vector_score_details,
         topk=candidate_limit,
         rerank_depth=rerank_depth,
         strict_filters=strict_filters,
         extra_candidate_indices=graph_candidate_scores.keys(),
+        extra_candidate_scores=graph_candidate_scores,
         filter_inactive_notices=NOTICE_FILTER_INACTIVE,
         include_unknown_notices=(
             NOTICE_INCLUDE_UNKNOWN
             if include_unknown_notices is None
             else include_unknown_notices
         ),
+        visual_metadata_enabled=(
+            PUBLIC_NOTICE_IMAGES_ENABLED and not authoritative_vector
+        ),
     )
-    ranked = rerank_with_graph(
-        ranked=ranked,
-        graph=DOG_GRAPH,
-        structured=structured_query,
-        query_text=search_text or query_text,
-        topk=topk,
-    )
-    return [format_hybrid_result(item, rank) for rank, item in enumerate(ranked, start=1)]
+    if authoritative_vector:
+        ranked = ranked[:topk]
+    else:
+        ranked = rerank_with_graph(
+            ranked=ranked,
+            graph=DOG_GRAPH,
+            structured=structured_query,
+            query_text=search_text or query_text,
+            topk=topk,
+            excluded_feature_prefixes=excluded_graph_feature_prefixes,
+        )
+    return [
+        format_hybrid_result(item, rank) for rank, item in enumerate(ranked, start=1)
+    ]
 
 
-def parse_query_conditions_with_gemma(raw_query: str, survey_text: str = "", extra_text: str = "") -> Dict[str, Any]:
+def run_dino_fusion_query(
+    *,
+    image: Image.Image,
+    aligned_clip_text: Optional[np.ndarray],
+    behavior_query: str,
+) -> Tuple[Optional[DinoFusionSearchResult], Optional[Dict[str, Any]]]:
+    """Run the optional DINO sidecar and preserve CLIP as a fail-open path."""
+
+    if not DINO_FUSION_SETTINGS.enabled:
+        return None, None
+    if PUBLIC_TEXT_RELEASE_ACTIVE:
+        return None, {
+            "served": False,
+            "mode": DINO_FUSION_SETTINGS.mode,
+            "fallback": "clip",
+            "reason": "disabled_for_public_text_only_release",
+        }
+    try:
+        result = DINO_FUSION_RUNTIME.search(
+            image=image,
+            aligned_clip_text=aligned_clip_text,
+            behavior_query=behavior_query,
+            doc_index_by_notice=HYBRID_DOC_INDEX_BY_ID,
+            source_metadata_path=METAS_PATH,
+            clip_metas=METAS,
+            encode_text_batch=embed_text_batch,
+        )
+    except Exception as exc:
+        DINO_FUSION_RUNTIME.record_error(exc)
+        if not DINO_FUSION_SETTINGS.fail_open:
+            raise HTTPException(
+                status_code=503,
+                detail="DINO fusion runtime is unavailable",
+            ) from exc
+        return None, {
+            "served": False,
+            "mode": DINO_FUSION_SETTINGS.mode,
+            "fallback": "clip",
+            "reason": "runtime_unavailable",
+        }
+    served = DINO_FUSION_SETTINGS.mode == "active"
+    diagnostics = result.diagnostics(served=served)
+    diagnostics["mode"] = DINO_FUSION_SETTINGS.mode
+    diagnostics["fallback"] = None if served else "clip"
+    return result, diagnostics
+
+
+def add_dino_served_overlap(
+    diagnostics: Dict[str, Any],
+    results: List[Dict[str, Any]],
+) -> None:
+    """Compare DINO notice IDs with either raw or profile-reranked results."""
+
+    dino_ids = {
+        clean_text(value) for value in diagnostics.get("top_notice_ids") or []
+    }
+    served_ids: set[str] = set()
+    for item in results:
+        dog_id = clean_text(
+            item.get("dog_id")
+            or item.get("desertionNo")
+            or item.get("desertion_no")
+            or item.get("notice_id")
+        )
+        if not dog_id:
+            meta = item.get("meta")
+            if isinstance(meta, dict):
+                dog_id = clean_text(
+                    meta.get("desertionNo")
+                    or meta.get("desertion_no")
+                    or meta.get("notice_id")
+                )
+        if dog_id:
+            served_ids.add(dog_id)
+    diagnostics["served_topk_overlap"] = len(served_ids & dino_ids)
+
+
+def attach_dino_retrieval_context(
+    results: List[Dict[str, Any]],
+    candidates: List[Dict[str, Any]],
+) -> None:
+    """Preserve DINO evidence after the profile reranker normalizes results."""
+
+    context_by_id = {
+        clean_text(candidate.get("desertionNo")): candidate
+        for candidate in candidates
+        if clean_text(candidate.get("desertionNo"))
+    }
+    for result in results:
+        candidate = context_by_id.get(clean_text(result.get("dog_id")))
+        if candidate is None:
+            continue
+        evidence = candidate.get("retrieval_evidence")
+        if isinstance(evidence, dict):
+            result["retrieval_evidence"] = dict(evidence)
+        score_parts = candidate.get("hybrid_scores")
+        if isinstance(score_parts, dict):
+            result["hybrid_scores"] = dict(score_parts)
+
+
+def build_dino_appearance_query(raw_query: str) -> str:
+    """Keep unsupported lifestyle text out of the appearance alignment head."""
+
+    analysis = analyze_appearance_query(clean_text(raw_query))
+    normalized = clean_text(analysis.get("normalized_query"))
+    if (
+        analysis.get("nonappearance_terms_excluded")
+        or analysis.get("unsupported_conditions")
+    ) and normalized == NEUTRAL_DOG_QUERY:
+        return ""
+    parsed = parse_structured_query(normalized)
+    appearance = merge_structured_query(
+        parse_structured_query(""),
+        appearance_search_conditions(parsed),
+    )
+    return build_search_query_text(normalized, appearance)
+
+
+def parse_query_conditions_with_gemma(
+    raw_query: str, survey_text: str = "", extra_text: str = ""
+) -> Dict[str, Any]:
     prompt = f"""
 너는 유기견 입양 검색 조건을 구조화하는 파서야. 아래 사용자 입력을 JSON 객체 하나로 변환해.
 허용 키는 coat_color, fur_length, ear_shape, body_size_hint, sex, age_hint, personality, face_visible, whole_body_visible, min_photo_quality, keywords 뿐이야.
@@ -1294,7 +2112,28 @@ def parse_query_conditions_with_gemma(raw_query: str, survey_text: str = "", ext
     raw = gemma_generate_text(prompt, max_new_tokens=220)
     return json.loads(extract_json_object(raw))
 
+
+def build_rule_based_recommendation(candidates: List[Dict[str, Any]]) -> str:
+    """Keep search APIs useful when the optional Gemma runtime is unavailable."""
+
+    if not candidates:
+        return (
+            "현재 검색 조건으로 확인할 후보를 찾지 못했습니다. "
+            "검색 조건을 넓혀 다시 확인해 주세요."
+        )
+    shown = min(6, len(candidates))
+    return (
+        f"검색 점수와 공고에 명시된 정보에 따라 상위 {shown}건을 "
+        "우선 확인 후보로 제공합니다. "
+        f"{PROFILE_RESULT_DISCLAIMER}"
+    )
+
+
 def gemma_recommend(profile_text: str, candidates: List[Dict[str, Any]]) -> str:
+    fallback = build_rule_based_recommendation(candidates)
+    if not GEMMA3_ENABLED:
+        return fallback
+
     lines = []
     for c in candidates:
         lines.append(
@@ -1317,16 +2156,21 @@ def gemma_recommend(profile_text: str, candidates: List[Dict[str, Any]]) -> str:
     context = json.dumps(lines, ensure_ascii=False)
 
     prompt = f"""
-너는 반려견 입양 컨설턴트야. 아래 사용자의 프로필을 고려해서
-후보 목록에 있는 실제 유기견 중 가장 적합한 6마리를 추천해줘.
+너는 유기견 후보 탐색을 돕는 안내자야. 아래 사용자의 프로필을 고려해서
+후보 목록에 있는 실제 유기견 중 먼저 확인할 후보 6마리를 안내해줘.
 
 - 반드시 후보 목록에 있는 정보만 사용해.
 - 유사도 점수가 높은 후보를 우선하되,
   점수가 비슷하다면 성별, 나이, 체중 등이 다양한 후보들을 골라서 균형 있게 추천해.
-- 후보에 적힌 기본 정보, 특징, visual_attrs를 바탕으로
-  사용자의 프로필 조건에 맞는 부분을 해석해서 설명을 보완해줘.
-- 예를 들어 "산책 주 3회 가능"이라고 하면, 활동량이 많은 품종이나 어린 강아지를 우선 추천해.
-- "차분한 성격"이라고 하면, 특징에 '순함', '조용함' 같은 단어가 있으면 강조해.
+- 후보에 적힌 기본 정보와 공고 설명만 생활조건 근거로 사용해.
+- visual_attrs는 사진에서 직접 확인 가능한 색상·털·귀·외형 설명에만 사용해.
+- 품종 표기는 공고 작성자가 입력한 참고 정보이며 순종 여부나 개별 성격의 증거가 아니다.
+- 품종, 나이, 체형, 사진만으로 활동성, 공격성, 아동 친화성, 다른 동물과의 사회성,
+  장시간 부재 적합성을 추정하거나 점수에 반영하지 마.
+- 성격·생활 적합 정보는 공고 설명에 직접 명시된 경우에만 인용하고,
+  없으면 확인할 수 없다고 분명히 밝혀.
+- 이 결과는 입양 결정을 대신하지 않고 사용자가 먼저 확인할 후보를 좁히는 용도라고 안내해.
+- "차분한 성격" 같은 요청은 공고 설명에 '순함', '조용함'처럼 직접 적힌 경우에만 강조해.
 - retrieval_evidence와 hybrid_scores가 있으면 벡터 검색, 키워드, 조건 매칭 중 어떤 근거가 강했는지 추천 이유에 반영해.
 - visual_attrs가 있으면 "흰색 장모", "귀가 선", "얼굴 확인 가능"처럼 사진 기반 근거를 추천 이유에 반영해.
 - photo_advice가 있으면 추천과 별도로 "사진 보완" 한 줄을 짧게 덧붙여도 좋아.
@@ -1338,10 +2182,15 @@ def gemma_recommend(profile_text: str, candidates: List[Dict[str, Any]]) -> str:
 [후보 목록]
 {context}
 """
-    return gemma_generate_text(
-        prompt=prompt,
-        max_new_tokens=GEMMA3_RECOMMEND_MAX_NEW_TOKENS,
-    )
+    try:
+        return gemma_generate_text(
+            prompt=prompt,
+            max_new_tokens=GEMMA3_RECOMMEND_MAX_NEW_TOKENS,
+        )
+    except Exception:
+        # Gemma is an optional explanation layer. Model/cache/GPU failures must
+        # not turn an otherwise valid retrieval response into an HTTP 500.
+        return fallback
 
 
 class TextQuery(BaseModel):
@@ -1365,6 +2214,7 @@ def breed_images(
     breed_code: str,
     limit: int = Query(60, ge=1, le=500),
 ):
+    require_public_notice_visual_assets_enabled()
     bucket = BREED_GALLERY.get(breed_code)
     if not bucket:
         raise HTTPException(status_code=404, detail="Breed code not found")
@@ -1385,6 +2235,7 @@ def visualize_breeds(
     breed_code: Optional[str] = Query(None),
     limit: int = Query(60, ge=1, le=200),
 ):
+    require_public_notice_visual_assets_enabled()
     return render_breed_gallery_page(
         request=request,
         gallery=BREED_GALLERY,
@@ -1403,6 +2254,7 @@ def live_breed_summary(
     years: int = Query(LIVE_FETCH_YEARS, ge=1, le=5),
     limit: int = Query(100, ge=1, le=500),
 ):
+    require_live_gallery_enabled()
     days = years * 365
     cache = get_live_dog_cache(refresh=refresh, days=days)
     gallery = build_breed_gallery_index(cache["items"])
@@ -1424,6 +2276,7 @@ def live_breed_images(
     years: int = Query(LIVE_FETCH_YEARS, ge=1, le=5),
     limit: int = Query(60, ge=1, le=500),
 ):
+    require_live_gallery_enabled()
     days = years * 365
     cache = get_live_dog_cache(refresh=refresh, days=days)
     gallery = build_breed_gallery_index(cache["items"])
@@ -1451,6 +2304,7 @@ def visualize_live_breeds(
     years: int = Query(LIVE_FETCH_YEARS, ge=1, le=5),
     limit: int = Query(60, ge=1, le=200),
 ):
+    require_live_gallery_enabled()
     days = years * 365
     cache = get_live_dog_cache(refresh=refresh, days=days)
     gallery = build_breed_gallery_index(cache["items"])
@@ -1471,9 +2325,20 @@ def visualize_live_breeds(
 @app.get("/health")
 def health():
     graph_summary = graph_status_summaries()
+    vector_modalities: Dict[str, int] = {}
+    for meta in METAS:
+        modality = resolve_vector_modality(meta)
+        vector_modalities[modality] = vector_modalities.get(modality, 0) + 1
     return {
         "status": "ok",
+        "release_profile": RELEASE_PROFILE,
         "index_size": index.ntotal,
+        "vector_modalities": vector_modalities,
+        "public_notice_images_enabled": PUBLIC_NOTICE_IMAGES_ENABLED,
+        "public_notice_visual_asset_routes_enabled": (
+            PUBLIC_NOTICE_VISUAL_ASSETS_ENABLED
+        ),
+        "graph_overlay_enabled": not PUBLIC_TEXT_RELEASE_ACTIVE,
         "hybrid_docs": len(HYBRID_DOCS),
         "device": device,
         "breed_groups": len(BREED_GALLERY),
@@ -1486,8 +2351,8 @@ def health():
         "notice_filter_inactive": NOTICE_FILTER_INACTIVE,
         "notice_include_unknown": NOTICE_INCLUDE_UNKNOWN,
         "gemma_enabled": GEMMA3_ENABLED,
+        "dino_fusion": DINO_FUSION_RUNTIME.status(),
     }
-
 
 
 @app.get("/rag/graph")
@@ -1504,9 +2369,15 @@ def rag_graph_summary():
         "notice_status": graph_summary["notice_status"],
         "hidden_docs": graph_summary["hidden_docs"],
         "filters": graph_summary["filters"],
-        "feature_examples": DOG_GRAPH.labels_for(DOG_GRAPH.feature_to_docs.keys(), limit=24),
-        "serving_feature_examples": DOG_GRAPH.top_features_for_doc_indices(serving_indices, limit=16),
-        "active_feature_examples": DOG_GRAPH.top_features_for_doc_indices(active_indices, limit=16),
+        "feature_examples": DOG_GRAPH.labels_for(
+            DOG_GRAPH.feature_to_docs.keys(), limit=24
+        ),
+        "serving_feature_examples": DOG_GRAPH.top_features_for_doc_indices(
+            serving_indices, limit=16
+        ),
+        "active_feature_examples": DOG_GRAPH.top_features_for_doc_indices(
+            active_indices, limit=16
+        ),
     }
 
 
@@ -1551,19 +2422,109 @@ def recommend(body: TextQuery):
     )
 
 
+def _negated_appearance_fields(query_analysis: Dict[str, Any]) -> set[str]:
+    return {
+        str(item.get("field", ""))
+        for item in query_analysis.get("unsupported_conditions", [])
+        if isinstance(item, dict)
+    }
+
+
+def _profile_negation_conflicts(
+    negated_fields: set[str],
+    profile: UserProfile | AppearanceProfile,
+) -> list[str]:
+    conflicts: list[str] = []
+    if "size" in negated_fields and profile.preferred_size != PreferredSize.any:
+        conflicts.append("profile.preferred_size")
+    if "age" in negated_fields and profile.preferred_age != PreferredAge.any:
+        conflicts.append("profile.preferred_age")
+    if "region" in negated_fields and profile.preferred_region:
+        conflicts.append("profile.preferred_region")
+    return conflicts
+
+
+def _reject_negation_conflicts(
+    query_analysis: Dict[str, Any],
+    conflicting_inputs: List[str],
+) -> None:
+    if not conflicting_inputs:
+        return
+    raise HTTPException(
+        status_code=422,
+        detail={
+            "code": "conflicting_negated_appearance_condition",
+            "message": (
+                "지원하지 않는 부정 외형 조건과 같은 필드의 구조화 조건을 "
+                "함께 사용할 수 없습니다. 원하는 긍정 조건만 남겨 주세요."
+            ),
+            "conflicting_inputs": sorted(set(conflicting_inputs)),
+            "unsupported_conditions": query_analysis["unsupported_conditions"],
+        },
+    )
+
+
 @app.post("/search/profile")
 def search_profile(body: ProfileSearchRequest):
-    structured = parse_structured_query(body.query)
-    if body.conditions:
-        structured = merge_structured_query(structured, body.conditions)
-    search_query = build_search_query_text(body.query, structured)
+    retrieval_query = body.query
+    conditions = body.conditions
+    nonappearance_query_terms_excluded = False
+    query_policy = None
+    include_unknown_notices = PROFILE_INCLUDE_UNKNOWN_NOTICES
+    if body.ranking_scope == "appearance":
+        query_analysis = analyze_appearance_query(body.query)
+        nonappearance_query_terms_excluded = bool(
+            query_analysis["nonappearance_terms_excluded"]
+        )
+        retrieval_query = str(query_analysis["normalized_query"])
+        query_policy = {
+            key: query_analysis[key]
+            for key in (
+                "typo_corrections",
+                "synonym_normalizations",
+                "unsupported_conditions",
+                "warnings",
+                "is_fully_supported",
+            )
+        }
+        conditions = appearance_search_conditions(body.conditions)
+        negated_fields = _negated_appearance_fields(query_analysis)
+        condition_field_map = {
+            "color": "coat_color",
+            "fur": "fur_length",
+            "size": "body_size_hint",
+            "age": "age_hint",
+            "sex": "sex",
+        }
+        conflicting_inputs = sorted(
+            condition_field_map[field]
+            for field in negated_fields
+            if field in condition_field_map and condition_field_map[field] in conditions
+        )
+        conflicting_inputs.extend(
+            _profile_negation_conflicts(negated_fields, body.profile)
+        )
+        _reject_negation_conflicts(query_analysis, conflicting_inputs)
+        # The contest-facing appearance flow promises active notices. Unknown
+        # status remains configurable only for the legacy profile scope.
+        include_unknown_notices = False
+
+    structured = parse_structured_query(retrieval_query)
+    if conditions:
+        structured = merge_structured_query(structured, conditions)
+    search_query = build_search_query_text(retrieval_query, structured)
     candidate_limit = PROFILE_RERANK_SETTINGS.candidate_count(body.topk)
     candidates = hybrid_search(
         query_text=search_query or body.query,
         structured_query=structured,
         topk=candidate_limit,
         rerank_depth=max(candidate_limit * 10, 80),
-        include_unknown_notices=PROFILE_INCLUDE_UNKNOWN_NOTICES,
+        include_unknown_notices=include_unknown_notices,
+        excluded_graph_feature_prefixes=(
+            APPEARANCE_GRAPH_EXCLUDED_FEATURE_PREFIXES
+            if body.ranking_scope == "appearance"
+            else ()
+        ),
     )
 
     candidates_with_meta: List[Dict[str, Any]] = []
@@ -1580,14 +2541,24 @@ def search_profile(body: ProfileSearchRequest):
         body.profile,
         PROFILE_RERANK_SETTINGS,
         topk=body.topk,
-        include_unknown_notices=PROFILE_INCLUDE_UNKNOWN_NOTICES,
+        include_unknown_notices=include_unknown_notices,
+        condition_keys=(
+            APPEARANCE_CONDITION_KEYS if body.ranking_scope == "appearance" else None
+        ),
     )
     return JSONResponse(
         {
             "retrieval": "graph_enhanced_multimodal_rag+profile_rerank",
             "query": body.query,
+            "retrieval_query": retrieval_query,
+            "nonappearance_query_terms_excluded": (nonappearance_query_terms_excluded),
+            "query_policy": query_policy,
             "structured_query": structured,
-            "profile": body.profile.model_dump(mode="json"),
+            "profile": body.profile.model_dump(
+                mode="json",
+                exclude_unset=body.ranking_scope == "appearance",
+            ),
+            "ranking_scope": body.ranking_scope,
             "candidate_count": len(candidates),
             "count": len(results),
             "weights": {
@@ -1597,12 +2568,208 @@ def search_profile(body: ProfileSearchRequest):
             },
             "notice_policy": {
                 "filter_inactive": True,
-                "include_unknown": PROFILE_INCLUDE_UNKNOWN_NOTICES,
+                "include_unknown": include_unknown_notices,
             },
             "disclaimer": PROFILE_RESULT_DISCLAIMER,
             "results": results,
         }
     )
+
+
+@app.post("/search/appearance/image")
+async def search_appearance_image(
+    ref_image: UploadFile = File(...),
+    query: str = Form("", max_length=2000),
+    preferred_size: PreferredSize = Form(PreferredSize.any),
+    preferred_age: PreferredAge = Form(PreferredAge.any),
+    preferred_region: Optional[str] = Form(None, max_length=100),
+    topk: int = Form(5, ge=1, le=20),
+):
+    """Find active notices from a user-provided visual reference.
+
+    The application does not retain the upload after request processing.
+    Framework-level temporary spooling may occur while multipart data is
+    parsed. Only objective size, age, and region preferences participate in
+    post-retrieval reranking; behavior and household-fit signals are absent.
+    """
+
+    raw_query = clean_text(query)
+    query_analysis = analyze_appearance_query(raw_query)
+    normalized_query = str(query_analysis["normalized_query"]) if raw_query else ""
+    nonappearance_query_terms_excluded = bool(
+        query_analysis["nonappearance_terms_excluded"]
+    )
+    query_policy = {
+        key: query_analysis[key]
+        for key in (
+            "typo_corrections",
+            "synonym_normalizations",
+            "unsupported_conditions",
+            "warnings",
+            "is_fully_supported",
+        )
+    }
+    # A lifestyle/temperament-only caption normalizes to the neutral dog query.
+    # For image search, applying that fallback through CLIP, BM25, or the graph
+    # would still let a forbidden caption change an otherwise image-only rank.
+    # Keep the fallback for text-only /search/profile, but make it a no-op here.
+    retrieval_query = (
+        ""
+        if (
+            nonappearance_query_terms_excluded
+            or bool(query_analysis["unsupported_conditions"])
+        )
+        and normalized_query == NEUTRAL_DOG_QUERY
+        else normalized_query
+    )
+
+    parsed = parse_structured_query(retrieval_query)
+    structured = merge_structured_query(
+        parse_structured_query(""),
+        appearance_search_conditions(parsed),
+    )
+    structured["raw_query"] = retrieval_query
+    search_query = build_search_query_text(retrieval_query, structured)
+
+    appearance_profile_payload: Dict[str, Any] = {
+        "preferred_size": preferred_size,
+        "preferred_age": preferred_age,
+    }
+    normalized_region = clean_text(preferred_region)
+    if normalized_region:
+        appearance_profile_payload["preferred_region"] = normalized_region
+    profile = AppearanceProfile.model_validate(appearance_profile_payload)
+    _reject_negation_conflicts(
+        query_analysis,
+        _profile_negation_conflicts(
+            _negated_appearance_fields(query_analysis),
+            profile,
+        ),
+    )
+
+    try:
+        pil = await load_uploaded_image(
+            ref_image,
+            allowed_formats=APPEARANCE_IMAGE_ALLOWED_FORMATS,
+        )
+    finally:
+        await ref_image.close()
+    try:
+        image_vec = embed_image(pil)
+        text_vec = embed_text(search_query) if search_query else None
+        query_vec = (
+            combine_embeddings(text_vec, None, image_vec)
+            if text_vec is not None
+            else image_vec
+        )
+        dino_result, dino_diagnostics = run_dino_fusion_query(
+            image=pil,
+            aligned_clip_text=text_vec,
+            # This route has an appearance-only contract. Temperament is handled
+            # by the profile route and must not alter this ranking.
+            behavior_query="",
+        )
+    finally:
+        pil.close()
+
+    candidate_limit = PROFILE_RERANK_SETTINGS.candidate_count(topk)
+    search_options: Dict[str, Any] = {
+        "query_text": search_query,
+        "structured_query": structured,
+        "topk": candidate_limit,
+        "rerank_depth": max(candidate_limit * 10, 80),
+        "query_vec": query_vec,
+        "include_unknown_notices": False,
+        "excluded_graph_feature_prefixes": (
+            APPEARANCE_GRAPH_EXCLUDED_FEATURE_PREFIXES
+        ),
+    }
+    dino_active = (
+        dino_result is not None and DINO_FUSION_SETTINGS.mode == "active"
+    )
+    if dino_active:
+        search_options["vector_scores_override"] = dino_result.vector_scores
+        search_options["vector_score_details_override"] = (
+            dino_result.vector_score_details
+        )
+        search_options["vector_override_authoritative"] = True
+    candidates = hybrid_search(**search_options)
+
+    candidates_with_meta: List[Dict[str, Any]] = []
+    for candidate in candidates:
+        item = dict(candidate)
+        dog_id = clean_text(candidate.get("desertionNo"))
+        raw_meta = HYBRID_META_BY_ID.get(dog_id)
+        if raw_meta:
+            item["_raw_meta"] = raw_meta
+        candidates_with_meta.append(item)
+
+    rerank_settings = PROFILE_RERANK_SETTINGS
+    if dino_active:
+        # DINO already supplies the visual ranking. Photo-quality is useful as
+        # evidence but must not displace its closest image match; explicit user
+        # size, age, and region preferences still participate via compatibility.
+        rerank_settings = ProfileRerankSettings(
+            compatibility_weight=PROFILE_RERANK_SETTINGS.compatibility_weight,
+            quality_weight=0.0,
+            candidate_multiplier=PROFILE_RERANK_SETTINGS.candidate_multiplier,
+        )
+    results = rerank_candidates(
+        candidates_with_meta,
+        profile,
+        rerank_settings,
+        topk=topk,
+        include_unknown_notices=False,
+        condition_keys=APPEARANCE_CONDITION_KEYS,
+    )
+    if dino_active:
+        attach_dino_retrieval_context(results, candidates)
+    payload: Dict[str, Any] = {
+        "retrieval": (
+            "graph_enhanced_multimodal_rag+appearance_image+profile_rerank"
+            + ("+dino_shared_space" if dino_active else "")
+        ),
+        "query": raw_query,
+        "retrieval_query": retrieval_query,
+        "nonappearance_query_terms_excluded": (nonappearance_query_terms_excluded),
+        "query_policy": query_policy,
+        "input_modality": "image+text" if text_vec is not None else "image",
+        "structured_query": structured,
+        "profile": profile.model_dump(mode="json", exclude_unset=True),
+        "ranking_scope": "appearance",
+        "candidate_count": len(candidates),
+        "count": len(results),
+        "weights": {
+            "compatibility": PROFILE_RERANK_SETTINGS.compatibility_weight,
+            "quality": PROFILE_RERANK_SETTINGS.quality_weight,
+            "candidate_multiplier": (PROFILE_RERANK_SETTINGS.candidate_multiplier),
+        },
+        "notice_policy": {
+            "filter_inactive": True,
+            "include_unknown": False,
+        },
+        "release_profile": RELEASE_PROFILE,
+        "candidate_vector_modalities": (
+            ["text"]
+            if PUBLIC_TEXT_RELEASE_ACTIVE
+            else (
+                ["dino_crop_image", "aligned_clip_text"]
+                if dino_active
+                else ["text", "image", "crop_image"]
+            )
+        ),
+        "image_query_limitation": (
+            "업로드 이미지는 공고 텍스트 벡터와 비교되며 공고 사진·crop 벡터 품질을 주장하지 않습니다."
+            if PUBLIC_TEXT_RELEASE_ACTIVE
+            else None
+        ),
+        "disclaimer": PROFILE_RESULT_DISCLAIMER,
+        "results": results,
+    }
+    if dino_diagnostics is not None:
+        add_dino_served_overlap(dino_diagnostics, results)
+        payload["retrieval_upgrade"] = dino_diagnostics
+    return JSONResponse(payload)
 
 
 class HybridRagQuery(BaseModel):
@@ -1619,11 +2786,19 @@ class HybridRagQuery(BaseModel):
 @app.post("/rag/recommend")
 def rag_recommend(body: HybridRagQuery):
     survey = body.survey or {}
-    survey_text = " ".join(clean_text(value) for value in survey.values()) if isinstance(survey, dict) else ""
-    raw_query = " ".join(
-        part for part in (clean_text(body.query), survey_text, clean_text(body.extra_text)) if part
+    survey_text = (
+        " ".join(clean_text(value) for value in survey.values())
+        if isinstance(survey, dict)
+        else ""
     )
-    structured = parse_structured_query(raw_query, survey if isinstance(survey, dict) else None)
+    raw_query = " ".join(
+        part
+        for part in (clean_text(body.query), survey_text, clean_text(body.extra_text))
+        if part
+    )
+    structured = parse_structured_query(
+        raw_query, survey if isinstance(survey, dict) else None
+    )
     parse_source = "rules"
     parse_error = ""
     if body.use_llm_parse:
@@ -1665,6 +2840,7 @@ def rag_recommend(body: HybridRagQuery):
         }
     )
 
+
 class ShelterNoticeDraftInput(BaseModel):
     dog: Dict[str, Any]
     tone: Optional[str] = "따뜻하고 정확한"
@@ -1675,16 +2851,24 @@ class ShelterNoticeDraftInput(BaseModel):
 def shelter_notice_draft(body: ShelterNoticeDraftInput):
     dog = body.dog
     visual_attrs = summarize_vlm_attrs_ko(dog.get("vlm_attrs"))
-    photo_advice = dog.get("photo_advice") if isinstance(dog.get("photo_advice"), list) else build_photo_advice(dog.get("vlm_attrs"))
+    photo_advice = (
+        dog.get("photo_advice")
+        if isinstance(dog.get("photo_advice"), list)
+        else build_photo_advice(dog.get("vlm_attrs"))
+    )
     sentence_count = min(5, max(3, int(body.sentence_count or 4)))
     context = {
         "desertionNo": clean_text(dog.get("desertionNo")),
-        "breed": clean_text(dog.get("breed") or dog.get("breed_name") or dog.get("breed_code")),
+        "breed": clean_text(
+            dog.get("breed") or dog.get("breed_name") or dog.get("breed_code")
+        ),
         "sex": clean_text(dog.get("sex")),
         "age": clean_text(dog.get("age")),
         "weight": clean_text(dog.get("weight")),
         "neuter": clean_text(dog.get("neuter")),
-        "base_desc": clean_text(dog.get("desc") or dog.get("base_desc") or dog.get("specialMark")),
+        "base_desc": clean_text(
+            dog.get("desc") or dog.get("base_desc") or dog.get("specialMark")
+        ),
         "vlm_desc": clean_text(dog.get("vlm_desc")),
         "visual_attrs": visual_attrs,
         "photo_advice": photo_advice,
@@ -1718,61 +2902,130 @@ class AdoptionContactInput(BaseModel):
     animal: Optional[Dict[str, Any]] = None
     desertion_no: Optional[str] = None
     species: Optional[str] = "dog"
+    preferences: Optional[InquiryPreferences] = None
+    refresh_latest: StrictBool = True
 
 
 @app.post("/adoption/contact_card")
 def adoption_contact_card(body: AdoptionContactInput):
-    base = dict(body.animal or {})
-    if body.desertion_no:
-        base["desertionNo"] = clean_text(body.desertion_no)
+    supplied_animal = body.animal if isinstance(body.animal, dict) else {}
+    requested_identifier = (
+        body.desertion_no
+        if body.desertion_no is not None
+        else supplied_animal.get("desertionNo") or supplied_animal.get("desertion_no")
+    )
+    desertion_no = normalize_notice_identifier(requested_identifier)
+    if not desertion_no:
+        raise HTTPException(status_code=400, detail="desertionNo is required")
+
+    trusted_snapshot = HYBRID_META_BY_ID.get(desertion_no)
+    trusted_snapshot_found = isinstance(trusted_snapshot, dict)
+    base = dict(trusted_snapshot) if trusted_snapshot_found else {}
+    base["desertionNo"] = desertion_no
     if body.species and not base.get("species"):
         base["species"] = clean_species(body.species)
 
-    if not clean_text(base.get("desertionNo")):
-        raise HTTPException(status_code=400, detail="desertionNo is required")
-
     latest = None
-    lookup_status = "not_started"
-    try:
-        latest, lookup_status = fetch_latest_notice_meta(base)
-    except requests.RequestException as exc:
-        lookup_status = f"request_error:{exc.__class__.__name__}"
+    lookup_status = "not_requested"
+    if body.refresh_latest:
+        if not NOTICE_LOOKUP_SEMAPHORE.acquire(blocking=False):
+            lookup_status = "busy"
+        else:
+            try:
+                try:
+                    latest, lookup_status = fetch_latest_notice_meta(base)
+                except (requests.RequestException, RuntimeError) as exc:
+                    lookup_status = f"request_error:{exc.__class__.__name__}"
+            finally:
+                NOTICE_LOOKUP_SEMAPHORE.release()
 
     merged = dict(base)
     if latest:
         merged.update(latest)
-    return JSONResponse(build_adoption_contact_card(merged, latest_found=latest is not None, lookup_status=lookup_status))
+        contact_source = "latest_public_api"
+    elif trusted_snapshot_found:
+        contact_source = "server_snapshot"
+    else:
+        contact_source = "unavailable"
+    return JSONResponse(
+        build_adoption_contact_card(
+            merged,
+            latest_found=latest is not None,
+            lookup_status=lookup_status,
+            preferences=body.preferences,
+            contact_source=contact_source,
+            trusted_snapshot_found=trusted_snapshot_found,
+        )
+    )
+
 
 @app.post("/recommend_with_image")
 async def recommend_with_image(
-    profile: str = Form(..., description="예: 20대 여성, 1인 가구, 평일 야근 잦음, 산책 주 3회 가능"),
+    profile: str = Form(
+        ..., description="예: 20대 여성, 1인 가구, 평일 야근 잦음, 산책 주 3회 가능"
+    ),
     ref_image: UploadFile = File(...),
     topk: int = Query(5, ge=1, le=20),
 ):
     structured = parse_structured_query(profile)
     search_query = build_search_query_text(profile, structured)
-    data = await ref_image.read()
-    pil = Image.open(io.BytesIO(data)).convert("RGB")
-    img_vec = embed_image(pil)
-    text_vec = embed_text(search_query) if search_query else None
-    final_vec = combine_embeddings(text_vec, None, img_vec) if text_vec is not None else img_vec
-    results = hybrid_search(
-        query_text=search_query or profile,
-        structured_query=structured,
-        topk=topk,
-        rerank_depth=max(topk * 10, 50),
-        query_vec=final_vec,
+    try:
+        pil = await load_uploaded_image(ref_image)
+    finally:
+        await ref_image.close()
+    try:
+        img_vec = embed_image(pil)
+        text_vec = embed_text(search_query) if search_query else None
+        final_vec = (
+            combine_embeddings(text_vec, None, img_vec)
+            if text_vec is not None
+            else img_vec
+        )
+
+        dino_text_vec: Optional[np.ndarray] = None
+        if DINO_FUSION_SETTINGS.enabled:
+            dino_text = build_dino_appearance_query(profile)
+            if dino_text:
+                dino_text_vec = (
+                    text_vec if dino_text == search_query else embed_text(dino_text)
+                )
+        dino_result, dino_diagnostics = run_dino_fusion_query(
+            image=pil,
+            aligned_clip_text=dino_text_vec,
+            behavior_query=profile,
+        )
+    finally:
+        pil.close()
+
+    search_options: Dict[str, Any] = {
+        "query_text": search_query or profile,
+        "structured_query": structured,
+        "topk": topk,
+        "rerank_depth": max(topk * 10, 50),
+        "query_vec": final_vec,
+    }
+    dino_active = (
+        dino_result is not None and DINO_FUSION_SETTINGS.mode == "active"
     )
+    if dino_active:
+        search_options["vector_scores_override"] = dino_result.vector_scores
+        search_options["vector_score_details_override"] = (
+            dino_result.vector_score_details
+        )
+        search_options["vector_override_authoritative"] = True
+    results = hybrid_search(**search_options)
     msg = gemma_recommend(profile_text=profile, candidates=results)
 
-    return JSONResponse(
-        {
-            "profile": profile,
-            "recommendation": msg,
-            "count": len(results),
-            "results": results,
-        }
-    )
+    payload: Dict[str, Any] = {
+        "profile": profile,
+        "recommendation": msg,
+        "count": len(results),
+        "results": results,
+    }
+    if dino_diagnostics is not None:
+        add_dino_served_overlap(dino_diagnostics, results)
+        payload["retrieval_upgrade"] = dino_diagnostics
+    return JSONResponse(payload)
 
 
 class SurveyInput(BaseModel):
@@ -1826,8 +3079,7 @@ async def _handle_recommend(
 
     img_vec = None
     if ref_image:
-        img_bytes = await ref_image.read()
-        pil = Image.open(io.BytesIO(img_bytes)).convert("RGB")
+        pil = await load_uploaded_image(ref_image)
         img_vec = embed_image(pil)
 
     final_vec = combine_embeddings(survey_vec, text_vec, img_vec)
@@ -1877,14 +3129,22 @@ async def rag_recommend_form(
         "dog_size": dog_size,
         "preferred_personality": preferred_personality,
     }
-    survey_text = " ".join(clean_text(value) for value in survey.values() if clean_text(value))
-    raw_query = " ".join(part for part in (clean_text(query), survey_text, clean_text(extra_text)) if part)
+    survey_text = " ".join(
+        clean_text(value) for value in survey.values() if clean_text(value)
+    )
+    raw_query = " ".join(
+        part
+        for part in (clean_text(query), survey_text, clean_text(extra_text))
+        if part
+    )
     structured = parse_structured_query(raw_query, survey)
     parse_source = "rules"
     parse_error = ""
     if use_llm_parse:
         try:
-            llm_structured = parse_query_conditions_with_gemma(query, survey_text, extra_text)
+            llm_structured = parse_query_conditions_with_gemma(
+                query, survey_text, extra_text
+            )
             structured = merge_structured_query(structured, llm_structured)
             parse_source = "llm+rules"
         except Exception as exc:
@@ -1895,8 +3155,7 @@ async def rag_recommend_form(
     text_vec = embed_text(search_query) if search_query else None
     img_vec = None
     if ref_image and ref_image.filename:
-        img_bytes = await ref_image.read()
-        pil = Image.open(io.BytesIO(img_bytes)).convert("RGB")
+        pil = await load_uploaded_image(ref_image)
         img_vec = embed_image(pil)
 
     if text_vec is not None and img_vec is not None:
@@ -1936,10 +3195,9 @@ async def rag_recommend_form(
     )
 
 
-
-
-
 def crop_file_url(crop_path: str, api_key: str) -> str:
+    if not PUBLIC_NOTICE_VISUAL_ASSETS_ENABLED:
+        return ""
     text = clean_text(crop_path).replace("\\", "/")
     if not text:
         return ""
@@ -1955,6 +3213,7 @@ def crop_file_url(crop_path: str, api_key: str) -> str:
 
 @app.get("/visualize/image-crop/{species}/{filename}")
 def image_crop_file(species: str, filename: str):
+    require_public_notice_visual_assets_enabled()
     species = clean_text(species).lower()
     filename = Path(clean_text(filename)).name
     if species not in {"dog", "cat", "other"} or not filename:
@@ -1971,10 +3230,13 @@ def image_crop_file(species: str, filename: str):
 
 
 def build_image_audit_payload(api_key: str) -> Dict[str, Any]:
+    require_public_notice_visual_assets_enabled()
     by_id: Dict[str, Dict[str, Any]] = {}
     for vector_index, meta in enumerate(METAS):
         did = clean_text(meta.get("desertionNo")) or f"idx-{vector_index}"
-        attrs = meta.get("image_attrs") if isinstance(meta.get("image_attrs"), dict) else {}
+        attrs = (
+            meta.get("image_attrs") if isinstance(meta.get("image_attrs"), dict) else {}
+        )
         priority = 0
         if attrs:
             priority += 10
@@ -2003,12 +3265,24 @@ def build_image_audit_payload(api_key: str) -> Dict[str, Any]:
     records: List[Dict[str, Any]] = []
     for item in by_id.values():
         meta = item.get("meta") or {}
-        attrs = meta.get("image_attrs") if isinstance(meta.get("image_attrs"), dict) else {}
+        attrs = (
+            meta.get("image_attrs") if isinstance(meta.get("image_attrs"), dict) else {}
+        )
         quality = attrs.get("photo_quality_score")
         crop_quality = attrs.get("crop_photo_quality_score")
-        area = attrs.get("dog_area_ratio") if attrs.get("dog_area_ratio") is not None else attrs.get("target_area_ratio")
-        bbox_norm = attrs.get("primary_bbox_norm") if isinstance(attrs.get("primary_bbox_norm"), list) else []
-        detected = attrs.get("target_detected") is True or attrs.get("dog_detected") is True
+        area = (
+            attrs.get("dog_area_ratio")
+            if attrs.get("dog_area_ratio") is not None
+            else attrs.get("target_area_ratio")
+        )
+        bbox_norm = (
+            attrs.get("primary_bbox_norm")
+            if isinstance(attrs.get("primary_bbox_norm"), list)
+            else []
+        )
+        detected = (
+            attrs.get("target_detected") is True or attrs.get("dog_detected") is True
+        )
         recovered = attrs.get("recovered_by_retry") is True
         primary_confidence = attrs.get("primary_confidence")
         crop_path = clean_text(attrs.get("crop_path"))
@@ -2019,7 +3293,11 @@ def build_image_audit_payload(api_key: str) -> Dict[str, Any]:
             review_flags.append("recovered")
         if attrs and not detected:
             review_flags.append("not_detected")
-        if recovered and isinstance(primary_confidence, (int, float)) and primary_confidence < 0.25:
+        if (
+            recovered
+            and isinstance(primary_confidence, (int, float))
+            and primary_confidence < 0.25
+        ):
             review_flags.append("low_conf_retry")
         if isinstance(quality, (int, float)) and quality < 0.50:
             review_flags.append("low_quality")
@@ -2039,8 +3317,12 @@ def build_image_audit_payload(api_key: str) -> Dict[str, Any]:
                 "weight": clean_text(meta.get("weight")),
                 "desc": resolve_desc(meta),
                 "care_name": clean_text(meta.get("care_name") or meta.get("careNm")),
-                "notice_start": clean_text(meta.get("notice_start") or meta.get("noticeSdt")),
-                "notice_end": clean_text(meta.get("notice_end") or meta.get("noticeEdt")),
+                "notice_start": clean_text(
+                    meta.get("notice_start") or meta.get("noticeSdt")
+                ),
+                "notice_end": clean_text(
+                    meta.get("notice_end") or meta.get("noticeEdt")
+                ),
                 "notice_status": classify_notice(meta),
                 "image_url": clean_text(meta.get("image_url") or meta.get("url")),
                 "detail_url": resolve_detail_url(meta),
@@ -2080,17 +3362,33 @@ def build_image_audit_payload(api_key: str) -> Dict[str, Any]:
             bucket = 2
         else:
             bucket = 3
-        return (bucket, -as_float(record.get("photo_quality_score")), clean_text(record.get("desertionNo")))
+        return (
+            bucket,
+            -as_float(record.get("photo_quality_score")),
+            clean_text(record.get("desertionNo")),
+        )
 
     records.sort(key=review_priority)
     total = len(records)
     detected_count = sum(1 for record in records if record.get("target_detected"))
     crop_count = sum(1 for record in records if record.get("crop_url"))
-    scored_count = sum(1 for record in records if isinstance(record.get("photo_quality_score"), (int, float)))
-    low_quality_count = sum(1 for record in records if "low_quality" in (record.get("review_flags") or []))
-    odd_area_count = sum(1 for record in records if "odd_area" in (record.get("review_flags") or []))
+    scored_count = sum(
+        1
+        for record in records
+        if isinstance(record.get("photo_quality_score"), (int, float))
+    )
+    low_quality_count = sum(
+        1 for record in records if "low_quality" in (record.get("review_flags") or [])
+    )
+    odd_area_count = sum(
+        1 for record in records if "odd_area" in (record.get("review_flags") or [])
+    )
     recovered_count = sum(1 for record in records if record.get("recovered_by_retry"))
-    low_conf_retry_count = sum(1 for record in records if "low_conf_retry" in (record.get("review_flags") or []))
+    low_conf_retry_count = sum(
+        1
+        for record in records
+        if "low_conf_retry" in (record.get("review_flags") or [])
+    )
     return {
         "generated_at": datetime.now().isoformat(timespec="seconds"),
         "records": records,
@@ -2113,8 +3411,11 @@ def build_image_audit_payload(api_key: str) -> Dict[str, Any]:
 
 @app.get("/visualize/image-audit", response_class=HTMLResponse)
 def image_audit_ui(request: Request):
+    require_public_notice_visual_assets_enabled()
     api_key = request.query_params.get("api_key", "")
-    payload_json = json.dumps(build_image_audit_payload(api_key), ensure_ascii=False).replace("</", "<\\/")
+    payload_json = json.dumps(
+        build_image_audit_payload(api_key), ensure_ascii=False
+    ).replace("</", "<\\/")
     page = r"""
 <!doctype html>
 <html lang="en">
@@ -2322,6 +3623,9 @@ def profile_search_demo():
 
 @app.get("/visualize/dashboard", response_class=HTMLResponse)
 def feature_dashboard_ui(request: Request):
+    redirect = _legacy_ui_redirect()
+    if redirect is not None:
+        return redirect
     api_key_json = json.dumps(request.query_params.get("api_key", ""))
     page = r"""
 <!doctype html>
@@ -2387,6 +3691,12 @@ def feature_dashboard_ui(request: Request):
 </head>
 <body>
 <main>
+  <aside class="panel" role="note">
+    <strong>Legacy experimental UI — development only.</strong>
+    This screen may expose behavior-oriented or LLM-assisted controls that are not
+    part of the contest demo. Use <a href="/demo">the appearance-first demo</a> for
+    evidence-bounded search and verified shelter contact guidance.
+  </aside>
   <header>
     <div>
       <h1>Dog RAG Dashboard</h1>
@@ -2484,7 +3794,17 @@ const noticeOutput = document.getElementById('noticeOutput');
 const contactOutput = document.getElementById('contactOutput');
 let lastResponse = null;
 let selected = null;
-apiKeyInput.value = initialApiKey || localStorage.getItem('dogDashboardApiKey') || '';
+function readSessionApiKey() {
+  try { return sessionStorage.getItem('dogDashboardApiKey') || ''; }
+  catch (_error) { return ''; }
+}
+function persistSessionApiKey(value) {
+  try {
+    if (value) sessionStorage.setItem('dogDashboardApiKey', value);
+    else sessionStorage.removeItem('dogDashboardApiKey');
+  } catch (_error) {}
+}
+apiKeyInput.value = initialApiKey || readSessionApiKey();
 
 function key() { return apiKeyInput.value.trim(); }
 function setStatus(text) { statusEl.textContent = text; }
@@ -2501,7 +3821,7 @@ async function fetchJson(url, options = {}) {
   return payload;
 }
 async function loadSystem() {
-  localStorage.setItem('dogDashboardApiKey', key());
+  persistSessionApiKey(key());
   setStatus('Loading system');
   const [health, graph] = await Promise.all([fetchJson('/health'), fetchJson('/rag/graph')]);
   healthJson.textContent = pretty(health);
@@ -2650,8 +3970,13 @@ loadSystem().catch(err => { setStatus('Error'); healthJson.textContent = String(
 </html>
 """.replace("__API_KEY__", api_key_json)
     return HTMLResponse(page)
+
+
 @app.get("/visualize/adoption-flow", response_class=HTMLResponse)
 def adoption_flow_ui(request: Request):
+    redirect = _legacy_ui_redirect()
+    if redirect is not None:
+        return redirect
     api_key_json = json.dumps(request.query_params.get("api_key", ""))
     page = """
 <!doctype html>
@@ -2696,6 +4021,12 @@ def adoption_flow_ui(request: Request):
 </head>
 <body>
 <main>
+  <aside class="summary" role="note">
+    <strong>Legacy experimental UI — development only.</strong>
+    This screen includes broad lifestyle and personality inputs that are not part
+    of the contest ranking claim. Use <a href="/demo">the appearance-first demo</a>
+    for evidence-bounded search and verified shelter contact guidance.
+  </aside>
   <header>
     <h1>입양 후보 탐색</h1>
     <div class="status" id="status">대기</div>
@@ -2742,7 +4073,17 @@ const statusEl = document.getElementById('status');
 const summaryEl = document.getElementById('summary');
 const resultsEl = document.getElementById('results');
 const submitBtn = document.getElementById('submitBtn');
-apiKey.value = initialApiKey || localStorage.getItem('dogApiKey') || '';
+function readSessionApiKey() {
+  try { return sessionStorage.getItem('dogApiKey') || ''; }
+  catch (_error) { return ''; }
+}
+function persistSessionApiKey(value) {
+  try {
+    if (value) sessionStorage.setItem('dogApiKey', value);
+    else sessionStorage.removeItem('dogApiKey');
+  } catch (_error) {}
+}
+apiKey.value = initialApiKey || readSessionApiKey();
 function escapeHtml(value) {
   return String(value || '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 }
@@ -2772,7 +4113,7 @@ function render(data) {
 form.addEventListener('submit', async event => {
   event.preventDefault();
   const key = apiKey.value.trim();
-  localStorage.setItem('dogApiKey', key);
+  persistSessionApiKey(key);
   const data = new FormData(form);
   data.delete('api_key');
   submitBtn.disabled = true;
@@ -2799,6 +4140,7 @@ form.addEventListener('submit', async event => {
     )
     return HTMLResponse(page)
 
+
 @app.post("/recommend_with_survey_form")
 async def recommend_with_survey_form(
     survey: str = Form(...),
@@ -2810,11 +4152,13 @@ async def recommend_with_survey_form(
         data = json.loads(survey)
         survey_obj = SurveyInput(**data)
         return await _handle_recommend(survey_obj, extra_text, ref_image, topk)
-    except Exception as e:
-        import traceback
-
-        traceback.print_exc()
-        return JSONResponse({"error": str(e)}, status_code=500)
+    except HTTPException:
+        raise
+    except Exception:
+        return JSONResponse(
+            {"error": "recommendation request could not be processed"},
+            status_code=500,
+        )
 
 
 @app.post("/recommend_with_survey_json")
@@ -2825,11 +4169,13 @@ async def recommend_with_survey_json(
 ):
     try:
         return await _handle_recommend(survey, extra_text, None, topk)
-    except Exception as e:
-        import traceback
-
-        traceback.print_exc()
-        return JSONResponse({"error": str(e)}, status_code=500)
+    except HTTPException:
+        raise
+    except Exception:
+        return JSONResponse(
+            {"error": "recommendation request could not be processed"},
+            status_code=500,
+        )
 
 
 @app.post("/chat")

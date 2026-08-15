@@ -1,0 +1,1640 @@
+{
+  "schema_version": 2,
+  "evaluation_id": "profile_rerank.appearance_v1",
+  "evaluation_reference_date": "2026-07-26",
+  "scope": "appearance_profile_reranking",
+  "method": {
+    "evaluation_type": "deterministic_rerank_contract_not_performance",
+    "candidate_pool": "same fixed notice IDs and baseline retrieval order for every profile",
+    "production_function": "app.profile_rerank.rerank_candidates",
+    "condition_keys": [
+      "preferred_size",
+      "preferred_age",
+      "preferred_region"
+    ],
+    "silver_source_fields": [
+      "weight",
+      "age",
+      "region/org/shelter address"
+    ],
+    "silver_label": "exact public-notice field matches; unknown yields zero bonus and zero penalty",
+    "binary_relevance": "all applicable appearance fields are known and match",
+    "graded_relevance": "matched appearance fields divided by applicable appearance fields",
+    "top_k": 5,
+    "compatibility_weight": 0.25,
+    "quality_weight": 0.0,
+    "quality_contract_isolation": "primary compatibility contract fixes quality_weight at 0.0",
+    "lifestyle_or_behavior_scored": false
+  },
+  "inputs": {
+    "profile_config": "data/eval_profiles.appearance_v1.json",
+    "profile_config_sha256": "8dab6a0ebe2aa17c0b6992432e285517387d2d1adc5cd419ba0e27259f943c12",
+    "dog_metas": "data/dog_metas.json",
+    "dog_metas_sha256": "723a4df01e2802ad5d42bd276eefbded097a0a6e72900784395c4c19626b6c00",
+    "candidate_subset_sha256": "3535a4263f8b5a800acf09ad83f6359be7a8857d311468e13b5d066c285c7c34",
+    "metadata_rows": 3746,
+    "unique_notices": 1516,
+    "fixed_candidate_count": 12,
+    "fixed_candidate_ids": [
+      "426339202600306",
+      "441570202600363",
+      "411319202600337",
+      "411318202600342",
+      "441570202600362",
+      "411310202600444",
+      "441570202600369",
+      "441570202600361",
+      "411315202600532",
+      "441570202600371",
+      "441570202600359",
+      "411315202600531"
+    ]
+  },
+  "summary": {
+    "passed": true,
+    "failure_count": 0,
+    "failure_details": [],
+    "profile_count": 2,
+    "profiles_with_different_top1_from_baseline": 2,
+    "distinct_profile_top1_count": 2,
+    "mean_precision_at_5_delta": 0.5,
+    "mean_ndcg_at_5_delta": 0.518598,
+    "mean_mrr_delta": 0.583333,
+    "unknown_neutrality_failures": 0,
+    "unknown_neutrality_failed_profiles": [],
+    "evidence_consistency_failures": 0,
+    "evidence_consistency_failure_details": [],
+    "silver_score_mismatches": 0,
+    "adoption_suitability_certainty_phrase_hits": 0,
+    "adoption_suitability_certainty_hit_details": [],
+    "quality_sensitivity_failures": 0
+  },
+  "profiles": [
+    {
+      "profile_id": "profile_a_small_adult_seoul",
+      "label": "A: 서울·소형·성견 선호",
+      "appearance_preferences": {
+        "preferred_size": "small",
+        "preferred_age": "adult",
+        "preferred_region": "서울"
+      },
+      "unscored_lifestyle_fields": [
+        "housing_type",
+        "daily_absence_hours",
+        "activity_level",
+        "dog_experience",
+        "has_children",
+        "has_other_pets"
+      ],
+      "baseline_order": [
+        "426339202600306",
+        "441570202600363",
+        "411319202600337",
+        "411318202600342",
+        "441570202600362",
+        "411310202600444",
+        "441570202600369",
+        "441570202600361",
+        "411315202600532",
+        "441570202600371",
+        "441570202600359",
+        "411315202600531"
+      ],
+      "reranked_order": [
+        "411319202600337",
+        "411310202600444",
+        "411315202600532",
+        "411315202600531",
+        "411318202600342",
+        "441570202600371",
+        "426339202600306",
+        "441570202600363",
+        "441570202600362",
+        "441570202600361",
+        "441570202600359",
+        "441570202600369"
+      ],
+      "baseline_metrics": {
+        "precision_at_5": 0.2,
+        "ndcg_at_5": 0.458055,
+        "mrr": 0.333333
+      },
+      "reranked_metrics": {
+        "precision_at_5": 0.8,
+        "ndcg_at_5": 1.0,
+        "mrr": 1.0
+      },
+      "metric_delta": {
+        "precision_at_5": 0.6,
+        "ndcg_at_5": 0.541945,
+        "mrr": 0.666667
+      },
+      "rank_change": {
+        "changed_candidates": 11,
+        "mean_absolute_rank_change": 4.0,
+        "max_absolute_rank_change": 8,
+        "top1_changed": true,
+        "shifts": {
+          "426339202600306": -6,
+          "441570202600363": -6,
+          "411319202600337": 2,
+          "411318202600342": -1,
+          "441570202600362": -4,
+          "411310202600444": 4,
+          "441570202600369": -5,
+          "441570202600361": -2,
+          "411315202600532": 6,
+          "441570202600371": 4,
+          "441570202600359": 0,
+          "411315202600531": 8
+        }
+      },
+      "unknown_neutrality_probe": {
+        "passed": true,
+        "retrieval_score": 0.5,
+        "compatibility_score": 0.0,
+        "final_score": 0.5,
+        "score_delta": 0.0,
+        "unknown_condition_count": 3
+      },
+      "evidence_consistency_failures": [],
+      "silver_score_mismatch_notice_ids": [],
+      "adoption_suitability_certainty_hits": [],
+      "candidates": [
+        {
+          "notice_id": "426339202600306",
+          "baseline_rank": 1,
+          "reranked_rank": 7,
+          "rank_change": -6,
+          "retrieval_score": 0.6,
+          "compatibility_score": 0.333333,
+          "final_score": 0.683333,
+          "silver_label": {
+            "relevance_grade": 0.333333,
+            "binary_relevant": false,
+            "match_count": 1,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "mismatch",
+              "preferred_age": "matched",
+              "preferred_region": "mismatch"
+            },
+            "appearance": {
+              "size": "medium",
+              "age_group": "adult",
+              "region": "부산",
+              "source_values": {
+                "weight": "11(Kg)",
+                "age": "2021(년생)",
+                "region_text": "부산광역시 사상구 부산광역시 강서구 맥도강변길 752-15 (대저2동) 감전119안전센터 부산동물보호센터"
+              },
+              "parsed_values": {
+                "weight_kg": 11.0,
+                "age_years": 5.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "선호한 성견 조건과 일치합니다."
+          ],
+          "caution_conditions": [
+            "공고상 크기는 중형견으로, 선호한 소형견과 다릅니다.",
+            "공고 지역은 부산으로 희망 지역 서울과 다릅니다."
+          ],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 선호한 성견 조건과 일치합니다. 공고상 크기는 중형견으로, 선호한 소형견과 다릅니다. 공고 지역은 부산으로 희망 지역 서울과 다릅니다."
+        },
+        {
+          "notice_id": "441570202600363",
+          "baseline_rank": 2,
+          "reranked_rank": 8,
+          "rank_change": -6,
+          "retrieval_score": 0.598,
+          "compatibility_score": 0.333333,
+          "final_score": 0.681333,
+          "silver_label": {
+            "relevance_grade": 0.333333,
+            "binary_relevant": false,
+            "match_count": 1,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "mismatch",
+              "preferred_age": "matched",
+              "preferred_region": "mismatch"
+            },
+            "appearance": {
+              "size": "large",
+              "age_group": "adult",
+              "region": "경기",
+              "source_values": {
+                "weight": "19.00(Kg)",
+                "age": "2022(년생)",
+                "region_text": "경기도 여주시 경기도 여주시 여양2로 42 (천송동) 흥천면 문장리 위더스 동물보호센터"
+              },
+              "parsed_values": {
+                "weight_kg": 19.0,
+                "age_years": 4.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "선호한 성견 조건과 일치합니다."
+          ],
+          "caution_conditions": [
+            "공고상 크기는 대형견으로, 선호한 소형견과 다릅니다.",
+            "공고 지역은 경기으로 희망 지역 서울과 다릅니다."
+          ],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 선호한 성견 조건과 일치합니다. 공고상 크기는 대형견으로, 선호한 소형견과 다릅니다. 공고 지역은 경기으로 희망 지역 서울과 다릅니다."
+        },
+        {
+          "notice_id": "411319202600337",
+          "baseline_rank": 3,
+          "reranked_rank": 1,
+          "rank_change": 2,
+          "retrieval_score": 0.596,
+          "compatibility_score": 1.0,
+          "final_score": 0.846,
+          "silver_label": {
+            "relevance_grade": 1.0,
+            "binary_relevant": true,
+            "match_count": 3,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "matched",
+              "preferred_age": "matched",
+              "preferred_region": "matched"
+            },
+            "appearance": {
+              "size": "small",
+              "age_group": "adult",
+              "region": "서울",
+              "source_values": {
+                "weight": "4.9(Kg)",
+                "age": "2023(년생)",
+                "region_text": "서울특별시 동작구 서울특별시 동작구 장승배기로27길 18 (노량진동) 상도지구대 디아크동물종합병원"
+              },
+              "parsed_values": {
+                "weight_kg": 4.9,
+                "age_years": 3.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "선호한 소형견 조건과 일치합니다.",
+            "선호한 성견 조건과 일치합니다.",
+            "희망 지역과 일치합니다."
+          ],
+          "caution_conditions": [],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 선호한 소형견 조건과 일치합니다. 선호한 성견 조건과 일치합니다. 희망 지역과 일치합니다."
+        },
+        {
+          "notice_id": "411318202600342",
+          "baseline_rank": 4,
+          "reranked_rank": 5,
+          "rank_change": -1,
+          "retrieval_score": 0.594,
+          "compatibility_score": 0.666667,
+          "final_score": 0.760667,
+          "silver_label": {
+            "relevance_grade": 0.666667,
+            "binary_relevant": false,
+            "match_count": 2,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "matched",
+              "preferred_age": "mismatch",
+              "preferred_region": "matched"
+            },
+            "appearance": {
+              "size": "small",
+              "age_group": "puppy",
+              "region": "서울",
+              "source_values": {
+                "weight": "7.4(Kg)",
+                "age": "2026(년생)",
+                "region_text": "서울특별시 영등포구 경기도 양주시 남면 감악산로 63-37 서울 영등포구 디지털로37나길 13-2 (대림동) 한국동물구조관리협회"
+              },
+              "parsed_values": {
+                "weight_kg": 7.4,
+                "age_years": 0.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "선호한 소형견 조건과 일치합니다.",
+            "희망 지역과 일치합니다."
+          ],
+          "caution_conditions": [
+            "공고상 연령대는 어린 개체으로, 선호한 성견과 다릅니다."
+          ],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 선호한 소형견 조건과 일치합니다. 희망 지역과 일치합니다. 공고상 연령대는 어린 개체으로, 선호한 성견과 다릅니다."
+        },
+        {
+          "notice_id": "441570202600362",
+          "baseline_rank": 5,
+          "reranked_rank": 9,
+          "rank_change": -4,
+          "retrieval_score": 0.592,
+          "compatibility_score": 0.333333,
+          "final_score": 0.675333,
+          "silver_label": {
+            "relevance_grade": 0.333333,
+            "binary_relevant": false,
+            "match_count": 1,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "mismatch",
+              "preferred_age": "matched",
+              "preferred_region": "mismatch"
+            },
+            "appearance": {
+              "size": "large",
+              "age_group": "adult",
+              "region": "경기",
+              "source_values": {
+                "weight": "21.00(Kg)",
+                "age": "2023(년생)",
+                "region_text": "경기도 여주시 경기도 여주시 여양2로 42 (천송동) 흥천면 문장리 위더스 동물보호센터"
+              },
+              "parsed_values": {
+                "weight_kg": 21.0,
+                "age_years": 3.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "선호한 성견 조건과 일치합니다."
+          ],
+          "caution_conditions": [
+            "공고상 크기는 대형견으로, 선호한 소형견과 다릅니다.",
+            "공고 지역은 경기으로 희망 지역 서울과 다릅니다."
+          ],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 선호한 성견 조건과 일치합니다. 공고상 크기는 대형견으로, 선호한 소형견과 다릅니다. 공고 지역은 경기으로 희망 지역 서울과 다릅니다."
+        },
+        {
+          "notice_id": "411310202600444",
+          "baseline_rank": 6,
+          "reranked_rank": 2,
+          "rank_change": 4,
+          "retrieval_score": 0.59,
+          "compatibility_score": 1.0,
+          "final_score": 0.84,
+          "silver_label": {
+            "relevance_grade": 1.0,
+            "binary_relevant": true,
+            "match_count": 3,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "matched",
+              "preferred_age": "matched",
+              "preferred_region": "matched"
+            },
+            "appearance": {
+              "size": "small",
+              "age_group": "adult",
+              "region": "서울",
+              "source_values": {
+                "weight": "3.7(Kg)",
+                "age": "2022(년생)",
+                "region_text": "서울특별시 노원구 서울특별시 노원구 수락산로 258 (상계동, 호성빌딩) 1층 노원구 하계동 인근 노원반려동물문화센터"
+              },
+              "parsed_values": {
+                "weight_kg": 3.7,
+                "age_years": 4.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "선호한 소형견 조건과 일치합니다.",
+            "선호한 성견 조건과 일치합니다.",
+            "희망 지역과 일치합니다."
+          ],
+          "caution_conditions": [],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 선호한 소형견 조건과 일치합니다. 선호한 성견 조건과 일치합니다. 희망 지역과 일치합니다."
+        },
+        {
+          "notice_id": "441570202600369",
+          "baseline_rank": 7,
+          "reranked_rank": 12,
+          "rank_change": -5,
+          "retrieval_score": 0.588,
+          "compatibility_score": 0.0,
+          "final_score": 0.588,
+          "silver_label": {
+            "relevance_grade": 0.0,
+            "binary_relevant": false,
+            "match_count": 0,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "mismatch",
+              "preferred_age": "mismatch",
+              "preferred_region": "mismatch"
+            },
+            "appearance": {
+              "size": "medium",
+              "age_group": "puppy",
+              "region": "경기",
+              "source_values": {
+                "weight": "10.00(Kg)",
+                "age": "2025(년생)",
+                "region_text": "경기도 여주시 경기도 여주시 여양2로 42 (천송동) 흥천면 문장리 위더스 동물보호센터"
+              },
+              "parsed_values": {
+                "weight_kg": 10.0,
+                "age_years": 1.0
+              }
+            }
+          },
+          "matched_conditions": [],
+          "caution_conditions": [
+            "공고상 크기는 중형견으로, 선호한 소형견과 다릅니다.",
+            "공고상 연령대는 어린 개체으로, 선호한 성견과 다릅니다.",
+            "공고 지역은 경기으로 희망 지역 서울과 다릅니다."
+          ],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 공고상 크기는 중형견으로, 선호한 소형견과 다릅니다. 공고상 연령대는 어린 개체으로, 선호한 성견과 다릅니다. 공고 지역은 경기으로 희망 지역 서울과 다릅니다."
+        },
+        {
+          "notice_id": "441570202600361",
+          "baseline_rank": 8,
+          "reranked_rank": 10,
+          "rank_change": -2,
+          "retrieval_score": 0.586,
+          "compatibility_score": 0.333333,
+          "final_score": 0.669333,
+          "silver_label": {
+            "relevance_grade": 0.333333,
+            "binary_relevant": false,
+            "match_count": 1,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "mismatch",
+              "preferred_age": "matched",
+              "preferred_region": "mismatch"
+            },
+            "appearance": {
+              "size": "large",
+              "age_group": "adult",
+              "region": "경기",
+              "source_values": {
+                "weight": "24.00(Kg)",
+                "age": "2023(년생)",
+                "region_text": "경기도 여주시 경기도 여주시 여양2로 42 (천송동) 흥천면 문장리 위더스 동물보호센터"
+              },
+              "parsed_values": {
+                "weight_kg": 24.0,
+                "age_years": 3.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "선호한 성견 조건과 일치합니다."
+          ],
+          "caution_conditions": [
+            "공고상 크기는 대형견으로, 선호한 소형견과 다릅니다.",
+            "공고 지역은 경기으로 희망 지역 서울과 다릅니다."
+          ],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 선호한 성견 조건과 일치합니다. 공고상 크기는 대형견으로, 선호한 소형견과 다릅니다. 공고 지역은 경기으로 희망 지역 서울과 다릅니다."
+        },
+        {
+          "notice_id": "411315202600532",
+          "baseline_rank": 9,
+          "reranked_rank": 3,
+          "rank_change": 6,
+          "retrieval_score": 0.584,
+          "compatibility_score": 1.0,
+          "final_score": 0.834,
+          "silver_label": {
+            "relevance_grade": 1.0,
+            "binary_relevant": true,
+            "match_count": 3,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "matched",
+              "preferred_age": "matched",
+              "preferred_region": "matched"
+            },
+            "appearance": {
+              "size": "small",
+              "age_group": "adult",
+              "region": "서울",
+              "source_values": {
+                "weight": "4.3(Kg)",
+                "age": "2021(년생)",
+                "region_text": "서울특별시 강서구 경기도 양주시 남면 감악산로 63-37 (남면) 한국동물구조관리협회 서울 강서구 등촌로13자길 39-9 (화곡동, 리치팰리스) 한국동물구조관리협회"
+              },
+              "parsed_values": {
+                "weight_kg": 4.3,
+                "age_years": 5.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "선호한 소형견 조건과 일치합니다.",
+            "선호한 성견 조건과 일치합니다.",
+            "희망 지역과 일치합니다."
+          ],
+          "caution_conditions": [],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 선호한 소형견 조건과 일치합니다. 선호한 성견 조건과 일치합니다. 희망 지역과 일치합니다."
+        },
+        {
+          "notice_id": "441570202600371",
+          "baseline_rank": 10,
+          "reranked_rank": 6,
+          "rank_change": 4,
+          "retrieval_score": 0.582,
+          "compatibility_score": 0.666667,
+          "final_score": 0.748667,
+          "silver_label": {
+            "relevance_grade": 0.666667,
+            "binary_relevant": false,
+            "match_count": 2,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "matched",
+              "preferred_age": "matched",
+              "preferred_region": "mismatch"
+            },
+            "appearance": {
+              "size": "small",
+              "age_group": "adult",
+              "region": "경기",
+              "source_values": {
+                "weight": "5.50(Kg)",
+                "age": "2023(년생)",
+                "region_text": "경기도 여주시 경기도 여주시 여양2로 42 (천송동) 현암동 현암3길 위더스 동물보호센터"
+              },
+              "parsed_values": {
+                "weight_kg": 5.5,
+                "age_years": 3.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "선호한 소형견 조건과 일치합니다.",
+            "선호한 성견 조건과 일치합니다."
+          ],
+          "caution_conditions": [
+            "공고 지역은 경기으로 희망 지역 서울과 다릅니다."
+          ],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 선호한 소형견 조건과 일치합니다. 선호한 성견 조건과 일치합니다. 공고 지역은 경기으로 희망 지역 서울과 다릅니다."
+        },
+        {
+          "notice_id": "441570202600359",
+          "baseline_rank": 11,
+          "reranked_rank": 11,
+          "rank_change": 0,
+          "retrieval_score": 0.58,
+          "compatibility_score": 0.333333,
+          "final_score": 0.663333,
+          "silver_label": {
+            "relevance_grade": 0.333333,
+            "binary_relevant": false,
+            "match_count": 1,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "mismatch",
+              "preferred_age": "matched",
+              "preferred_region": "mismatch"
+            },
+            "appearance": {
+              "size": "large",
+              "age_group": "adult",
+              "region": "경기",
+              "source_values": {
+                "weight": "23.00(Kg)",
+                "age": "2023(년생)",
+                "region_text": "경기도 여주시 경기도 여주시 여양2로 42 (천송동) 흥천면 문장리 위더스 동물보호센터"
+              },
+              "parsed_values": {
+                "weight_kg": 23.0,
+                "age_years": 3.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "선호한 성견 조건과 일치합니다."
+          ],
+          "caution_conditions": [
+            "공고상 크기는 대형견으로, 선호한 소형견과 다릅니다.",
+            "공고 지역은 경기으로 희망 지역 서울과 다릅니다."
+          ],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 선호한 성견 조건과 일치합니다. 공고상 크기는 대형견으로, 선호한 소형견과 다릅니다. 공고 지역은 경기으로 희망 지역 서울과 다릅니다."
+        },
+        {
+          "notice_id": "411315202600531",
+          "baseline_rank": 12,
+          "reranked_rank": 4,
+          "rank_change": 8,
+          "retrieval_score": 0.578,
+          "compatibility_score": 1.0,
+          "final_score": 0.828,
+          "silver_label": {
+            "relevance_grade": 1.0,
+            "binary_relevant": true,
+            "match_count": 3,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "matched",
+              "preferred_age": "matched",
+              "preferred_region": "matched"
+            },
+            "appearance": {
+              "size": "small",
+              "age_group": "adult",
+              "region": "서울",
+              "source_values": {
+                "weight": "7.3(Kg)",
+                "age": "2021(년생)",
+                "region_text": "서울특별시 강서구 경기도 양주시 남면 감악산로 63-37 (남면) 한국동물구조관리협회 서울 강서구 등촌로13자길 39-9 (화곡동, 리치팰리스) 한국동물구조관리협회"
+              },
+              "parsed_values": {
+                "weight_kg": 7.3,
+                "age_years": 5.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "선호한 소형견 조건과 일치합니다.",
+            "선호한 성견 조건과 일치합니다.",
+            "희망 지역과 일치합니다."
+          ],
+          "caution_conditions": [],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 선호한 소형견 조건과 일치합니다. 선호한 성견 조건과 일치합니다. 희망 지역과 일치합니다."
+        }
+      ]
+    },
+    {
+      "profile_id": "profile_b_large_adult_gyeonggi",
+      "label": "B: 경기·대형·성견 선호",
+      "appearance_preferences": {
+        "preferred_size": "large",
+        "preferred_age": "adult",
+        "preferred_region": "경기"
+      },
+      "unscored_lifestyle_fields": [
+        "housing_type",
+        "daily_absence_hours",
+        "activity_level",
+        "dog_experience",
+        "has_children",
+        "has_other_pets"
+      ],
+      "baseline_order": [
+        "426339202600306",
+        "441570202600363",
+        "411319202600337",
+        "411318202600342",
+        "441570202600362",
+        "411310202600444",
+        "441570202600369",
+        "441570202600361",
+        "411315202600532",
+        "441570202600371",
+        "441570202600359",
+        "411315202600531"
+      ],
+      "reranked_order": [
+        "441570202600363",
+        "441570202600362",
+        "441570202600361",
+        "441570202600359",
+        "441570202600371",
+        "426339202600306",
+        "411319202600337",
+        "411310202600444",
+        "441570202600369",
+        "411315202600532",
+        "411315202600531",
+        "411318202600342"
+      ],
+      "baseline_metrics": {
+        "precision_at_5": 0.4,
+        "ndcg_at_5": 0.504748,
+        "mrr": 0.5
+      },
+      "reranked_metrics": {
+        "precision_at_5": 0.8,
+        "ndcg_at_5": 1.0,
+        "mrr": 1.0
+      },
+      "metric_delta": {
+        "precision_at_5": 0.4,
+        "ndcg_at_5": 0.495252,
+        "mrr": 0.5
+      },
+      "rank_change": {
+        "changed_candidates": 12,
+        "mean_absolute_rank_change": 3.666667,
+        "max_absolute_rank_change": 8,
+        "top1_changed": true,
+        "shifts": {
+          "426339202600306": -5,
+          "441570202600363": 1,
+          "411319202600337": -4,
+          "411318202600342": -8,
+          "441570202600362": 3,
+          "411310202600444": -2,
+          "441570202600369": -2,
+          "441570202600361": 5,
+          "411315202600532": -1,
+          "441570202600371": 5,
+          "441570202600359": 7,
+          "411315202600531": 1
+        }
+      },
+      "unknown_neutrality_probe": {
+        "passed": true,
+        "retrieval_score": 0.5,
+        "compatibility_score": 0.0,
+        "final_score": 0.5,
+        "score_delta": 0.0,
+        "unknown_condition_count": 3
+      },
+      "evidence_consistency_failures": [],
+      "silver_score_mismatch_notice_ids": [],
+      "adoption_suitability_certainty_hits": [],
+      "candidates": [
+        {
+          "notice_id": "426339202600306",
+          "baseline_rank": 1,
+          "reranked_rank": 6,
+          "rank_change": -5,
+          "retrieval_score": 0.6,
+          "compatibility_score": 0.333333,
+          "final_score": 0.683333,
+          "silver_label": {
+            "relevance_grade": 0.333333,
+            "binary_relevant": false,
+            "match_count": 1,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "mismatch",
+              "preferred_age": "matched",
+              "preferred_region": "mismatch"
+            },
+            "appearance": {
+              "size": "medium",
+              "age_group": "adult",
+              "region": "부산",
+              "source_values": {
+                "weight": "11(Kg)",
+                "age": "2021(년생)",
+                "region_text": "부산광역시 사상구 부산광역시 강서구 맥도강변길 752-15 (대저2동) 감전119안전센터 부산동물보호센터"
+              },
+              "parsed_values": {
+                "weight_kg": 11.0,
+                "age_years": 5.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "선호한 성견 조건과 일치합니다."
+          ],
+          "caution_conditions": [
+            "공고상 크기는 중형견으로, 선호한 대형견과 다릅니다.",
+            "공고 지역은 부산으로 희망 지역 경기과 다릅니다."
+          ],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 선호한 성견 조건과 일치합니다. 공고상 크기는 중형견으로, 선호한 대형견과 다릅니다. 공고 지역은 부산으로 희망 지역 경기과 다릅니다."
+        },
+        {
+          "notice_id": "441570202600363",
+          "baseline_rank": 2,
+          "reranked_rank": 1,
+          "rank_change": 1,
+          "retrieval_score": 0.598,
+          "compatibility_score": 1.0,
+          "final_score": 0.848,
+          "silver_label": {
+            "relevance_grade": 1.0,
+            "binary_relevant": true,
+            "match_count": 3,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "matched",
+              "preferred_age": "matched",
+              "preferred_region": "matched"
+            },
+            "appearance": {
+              "size": "large",
+              "age_group": "adult",
+              "region": "경기",
+              "source_values": {
+                "weight": "19.00(Kg)",
+                "age": "2022(년생)",
+                "region_text": "경기도 여주시 경기도 여주시 여양2로 42 (천송동) 흥천면 문장리 위더스 동물보호센터"
+              },
+              "parsed_values": {
+                "weight_kg": 19.0,
+                "age_years": 4.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "선호한 대형견 조건과 일치합니다.",
+            "선호한 성견 조건과 일치합니다.",
+            "희망 지역과 일치합니다."
+          ],
+          "caution_conditions": [],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 선호한 대형견 조건과 일치합니다. 선호한 성견 조건과 일치합니다. 희망 지역과 일치합니다."
+        },
+        {
+          "notice_id": "411319202600337",
+          "baseline_rank": 3,
+          "reranked_rank": 7,
+          "rank_change": -4,
+          "retrieval_score": 0.596,
+          "compatibility_score": 0.333333,
+          "final_score": 0.679333,
+          "silver_label": {
+            "relevance_grade": 0.333333,
+            "binary_relevant": false,
+            "match_count": 1,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "mismatch",
+              "preferred_age": "matched",
+              "preferred_region": "mismatch"
+            },
+            "appearance": {
+              "size": "small",
+              "age_group": "adult",
+              "region": "서울",
+              "source_values": {
+                "weight": "4.9(Kg)",
+                "age": "2023(년생)",
+                "region_text": "서울특별시 동작구 서울특별시 동작구 장승배기로27길 18 (노량진동) 상도지구대 디아크동물종합병원"
+              },
+              "parsed_values": {
+                "weight_kg": 4.9,
+                "age_years": 3.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "선호한 성견 조건과 일치합니다."
+          ],
+          "caution_conditions": [
+            "공고상 크기는 소형견으로, 선호한 대형견과 다릅니다.",
+            "공고 지역은 서울으로 희망 지역 경기과 다릅니다."
+          ],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 선호한 성견 조건과 일치합니다. 공고상 크기는 소형견으로, 선호한 대형견과 다릅니다. 공고 지역은 서울으로 희망 지역 경기과 다릅니다."
+        },
+        {
+          "notice_id": "411318202600342",
+          "baseline_rank": 4,
+          "reranked_rank": 12,
+          "rank_change": -8,
+          "retrieval_score": 0.594,
+          "compatibility_score": 0.0,
+          "final_score": 0.594,
+          "silver_label": {
+            "relevance_grade": 0.0,
+            "binary_relevant": false,
+            "match_count": 0,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "mismatch",
+              "preferred_age": "mismatch",
+              "preferred_region": "mismatch"
+            },
+            "appearance": {
+              "size": "small",
+              "age_group": "puppy",
+              "region": "서울",
+              "source_values": {
+                "weight": "7.4(Kg)",
+                "age": "2026(년생)",
+                "region_text": "서울특별시 영등포구 경기도 양주시 남면 감악산로 63-37 서울 영등포구 디지털로37나길 13-2 (대림동) 한국동물구조관리협회"
+              },
+              "parsed_values": {
+                "weight_kg": 7.4,
+                "age_years": 0.0
+              }
+            }
+          },
+          "matched_conditions": [],
+          "caution_conditions": [
+            "공고상 크기는 소형견으로, 선호한 대형견과 다릅니다.",
+            "공고상 연령대는 어린 개체으로, 선호한 성견과 다릅니다.",
+            "공고 지역은 서울으로 희망 지역 경기과 다릅니다."
+          ],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 공고상 크기는 소형견으로, 선호한 대형견과 다릅니다. 공고상 연령대는 어린 개체으로, 선호한 성견과 다릅니다. 공고 지역은 서울으로 희망 지역 경기과 다릅니다."
+        },
+        {
+          "notice_id": "441570202600362",
+          "baseline_rank": 5,
+          "reranked_rank": 2,
+          "rank_change": 3,
+          "retrieval_score": 0.592,
+          "compatibility_score": 1.0,
+          "final_score": 0.842,
+          "silver_label": {
+            "relevance_grade": 1.0,
+            "binary_relevant": true,
+            "match_count": 3,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "matched",
+              "preferred_age": "matched",
+              "preferred_region": "matched"
+            },
+            "appearance": {
+              "size": "large",
+              "age_group": "adult",
+              "region": "경기",
+              "source_values": {
+                "weight": "21.00(Kg)",
+                "age": "2023(년생)",
+                "region_text": "경기도 여주시 경기도 여주시 여양2로 42 (천송동) 흥천면 문장리 위더스 동물보호센터"
+              },
+              "parsed_values": {
+                "weight_kg": 21.0,
+                "age_years": 3.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "선호한 대형견 조건과 일치합니다.",
+            "선호한 성견 조건과 일치합니다.",
+            "희망 지역과 일치합니다."
+          ],
+          "caution_conditions": [],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 선호한 대형견 조건과 일치합니다. 선호한 성견 조건과 일치합니다. 희망 지역과 일치합니다."
+        },
+        {
+          "notice_id": "411310202600444",
+          "baseline_rank": 6,
+          "reranked_rank": 8,
+          "rank_change": -2,
+          "retrieval_score": 0.59,
+          "compatibility_score": 0.333333,
+          "final_score": 0.673333,
+          "silver_label": {
+            "relevance_grade": 0.333333,
+            "binary_relevant": false,
+            "match_count": 1,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "mismatch",
+              "preferred_age": "matched",
+              "preferred_region": "mismatch"
+            },
+            "appearance": {
+              "size": "small",
+              "age_group": "adult",
+              "region": "서울",
+              "source_values": {
+                "weight": "3.7(Kg)",
+                "age": "2022(년생)",
+                "region_text": "서울특별시 노원구 서울특별시 노원구 수락산로 258 (상계동, 호성빌딩) 1층 노원구 하계동 인근 노원반려동물문화센터"
+              },
+              "parsed_values": {
+                "weight_kg": 3.7,
+                "age_years": 4.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "선호한 성견 조건과 일치합니다."
+          ],
+          "caution_conditions": [
+            "공고상 크기는 소형견으로, 선호한 대형견과 다릅니다.",
+            "공고 지역은 서울으로 희망 지역 경기과 다릅니다."
+          ],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 선호한 성견 조건과 일치합니다. 공고상 크기는 소형견으로, 선호한 대형견과 다릅니다. 공고 지역은 서울으로 희망 지역 경기과 다릅니다."
+        },
+        {
+          "notice_id": "441570202600369",
+          "baseline_rank": 7,
+          "reranked_rank": 9,
+          "rank_change": -2,
+          "retrieval_score": 0.588,
+          "compatibility_score": 0.333333,
+          "final_score": 0.671333,
+          "silver_label": {
+            "relevance_grade": 0.333333,
+            "binary_relevant": false,
+            "match_count": 1,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "mismatch",
+              "preferred_age": "mismatch",
+              "preferred_region": "matched"
+            },
+            "appearance": {
+              "size": "medium",
+              "age_group": "puppy",
+              "region": "경기",
+              "source_values": {
+                "weight": "10.00(Kg)",
+                "age": "2025(년생)",
+                "region_text": "경기도 여주시 경기도 여주시 여양2로 42 (천송동) 흥천면 문장리 위더스 동물보호센터"
+              },
+              "parsed_values": {
+                "weight_kg": 10.0,
+                "age_years": 1.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "희망 지역과 일치합니다."
+          ],
+          "caution_conditions": [
+            "공고상 크기는 중형견으로, 선호한 대형견과 다릅니다.",
+            "공고상 연령대는 어린 개체으로, 선호한 성견과 다릅니다."
+          ],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 희망 지역과 일치합니다. 공고상 크기는 중형견으로, 선호한 대형견과 다릅니다. 공고상 연령대는 어린 개체으로, 선호한 성견과 다릅니다."
+        },
+        {
+          "notice_id": "441570202600361",
+          "baseline_rank": 8,
+          "reranked_rank": 3,
+          "rank_change": 5,
+          "retrieval_score": 0.586,
+          "compatibility_score": 1.0,
+          "final_score": 0.836,
+          "silver_label": {
+            "relevance_grade": 1.0,
+            "binary_relevant": true,
+            "match_count": 3,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "matched",
+              "preferred_age": "matched",
+              "preferred_region": "matched"
+            },
+            "appearance": {
+              "size": "large",
+              "age_group": "adult",
+              "region": "경기",
+              "source_values": {
+                "weight": "24.00(Kg)",
+                "age": "2023(년생)",
+                "region_text": "경기도 여주시 경기도 여주시 여양2로 42 (천송동) 흥천면 문장리 위더스 동물보호센터"
+              },
+              "parsed_values": {
+                "weight_kg": 24.0,
+                "age_years": 3.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "선호한 대형견 조건과 일치합니다.",
+            "선호한 성견 조건과 일치합니다.",
+            "희망 지역과 일치합니다."
+          ],
+          "caution_conditions": [],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 선호한 대형견 조건과 일치합니다. 선호한 성견 조건과 일치합니다. 희망 지역과 일치합니다."
+        },
+        {
+          "notice_id": "411315202600532",
+          "baseline_rank": 9,
+          "reranked_rank": 10,
+          "rank_change": -1,
+          "retrieval_score": 0.584,
+          "compatibility_score": 0.333333,
+          "final_score": 0.667333,
+          "silver_label": {
+            "relevance_grade": 0.333333,
+            "binary_relevant": false,
+            "match_count": 1,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "mismatch",
+              "preferred_age": "matched",
+              "preferred_region": "mismatch"
+            },
+            "appearance": {
+              "size": "small",
+              "age_group": "adult",
+              "region": "서울",
+              "source_values": {
+                "weight": "4.3(Kg)",
+                "age": "2021(년생)",
+                "region_text": "서울특별시 강서구 경기도 양주시 남면 감악산로 63-37 (남면) 한국동물구조관리협회 서울 강서구 등촌로13자길 39-9 (화곡동, 리치팰리스) 한국동물구조관리협회"
+              },
+              "parsed_values": {
+                "weight_kg": 4.3,
+                "age_years": 5.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "선호한 성견 조건과 일치합니다."
+          ],
+          "caution_conditions": [
+            "공고상 크기는 소형견으로, 선호한 대형견과 다릅니다.",
+            "공고 지역은 서울으로 희망 지역 경기과 다릅니다."
+          ],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 선호한 성견 조건과 일치합니다. 공고상 크기는 소형견으로, 선호한 대형견과 다릅니다. 공고 지역은 서울으로 희망 지역 경기과 다릅니다."
+        },
+        {
+          "notice_id": "441570202600371",
+          "baseline_rank": 10,
+          "reranked_rank": 5,
+          "rank_change": 5,
+          "retrieval_score": 0.582,
+          "compatibility_score": 0.666667,
+          "final_score": 0.748667,
+          "silver_label": {
+            "relevance_grade": 0.666667,
+            "binary_relevant": false,
+            "match_count": 2,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "mismatch",
+              "preferred_age": "matched",
+              "preferred_region": "matched"
+            },
+            "appearance": {
+              "size": "small",
+              "age_group": "adult",
+              "region": "경기",
+              "source_values": {
+                "weight": "5.50(Kg)",
+                "age": "2023(년생)",
+                "region_text": "경기도 여주시 경기도 여주시 여양2로 42 (천송동) 현암동 현암3길 위더스 동물보호센터"
+              },
+              "parsed_values": {
+                "weight_kg": 5.5,
+                "age_years": 3.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "선호한 성견 조건과 일치합니다.",
+            "희망 지역과 일치합니다."
+          ],
+          "caution_conditions": [
+            "공고상 크기는 소형견으로, 선호한 대형견과 다릅니다."
+          ],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 선호한 성견 조건과 일치합니다. 희망 지역과 일치합니다. 공고상 크기는 소형견으로, 선호한 대형견과 다릅니다."
+        },
+        {
+          "notice_id": "441570202600359",
+          "baseline_rank": 11,
+          "reranked_rank": 4,
+          "rank_change": 7,
+          "retrieval_score": 0.58,
+          "compatibility_score": 1.0,
+          "final_score": 0.83,
+          "silver_label": {
+            "relevance_grade": 1.0,
+            "binary_relevant": true,
+            "match_count": 3,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "matched",
+              "preferred_age": "matched",
+              "preferred_region": "matched"
+            },
+            "appearance": {
+              "size": "large",
+              "age_group": "adult",
+              "region": "경기",
+              "source_values": {
+                "weight": "23.00(Kg)",
+                "age": "2023(년생)",
+                "region_text": "경기도 여주시 경기도 여주시 여양2로 42 (천송동) 흥천면 문장리 위더스 동물보호센터"
+              },
+              "parsed_values": {
+                "weight_kg": 23.0,
+                "age_years": 3.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "선호한 대형견 조건과 일치합니다.",
+            "선호한 성견 조건과 일치합니다.",
+            "희망 지역과 일치합니다."
+          ],
+          "caution_conditions": [],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 선호한 대형견 조건과 일치합니다. 선호한 성견 조건과 일치합니다. 희망 지역과 일치합니다."
+        },
+        {
+          "notice_id": "411315202600531",
+          "baseline_rank": 12,
+          "reranked_rank": 11,
+          "rank_change": 1,
+          "retrieval_score": 0.578,
+          "compatibility_score": 0.333333,
+          "final_score": 0.661333,
+          "silver_label": {
+            "relevance_grade": 0.333333,
+            "binary_relevant": false,
+            "match_count": 1,
+            "known_count": 3,
+            "applicable_count": 3,
+            "condition_states": {
+              "preferred_size": "mismatch",
+              "preferred_age": "matched",
+              "preferred_region": "mismatch"
+            },
+            "appearance": {
+              "size": "small",
+              "age_group": "adult",
+              "region": "서울",
+              "source_values": {
+                "weight": "7.3(Kg)",
+                "age": "2021(년생)",
+                "region_text": "서울특별시 강서구 경기도 양주시 남면 감악산로 63-37 (남면) 한국동물구조관리협회 서울 강서구 등촌로13자길 39-9 (화곡동, 리치팰리스) 한국동물구조관리협회"
+              },
+              "parsed_values": {
+                "weight_kg": 7.3,
+                "age_years": 5.0
+              }
+            }
+          },
+          "matched_conditions": [
+            "선호한 성견 조건과 일치합니다."
+          ],
+          "caution_conditions": [
+            "공고상 크기는 소형견으로, 선호한 대형견과 다릅니다.",
+            "공고 지역은 서울으로 희망 지역 경기과 다릅니다."
+          ],
+          "unknown_conditions": [],
+          "recommendation_reason": "확인된 조건 3/3. 선호한 성견 조건과 일치합니다. 공고상 크기는 소형견으로, 선호한 대형견과 다릅니다. 공고 지역은 서울으로 희망 지역 경기과 다릅니다."
+        }
+      ]
+    }
+  ],
+  "quality_weight_sensitivity": {
+    "scope": "fixed_pool_quality_weight_sensitivity",
+    "evaluation_type": "deterministic_sensitivity_contract_not_performance",
+    "claim_boundary": "Compares ordering sensitivity only; it does not show search quality, user utility, or an optimal weight.",
+    "settings": {
+      "control_quality_weight": 0.0,
+      "production_default_quality_weight": 0.05,
+      "code_default_quality_weight": 0.05,
+      "top_k": 5,
+      "primary_contract_quality_weight": 0.0,
+      "compatibility_weight": 0.25,
+      "control_matches_primary_contract": true,
+      "production_default_matches_code_default": true
+    },
+    "quality_coverage": {
+      "candidate_count": 12,
+      "known_count": 11,
+      "unknown_count": 1,
+      "known_rate": 0.916667,
+      "unknown_rate": 0.083333,
+      "known_candidate_ids": [
+        "426339202600306",
+        "441570202600363",
+        "411319202600337",
+        "411318202600342",
+        "441570202600362",
+        "411310202600444",
+        "441570202600369",
+        "441570202600361",
+        "411315202600532",
+        "441570202600359",
+        "411315202600531"
+      ],
+      "unknown_candidate_ids": [
+        "441570202600371"
+      ],
+      "quality_scores": {
+        "426339202600306": 0.8673,
+        "441570202600363": 0.9548,
+        "411319202600337": 0.9163,
+        "411318202600342": 0.9403,
+        "441570202600362": 0.9778,
+        "411310202600444": 0.6732,
+        "441570202600369": 0.9665,
+        "441570202600361": 0.9812,
+        "411315202600532": 0.9333,
+        "441570202600371": null,
+        "441570202600359": 0.955,
+        "411315202600531": 0.9186
+      },
+      "known_quality_score_stats": {
+        "min": 0.6732,
+        "mean": 0.916755,
+        "max": 0.9812
+      },
+      "known_quality_bonus_at_production_default_stats": {
+        "min": 0.03366,
+        "mean": 0.045838,
+        "max": 0.04906
+      }
+    },
+    "unknown_quality_policy": "Unknown receives no direct quality term, while known candidates can gain a relative bonus; rank and neighboring score margins are therefore reported separately.",
+    "summary": {
+      "passed": true,
+      "failure_count": 0,
+      "failure_details": [],
+      "profile_count": 2,
+      "profiles_with_top1_change": 0,
+      "profiles_with_top_k_membership_change": 0,
+      "profiles_with_top_k_position_change": 1,
+      "mean_profile_mean_absolute_rank_shift": 0.5,
+      "max_absolute_rank_shift_across_profiles": 3,
+      "unknown_profile_observation_count": 2,
+      "unknown_observations_with_rank_change": 0,
+      "unknown_observations_with_direct_score_change": 0,
+      "unknown_observations_with_relative_context_change": 2
+    },
+    "profiles": [
+      {
+        "profile_id": "profile_a_small_adult_seoul",
+        "label": "A: 서울·소형·성견 선호",
+        "control_order": [
+          "411319202600337",
+          "411310202600444",
+          "411315202600532",
+          "411315202600531",
+          "411318202600342",
+          "441570202600371",
+          "426339202600306",
+          "441570202600363",
+          "441570202600362",
+          "441570202600361",
+          "441570202600359",
+          "441570202600369"
+        ],
+        "production_default_order": [
+          "411319202600337",
+          "411315202600532",
+          "411315202600531",
+          "411310202600444",
+          "411318202600342",
+          "441570202600371",
+          "441570202600363",
+          "426339202600306",
+          "441570202600362",
+          "441570202600361",
+          "441570202600359",
+          "441570202600369"
+        ],
+        "top1": {
+          "control_notice_id": "411319202600337",
+          "production_default_notice_id": "411319202600337",
+          "changed": false
+        },
+        "top_k_membership": {
+          "k": 5,
+          "control_notice_ids": [
+            "411319202600337",
+            "411310202600444",
+            "411315202600532",
+            "411315202600531",
+            "411318202600342"
+          ],
+          "production_default_notice_ids": [
+            "411319202600337",
+            "411315202600532",
+            "411315202600531",
+            "411310202600444",
+            "411318202600342"
+          ],
+          "entered_notice_ids": [],
+          "exited_notice_ids": [],
+          "replacement_count": 0,
+          "changed_candidate_count": 0
+        },
+        "top_k_position": {
+          "changed_candidate_count": 3,
+          "changed_notice_ids": [
+            "411310202600444",
+            "411315202600532",
+            "411315202600531"
+          ],
+          "changed_slot_count": 3,
+          "changed_slots": [
+            {
+              "rank": 2,
+              "control_notice_id": "411310202600444",
+              "production_default_notice_id": "411315202600532"
+            },
+            {
+              "rank": 3,
+              "control_notice_id": "411315202600532",
+              "production_default_notice_id": "411315202600531"
+            },
+            {
+              "rank": 4,
+              "control_notice_id": "411315202600531",
+              "production_default_notice_id": "411310202600444"
+            }
+          ]
+        },
+        "all_candidate_rank_change": {
+          "changed_candidates": 5,
+          "mean_absolute_rank_change": 0.5,
+          "max_absolute_rank_change": 2,
+          "top1_changed": false,
+          "shifts": {
+            "411319202600337": 0,
+            "411310202600444": -2,
+            "411315202600532": 1,
+            "411315202600531": 1,
+            "411318202600342": 0,
+            "441570202600371": 0,
+            "426339202600306": -1,
+            "441570202600363": 1,
+            "441570202600362": 0,
+            "441570202600361": 0,
+            "441570202600359": 0,
+            "441570202600369": 0
+          }
+        },
+        "unknown_quality_candidates": [
+          {
+            "notice_id": "441570202600371",
+            "quality_score": null,
+            "control": {
+              "rank": 6,
+              "final_score": 0.748667,
+              "higher_notice_id": "411318202600342",
+              "margin_to_higher": 0.012,
+              "lower_notice_id": "426339202600306",
+              "margin_over_lower": 0.065334
+            },
+            "production_default": {
+              "rank": 6,
+              "final_score": 0.748667,
+              "higher_notice_id": "411318202600342",
+              "margin_to_higher": 0.059015,
+              "lower_notice_id": "441570202600363",
+              "margin_over_lower": 0.019594
+            },
+            "rank_shift": 0,
+            "score_delta": 0.0,
+            "direct_score_neutral": true,
+            "relative_neighbor_or_margin_changed": true
+          }
+        ]
+      },
+      {
+        "profile_id": "profile_b_large_adult_gyeonggi",
+        "label": "B: 경기·대형·성견 선호",
+        "control_order": [
+          "441570202600363",
+          "441570202600362",
+          "441570202600361",
+          "441570202600359",
+          "441570202600371",
+          "426339202600306",
+          "411319202600337",
+          "411310202600444",
+          "441570202600369",
+          "411315202600532",
+          "411315202600531",
+          "411318202600342"
+        ],
+        "production_default_order": [
+          "441570202600363",
+          "441570202600362",
+          "441570202600361",
+          "441570202600359",
+          "441570202600371",
+          "426339202600306",
+          "411319202600337",
+          "441570202600369",
+          "411315202600532",
+          "411315202600531",
+          "411310202600444",
+          "411318202600342"
+        ],
+        "top1": {
+          "control_notice_id": "441570202600363",
+          "production_default_notice_id": "441570202600363",
+          "changed": false
+        },
+        "top_k_membership": {
+          "k": 5,
+          "control_notice_ids": [
+            "441570202600363",
+            "441570202600362",
+            "441570202600361",
+            "441570202600359",
+            "441570202600371"
+          ],
+          "production_default_notice_ids": [
+            "441570202600363",
+            "441570202600362",
+            "441570202600361",
+            "441570202600359",
+            "441570202600371"
+          ],
+          "entered_notice_ids": [],
+          "exited_notice_ids": [],
+          "replacement_count": 0,
+          "changed_candidate_count": 0
+        },
+        "top_k_position": {
+          "changed_candidate_count": 0,
+          "changed_notice_ids": [],
+          "changed_slot_count": 0,
+          "changed_slots": []
+        },
+        "all_candidate_rank_change": {
+          "changed_candidates": 4,
+          "mean_absolute_rank_change": 0.5,
+          "max_absolute_rank_change": 3,
+          "top1_changed": false,
+          "shifts": {
+            "441570202600363": 0,
+            "441570202600362": 0,
+            "441570202600361": 0,
+            "441570202600359": 0,
+            "441570202600371": 0,
+            "426339202600306": 0,
+            "411319202600337": 0,
+            "411310202600444": -3,
+            "441570202600369": 1,
+            "411315202600532": 1,
+            "411315202600531": 1,
+            "411318202600342": 0
+          }
+        },
+        "unknown_quality_candidates": [
+          {
+            "notice_id": "441570202600371",
+            "quality_score": null,
+            "control": {
+              "rank": 5,
+              "final_score": 0.748667,
+              "higher_notice_id": "441570202600359",
+              "margin_to_higher": 0.081333,
+              "lower_notice_id": "426339202600306",
+              "margin_over_lower": 0.065334
+            },
+            "production_default": {
+              "rank": 5,
+              "final_score": 0.748667,
+              "higher_notice_id": "441570202600359",
+              "margin_to_higher": 0.129083,
+              "lower_notice_id": "426339202600306",
+              "margin_over_lower": 0.021969
+            },
+            "rank_shift": 0,
+            "score_delta": 0.0,
+            "direct_score_neutral": true,
+            "relative_neighbor_or_margin_changed": true
+          }
+        ]
+      }
+    ],
+    "limitations": [
+      "The 12 fixed candidates use deterministic synthetic retrieval scores and two configured profiles.",
+      "Photo quality is a technical image-usability heuristic, not animal quality, adoption suitability, or human relevance judgment.",
+      "Only one fixed candidate has unknown photo quality, so unknown relative effects do not generalize beyond this pool."
+    ]
+  },
+  "limitations": [
+    "This is a deterministic implementation contract, not independent evidence that reranking improves user outcomes or search relevance.",
+    "Silver labels are deterministic proxies derived from public notice fields, not human judgments of adoption suitability.",
+    "The fixed candidate pool isolates reranking behavior; it does not evaluate retrieval recall or population-level generalization.",
+    "The quality-weight appendix compares ordering sensitivity on 12 fixed candidates and two profiles; it is not evidence of performance improvement or an optimal weight.",
+    "Photo quality is a technical image-usability heuristic, not animal quality or adoption suitability.",
+    "Only size, age group, and region are scored. Personality, activity, absence time, children, and other-pet compatibility are not inferred or scored.",
+    "Notice state and metadata reflect the fixed reference date; shelter confirmation is still required before a visit."
+  ]
+}

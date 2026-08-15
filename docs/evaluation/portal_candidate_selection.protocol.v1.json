@@ -1,0 +1,129 @@
+{
+  "schema_version": "portal-candidate-selection-template.v1",
+  "registration_status": "template_no_human_results",
+  "protocol_id_base": "portal-e2e-appearance-v1",
+  "purpose": "Compare end-to-end time to confirm three active, appearance-relevant candidates in the official portal and Meongtamjeong.",
+  "design": {
+    "participant_min": 3,
+    "participant_target": 4,
+    "participant_max": 5,
+    "selection_count": 3,
+    "time_cap_seconds": 300,
+    "blind_label_seed": 20260726,
+    "species": "dog",
+    "active_status_source": "official_notice_detail_at_selection",
+    "blind_relevance_source_hidden": true,
+    "systems": [
+      {
+        "system_id": "official_portal",
+        "label": "국가동물보호정보시스템",
+        "entry_url": "https://www.animal.go.kr/front/awtis/public/publicList.do?menuNo=1000000055"
+      },
+      {
+        "system_id": "meongtamjeong",
+        "label": "멍탐정",
+        "entry_url": "http://127.0.0.1:8000/demo"
+      }
+    ],
+    "tasks": [
+      {
+        "task_id": "brown-small",
+        "prompt": "갈색 소형견을 찾아줘",
+        "criteria": {
+          "colors_any": ["brown"],
+          "sizes_any": ["small"],
+          "active_only": true
+        }
+      },
+      {
+        "task_id": "jeju-white-puppy",
+        "prompt": "제주에서 보호 중인 흰색 어린 강아지",
+        "criteria": {
+          "colors_any": ["white"],
+          "age_hints_any": ["puppy"],
+          "regions_any": ["제주"],
+          "active_only": true
+        }
+      },
+      {
+        "task_id": "gyeongnam-black-small",
+        "prompt": "경남의 검정색 소형견",
+        "criteria": {
+          "colors_any": ["black"],
+          "sizes_any": ["small"],
+          "regions_any": ["경남"],
+          "active_only": true
+        }
+      },
+      {
+        "task_id": "senior-under-8kg",
+        "prompt": "8kg 이하의 노령 소형견",
+        "criteria": {
+          "weight_kg": {"max": 8.0},
+          "age_hints_any": ["senior"],
+          "active_only": true
+        }
+      }
+    ],
+    "sequences": {
+      "S1": [
+        {"trial_index": 1, "task_id": "brown-small", "system_id": "official_portal"},
+        {"trial_index": 2, "task_id": "jeju-white-puppy", "system_id": "meongtamjeong"},
+        {"trial_index": 3, "task_id": "gyeongnam-black-small", "system_id": "meongtamjeong"},
+        {"trial_index": 4, "task_id": "senior-under-8kg", "system_id": "official_portal"}
+      ],
+      "S2": [
+        {"trial_index": 1, "task_id": "jeju-white-puppy", "system_id": "meongtamjeong"},
+        {"trial_index": 2, "task_id": "gyeongnam-black-small", "system_id": "official_portal"},
+        {"trial_index": 3, "task_id": "senior-under-8kg", "system_id": "official_portal"},
+        {"trial_index": 4, "task_id": "brown-small", "system_id": "meongtamjeong"}
+      ],
+      "S3": [
+        {"trial_index": 1, "task_id": "gyeongnam-black-small", "system_id": "official_portal"},
+        {"trial_index": 2, "task_id": "senior-under-8kg", "system_id": "meongtamjeong"},
+        {"trial_index": 3, "task_id": "brown-small", "system_id": "meongtamjeong"},
+        {"trial_index": 4, "task_id": "jeju-white-puppy", "system_id": "official_portal"}
+      ],
+      "S4": [
+        {"trial_index": 1, "task_id": "senior-under-8kg", "system_id": "meongtamjeong"},
+        {"trial_index": 2, "task_id": "brown-small", "system_id": "official_portal"},
+        {"trial_index": 3, "task_id": "jeju-white-puppy", "system_id": "official_portal"},
+        {"trial_index": 4, "task_id": "gyeongnam-black-small", "system_id": "meongtamjeong"}
+      ]
+    },
+    "outcome_policy": {
+      "completed": "Exactly three unique candidates whose official detail pages are active.",
+      "time_cap": "Five-minute cap reached before three active candidates; duration is the cap.",
+      "participant_stopped": "Participant chose to stop before the cap; capped as five minutes in time comparison.",
+      "network_failure": "Network failure prevented continuation; reported separately and excluded from capped-time comparison.",
+      "technical_failure": "Browser or product failure prevented continuation; reported separately and excluded from capped-time comparison."
+    },
+    "metrics": {
+      "primary": [
+        "completion_rate_all_scheduled",
+        "participant_median_capped_time_to_three_active_candidates"
+      ],
+      "guardrail": [
+        "blind_relevance_of_final_candidates",
+        "outcome_counts_by_failure_type"
+      ],
+      "inferential_statistics": false
+    },
+    "privacy": {
+      "participant_code_only": true,
+      "free_text": false,
+      "names_emails_phones_ip_user_agent": false,
+      "exact_start_end_timestamp": false,
+      "candidate_public_notice_id_and_url": true
+    },
+    "scope_exclusions": [
+      "shelter_contact",
+      "shelter_visit",
+      "adoption_outcome",
+      "temperament",
+      "health",
+      "safety",
+      "child_or_pet_compatibility"
+    ]
+  }
+}

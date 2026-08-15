@@ -1,7 +1,9 @@
 import argparse
 import json
+import sys
 from pathlib import Path
 
+import pytest
 from PIL import Image
 
 import scripts.enrich_image_crops as crops
@@ -118,7 +120,9 @@ def test_process_records_preserves_crop_metadata_contract(tmp_path, monkeypatch)
         crops, "load_torchvision_detector", lambda model, device: FakeDetector()
     )
     monkeypatch.setattr(
-        crops, "download_image", lambda url: Image.new("RGB", (100, 80), "white")
+        crops,
+        "download_image",
+        lambda url, **_kwargs: Image.new("RGB", (100, 80), "white"),
     )
     monkeypatch.setattr(
         crops,
@@ -154,3 +158,116 @@ def test_process_records_preserves_crop_metadata_contract(tmp_path, monkeypatch)
     assert attrs["photo_quality_score"] == 0.75
     assert attrs["crop_photo_quality_score"] == 0.75
     assert Path(attrs["crop_path"]).exists()
+
+
+def test_extract_image_url_rejects_private_and_credential_targets() -> None:
+    assert crops.extract_image_url({"image_url": "http://127.0.0.1/private"}) == ""
+    assert (
+        crops.extract_image_url(
+            {"image_url": "https://user:password@openapi.animal.go.kr/dog.jpg"}
+        )
+        == ""
+    )
+    assert (
+        crops.extract_image_url({"image_url": "https://openapi.animal.go.kr/dog.jpg"})
+        == "https://openapi.animal.go.kr/dog.jpg"
+    )
+
+
+def test_download_image_uses_fixed_failure_without_url_or_exception_detail() -> None:
+    marker = "sensitive-upstream-detail"
+
+    class RejectingDownloader:
+        def __call__(self, url: str):
+            assert marker in url
+            return None
+
+    with pytest.raises(crops.ImageDownloadError) as caught:
+        crops.download_image(
+            f"https://openapi.animal.go.kr/dog.jpg?token={marker}",
+            downloader=RejectingDownloader(),
+        )
+
+    assert str(caught.value) == "image_download_failed"
+    assert marker not in str(caught.value)
+
+
+def test_process_records_sanitizes_current_and_previous_error_details(
+    tmp_path, monkeypatch
+) -> None:
+    source = tmp_path / "input.json"
+    output = tmp_path / "output.json"
+    source.write_text(
+        json.dumps(
+            {
+                "items": [
+                    {
+                        "desertionNo": "dog-failed",
+                        "image_url": "https://openapi.animal.go.kr/dog.jpg",
+                        "image_attrs": {"error": "old-sensitive-error-detail"},
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    class FakeDetector:
+        device = "cpu"
+
+    monkeypatch.setattr(
+        crops, "load_torchvision_detector", lambda model, device: FakeDetector()
+    )
+
+    def fail_download(url: str, **_kwargs):
+        raise crops.ImageDownloadError("new-sensitive-error-detail")
+
+    monkeypatch.setattr(crops, "download_image", fail_download)
+    args = argparse.Namespace(
+        input=source,
+        output=output,
+        crop_dir=tmp_path / "crops",
+        species="dog",
+        model=crops.DEFAULT_DETECTOR_MODEL,
+        limit=0,
+        conf=0.25,
+        imgsz=640,
+        device="cpu",
+        crop_margin=0.08,
+        checkpoint_every=0,
+        retry_missing_only=False,
+        allowed_image_hosts=None,
+    )
+
+    crops.process_records(args)
+    attrs = json.loads(output.read_text(encoding="utf-8"))["items"][0]["image_attrs"]
+
+    assert attrs["error"] == "image_download_failed"
+    assert attrs["previous_error"] == "previous_image_processing_failed"
+    assert "sensitive-error-detail" not in json.dumps(attrs)
+
+
+def test_allowed_image_host_cli_is_repeatable_and_rejects_private_host(
+    monkeypatch,
+) -> None:
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "enrich_image_crops.py",
+            "--allowed-image-host",
+            "images.example.org",
+            "--allowed-image-host",
+            "cdn.example.org",
+        ],
+    )
+    args = crops.parse_args()
+    assert args.allowed_image_hosts == ["images.example.org", "cdn.example.org"]
+
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["enrich_image_crops.py", "--allowed-image-host", "127.0.0.1"],
+    )
+    with pytest.raises(SystemExit):
+        crops.parse_args()

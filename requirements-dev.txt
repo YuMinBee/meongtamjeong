@@ -8,5 +8,5 @@ pydantic>=2,<3
 python-dotenv>=1,<2
 python-multipart>=0.0.9,<1
 requests>=2.31,<3
-pytest>=8,<9
+pytest>=9.0.3,<10
 ruff==0.15.21

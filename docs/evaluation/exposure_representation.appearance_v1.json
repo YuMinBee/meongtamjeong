@@ -1,0 +1,3813 @@
+{
+  "schema_version": "exposure-representation.v1",
+  "evaluation_id": "exposure_representation.appearance_v1",
+  "reference_date": "2026-07-26",
+  "scope": "descriptive_retrieval_exposure_not_normative_fairness",
+  "method": {
+    "ranking_recomputed": false,
+    "ranking_logic_changed": false,
+    "systems": [
+      "clip_active",
+      "hybrid_natural_graph"
+    ],
+    "query_count": 12,
+    "top_k": 10,
+    "exposure_unit": "one equal-weight Top-K slot; repeated notices across different queries count once per query",
+    "representation_denominator": "unique active notices",
+    "group_dimensions": [
+      "region",
+      "shelter",
+      "size",
+      "age",
+      "photo_quality"
+    ],
+    "unknown_policy": "missing or unrecognized values are retained as the explicit unknown group",
+    "ratio_formula": "exposure_share / corpus_representation_share",
+    "zero_representation_ratio": null,
+    "query_evidence_dimensions": {
+      "color": "criteria.colors_any -> public notice color",
+      "size": "criteria.sizes_any or criteria.weight_kg -> public notice weight",
+      "age": "criteria.age_hints_any -> public notice age",
+      "region": "criteria.regions_any -> public notice region"
+    },
+    "active_only_is_filter_not_evidence_dimension": true
+  },
+  "inputs": {
+    "dog_metas": {
+      "path": "data/dog_metas.json",
+      "sha256": "723a4df01e2802ad5d42bd276eefbded097a0a6e72900784395c4c19626b6c00",
+      "rows": 3746
+    },
+    "retrieval_report": {
+      "path": "docs/evaluation/retrieval_eval.appearance_v1.json",
+      "sha256": "30e7ea0c94d725b8cfe7c76147d8c91e7db807df9bab2486b68cabb93e4f019f"
+    },
+    "queries": {
+      "path": "data/eval_queries.appearance_v1.json",
+      "sha256": "fb8713b31d1210ee72eeb1ceb2dca37cceb24777dc3f00142a9adec6d090c03d",
+      "count": 12
+    },
+    "source_retrieval_artifact_sha256": {
+      "index": "2722aef8257b8748bd2cdd00d4224e7b4dee3d1d552a235439eb4c97c71aface",
+      "metas": "723a4df01e2802ad5d42bd276eefbded097a0a6e72900784395c4c19626b6c00",
+      "queries": "fb8713b31d1210ee72eeb1ceb2dca37cceb24777dc3f00142a9adec6d090c03d"
+    }
+  },
+  "corpus": {
+    "metadata_rows": 3746,
+    "active_unique_notices": 1516
+  },
+  "systems": {
+    "clip_active": {
+      "role": "status_matched_baseline",
+      "query_count": 12,
+      "top_k": 10,
+      "exposure_slots": 120,
+      "unique_exposed_notice_count": 50,
+      "query_evidence_coverage": {
+        "overall": {
+          "applicable_count": 300,
+          "evaluated_count": 297,
+          "unknown_count": 3,
+          "evidence_coverage": 0.99
+        },
+        "by_dimension": {
+          "color": {
+            "applicable_count": 80,
+            "evaluated_count": 77,
+            "unknown_count": 3,
+            "evidence_coverage": 0.9625
+          },
+          "size": {
+            "applicable_count": 110,
+            "evaluated_count": 110,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          "age": {
+            "applicable_count": 50,
+            "evaluated_count": 50,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          "region": {
+            "applicable_count": 60,
+            "evaluated_count": 60,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          }
+        },
+        "queries": [
+          {
+            "query_id": "brown-small",
+            "applicable_dimensions": [
+              "color",
+              "size"
+            ],
+            "result_count": 10,
+            "applicable_count": 20,
+            "evaluated_count": 20,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          {
+            "query_id": "white-tiny",
+            "applicable_dimensions": [
+              "color",
+              "size"
+            ],
+            "result_count": 10,
+            "applicable_count": 20,
+            "evaluated_count": 20,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          {
+            "query_id": "black-medium",
+            "applicable_dimensions": [
+              "color",
+              "size"
+            ],
+            "result_count": 10,
+            "applicable_count": 20,
+            "evaluated_count": 19,
+            "unknown_count": 1,
+            "evidence_coverage": 0.95
+          },
+          {
+            "query_id": "cream-small",
+            "applicable_dimensions": [
+              "color",
+              "size"
+            ],
+            "result_count": 10,
+            "applicable_count": 20,
+            "evaluated_count": 20,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          {
+            "query_id": "gyeonggi-small-adult",
+            "applicable_dimensions": [
+              "size",
+              "age",
+              "region"
+            ],
+            "result_count": 10,
+            "applicable_count": 30,
+            "evaluated_count": 30,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          {
+            "query_id": "seoul-small-puppy",
+            "applicable_dimensions": [
+              "size",
+              "age",
+              "region"
+            ],
+            "result_count": 10,
+            "applicable_count": 30,
+            "evaluated_count": 30,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          {
+            "query_id": "jeju-white-puppy",
+            "applicable_dimensions": [
+              "color",
+              "age",
+              "region"
+            ],
+            "result_count": 10,
+            "applicable_count": 30,
+            "evaluated_count": 30,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          {
+            "query_id": "jeonbuk-brown-large",
+            "applicable_dimensions": [
+              "color",
+              "size",
+              "region"
+            ],
+            "result_count": 10,
+            "applicable_count": 30,
+            "evaluated_count": 30,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          {
+            "query_id": "gyeongnam-black-small",
+            "applicable_dimensions": [
+              "color",
+              "size",
+              "region"
+            ],
+            "result_count": 10,
+            "applicable_count": 30,
+            "evaluated_count": 29,
+            "unknown_count": 1,
+            "evidence_coverage": 0.966667
+          },
+          {
+            "query_id": "gyeonggi-tan-medium",
+            "applicable_dimensions": [
+              "color",
+              "size",
+              "region"
+            ],
+            "result_count": 10,
+            "applicable_count": 30,
+            "evaluated_count": 29,
+            "unknown_count": 1,
+            "evidence_coverage": 0.966667
+          },
+          {
+            "query_id": "adult-3-to-8kg",
+            "applicable_dimensions": [
+              "size",
+              "age"
+            ],
+            "result_count": 10,
+            "applicable_count": 20,
+            "evaluated_count": 20,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          {
+            "query_id": "senior-under-8kg",
+            "applicable_dimensions": [
+              "size",
+              "age"
+            ],
+            "result_count": 10,
+            "applicable_count": 20,
+            "evaluated_count": 20,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          }
+        ]
+      }
+    },
+    "hybrid_natural_graph": {
+      "role": "headline_natural_only",
+      "query_count": 12,
+      "top_k": 10,
+      "exposure_slots": 120,
+      "unique_exposed_notice_count": 116,
+      "query_evidence_coverage": {
+        "overall": {
+          "applicable_count": 300,
+          "evaluated_count": 300,
+          "unknown_count": 0,
+          "evidence_coverage": 1.0
+        },
+        "by_dimension": {
+          "color": {
+            "applicable_count": 80,
+            "evaluated_count": 80,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          "size": {
+            "applicable_count": 110,
+            "evaluated_count": 110,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          "age": {
+            "applicable_count": 50,
+            "evaluated_count": 50,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          "region": {
+            "applicable_count": 60,
+            "evaluated_count": 60,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          }
+        },
+        "queries": [
+          {
+            "query_id": "brown-small",
+            "applicable_dimensions": [
+              "color",
+              "size"
+            ],
+            "result_count": 10,
+            "applicable_count": 20,
+            "evaluated_count": 20,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          {
+            "query_id": "white-tiny",
+            "applicable_dimensions": [
+              "color",
+              "size"
+            ],
+            "result_count": 10,
+            "applicable_count": 20,
+            "evaluated_count": 20,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          {
+            "query_id": "black-medium",
+            "applicable_dimensions": [
+              "color",
+              "size"
+            ],
+            "result_count": 10,
+            "applicable_count": 20,
+            "evaluated_count": 20,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          {
+            "query_id": "cream-small",
+            "applicable_dimensions": [
+              "color",
+              "size"
+            ],
+            "result_count": 10,
+            "applicable_count": 20,
+            "evaluated_count": 20,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          {
+            "query_id": "gyeonggi-small-adult",
+            "applicable_dimensions": [
+              "size",
+              "age",
+              "region"
+            ],
+            "result_count": 10,
+            "applicable_count": 30,
+            "evaluated_count": 30,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          {
+            "query_id": "seoul-small-puppy",
+            "applicable_dimensions": [
+              "size",
+              "age",
+              "region"
+            ],
+            "result_count": 10,
+            "applicable_count": 30,
+            "evaluated_count": 30,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          {
+            "query_id": "jeju-white-puppy",
+            "applicable_dimensions": [
+              "color",
+              "age",
+              "region"
+            ],
+            "result_count": 10,
+            "applicable_count": 30,
+            "evaluated_count": 30,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          {
+            "query_id": "jeonbuk-brown-large",
+            "applicable_dimensions": [
+              "color",
+              "size",
+              "region"
+            ],
+            "result_count": 10,
+            "applicable_count": 30,
+            "evaluated_count": 30,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          {
+            "query_id": "gyeongnam-black-small",
+            "applicable_dimensions": [
+              "color",
+              "size",
+              "region"
+            ],
+            "result_count": 10,
+            "applicable_count": 30,
+            "evaluated_count": 30,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          {
+            "query_id": "gyeonggi-tan-medium",
+            "applicable_dimensions": [
+              "color",
+              "size",
+              "region"
+            ],
+            "result_count": 10,
+            "applicable_count": 30,
+            "evaluated_count": 30,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          {
+            "query_id": "adult-3-to-8kg",
+            "applicable_dimensions": [
+              "size",
+              "age"
+            ],
+            "result_count": 10,
+            "applicable_count": 20,
+            "evaluated_count": 20,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          },
+          {
+            "query_id": "senior-under-8kg",
+            "applicable_dimensions": [
+              "size",
+              "age"
+            ],
+            "result_count": 10,
+            "applicable_count": 20,
+            "evaluated_count": 20,
+            "unknown_count": 0,
+            "evidence_coverage": 1.0
+          }
+        ]
+      }
+    }
+  },
+  "dimensions": {
+    "region": {
+      "corpus_evidence_coverage": {
+        "applicable_count": 1516,
+        "evaluated_count": 1516,
+        "unknown_count": 0,
+        "evidence_coverage": 1.0
+      },
+      "groups": [
+        {
+          "group": "경기",
+          "corpus_count": 272,
+          "representation_share": 0.17942,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 55,
+              "exposure_share": 0.458333,
+              "exposure_representation_ratio": 2.554534
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 41,
+              "exposure_share": 0.341667,
+              "exposure_representation_ratio": 1.904289
+            }
+          }
+        },
+        {
+          "group": "전남",
+          "corpus_count": 197,
+          "representation_share": 0.129947,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 9,
+              "exposure_share": 0.075,
+              "exposure_representation_ratio": 0.577157
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 14,
+              "exposure_share": 0.116667,
+              "exposure_representation_ratio": 0.8978
+            }
+          }
+        },
+        {
+          "group": "경남",
+          "corpus_count": 174,
+          "representation_share": 0.114776,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 10,
+              "exposure_share": 0.083333,
+              "exposure_representation_ratio": 0.726054
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 13,
+              "exposure_share": 0.108333,
+              "exposure_representation_ratio": 0.94387
+            }
+          }
+        },
+        {
+          "group": "전북",
+          "corpus_count": 170,
+          "representation_share": 0.112137,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 6,
+              "exposure_share": 0.05,
+              "exposure_representation_ratio": 0.445882
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 11,
+              "exposure_share": 0.091667,
+              "exposure_representation_ratio": 0.817451
+            }
+          }
+        },
+        {
+          "group": "경북",
+          "corpus_count": 157,
+          "representation_share": 0.103562,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 25,
+              "exposure_share": 0.208333,
+              "exposure_representation_ratio": 2.011677
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 8,
+              "exposure_share": 0.066667,
+              "exposure_representation_ratio": 0.643737
+            }
+          }
+        },
+        {
+          "group": "충남",
+          "corpus_count": 119,
+          "representation_share": 0.078496,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 0.106162
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 3,
+              "exposure_share": 0.025,
+              "exposure_representation_ratio": 0.318487
+            }
+          }
+        },
+        {
+          "group": "제주",
+          "corpus_count": 91,
+          "representation_share": 0.060026,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 13,
+              "exposure_share": 0.108333,
+              "exposure_representation_ratio": 1.804762
+            }
+          }
+        },
+        {
+          "group": "강원",
+          "corpus_count": 69,
+          "representation_share": 0.045515,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 4,
+              "exposure_share": 0.033333,
+              "exposure_representation_ratio": 0.732367
+            }
+          }
+        },
+        {
+          "group": "충북",
+          "corpus_count": 66,
+          "representation_share": 0.043536,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 0.191414
+            }
+          }
+        },
+        {
+          "group": "인천",
+          "corpus_count": 59,
+          "representation_share": 0.038918,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 0.214124
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 4,
+              "exposure_share": 0.033333,
+              "exposure_representation_ratio": 0.856497
+            }
+          }
+        },
+        {
+          "group": "서울",
+          "corpus_count": 55,
+          "representation_share": 0.03628,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 9,
+              "exposure_share": 0.075,
+              "exposure_representation_ratio": 2.067273
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 7,
+              "exposure_share": 0.058333,
+              "exposure_representation_ratio": 1.607879
+            }
+          }
+        },
+        {
+          "group": "부산",
+          "corpus_count": 28,
+          "representation_share": 0.01847,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 4,
+              "exposure_share": 0.033333,
+              "exposure_representation_ratio": 1.804762
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "대구",
+          "corpus_count": 25,
+          "representation_share": 0.016491,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 0.505333
+            }
+          }
+        },
+        {
+          "group": "울산",
+          "corpus_count": 21,
+          "representation_share": 0.013852,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "대전",
+          "corpus_count": 11,
+          "representation_share": 0.007256,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "세종",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "unknown",
+          "corpus_count": 0,
+          "representation_share": 0.0,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": null
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": null
+            }
+          }
+        }
+      ]
+    },
+    "shelter": {
+      "corpus_evidence_coverage": {
+        "applicable_count": 1516,
+        "evaluated_count": 1516,
+        "unknown_count": 0,
+        "evidence_coverage": 1.0
+      },
+      "groups": [
+        {
+          "group": "한국동물구조관리협회",
+          "corpus_count": 120,
+          "representation_share": 0.079156,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 53,
+              "exposure_share": 0.441667,
+              "exposure_representation_ratio": 5.579722
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 31,
+              "exposure_share": 0.258333,
+              "exposure_representation_ratio": 3.263611
+            }
+          }
+        },
+        {
+          "group": "제주 동물보호센터",
+          "corpus_count": 91,
+          "representation_share": 0.060026,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 13,
+              "exposure_share": 0.108333,
+              "exposure_representation_ratio": 1.804762
+            }
+          }
+        },
+        {
+          "group": "(사)동물보호관리협회",
+          "corpus_count": 52,
+          "representation_share": 0.034301,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 6,
+              "exposure_share": 0.05,
+              "exposure_representation_ratio": 1.457692
+            }
+          }
+        },
+        {
+          "group": "한국야생동물보호협회",
+          "corpus_count": 42,
+          "representation_share": 0.027704,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "반려동물보호센터",
+          "corpus_count": 35,
+          "representation_share": 0.023087,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 2,
+              "exposure_share": 0.016667,
+              "exposure_representation_ratio": 0.721905
+            }
+          }
+        },
+        {
+          "group": "군산유기동물보호센터",
+          "corpus_count": 34,
+          "representation_share": 0.022427,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 2,
+              "exposure_share": 0.016667,
+              "exposure_representation_ratio": 0.743137
+            }
+          }
+        },
+        {
+          "group": "나주유기동물보호센터",
+          "corpus_count": 32,
+          "representation_share": 0.021108,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 5,
+              "exposure_share": 0.041667,
+              "exposure_representation_ratio": 1.973958
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "더나은동물병원",
+          "corpus_count": 30,
+          "representation_share": 0.019789,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 4,
+              "exposure_share": 0.033333,
+              "exposure_representation_ratio": 1.684444
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 6,
+              "exposure_share": 0.05,
+              "exposure_representation_ratio": 2.526667
+            }
+          }
+        },
+        {
+          "group": "위더스 동물보호센터",
+          "corpus_count": 30,
+          "representation_share": 0.019789,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 3,
+              "exposure_share": 0.025,
+              "exposure_representation_ratio": 1.263333
+            }
+          }
+        },
+        {
+          "group": "평택시동물보호센터",
+          "corpus_count": 22,
+          "representation_share": 0.014512,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 0.574242
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 2,
+              "exposure_share": 0.016667,
+              "exposure_representation_ratio": 1.148485
+            }
+          }
+        },
+        {
+          "group": "남부여동물보호소",
+          "corpus_count": 21,
+          "representation_share": 0.013852,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "울산유기동물보호센터",
+          "corpus_count": 21,
+          "representation_share": 0.013852,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "의성동물보호센터",
+          "corpus_count": 21,
+          "representation_share": 0.013852,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 0.601587
+            }
+          }
+        },
+        {
+          "group": "창원동물보호센터",
+          "corpus_count": 21,
+          "representation_share": 0.013852,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 0.601587
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 2,
+              "exposure_share": 0.016667,
+              "exposure_representation_ratio": 1.203175
+            }
+          }
+        },
+        {
+          "group": "화성시민동물보호센터",
+          "corpus_count": 21,
+          "representation_share": 0.013852,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 10,
+              "exposure_share": 0.083333,
+              "exposure_representation_ratio": 6.015873
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 5,
+              "exposure_share": 0.041667,
+              "exposure_representation_ratio": 3.007937
+            }
+          }
+        },
+        {
+          "group": "광주광역동물보호센터",
+          "corpus_count": 20,
+          "representation_share": 0.013193,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 3,
+              "exposure_share": 0.025,
+              "exposure_representation_ratio": 1.895
+            }
+          }
+        },
+        {
+          "group": "구미시 동물보호센터",
+          "corpus_count": 20,
+          "representation_share": 0.013193,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "음성군 동물보호센터",
+          "corpus_count": 20,
+          "representation_share": 0.013193,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "부산동물보호센터",
+          "corpus_count": 19,
+          "representation_share": 0.012533,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 4,
+              "exposure_share": 0.033333,
+              "exposure_representation_ratio": 2.659649
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "천안시 동물보호센터",
+          "corpus_count": 19,
+          "representation_share": 0.012533,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "한마음동물병원",
+          "corpus_count": 19,
+          "representation_share": 0.012533,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "밀양시 동물보호센터",
+          "corpus_count": 18,
+          "representation_share": 0.011873,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 9,
+              "exposure_share": 0.075,
+              "exposure_representation_ratio": 6.316667
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 0.701852
+            }
+          }
+        },
+        {
+          "group": "신안군유기동물보호소",
+          "corpus_count": 18,
+          "representation_share": 0.011873,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 0.701852
+            }
+          }
+        },
+        {
+          "group": "학교임시동물보호센터",
+          "corpus_count": 18,
+          "representation_share": 0.011873,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "화순군유기동물보호소",
+          "corpus_count": 18,
+          "representation_share": 0.011873,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "부안군 동물보호센터",
+          "corpus_count": 17,
+          "representation_share": 0.011214,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 0.743137
+            }
+          }
+        },
+        {
+          "group": "상주시 동물보호센터",
+          "corpus_count": 17,
+          "representation_share": 0.011214,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 0.743137
+            }
+          }
+        },
+        {
+          "group": "경주동물사랑보호센터",
+          "corpus_count": 16,
+          "representation_share": 0.010554,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 0.789583
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 0.789583
+            }
+          }
+        },
+        {
+          "group": "고양시동물보호센터",
+          "corpus_count": 16,
+          "representation_share": 0.010554,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 3,
+              "exposure_share": 0.025,
+              "exposure_representation_ratio": 2.36875
+            }
+          }
+        },
+        {
+          "group": "논산시 동물보호센터",
+          "corpus_count": 15,
+          "representation_share": 0.009894,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 0.842222
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "익산유기동물보호소",
+          "corpus_count": 15,
+          "representation_share": 0.009894,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 2,
+              "exposure_share": 0.016667,
+              "exposure_representation_ratio": 1.684444
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 0.842222
+            }
+          }
+        },
+        {
+          "group": "(사)영일동물플러스",
+          "corpus_count": 14,
+          "representation_share": 0.009235,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 24,
+              "exposure_share": 0.2,
+              "exposure_representation_ratio": 21.657143
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 2,
+              "exposure_share": 0.016667,
+              "exposure_representation_ratio": 1.804762
+            }
+          }
+        },
+        {
+          "group": "공주시 동물보호센터",
+          "corpus_count": 14,
+          "representation_share": 0.009235,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "인월동물병원",
+          "corpus_count": 14,
+          "representation_share": 0.009235,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "함안군동물보호센터",
+          "corpus_count": 14,
+          "representation_share": 0.009235,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "담양군 동물보호센터",
+          "corpus_count": 13,
+          "representation_share": 0.008575,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "원주시동물보호센터",
+          "corpus_count": 12,
+          "representation_share": 0.007916,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 2,
+              "exposure_share": 0.016667,
+              "exposure_representation_ratio": 2.105556
+            }
+          }
+        },
+        {
+          "group": "최동물병원",
+          "corpus_count": 12,
+          "representation_share": 0.007916,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 2,
+              "exposure_share": 0.016667,
+              "exposure_representation_ratio": 2.105556
+            }
+          }
+        },
+        {
+          "group": "하나동물병원",
+          "corpus_count": 12,
+          "representation_share": 0.007916,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "당진시동물보호소",
+          "corpus_count": 11,
+          "representation_share": 0.007256,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "대전동물보호센터",
+          "corpus_count": 11,
+          "representation_share": 0.007256,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "안성시동물보호센터",
+          "corpus_count": 11,
+          "representation_share": 0.007256,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 2,
+              "exposure_share": 0.016667,
+              "exposure_representation_ratio": 2.29697
+            }
+          }
+        },
+        {
+          "group": "용인시 동물보호센터",
+          "corpus_count": 11,
+          "representation_share": 0.007256,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "의령군 동물보호센터",
+          "corpus_count": 11,
+          "representation_share": 0.007256,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "해남유기동물보호센터",
+          "corpus_count": 11,
+          "representation_share": 0.007256,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "강릉시 동물사랑센터",
+          "corpus_count": 10,
+          "representation_share": 0.006596,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "사천시 동물보호센터",
+          "corpus_count": 10,
+          "representation_share": 0.006596,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "아산동물복지지원센터",
+          "corpus_count": 10,
+          "representation_share": 0.006596,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "태민동물보호센터",
+          "corpus_count": 10,
+          "representation_share": 0.006596,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 1.263333
+            }
+          }
+        },
+        {
+          "group": "행복한동물병원",
+          "corpus_count": 10,
+          "representation_share": 0.006596,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "목포시유기동물보호소",
+          "corpus_count": 9,
+          "representation_share": 0.005937,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "시흥동물누리보호센터",
+          "corpus_count": 9,
+          "representation_share": 0.005937,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "신영재동물병원",
+          "corpus_count": 9,
+          "representation_share": 0.005937,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 3,
+              "exposure_share": 0.025,
+              "exposure_representation_ratio": 4.211111
+            }
+          }
+        },
+        {
+          "group": "유기동물 삼호 보호소",
+          "corpus_count": 9,
+          "representation_share": 0.005937,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 4,
+              "exposure_share": 0.033333,
+              "exposure_representation_ratio": 5.614815
+            }
+          }
+        },
+        {
+          "group": "임실유기동물보호센터",
+          "corpus_count": 9,
+          "representation_share": 0.005937,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "진주시동물보호센터",
+          "corpus_count": 9,
+          "representation_share": 0.005937,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "철원군",
+          "corpus_count": 9,
+          "representation_share": 0.005937,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "고령군 유기견 보호소",
+          "corpus_count": 8,
+          "representation_share": 0.005277,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "곡성군동물보호소",
+          "corpus_count": 8,
+          "representation_share": 0.005277,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "광주TNR동물병원초월",
+          "corpus_count": 8,
+          "representation_share": 0.005277,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "서산시 동물보호센터",
+          "corpus_count": 8,
+          "representation_share": 0.005277,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "양구군유기동물보호소",
+          "corpus_count": 8,
+          "representation_share": 0.005277,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 2,
+              "exposure_share": 0.016667,
+              "exposure_representation_ratio": 3.158333
+            }
+          }
+        },
+        {
+          "group": "영천유기동물보호센터",
+          "corpus_count": 8,
+          "representation_share": 0.005277,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 2,
+              "exposure_share": 0.016667,
+              "exposure_representation_ratio": 3.158333
+            }
+          }
+        },
+        {
+          "group": "전북말산업복합센터",
+          "corpus_count": 8,
+          "representation_share": 0.005277,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "베스트동물병원",
+          "corpus_count": 7,
+          "representation_share": 0.004617,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "울진군동물보호센터",
+          "corpus_count": 7,
+          "representation_share": 0.004617,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "태백시유기동물보호소",
+          "corpus_count": 7,
+          "representation_share": 0.004617,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "거창군 동물보호소",
+          "corpus_count": 6,
+          "representation_share": 0.003958,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 2.105556
+            }
+          }
+        },
+        {
+          "group": "경산시유기동물보호소",
+          "corpus_count": 6,
+          "representation_share": 0.003958,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 2.105556
+            }
+          }
+        },
+        {
+          "group": "남해군동물보호센터",
+          "corpus_count": 6,
+          "representation_share": 0.003958,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "대구유기동물보호협회",
+          "corpus_count": 6,
+          "representation_share": 0.003958,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "양평군유기동물보호소",
+          "corpus_count": 6,
+          "representation_share": 0.003958,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 2.105556
+            }
+          }
+        },
+        {
+          "group": "영주시 동물보호센터",
+          "corpus_count": 6,
+          "representation_share": 0.003958,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "정읍시 동물보호소",
+          "corpus_count": 6,
+          "representation_share": 0.003958,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "군위종합동물병원",
+          "corpus_count": 5,
+          "representation_share": 0.003298,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "대구시수의사회(동인)",
+          "corpus_count": 5,
+          "representation_share": 0.003298,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "사단법인 동부",
+          "corpus_count": 5,
+          "representation_share": 0.003298,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "속초시유기동물보호소",
+          "corpus_count": 5,
+          "representation_share": 0.003298,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "수원시 동물보호센터",
+          "corpus_count": 5,
+          "representation_share": 0.003298,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "옥천동물병원",
+          "corpus_count": 5,
+          "representation_share": 0.003298,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "완주군유기동물보호소",
+          "corpus_count": 5,
+          "representation_share": 0.003298,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "장성군동물보호센터",
+          "corpus_count": 5,
+          "representation_share": 0.003298,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "점곡동물보호센터",
+          "corpus_count": 5,
+          "representation_share": 0.003298,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "제천시 동물보호센터",
+          "corpus_count": 5,
+          "representation_share": 0.003298,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "창녕 유기동물보호소",
+          "corpus_count": 5,
+          "representation_share": 0.003298,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 2.526667
+            }
+          }
+        },
+        {
+          "group": "청도군동물보호센터",
+          "corpus_count": 5,
+          "representation_share": 0.003298,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "칠곡유기동물보호센터",
+          "corpus_count": 5,
+          "representation_share": 0.003298,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "펫앤쉘터동물병원",
+          "corpus_count": 5,
+          "representation_share": 0.003298,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 2.526667
+            }
+          }
+        },
+        {
+          "group": "거제시동물보호센터",
+          "corpus_count": 4,
+          "representation_share": 0.002639,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 3.158333
+            }
+          }
+        },
+        {
+          "group": "광양시 임시보호소",
+          "corpus_count": 4,
+          "representation_share": 0.002639,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 4,
+              "exposure_share": 0.033333,
+              "exposure_representation_ratio": 12.633333
+            }
+          }
+        },
+        {
+          "group": "괴산증평동물보호센터",
+          "corpus_count": 4,
+          "representation_share": 0.002639,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "길동물병원",
+          "corpus_count": 4,
+          "representation_share": 0.002639,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "남양주시동물보호센터",
+          "corpus_count": 4,
+          "representation_share": 0.002639,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "쉼터 동물의료센터",
+          "corpus_count": 4,
+          "representation_share": 0.002639,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "예천군유기동물보호소",
+          "corpus_count": 4,
+          "representation_share": 0.002639,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "유기동물보호센터",
+          "corpus_count": 4,
+          "representation_share": 0.002639,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "유기동물임시보호센터",
+          "corpus_count": 4,
+          "representation_share": 0.002639,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "최종주동물병원",
+          "corpus_count": 4,
+          "representation_share": 0.002639,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "춘천시 동물보호센터",
+          "corpus_count": 4,
+          "representation_share": 0.002639,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "(사)동부동물보호협회",
+          "corpus_count": 3,
+          "representation_share": 0.001979,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "강화군 동물보호센터",
+          "corpus_count": 3,
+          "representation_share": 0.001979,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "경동동물병원",
+          "corpus_count": 3,
+          "representation_share": 0.001979,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "동부동물병원",
+          "corpus_count": 3,
+          "representation_share": 0.001979,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 4.211111
+            }
+          }
+        },
+        {
+          "group": "보령시유기동물보호소",
+          "corpus_count": 3,
+          "representation_share": 0.001979,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "순천시유기동물보호소",
+          "corpus_count": 3,
+          "representation_share": 0.001979,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "시민동물병원",
+          "corpus_count": 3,
+          "representation_share": 0.001979,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "신공항동물병원",
+          "corpus_count": 3,
+          "representation_share": 0.001979,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "영광동물보호센터",
+          "corpus_count": 3,
+          "representation_share": 0.001979,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 4,
+              "exposure_share": 0.033333,
+              "exposure_representation_ratio": 16.844444
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "영덕유기동물보호센터",
+          "corpus_count": 3,
+          "representation_share": 0.001979,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "정선가축병원",
+          "corpus_count": 3,
+          "representation_share": 0.001979,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "제일동물병원",
+          "corpus_count": 3,
+          "representation_share": 0.001979,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "종합축산",
+          "corpus_count": 3,
+          "representation_share": 0.001979,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "충주시동물보호센터",
+          "corpus_count": 3,
+          "representation_share": 0.001979,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "하동군유기동물보호소",
+          "corpus_count": 3,
+          "representation_share": 0.001979,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "화천군농업기술센터",
+          "corpus_count": 3,
+          "representation_share": 0.001979,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "24시아이동물메디컬",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "가정동물병원",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "가평군유기동물보호소",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "강진군 유기견 보호소",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "구례군동물보호센터",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "내품애센터",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "노원반려동물문화센터",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "단양군동물보호센터",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 6.316667
+            }
+          }
+        },
+        {
+          "group": "대구유기동물보호센터",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 6.316667
+            }
+          }
+        },
+        {
+          "group": "동해시동물보호센터",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "디아크동물종합병원",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "보성유기동물보호센터",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "봉화군유기동물보호소",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "성주군동물보호센터",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "세종유기동물보호센터",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "순창유기동물보호소",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "영월군 동물보호센터",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "오산 유기동물보호소",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "정샘동물병원",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "진도군임시보호소",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "청원동물병원",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "통영시동물보호센터",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "프렌즈동물병원",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "함양군 동물보호센터",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "홍천군유기동물보호소",
+          "corpus_count": 2,
+          "representation_share": 0.001319,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "119동물병원",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "고성군 동물가족센터",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "김천시 동물보호센터",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "남산동물병원",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "다나동물병원",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "대구시수의사회(보경)",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "대구시수의사회(삼덕)",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "대구시수의사회(평리)",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "동부동물보호협회",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "동부유기동물보호협회",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "동인동물병원",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "디아크 동물종합병원",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "무안군유기동물보호소",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "서천군유기동물보호소",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "예산임시동물보호센터",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "인제군동물보호센터",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "제니스동물병원",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "조재진동물병원",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 12.633333
+            }
+          }
+        },
+        {
+          "group": "주동물병원",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 12.633333
+            }
+          }
+        },
+        {
+          "group": "증평 가정견 훈련소",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "진안군유기동물보호소",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "하남동물보호센터",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "한국유기동물복지협회",
+          "corpus_count": 1,
+          "representation_share": 0.00066,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 1,
+              "exposure_share": 0.008333,
+              "exposure_representation_ratio": 12.633333
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": 0.0
+            }
+          }
+        },
+        {
+          "group": "unknown",
+          "corpus_count": 0,
+          "representation_share": 0.0,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": null
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": null
+            }
+          }
+        }
+      ]
+    },
+    "size": {
+      "corpus_evidence_coverage": {
+        "applicable_count": 1516,
+        "evaluated_count": 1516,
+        "unknown_count": 0,
+        "evidence_coverage": 1.0
+      },
+      "groups": [
+        {
+          "group": "small",
+          "corpus_count": 547,
+          "representation_share": 0.360818,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 56,
+              "exposure_share": 0.466667,
+              "exposure_representation_ratio": 1.293358
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 71,
+              "exposure_share": 0.591667,
+              "exposure_representation_ratio": 1.639793
+            }
+          }
+        },
+        {
+          "group": "tiny",
+          "corpus_count": 526,
+          "representation_share": 0.346966,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 14,
+              "exposure_share": 0.116667,
+              "exposure_representation_ratio": 0.336248
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 11,
+              "exposure_share": 0.091667,
+              "exposure_representation_ratio": 0.264195
+            }
+          }
+        },
+        {
+          "group": "medium",
+          "corpus_count": 325,
+          "representation_share": 0.21438,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 39,
+              "exposure_share": 0.325,
+              "exposure_representation_ratio": 1.516
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 25,
+              "exposure_share": 0.208333,
+              "exposure_representation_ratio": 0.971795
+            }
+          }
+        },
+        {
+          "group": "large",
+          "corpus_count": 118,
+          "representation_share": 0.077836,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 11,
+              "exposure_share": 0.091667,
+              "exposure_representation_ratio": 1.177684
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 13,
+              "exposure_share": 0.108333,
+              "exposure_representation_ratio": 1.391808
+            }
+          }
+        },
+        {
+          "group": "unknown",
+          "corpus_count": 0,
+          "representation_share": 0.0,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": null
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": null
+            }
+          }
+        }
+      ]
+    },
+    "age": {
+      "corpus_evidence_coverage": {
+        "applicable_count": 1516,
+        "evaluated_count": 1516,
+        "unknown_count": 0,
+        "evidence_coverage": 1.0
+      },
+      "groups": [
+        {
+          "group": "puppy",
+          "corpus_count": 808,
+          "representation_share": 0.532982,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 47,
+              "exposure_share": 0.391667,
+              "exposure_representation_ratio": 0.73486
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 40,
+              "exposure_share": 0.333333,
+              "exposure_representation_ratio": 0.625413
+            }
+          }
+        },
+        {
+          "group": "adult",
+          "corpus_count": 627,
+          "representation_share": 0.413588,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 53,
+              "exposure_share": 0.441667,
+              "exposure_representation_ratio": 1.067889
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 66,
+              "exposure_share": 0.55,
+              "exposure_representation_ratio": 1.329825
+            }
+          }
+        },
+        {
+          "group": "senior",
+          "corpus_count": 81,
+          "representation_share": 0.05343,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 20,
+              "exposure_share": 0.166667,
+              "exposure_representation_ratio": 3.119342
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 14,
+              "exposure_share": 0.116667,
+              "exposure_representation_ratio": 2.183539
+            }
+          }
+        },
+        {
+          "group": "unknown",
+          "corpus_count": 0,
+          "representation_share": 0.0,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": null
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 0,
+              "exposure_share": 0.0,
+              "exposure_representation_ratio": null
+            }
+          }
+        }
+      ]
+    },
+    "photo_quality": {
+      "corpus_evidence_coverage": {
+        "applicable_count": 1516,
+        "evaluated_count": 1228,
+        "unknown_count": 288,
+        "evidence_coverage": 0.810026
+      },
+      "groups": [
+        {
+          "group": "high",
+          "corpus_count": 719,
+          "representation_share": 0.474274,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 75,
+              "exposure_share": 0.625,
+              "exposure_representation_ratio": 1.317803
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 85,
+              "exposure_share": 0.708333,
+              "exposure_representation_ratio": 1.49351
+            }
+          }
+        },
+        {
+          "group": "medium",
+          "corpus_count": 477,
+          "representation_share": 0.314644,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 28,
+              "exposure_share": 0.233333,
+              "exposure_representation_ratio": 0.741579
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 24,
+              "exposure_share": 0.2,
+              "exposure_representation_ratio": 0.635639
+            }
+          }
+        },
+        {
+          "group": "low",
+          "corpus_count": 32,
+          "representation_share": 0.021108,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 3,
+              "exposure_share": 0.025,
+              "exposure_representation_ratio": 1.184375
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 2,
+              "exposure_share": 0.016667,
+              "exposure_representation_ratio": 0.789583
+            }
+          }
+        },
+        {
+          "group": "unknown",
+          "corpus_count": 288,
+          "representation_share": 0.189974,
+          "exposure_by_system": {
+            "clip_active": {
+              "exposure_count": 14,
+              "exposure_share": 0.116667,
+              "exposure_representation_ratio": 0.61412
+            },
+            "hybrid_natural_graph": {
+              "exposure_count": 9,
+              "exposure_share": 0.075,
+              "exposure_representation_ratio": 0.394792
+            }
+          }
+        }
+      ]
+    }
+  },
+  "validation": {
+    "passed": true,
+    "failure_count": 0,
+    "failures": []
+  },
+  "limitations": [
+    "This is a descriptive exposure diagnostic, not a normative fairness assessment.",
+    "Region, shelter, size, age, and photo quality are not asserted to be protected attributes.",
+    "An exposure/representation ratio above or below 1 does not by itself establish benefit, harm, bias, or an appropriate target.",
+    "The result covers 12 fixed appearance queries and equal-weight Top-K slots; it does not represent all user queries or rank-discounted attention.",
+    "Ratios for small corpus groups can be unstable and must be read with corpus and exposure counts.",
+    "Unknown is retained as missing evidence rather than imputed as a fact.",
+    "Photo quality describes image usability, not health, temperament, or adoption suitability.",
+    "Notice status and metadata are fixed to the reference date and can change afterward."
+  ]
+}

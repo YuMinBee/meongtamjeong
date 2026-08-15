@@ -1,0 +1,18 @@
+{
+  "schema_version": "appearance-query-holdout-run.v3",
+  "attempt_id": "740dd6972df18ecf1cfccc2f",
+  "status": "completed",
+  "execution_count": 1,
+  "started_at": "2026-07-26T03:02:48+00:00",
+  "frozen_holdout_sha256": "8bb4f757fb41ea5a8466e79d6c32799dff6030056fa1c175f5d4089b6343601a",
+  "scope": {
+    "base_queries": 12,
+    "semantic_queries": 24,
+    "negative_queries": 6,
+    "retrieval_executions": 42
+  },
+  "completed_at": "2026-07-26T03:02:58+00:00",
+  "report_sha256": "93a7aae189cb70de2bf65b92178dafb90ba48621ce493a003585a9356a614bf0",
+  "markdown_sha256": "426796aac725feea15dd943e627fc353f962491117d0c9c29dc1aaa2ae62eb1a",
+  "integrity_validation_passed": true
+}

@@ -4,7 +4,8 @@ import os
 import sys
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Sequence
+from urllib.parse import urlencode
 
 import requests
 from dotenv import load_dotenv
@@ -18,14 +19,27 @@ if str(BASE_DIR) not in sys.path:
 
 from app.species import clean_species, species_config, species_from_upkind  # noqa: E402
 from app.notice_status import is_searchable_notice  # noqa: E402
+from app.notice_metadata import (  # noqa: E402
+    extract_image_urls,
+    normalize_additional_notice_fields,
+    normalize_breed_fields as normalize_reported_breed_fields,
+    normalize_http_url,
+)
+from app.notice_provider import (  # noqa: E402
+    NATIONAL_ANIMAL_API_BASE,
+    LocalJsonNoticeProvider,
+    NationalAnimalProtectionNoticeProvider,
+    NoticeFetchRequest,
+    NoticeProvider,
+    validate_provider_result,
+)
 
 DATA_DIR = BASE_DIR / "data"
 ENV_PATH = BASE_DIR / ".env"
 load_dotenv(ENV_PATH)
 
-API_BASE = (
-    "https://apis.data.go.kr/1543061/abandonmentPublicService_v2/abandonmentPublic_v2"
-)
+# Backwards-compatible export for scripts/tests that imported this constant.
+API_BASE = NATIONAL_ANIMAL_API_BASE
 DEFAULT_API_KEY = os.getenv("ANIMAL_API_KEY", "")
 
 
@@ -33,6 +47,18 @@ def clean_text(value: Any) -> str:
     if value is None:
         return ""
     return str(value).strip()
+
+
+def resolve_lookback_days(years: int, days: Optional[int] = None) -> int:
+    """Resolve a bounded lookup window while preserving the legacy years API."""
+
+    if days is not None:
+        if days <= 0:
+            raise ValueError("days must be a positive integer")
+        return days
+    if years <= 0:
+        raise ValueError("years must be a positive integer")
+    return years * 365
 
 
 def parse_api_date(value: Any) -> Optional[datetime]:
@@ -56,58 +82,26 @@ def is_active_notice(rec: Dict[str, Any], 기준일: datetime) -> bool:
     )
 
 
-def normalize_breed_fields(rec: Dict[str, Any]) -> Dict[str, str]:
-    raw_kind = clean_text(
-        rec.get("kindCd") or rec.get("breed") or rec.get("breed_name")
-    )
-    raw_breed_code = clean_text(rec.get("breedCd") or rec.get("breed_code"))
-
-    breed_code = raw_breed_code or (raw_kind if raw_kind.isdigit() else "")
-    breed_name = (
-        raw_kind
-        if raw_kind and not raw_kind.isdigit()
-        else clean_text(rec.get("breed_name"))
-    )
-    breed = breed_name or breed_code or "Unknown"
-
-    return {
-        "breed": breed,
-        "breed_code": breed_code,
-        "breed_name": breed_name,
-    }
+def normalize_breed_fields(rec: Dict[str, Any]) -> Dict[str, Any]:
+    return normalize_reported_breed_fields(rec)
 
 
 def extract_image_url(rec: Dict[str, Any]) -> str:
-    for key in (
-        "image_url",
-        "url",
-        "popfile",
-        "popfile1",
-        "popfile2",
-        "fileName",
-        "thumb",
-        "image",
-        "img",
-    ):
-        value = clean_text(rec.get(key))
-        if value.startswith("http"):
-            return value
-
-    for key, value in rec.items():
-        text = clean_text(value)
-        if not text.startswith("http"):
-            continue
-        if any(token in str(key).lower() for token in ("pop", "img", "thumb")):
-            return text
-    return ""
+    image_urls = extract_image_urls(rec)
+    return image_urls[0] if image_urls else ""
 
 
 def build_live_animal_meta(rec: Dict[str, Any], species: str = "dog") -> Dict[str, Any]:
-    breed_fields = normalize_breed_fields(rec)
-    desertion_no = clean_text(rec.get("desertionNo")) or "Unknown"
-    notice_no = clean_text(rec.get("noticeNo"))
+    source_fields = normalize_additional_notice_fields(rec)
+    desertion_no = (
+        clean_text(
+            rec.get("desertionNo") or rec.get("desertion_no") or rec.get("notice_id")
+        )
+        or "Unknown"
+    )
+    notice_no = clean_text(rec.get("noticeNo") or rec.get("notice_no"))
     upkind = (
-        clean_text(rec.get("upkind") or rec.get("upkindCd"))
+        clean_text(rec.get("upkind") or rec.get("upkindCd") or rec.get("upKindCd"))
         or species_config(species)["upkind"]
     )
     normalized_species = species_from_upkind(upkind, clean_species(species))
@@ -118,9 +112,7 @@ def build_live_animal_meta(rec: Dict[str, Any], species: str = "dog") -> Dict[st
         "upkind": upkind,
         "desertionNo": desertion_no,
         "notice_no": notice_no,
-        "breed": breed_fields["breed"],
-        "breed_code": breed_fields["breed_code"],
-        "breed_name": breed_fields["breed_name"],
+        **source_fields,
         "sex": clean_text(rec.get("sexCd")) or clean_text(rec.get("sex")) or "Unknown",
         "age": clean_text(rec.get("age")) or "Unknown",
         "weight": clean_text(rec.get("weight")) or "Unknown",
@@ -128,10 +120,10 @@ def build_live_animal_meta(rec: Dict[str, Any], species: str = "dog") -> Dict[st
         or clean_text(rec.get("neuter"))
         or "Unknown",
         "desc": clean_text(rec.get("specialMark")) or clean_text(rec.get("desc")) or "",
-        "image_url": extract_image_url(rec),
-        "detail_url": (
-            "https://www.animal.go.kr/front/awtis/public/publicDtl.do"
-            f"?desertionNo={desertion_no}&menuNo=1000000055"
+        "detail_url": normalize_http_url(rec.get("detail_url") or rec.get("detailUrl"))
+        or (
+            "https://www.animal.go.kr/front/awtis/public/publicDtl.do?"
+            + urlencode({"desertionNo": desertion_no, "menuNo": "1000000055"})
             if desertion_no != "Unknown"
             else ""
         ),
@@ -173,83 +165,82 @@ def fetch_live_animals(
     rows: int,
     max_pages: int,
     include_closed: bool = False,
+    days: Optional[int] = None,
+    provider: Optional[NoticeProvider] = None,
+    now: Optional[datetime] = None,
 ) -> Dict[str, Any]:
     normalized_species = clean_species(species)
     upkind = species_config(normalized_species)["upkind"]
-    end = datetime.now().astimezone()
-    start = end - timedelta(days=years * 365)
-    session = build_session()
+    lookback_days = resolve_lookback_days(years, days)
+    end = now or datetime.now().astimezone()
+    if end.tzinfo is None or end.utcoffset() is None:
+        raise ValueError("now must include a timezone")
+    start = end - timedelta(days=lookback_days)
+    active_provider = provider or NationalAnimalProtectionNoticeProvider(
+        api_key=api_key,
+        session=build_session(),
+        api_base=API_BASE,
+    )
+    provider_result = active_provider.fetch(
+        NoticeFetchRequest(
+            species=normalized_species,
+            start=start,
+            end=end,
+            rows=rows,
+            max_pages=max_pages,
+        )
+    )
+    validate_provider_result(active_provider, provider_result)
 
     items: List[Dict[str, Any]] = []
     seen = set()
     stats = {
-        "pages_fetched": 0,
-        "raw_items": 0,
+        "pages_fetched": provider_result.pages_fetched,
+        "raw_items": provider_result.raw_items,
+        "provider_records": len(provider_result.records),
         "kept_items": 0,
         "skipped_closed": 0,
         "skipped_no_image": 0,
         "skipped_duplicate": 0,
     }
 
-    for page in range(1, max_pages + 1):
-        params = {
-            "serviceKey": api_key,
-            "numOfRows": rows,
-            "pageNo": page,
-            "_type": "json",
-            "upkind": upkind,
-            "bgnde": start.strftime("%Y%m%d"),
-            "endde": end.strftime("%Y%m%d"),
-        }
+    for source in provider_result.records:
+        rec = source.normalization_input()
+        if not include_closed and not is_active_notice(rec, 기준일=end):
+            stats["skipped_closed"] += 1
+            continue
 
-        resp = session.get(API_BASE, params=params, timeout=30)
-        resp.raise_for_status()
+        meta = build_live_animal_meta(rec, species=normalized_species)
+        if not meta["image_url"]:
+            stats["skipped_no_image"] += 1
+            continue
 
-        data = resp.json()
-        body = (
-            data.get("response", {}).get("body", {}) if isinstance(data, dict) else {}
-        )
-        page_items = body.get("items", {}).get("item", [])
-        if isinstance(page_items, dict):
-            page_items = [page_items]
-        if not page_items:
-            break
+        # This is the time at which the upstream notice was checked, not
+        # an assertion that the notice will remain active afterward.
+        meta["last_verified_at"] = end.isoformat(timespec="seconds")
+        meta["source_status"] = source.source_status
+        meta["source_provenance"] = source.provenance.as_dict()
 
-        stats["pages_fetched"] += 1
-        stats["raw_items"] += len(page_items)
+        desertion_no = meta["desertionNo"]
+        if desertion_no in seen:
+            stats["skipped_duplicate"] += 1
+            continue
 
-        for rec in page_items:
-            if not include_closed and not is_active_notice(rec, 기준일=end):
-                stats["skipped_closed"] += 1
-                continue
-
-            meta = build_live_animal_meta(rec, species=normalized_species)
-            if not meta["image_url"]:
-                stats["skipped_no_image"] += 1
-                continue
-
-            # This is the time at which the upstream notice was checked, not
-            # an assertion that the notice will remain active afterward.
-            meta["last_verified_at"] = end.isoformat(timespec="seconds")
-
-            desertion_no = meta["desertionNo"]
-            if desertion_no in seen:
-                stats["skipped_duplicate"] += 1
-                continue
-
-            seen.add(desertion_no)
-            items.append(meta)
-            stats["kept_items"] += 1
+        seen.add(desertion_no)
+        items.append(meta)
+        stats["kept_items"] += 1
 
     return {
         "fetched_at": end.isoformat(timespec="seconds"),
+        "provider": active_provider.provider_id,
         "species": normalized_species,
         "upkind": upkind,
-        "years": years,
-        "days": years * 365,
+        "years": years if days is None else None,
+        "days": lookback_days,
         "include_closed": include_closed,
         "items": items,
         "stats": stats,
+        "provider_diagnostics": dict(provider_result.diagnostics),
     }
 
 
@@ -259,8 +250,17 @@ def fetch_live_dogs(
     rows: int,
     max_pages: int,
     include_closed: bool = False,
+    days: Optional[int] = None,
 ) -> Dict[str, Any]:
-    return fetch_live_animals(api_key, "dog", years, rows, max_pages, include_closed)
+    return fetch_live_animals(
+        api_key,
+        "dog",
+        years,
+        rows,
+        max_pages,
+        include_closed,
+        days,
+    )
 
 
 def save_payload(payload: Dict[str, Any], output_path: Path) -> None:
@@ -269,7 +269,7 @@ def save_payload(payload: Dict[str, Any], output_path: Path) -> None:
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="최근 N년 유기동물 공고를 공공 API에서 받아 로컬 JSON 캐시 파일로 저장합니다."
     )
@@ -281,6 +281,12 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--years", type=int, default=3, help="오늘 기준 몇 년 전까지 조회할지"
+    )
+    parser.add_argument(
+        "--days",
+        type=int,
+        default=None,
+        help="오늘 기준 조회 일수. 지정하면 --years보다 우선합니다.",
     )
     parser.add_argument("--rows", type=int, default=1000, help="페이지당 조회 건수")
     parser.add_argument("--max-pages", type=int, default=500, help="최대 페이지 수")
@@ -296,11 +302,37 @@ def parse_args() -> argparse.Namespace:
         help="공공 유기동물 API 키",
     )
     parser.add_argument(
+        "--provider",
+        choices=("national-api", "local-json"),
+        default="national-api",
+        help="공고 원천 provider. 기본값은 국가동물보호정보시스템 API",
+    )
+    parser.add_argument(
+        "--input-json",
+        type=Path,
+        help="--provider local-json에서 읽을 canonical JSON 파일",
+    )
+    parser.add_argument(
         "--include-closed",
         action="store_true",
         help="공고 종료/처리 완료 데이터도 포함",
     )
-    return parser.parse_args()
+    args = parser.parse_args(argv)
+    if args.provider == "local-json" and args.input_json is None:
+        parser.error("--provider local-json requires --input-json")
+    if args.provider != "local-json" and args.input_json is not None:
+        parser.error("--input-json can only be used with --provider local-json")
+    return args
+
+
+def provider_from_args(args: argparse.Namespace) -> NoticeProvider:
+    if args.provider == "local-json":
+        return LocalJsonNoticeProvider(args.input_json)
+    return NationalAnimalProtectionNoticeProvider(
+        api_key=args.api_key,
+        session=build_session(),
+        api_base=API_BASE,
+    )
 
 
 def main() -> None:
@@ -314,14 +346,19 @@ def main() -> None:
         rows=args.rows,
         max_pages=args.max_pages,
         include_closed=args.include_closed,
+        days=args.days,
+        provider=provider_from_args(args),
     )
     save_payload(payload, output_path)
 
     stats = payload["stats"]
     print(f"[DONE] 저장 완료: {output_path}")
-    print(f"[INFO] species={payload['species']} upkind={payload['upkind']}")
+    print(
+        f"[INFO] provider={payload['provider']} "
+        f"species={payload['species']} upkind={payload['upkind']}"
+    )
     print(f"[INFO] fetched_at={payload['fetched_at']}")
-    print(f"[INFO] years={payload['years']} days={payload['days']}")
+    print(f"[INFO] lookback_days={payload['days']}")
     print(
         f"[INFO] pages={stats['pages_fetched']} raw={stats['raw_items']} kept={stats['kept_items']}"
     )

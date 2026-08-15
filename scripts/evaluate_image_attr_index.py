@@ -8,7 +8,7 @@ import sys
 import tempfile
 import time
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Tuple
+from typing import Any, Dict, Iterable, List
 
 import clip
 import faiss
@@ -19,16 +19,15 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
 
-from app.hybrid_rag import (
+from app.hybrid_rag import (  # noqa: E402
     BM25Index,
     build_hybrid_documents,
     build_search_query_text,
     parse_structured_query,
     rank_hybrid_documents,
-    tokenize,
     vector_hits_to_doc_modality_scores,
 )
-from app.notice_status import is_searchable_notice
+from app.notice_status import is_searchable_notice  # noqa: E402
 
 DATA_DIR = BASE_DIR / "data"
 DEFAULT_QUERIES = DATA_DIR / "eval_queries.sample.json"

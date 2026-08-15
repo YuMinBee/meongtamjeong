@@ -11,13 +11,18 @@
 
 각 파일의 공고번호, 원본 이미지 URL, 실제 공고 링크, 수집·확인 시각, 변환 방식과 SHA-256은 [`manifest.json`](manifest.json)에 기록했습니다. 네 공고 모두 2026-07-17 스냅샷에서 `보호중`이었지만 공고 상태와 링크는 이후 변경될 수 있습니다.
 
-사진은 `POST /recommend_with_image`의 `ref_image` 입력 예시로 사용할 수 있습니다.
+사진은 권장 외형 검색 API인 `POST /search/appearance/image`의 `ref_image` 입력 예시로 사용할 수 있습니다.
 
 ```bash
-curl -X POST "http://localhost:8000/recommend_with_image?topk=5" \
+curl -X POST "http://localhost:8000/search/appearance/image" \
   -H "x-api-key: $API_KEY" \
-  -F "profile=아파트에 살며 중형견을 찾고 있어요" \
-  -F "ref_image=@assets/samples/notice_428349202600501.jpg"
+  -F "ref_image=@assets/samples/notice_428349202600501.jpg" \
+  -F "query=검은 털의 중형견" \
+  -F "preferred_size=medium" \
+  -F "preferred_age=any" \
+  -F "topk=5"
 ```
 
 공공데이터포털에는 해당 API의 이용허락범위가 `제한 없음`으로 표시되어 있습니다. 다만 API 응답에는 개별 사진의 촬영자나 별도 사진 라이선스가 없으므로, 이 파일들은 프로젝트 소스의 Apache-2.0으로 재허가하지 않습니다. 권리 관련 요청이 접수되면 파일을 제거하고 원격 공고 링크 방식으로 전환합니다.
+
+출품 릴리스 전에는 제공기관에 이 crop의 공개 재배포 가능 범위를 서면으로 확인해야 합니다. 확인하지 못하면 네 파일을 릴리스에서 제외하고 사용자가 공식 공고 링크에서 직접 고른 사진을 업로드하는 예시로 대체합니다. 네 파일을 제거하더라도 사진 파생 벡터가 포함된 `data/dog_faiss.index`의 권리 검토는 별도로 남으므로 [`DATA_CARD.md`](../../DATA_CARD.md)의 전체 산출물 경계를 함께 확인해야 합니다.
