@@ -1090,9 +1090,11 @@
     .workspace {
       grid-template-columns:400px minmax(0,1fr);
       gap:30px;
+      align-items:stretch;
       margin-top:44px;
     }
     .profile-panel {
+      align-self:start;
       border:1px solid rgba(18,63,55,.13);
       border-radius:30px;
       background:#fff;
@@ -1161,6 +1163,12 @@
       font-size:.92rem;
     }
     .primary-button:hover { box-shadow:0 17px 32px rgba(226,76,37,.30); }
+    .results-panel {
+      min-width:0;
+      align-self:stretch;
+      display:flex;
+      flex-direction:column;
+    }
     .results-head { min-height:104px; padding:5px 3px 20px; }
     .results-head .step-label { color:#fff; background:var(--brand-deep); }
     .results-head h2 { margin-top:11px; font-size:1.85rem; }
@@ -1176,10 +1184,11 @@
       background:#e9f7f0;
     }
     .compare-note { border-radius:15px; }
-    .results-list { grid-template-columns:repeat(2, minmax(0,1fr)); gap:18px; }
-    .results-list > li { min-width:0; display:flex; }
+    .results-list { grid-template-columns:repeat(2, minmax(0,1fr)); grid-auto-flow:row dense; align-items:stretch; gap:18px; }
+    .results-list > li { min-width:0; height:100%; display:flex; }
     .dog-card {
       width:100%;
+      height:100%;
       min-height:0;
       display:flex;
       flex-direction:column;
@@ -1227,6 +1236,11 @@
         radial-gradient(circle at 50% 42%, rgba(221,255,120,.32), transparent 12rem),
         #fff;
       box-shadow:var(--shadow-soft);
+    }
+    #emptyState {
+      position:sticky;
+      top:98px;
+      min-height:clamp(500px, calc(100vh - 132px), 640px);
     }
     .state-visual {
       width:146px;
@@ -1299,6 +1313,8 @@
       .hero h1 { font-size:clamp(2.8rem, 9vw, 4.6rem); }
       .workspace { grid-template-columns:1fr; }
       .profile-panel { width:min(100%, 700px); margin:0 auto; }
+      .results-panel { display:block; align-self:auto; }
+      #emptyState { position:static; min-height:500px; }
       .results-head { margin-top:16px; }
       .results-list, .skeleton-list { grid-template-columns:repeat(2, minmax(0,1fr)); }
       .dog-card { display:flex; }
@@ -1339,6 +1355,7 @@
       .notice-link { grid-column:auto; }
       .image-shell, .image-fallback { min-height:0; aspect-ratio:4/3; }
       .state-card { min-height:430px; padding:30px 22px; }
+      #emptyState { min-height:430px; }
       .skeleton-card { height:535px; }
       .skeleton-image { min-height:245px; }
       .method-strip { margin-top:34px; border-radius:24px; }
