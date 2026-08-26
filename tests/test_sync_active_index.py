@@ -511,6 +511,60 @@ def test_image_failure_still_adds_text_only() -> None:
     assert result.report["stats"]["active_ids_without_public_text_vectors"] == 0
 
 
+def test_text_only_mode_never_retains_downloads_or_embeds_images() -> None:
+    class TextOnlyEncoder(FakeEncoder):
+        def encode_image(self, image: object) -> np.ndarray | None:
+            raise AssertionError("text-only mode must not encode images")
+
+    current_a = active_notice("A")
+    current_text = sync.build_public_notice_text(current_a)
+
+    result = sync.synchronize_active_vectors(
+        np.array(
+            [[0.2, 0.8], [0.3, 0.7], [1.0, 0.0]],
+            dtype=np.float32,
+        ),
+        [
+            {
+                "desertionNo": "A",
+                "type": "image",
+                "image_url": current_a["image_url"],
+            },
+            {
+                "desertionNo": "A",
+                "type": "crop_image",
+                "image_url": current_a["image_url"],
+            },
+            {
+                "desertionNo": "A",
+                "type": "text",
+                "desc_full": current_text,
+            },
+        ],
+        [current_a, active_notice("B")],
+        reference_date=REFERENCE_DATE,
+        encoder=TextOnlyEncoder(),
+        image_downloader=lambda url: (_ for _ in ()).throw(
+            AssertionError("text-only mode must not download images")
+        ),
+        text_only=True,
+    )
+
+    assert [meta["type"] for meta in result.metas] == ["text", "text"]
+    assert [meta["desertionNo"] for meta in result.metas] == ["A", "B"]
+    np.testing.assert_array_equal(
+        result.vectors,
+        np.array([[1.0, 0.0], [1.0, 0.0]], dtype=np.float32),
+    )
+    assert result.report["release_profile"] == "public-text-only-v1"
+    stats = result.report["stats"]
+    assert stats["removed_profile_excluded_image_vectors"] == 2
+    assert stats["refresh_image_required_unique_ids"] == 0
+    assert stats["new_image_vectors"] == 0
+    assert stats["new_image_failures"] == 0
+    assert stats["output_vectors"] == 2
+
+
 def test_public_text_encoder_failure_aborts_even_when_image_succeeds() -> None:
     class TextFailureEncoder(FakeEncoder):
         def encode_text(self, text: str) -> np.ndarray | None:
@@ -1000,6 +1054,81 @@ def test_run_writes_consistent_index_metas_and_hash_report(
             "passed": True,
         },
     }
+
+
+def test_run_text_only_omits_image_runtime_and_records_profile(
+    workdir: Path,
+) -> None:
+    fresh_path = workdir / "fresh.json"
+    input_index = workdir / "existing.index"
+    input_metas = workdir / "existing-metas.json"
+    index_out = workdir / "synced.index"
+    metas_out = workdir / "synced-metas.json"
+    report_out = workdir / "sync-report.json"
+    current = active_notice("A")
+    fresh_path.write_text(
+        json.dumps(
+            {
+                "fetched_at": "2026-07-25T12:00:00+09:00",
+                "items": [current, active_notice("B")],
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    input_index.write_bytes(b"fake existing index")
+    input_metas.write_text(
+        json.dumps(
+            [
+                {
+                    "desertionNo": "A",
+                    "type": "image",
+                    "image_url": current["image_url"],
+                },
+                {
+                    "desertionNo": "A",
+                    "type": "text",
+                    "desc_full": sync.build_public_notice_text(current),
+                },
+            ]
+        ),
+        encoding="utf-8",
+    )
+    args = sync.parse_args(
+        [
+            "--fresh-cache",
+            str(fresh_path),
+            "--existing-index",
+            str(input_index),
+            "--existing-metas",
+            str(input_metas),
+            "--index-out",
+            str(index_out),
+            "--metas-out",
+            str(metas_out),
+            "--report-out",
+            str(report_out),
+            "--text-only",
+        ]
+    )
+
+    report = sync.run(
+        args,
+        faiss_module=FakeFaiss(FakeIndex([[0.0, 1.0], [1.0, 0.0]])),
+        encoder=FakeEncoder(),
+        image_downloader=lambda url: (_ for _ in ()).throw(
+            AssertionError("text-only run must not download images")
+        ),
+        quality_evaluator=lambda image: (_ for _ in ()).throw(
+            AssertionError("text-only run must not score images")
+        ),
+    )
+
+    output_metas = json.loads(metas_out.read_text(encoding="utf-8"))
+    assert [row["type"] for row in output_metas] == ["text", "text"]
+    assert report["release_profile"] == "public-text-only-v1"
+    assert report["source"]["allowed_image_hosts"] == []
+    assert report["stats"]["removed_profile_excluded_image_vectors"] == 1
 
 
 @pytest.mark.parametrize(

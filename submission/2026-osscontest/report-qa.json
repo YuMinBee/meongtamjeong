@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-26T17:23:00+09:00",
+  "official_template": {
+    "sha256": "937679bac40cbfaced3457530c232c9d190a74f6b5d67c58b4bc33014a579195",
+    "guide_page_removed": true,
+    "preserve_only_package_parts_verified": true
+  },
+  "renderer": {
+    "name": "LibreOffice",
+    "version": "26.2.5.2",
+    "mode": "portable-headless-cpu"
+  },
+  "docx": {
+    "file": "2026 오픈소스 개발자대회 결과보고서_접수번호(팀명).docx",
+    "bytes": 29077,
+    "sha256": "63ad39afccf0696390525855ac149b216f8d43187905b1d00fc9a67dd7e7ed44"
+  },
+  "pdf": {
+    "file": "2026 오픈소스 개발자대회 결과보고서_접수번호(팀명).pdf",
+    "bytes": 380908,
+    "sha256": "d4270b0efa6170607dd1724d99765569629698af69b7487a566ada43ba38ea92",
+    "pages": 8,
+    "portrait_report_pages": 4,
+    "landscape_attachment_pages": 4,
+    "all_pages_visually_inspected": true,
+    "extractable_text_verified": true
+  },
+  "form_placeholders": [
+    "team_name",
+    "team_size",
+    "participant_division",
+    "youtube_demo_url",
+    "receipt_number_in_filename"
+  ],
+  "sbom_direct_dependency_rows": 25,
+  "ai_profile": "type-1-openai-clip-vit-b-32-frozen"
+}

@@ -1,0 +1,1505 @@
+{
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "creationInfo": {
+    "comment": "Generated from the validated clean-environment inventory. Only declared direct dependency edges are asserted.",
+    "created": "2026-08-26T08:05:00Z",
+    "creators": [
+      "Tool: meongtamjeong-generate-sbom/1.0"
+    ]
+  },
+  "dataLicense": "CC0-1.0",
+  "documentDescribes": [
+    "SPDXRef-RootPackage"
+  ],
+  "documentNamespace": "https://github.com/YuMinBee/meongtamjeong/sbom/86c94182abb5a492b62bc6f795e99efa33ac0d4ec974c1d993c45213a3b519d2",
+  "name": "MeongTamjeong-submission-2026-SBOM",
+  "packages": [
+    {
+      "SPDXID": "SPDXRef-RootPackage",
+      "copyrightText": "Copyright YuMinBee",
+      "downloadLocation": "https://github.com/YuMinBee/meongtamjeong",
+      "filesAnalyzed": false,
+      "homepage": "https://github.com/YuMinBee/meongtamjeong",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "name": "MeongTamjeong",
+      "versionInfo": "submission-2026"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-accelerate-70430045",
+      "comment": "Installed distribution metadata: Apache (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/huggingface/accelerate",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/accelerate@1.14.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "Apache-2.0",
+      "name": "accelerate",
+      "versionInfo": "1.14.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-annotated-doc-a7cf565d",
+      "comment": "Installed distribution metadata: MIT (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/fastapi/annotated-doc",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/annotated-doc@0.0.4",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "annotated-doc",
+      "versionInfo": "0.0.4"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-annotated-types-a0bbc9b0",
+      "comment": "Installed distribution metadata: MIT (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/annotated-types/annotated-types",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/annotated-types@0.8.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "annotated-types",
+      "versionInfo": "0.8.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-anyio-d07ebf74",
+      "comment": "Installed distribution metadata: MIT (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://anyio.readthedocs.io/en/latest/",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/anyio@4.14.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "anyio",
+      "versionInfo": "4.14.2"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-certifi-78ae46fa",
+      "comment": "Installed distribution metadata: MPL-2.0 (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/certifi/python-certifi",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/certifi@2026.7.22",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MPL-2.0",
+      "name": "certifi",
+      "versionInfo": "2026.7.22"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-charset-normalizer-4fc50459",
+      "comment": "Installed distribution metadata: MIT (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/jawah/charset_normalizer",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/charset-normalizer@3.4.9",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "charset-normalizer",
+      "versionInfo": "3.4.9"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-click-e5c7ffac",
+      "comment": "Installed distribution metadata: BSD-3-Clause (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/pallets/click/",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/click@8.4.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "BSD-3-Clause",
+      "name": "click",
+      "versionInfo": "8.4.2"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-clip-67905ad3",
+      "comment": "Installed distribution metadata: MIT (license-file-header).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/openai/CLIP.git@dcba3cb2e2827b402d2701e7e1c7d9fed8a20ef1",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "clip",
+      "versionInfo": "1.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-colorama-7f930ee0",
+      "comment": "Installed distribution metadata: BSD (variant unspecified) (Classifier).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/tartley/colorama",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/colorama@0.4.6",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "colorama",
+      "versionInfo": "0.4.6"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-et-xmlfile-22bcac75",
+      "comment": "Installed distribution metadata: MIT (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://foss.heptapod.net/openpyxl/et_xmlfile",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/et-xmlfile@2.0.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "et-xmlfile",
+      "versionInfo": "2.0.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-exceptiongroup-45a8e507",
+      "comment": "Installed distribution metadata: MIT (Classifier).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/agronholm/exceptiongroup/blob/main/CHANGES.rst",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/exceptiongroup@1.3.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "exceptiongroup",
+      "versionInfo": "1.3.1"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-faiss-cpu-cc9c7637",
+      "comment": "Installed distribution metadata: MIT (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/facebookresearch/faiss",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/faiss-cpu@1.14.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "faiss-cpu",
+      "versionInfo": "1.14.3"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-fastapi-6aee0e67",
+      "comment": "Installed distribution metadata: MIT (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/fastapi/fastapi",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/fastapi@0.140.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "fastapi",
+      "versionInfo": "0.140.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-filelock-29116e47",
+      "comment": "Installed distribution metadata: MIT (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/tox-dev/py-filelock",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/filelock@3.32.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "filelock",
+      "versionInfo": "3.32.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-fsspec-2eb19033",
+      "comment": "Installed distribution metadata: BSD-3-Clause (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/fsspec/filesystem_spec",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/fsspec@2026.6.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "BSD-3-Clause",
+      "name": "fsspec",
+      "versionInfo": "2026.6.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-ftfy-cfb1a2de",
+      "comment": "Installed distribution metadata: Apache-2.0 (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/rspeer/python-ftfy",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/ftfy@6.3.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "Apache-2.0",
+      "name": "ftfy",
+      "versionInfo": "6.3.1"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-h11-973b98d4",
+      "comment": "Installed distribution metadata: MIT (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/python-hyper/h11",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/h11@0.16.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "h11",
+      "versionInfo": "0.16.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-hf-xet-a66f6b69",
+      "comment": "Installed distribution metadata: Apache-2.0 (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/huggingface/xet-core.git",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/hf-xet@1.5.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "Apache-2.0",
+      "name": "hf-xet",
+      "versionInfo": "1.5.2"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-httpcore-682c636f",
+      "comment": "Installed distribution metadata: BSD-3-Clause (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/encode/httpcore",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/httpcore@1.0.9",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "BSD-3-Clause",
+      "name": "httpcore",
+      "versionInfo": "1.0.9"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-httptools-8c5cc289",
+      "comment": "Installed distribution metadata: MIT (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/MagicStack/httptools",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/httptools@0.8.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "httptools",
+      "versionInfo": "0.8.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-httpx-44c3f6f8",
+      "comment": "Installed distribution metadata: BSD-3-Clause (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/encode/httpx",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/httpx@0.28.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "BSD-3-Clause",
+      "name": "httpx",
+      "versionInfo": "0.28.1"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-huggingface-hub-61f652e7",
+      "comment": "Installed distribution metadata: Apache-2.0 (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/huggingface/huggingface_hub",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/huggingface-hub@1.24.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "Apache-2.0",
+      "name": "huggingface-hub",
+      "versionInfo": "1.24.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-idna-de30d2f3",
+      "comment": "Installed distribution metadata: BSD-3-Clause (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/kjd/idna",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/idna@3.18",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "BSD-3-Clause",
+      "name": "idna",
+      "versionInfo": "3.18"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-iniconfig-429e50b8",
+      "comment": "Installed distribution metadata: MIT (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/pytest-dev/iniconfig",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/iniconfig@2.3.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "iniconfig",
+      "versionInfo": "2.3.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-jinja2-c34aaa3c",
+      "comment": "Installed distribution metadata: BSD (variant unspecified) (Classifier).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/pallets/jinja/",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/jinja2@3.1.6",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "jinja2",
+      "versionInfo": "3.1.6"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-markdown-it-py-555a56fe",
+      "comment": "Installed distribution metadata: MIT (Classifier).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/executablebooks/markdown-it-py",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/markdown-it-py@4.2.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "markdown-it-py",
+      "versionInfo": "4.2.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-markupsafe-f8eacd22",
+      "comment": "Installed distribution metadata: BSD-3-Clause (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/pallets/markupsafe/",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/markupsafe@3.0.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "BSD-3-Clause",
+      "name": "markupsafe",
+      "versionInfo": "3.0.3"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-mdurl-a226d97c",
+      "comment": "Installed distribution metadata: MIT (Classifier).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/executablebooks/mdurl",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/mdurl@0.1.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "mdurl",
+      "versionInfo": "0.1.2"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-mpmath-746f76ea",
+      "comment": "Installed distribution metadata: BSD (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/fredrik-johansson/mpmath",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/mpmath@1.3.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "mpmath",
+      "versionInfo": "1.3.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-networkx-4eb2b1ff",
+      "comment": "Installed distribution metadata: BSD (variant unspecified) (Classifier).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://networkx.org/",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/networkx@3.4.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "networkx",
+      "versionInfo": "3.4.2"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-numpy-73dd0baf",
+      "comment": "Installed distribution metadata: BSD (variant unspecified) (Classifier).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/numpy/numpy",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/numpy@2.2.6",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "numpy",
+      "versionInfo": "2.2.6"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-opencv-python-headless-efc5d0d3",
+      "comment": "Installed distribution metadata: Apache 2.0 (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/opencv/opencv-python",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/opencv-python-headless@4.13.0.92",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "Apache-2.0",
+      "name": "opencv-python-headless",
+      "versionInfo": "4.13.0.92"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-openpyxl-fab008f0",
+      "comment": "Installed distribution metadata: MIT (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://foss.heptapod.net/openpyxl/openpyxl",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/openpyxl@3.1.5",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "openpyxl",
+      "versionInfo": "3.1.5"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-packaging-71669691",
+      "comment": "Installed distribution metadata: Apache-2.0 OR BSD-2-Clause (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/pypa/packaging",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/packaging@26.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "Apache-2.0 OR BSD-2-Clause",
+      "name": "packaging",
+      "versionInfo": "26.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-pandas-ae4863bd",
+      "comment": "Installed distribution metadata: BSD (variant unspecified) (Classifier).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/pandas-dev/pandas",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/pandas@2.3.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "pandas",
+      "versionInfo": "2.3.3"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-pillow-f6000d4e",
+      "comment": "Installed distribution metadata: MIT-CMU (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/python-pillow/Pillow",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/pillow@12.3.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT-CMU",
+      "name": "pillow",
+      "versionInfo": "12.3.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-pip-fed5038b",
+      "comment": "Installed distribution metadata: MIT (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/pypa/pip",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/pip@25.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "pip",
+      "versionInfo": "25.2"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-pluggy-ff3c5a59",
+      "comment": "Installed distribution metadata: MIT (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://pypi.org/project/pluggy/1.6.0/",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/pluggy@1.6.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "pluggy",
+      "versionInfo": "1.6.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-psutil-7cbd0f5b",
+      "comment": "Installed distribution metadata: BSD-3-Clause (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/giampaolo/psutil",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/psutil@7.2.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "BSD-3-Clause",
+      "name": "psutil",
+      "versionInfo": "7.2.2"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-pydantic-6366233f",
+      "comment": "Installed distribution metadata: MIT (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/pydantic/pydantic",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/pydantic@2.13.4",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "pydantic",
+      "versionInfo": "2.13.4"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-pydantic-core-c7657d51",
+      "comment": "Installed distribution metadata: MIT (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/pydantic/pydantic/tree/main/pydantic-core",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/pydantic-core@2.46.4",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "pydantic-core",
+      "versionInfo": "2.46.4"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-pygments-2891ee72",
+      "comment": "Installed distribution metadata: BSD-2-Clause (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/pygments/pygments",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/pygments@2.20.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "BSD-2-Clause",
+      "name": "pygments",
+      "versionInfo": "2.20.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-pytest-2b01214d",
+      "comment": "Installed distribution metadata: MIT (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/pytest-dev/pytest",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/pytest@9.0.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "pytest",
+      "versionInfo": "9.0.3"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-python-dateutil-79681279",
+      "comment": "Installed distribution metadata: Dual License (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/dateutil/dateutil",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/python-dateutil@2.9.0.post0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "python-dateutil",
+      "versionInfo": "2.9.0.post0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-python-dotenv-8a38abae",
+      "comment": "Installed distribution metadata: BSD-3-Clause (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/theskumar/python-dotenv",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/python-dotenv@1.2.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "BSD-3-Clause",
+      "name": "python-dotenv",
+      "versionInfo": "1.2.2"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-python-multipart-9803cf93",
+      "comment": "Installed distribution metadata: Apache-2.0 (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/Kludex/python-multipart",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/python-multipart@0.0.32",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "Apache-2.0",
+      "name": "python-multipart",
+      "versionInfo": "0.0.32"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-pytz-3fff11e9",
+      "comment": "Installed distribution metadata: MIT (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/stub42/pytz.git",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/pytz@2026.3.post1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "pytz",
+      "versionInfo": "2026.3.post1"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-pyyaml-ebb0e165",
+      "comment": "Installed distribution metadata: MIT (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://pyyaml.org/wiki/PyYAMLDocumentation",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/pyyaml@6.0.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "pyyaml",
+      "versionInfo": "6.0.3"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-regex-42d58222",
+      "comment": "Installed distribution metadata: Apache-2.0 AND CNRI-Python (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/mrabarnett/mrab-regex",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/regex@2026.7.19",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "Apache-2.0 AND CNRI-Python",
+      "name": "regex",
+      "versionInfo": "2026.7.19"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-requests-ec72420d",
+      "comment": "Installed distribution metadata: Apache-2.0 (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/psf/requests",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/requests@2.34.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "Apache-2.0",
+      "name": "requests",
+      "versionInfo": "2.34.2"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-rich-7baa68f2",
+      "comment": "Installed distribution metadata: MIT (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/Textualize/rich",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/rich@15.0.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "rich",
+      "versionInfo": "15.0.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-ruff-acadbba9",
+      "comment": "Installed distribution metadata: MIT (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/astral-sh/ruff",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/ruff@0.15.21",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "ruff",
+      "versionInfo": "0.15.21"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-safetensors-54f843a3",
+      "comment": "Installed distribution metadata: Apache-2.0 (Classifier).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/huggingface/safetensors",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/safetensors@0.8.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "Apache-2.0",
+      "name": "safetensors",
+      "versionInfo": "0.8.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-sentencepiece-5c5eff0b",
+      "comment": "Installed distribution metadata: Apache-2.0 (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/google/sentencepiece",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/sentencepiece@0.2.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "Apache-2.0",
+      "name": "sentencepiece",
+      "versionInfo": "0.2.2"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-setuptools-9ee3a079",
+      "comment": "Installed distribution metadata: MIT (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/pypa/setuptools",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/setuptools@80.10.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "setuptools",
+      "versionInfo": "80.10.2"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-shellingham-3fd6bb89",
+      "comment": "Installed distribution metadata: ISC License (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/sarugaku/shellingham",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/shellingham@1.5.4",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "ISC",
+      "name": "shellingham",
+      "versionInfo": "1.5.4"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-six-44778d82",
+      "comment": "Installed distribution metadata: MIT (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/benjaminp/six",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/six@1.17.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "six",
+      "versionInfo": "1.17.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-starlette-49154123",
+      "comment": "Installed distribution metadata: BSD-3-Clause (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/Kludex/starlette",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/starlette@1.3.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "BSD-3-Clause",
+      "name": "starlette",
+      "versionInfo": "1.3.1"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-sympy-6bcfc6e6",
+      "comment": "Installed distribution metadata: BSD (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/sympy/sympy",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/sympy@1.14.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "sympy",
+      "versionInfo": "1.14.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-tokenizers-6f390708",
+      "comment": "Installed distribution metadata: Apache-2.0 (Classifier).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/huggingface/tokenizers",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/tokenizers@0.22.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "Apache-2.0",
+      "name": "tokenizers",
+      "versionInfo": "0.22.2"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-tomli-20365bfa",
+      "comment": "Installed distribution metadata: MIT (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/hukkin/tomli",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/tomli@2.4.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "tomli",
+      "versionInfo": "2.4.1"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-torch-37bf51bf",
+      "comment": "Installed distribution metadata: Apache-2.0 AND Apache-2.0 WITH LLVM-exception AND BSD-2-Clause AND BSD-3-Clause AND BSL-1.0 AND MIT (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/pytorch/pytorch",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/torch@2.13.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "torch",
+      "versionInfo": "2.13.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-torchvision-1094fe4d",
+      "comment": "Installed distribution metadata: BSD (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/pytorch/vision",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/torchvision@0.28.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "torchvision",
+      "versionInfo": "0.28.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-tqdm-4607a10a",
+      "comment": "Installed distribution metadata: MPL-2.0 AND MIT (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/tqdm/tqdm",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/tqdm@4.69.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MPL-2.0 AND MIT",
+      "name": "tqdm",
+      "versionInfo": "4.69.1"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-transformers-ad9b0702",
+      "comment": "Installed distribution metadata: Apache 2.0 License (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/huggingface/transformers",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/transformers@5.14.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "Apache-2.0",
+      "name": "transformers",
+      "versionInfo": "5.14.1"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-typer-19cb4ed1",
+      "comment": "Installed distribution metadata: MIT (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/fastapi/typer",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/typer@0.27.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "typer",
+      "versionInfo": "0.27.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-typing-extensions-c46d4553",
+      "comment": "Installed distribution metadata: PSF-2.0 (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/python/typing_extensions",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/typing-extensions@4.16.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "PSF-2.0",
+      "name": "typing-extensions",
+      "versionInfo": "4.16.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-typing-inspection-881f83db",
+      "comment": "Installed distribution metadata: MIT (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/pydantic/typing-inspection",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/typing-inspection@0.4.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "typing-inspection",
+      "versionInfo": "0.4.2"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-tzdata-572d4fe9",
+      "comment": "Installed distribution metadata: Apache-2.0 (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/python/tzdata",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/tzdata@2026.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "Apache-2.0",
+      "name": "tzdata",
+      "versionInfo": "2026.3"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-urllib3-4e08df86",
+      "comment": "Installed distribution metadata: MIT (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/urllib3/urllib3",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/urllib3@2.7.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "urllib3",
+      "versionInfo": "2.7.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-uvicorn-bab9d673",
+      "comment": "Installed distribution metadata: BSD-3-Clause (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/Kludex/uvicorn",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/uvicorn@0.51.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "BSD-3-Clause",
+      "name": "uvicorn",
+      "versionInfo": "0.51.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-watchfiles-22892584",
+      "comment": "Installed distribution metadata: MIT (License).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/samuelcolvin/watchfiles",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/watchfiles@1.2.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "watchfiles",
+      "versionInfo": "1.2.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-wcwidth-3bd2b237",
+      "comment": "Installed distribution metadata: MIT (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/jquast/wcwidth",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/wcwidth@0.8.2",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "wcwidth",
+      "versionInfo": "0.8.2"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-websockets-20c2c771",
+      "comment": "Installed distribution metadata: BSD-3-Clause (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/python-websockets/websockets",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/websockets@16.1.1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "BSD-3-Clause",
+      "name": "websockets",
+      "versionInfo": "16.1.1"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-wheel-ba599261",
+      "comment": "Installed distribution metadata: MIT (License-Expression).",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "https://github.com/pypa/wheel",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:pypi/wheel@0.47.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "MIT",
+      "name": "wheel",
+      "versionInfo": "0.47.0"
+    }
+  ],
+  "relationships": [
+    {
+      "relatedSpdxElement": "SPDXRef-RootPackage",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-accelerate-70430045",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-clip-67905ad3",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-faiss-cpu-cc9c7637",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-fastapi-6aee0e67",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-ftfy-cfb1a2de",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-httpx-44c3f6f8",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-numpy-73dd0baf",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-opencv-python-headless-efc5d0d3",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-openpyxl-fab008f0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-pandas-ae4863bd",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-pillow-f6000d4e",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-pydantic-6366233f",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-pytest-2b01214d",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-python-dotenv-8a38abae",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-python-multipart-9803cf93",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-regex-42d58222",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-requests-ec72420d",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-ruff-acadbba9",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-sentencepiece-5c5eff0b",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-torch-37bf51bf",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-torchvision-1094fe4d",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-tqdm-4607a10a",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-transformers-ad9b0702",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-urllib3-4e08df86",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-uvicorn-bab9d673",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-RootPackage"
+    }
+  ],
+  "spdxVersion": "SPDX-2.3"
+}

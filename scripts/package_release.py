@@ -71,6 +71,7 @@ PUBLIC_TEXT_SAMPLE_PREFIX = "assets/samples/"
 PUBLIC_TEXT_EXCLUDED_SOURCE_PREFIXES = (".github/",)
 PUBLIC_TEXT_RETAINED_DOCS = frozenset(
     {
+        "docs/SBOM.md",
         "docs/dependency-report.json",
         "docs/dependency-report.md",
         PUBLIC_TEXT_PORTAL_BLIND_LABEL_TEMPLATE,
@@ -87,6 +88,7 @@ PUBLIC_TEXT_RETAINED_TESTS = frozenset(
     {
         "tests/test_appearance_query.py",
         "tests/test_dependency_snapshot.py",
+        "tests/test_generate_sbom.py",
         "tests/test_package_release.py",
         "tests/test_public_text_evaluation_summary.py",
         "tests/test_notice_metadata.py",
@@ -128,6 +130,8 @@ COMMON_REQUIRED_RELEASE_PATHS = frozenset(
         "NOTICE",
         "README.md",
         "SECURITY.md",
+        "SBOM.cdx.json",
+        "SBOM.spdx.json",
         "THIRD_PARTY_NOTICES.md",
         "app/appearance_query.py",
         "app/graph_rag.py",
@@ -144,6 +148,7 @@ COMMON_REQUIRED_RELEASE_PATHS = frozenset(
         "data/snapshot_manifest.json",
         "docs/dependency-report.json",
         "docs/dependency-report.md",
+        "docs/SBOM.md",
         "environment.release.yml",
         "environment.yml",
         "pytest.ini",
@@ -153,12 +158,14 @@ COMMON_REQUIRED_RELEASE_PATHS = frozenset(
         "scripts/check_contest_readiness.py",
         "scripts/check_dependency_snapshot.py",
         "scripts/generate_dependency_report.py",
+        "scripts/generate_sbom.py",
         "scripts/package_release.py",
         "scripts/smoke_full_runtime.py",
         "scripts/verify_contest_release.py",
         "scripts/verify_release_archive.py",
         "tests/test_package_release.py",
         "tests/test_dependency_snapshot.py",
+        "tests/test_generate_sbom.py",
         "tests/test_smoke_full_runtime.py",
         "tests/test_verify_contest_release.py",
         "tests/test_verify_release_archive.py",

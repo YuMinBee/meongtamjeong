@@ -540,6 +540,7 @@ def synchronize_active_vectors(
     image_downloader: ImageDownloader | None,
     quality_evaluator: QualityEvaluator | None = None,
     include_unknown: bool = False,
+    text_only: bool = False,
 ) -> SyncResult:
     """Return synchronized vectors, metadata, and a deterministic report."""
 
@@ -570,6 +571,7 @@ def synchronize_active_vectors(
     removed_changed_image_rows = 0
     removed_changed_crop_rows = 0
     removed_changed_text_rows = 0
+    removed_profile_excluded_image_rows = 0
     removed_unrecognized_rows = 0
     existing_missing_id_rows = 0
 
@@ -585,6 +587,9 @@ def synchronize_active_vectors(
 
         latest = sanitize_notice_metadata(fresh_record)
         row_type = clean_text(existing_meta.get("type"))
+        if text_only and row_type in {"image", "crop_image"}:
+            removed_profile_excluded_image_rows += 1
+            continue
         fresh_image_url = first_text(latest, "image_url")
         fresh_text = clean_text(latest.get("desc_full"))
         if row_type == "text":
@@ -632,13 +637,21 @@ def synchronize_active_vectors(
         retained_types[row_type] += 1
 
     existing_active_ids = existing_ids.intersection(active)
-    refresh_image_ids = {
-        dog_id for dog_id in existing_active_ids if dog_id not in current_image_ids
-    }
+    refresh_image_ids = (
+        set()
+        if text_only
+        else {
+            dog_id
+            for dog_id in existing_active_ids
+            if dog_id not in current_image_ids
+        }
+    )
     refresh_text_ids = {
         dog_id for dog_id in existing_active_ids if dog_id not in current_text_ids
     }
-    requested_image_ids = set(new_ids).union(refresh_image_ids)
+    requested_image_ids = (
+        set() if text_only else set(new_ids).union(refresh_image_ids)
+    )
     requested_text_ids = set(new_ids).union(refresh_text_ids)
     generation_ids = sorted(requested_image_ids.union(requested_text_ids))
     if generation_ids and encoder is None:
@@ -792,6 +805,7 @@ def synchronize_active_vectors(
         + removed_changed_image_rows
         + removed_changed_crop_rows
         + removed_changed_text_rows
+        + removed_profile_excluded_image_rows
         + removed_unrecognized_rows
     )
     new_image_failures = (
@@ -819,6 +833,9 @@ def synchronize_active_vectors(
         "removed_changed_image_vectors": removed_changed_image_rows,
         "removed_changed_crop_vectors": removed_changed_crop_rows,
         "removed_changed_text_vectors": removed_changed_text_rows,
+        "removed_profile_excluded_image_vectors": (
+            removed_profile_excluded_image_rows
+        ),
         "removed_unrecognized_vectors": removed_unrecognized_rows,
         "removed_existing_unique_ids": len(removed_ids),
         "refresh_required_unique_ids": len(refresh_image_ids.union(refresh_text_ids)),
@@ -861,6 +878,7 @@ def synchronize_active_vectors(
     }
     report = {
         "schema_version": 1,
+        "release_profile": "public-text-only-v1" if text_only else "full",
         "policy": {
             "existing_active_vectors": (
                 "retained_only_when_embedding_source_provenance_matches"
@@ -878,6 +896,7 @@ def synchronize_active_vectors(
             "public_text_failure": "abort_without_writing_outputs",
             "active_notice_vector_coverage": "at_least_one_vector_and_one_text_vector",
             "vlm_or_personality_inference": "prohibited",
+            "visual_vectors": "excluded" if text_only else "retained_or_refreshed",
         },
         "stats": stats,
         "warnings": _warning_codes(stats),
@@ -1058,6 +1077,14 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument("--clip-model", default="ViT-B/32")
     parser.add_argument("--device", default="auto")
+    parser.add_argument(
+        "--text-only",
+        action="store_true",
+        help=(
+            "Do not retain, download, or embed notice images. Produce an "
+            "intermediate index containing public-notice text vectors only."
+        ),
+    )
     parser.add_argument("--image-timeout", type=float, default=15.0)
     parser.add_argument(
         "--allowed-image-host",
@@ -1118,12 +1145,26 @@ def run(
     existing_vectors = extract_index_vectors(existing_index)
 
     runtime_encoder = encoder or ClipEncoder(args.clip_model, args.device)
-    allowed_image_hosts = tuple(args.allowed_image_hosts or DEFAULT_ALLOWED_IMAGE_HOSTS)
-    downloader = image_downloader or PublicImageDownloader(
-        args.image_timeout,
-        allowed_hosts=allowed_image_hosts,
+    text_only = bool(args.text_only)
+    allowed_image_hosts = (
+        ()
+        if text_only
+        else tuple(args.allowed_image_hosts or DEFAULT_ALLOWED_IMAGE_HOSTS)
     )
-    evaluator = quality_evaluator or default_quality_evaluator
+    downloader = (
+        None
+        if text_only
+        else image_downloader
+        or PublicImageDownloader(
+            args.image_timeout,
+            allowed_hosts=allowed_image_hosts,
+        )
+    )
+    evaluator = (
+        None
+        if text_only
+        else quality_evaluator or default_quality_evaluator
+    )
     result = synchronize_active_vectors(
         existing_vectors,
         existing_metas,
@@ -1133,6 +1174,7 @@ def run(
         image_downloader=downloader,
         quality_evaluator=evaluator,
         include_unknown=bool(args.include_unknown),
+        text_only=text_only,
     )
 
     output_index = faiss.IndexFlatL2(result.vectors.shape[1])
@@ -1180,6 +1222,7 @@ def run(
                 "refreshed_image_vectors": report["stats"]["refreshed_image_vectors"],
                 "refreshed_text_vectors": report["stats"]["refreshed_text_vectors"],
                 "new_unique_ids": report["stats"]["new_unique_ids"],
+                "release_profile": report["release_profile"],
                 "warnings": report["warnings"],
                 "report_sha256": sha256_file(args.report_out),
             },

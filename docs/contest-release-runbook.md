@@ -26,22 +26,19 @@
 ```text
 python scripts/fetch_live_dogs.py --days 365 --out <TEMP_DIR>/fresh_dogs.json
 
-python scripts/reuse_image_enrichment.py \
-  --fresh-cache <TEMP_DIR>/fresh_dogs.json \
-  --existing-metas data/dog_metas.json \
-  --output <TEMP_DIR>/fresh_dogs_reused.json
-
 python scripts/sync_active_index.py \
-  --fresh-cache <TEMP_DIR>/fresh_dogs_reused.json \
+  --fresh-cache <TEMP_DIR>/fresh_dogs.json \
   --existing-index data/dog_faiss.index \
   --existing-metas data/dog_metas.json \
   --index-out <TEMP_DIR>/dog_faiss.index \
   --metas-out <TEMP_DIR>/dog_metas.json \
   --report-out <TEMP_DIR>/active_index_sync_report.json \
-  --reference-date <YYYY-MM-DD>
+  --reference-date <YYYY-MM-DD> \
+  --device cpu \
+  --text-only
 ```
 
-`fetch_live_dogs.py`는 `.env`의 `ANIMAL_API_KEY`를 읽습니다. 정식 갱신에서는 365일보다 짧은 조회 범위를 쓰지 않습니다. 365일보다 오래 보호 중인 공고가 누락될 가능성도 있으므로 API 페이지 완주 여부, 이전 manifest 대비 active 공고 수, 제거 비율, 사진·텍스트 임베딩 실패 수를 사람이 확인합니다. `sync_active_index.py`는 기본적으로 `openapi.animal.go.kr` 이미지만 요청하고 redirect를 따르지 않습니다. 다른 공개 provider를 쓰는 경우에만 검토한 정확한 DNS 호스트를 `--allowed-image-host`로 추가합니다. 기본 제거 상한은 0.5이고 최소 active 수 기본값은 1이므로, 릴리스 담당자는 이전 스냅샷 규모를 근거로 `--min-active-notices`를 더 엄격하게 정해 실행할 수 있습니다. 단지 통과시키기 위해 안전 한도나 이미지 호스트 제한을 낮추지 않습니다.
+`fetch_live_dogs.py`는 `.env`의 `ANIMAL_API_KEY`를 읽습니다. 정식 갱신에서는 365일보다 짧은 조회 범위를 쓰지 않습니다. 365일보다 오래 보호 중인 공고가 누락될 가능성도 있으므로 API 페이지 완주 여부, 이전 manifest 대비 active 공고 수, 제거 비율, 텍스트 임베딩 실패 수를 사람이 확인합니다. 최종 출품은 `public-text-only-v1`이므로 `--text-only`가 원격 사진 다운로드와 이미지 encoder 호출을 모두 차단합니다. 기본 제거 상한은 0.5이고 최소 active 수 기본값은 1이므로, 릴리스 담당자는 이전 스냅샷 규모를 근거로 `--min-active-notices`를 더 엄격하게 정해 실행할 수 있습니다. 단지 통과시키기 위해 안전 한도를 낮추지 않습니다. 대규모 학습이 같은 장비에서 실행 중이면 CPU 임베딩도 겹치지 않고 자원이 확보된 뒤 순차 실행합니다.
 
 ## 2. 임시 artifact strict 검증과 수동 승격
 

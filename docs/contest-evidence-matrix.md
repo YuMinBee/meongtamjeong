@@ -22,7 +22,7 @@
 | 3분 이내 시연영상 | [`demo-video-script.md`](demo-video-script.md), [`demo-runbook.md`](demo-runbook.md) | readiness·runtime smoke | 대본 2분 55초, 영상 미제작 | 최종 export 3분 미만, 재생 확인, 권리·비밀·개인정보 프레임 검수 |
 | 소스코드·산출물 | Git 저장소, [`package_release.py`](../scripts/package_release.py) | 추적 파일·비밀 패턴·annotated tag·clean HEAD·embedded manifest·ZIP SHA 검사 | 구현 완료, worktree dirty | YuMinBee 명의 clean release commit·annotated tag에서 실제 ZIP 생성·압축 해제 실행 |
 | 기능테스트 | API·데모·평가·provider·release 도구 | pytest, Ruff, full/public runtime 및 release ZIP runtime smoke | 현재 PASS | fresh snapshot·clean clone·최종 tag에서 전체 gate 재실행 |
-| 라이선스 검증 | [`LICENSE`](../LICENSE), [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md), [`DATA_CARD.md`](../DATA_CARD.md), [`MODEL_CARD.md`](../MODEL_CARD.md), dependency report | dependency inventory·이력 비밀·package 검사 | 코드·의존성 정리 완료, 사진 파생물 권리와 과거 이력 조치 미완료 | `full` 권리 근거 보존 또는 clean-history `public-text-only-v1` 선택; 이력 검사 PASS |
+| 라이선스·SBOM 검증 | [`LICENSE`](../LICENSE), [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md), [`DATA_CARD.md`](../DATA_CARD.md), [`MODEL_CARD.md`](../MODEL_CARD.md), [`SBOM.md`](SBOM.md), SPDX·CycloneDX SBOM | dependency inventory·SBOM 생성·이력 비밀·package 검사 | 코드·75개 구성요소 SBOM과 reachable Git 이력 비밀검사 완료, 사진 파생물 권리는 미확인 | 권리 노출 최소화 `public-text-only-v1` 선택; clean release package 검사 PASS |
 | 2차 발표 | 3분 동선, 예상 질문, 장애 대체 동선 | 발표 PC 수동 QA | 대본·Q&A 준비, 실기 QA 미완료 | 발표 해상도·키보드·네트워크 단절·외부 링크 실패 포함 리허설 완료 |
 
 ## 3. 심사 주장과 재현 증거

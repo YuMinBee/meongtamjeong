@@ -1,0 +1,2795 @@
+{
+  "bomFormat": "CycloneDX",
+  "components": [
+    {
+      "bom-ref": "pkg:pypi/accelerate@1.14.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/huggingface/accelerate"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "name": "accelerate",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "vlm"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/accelerate@1.14.0",
+      "type": "library",
+      "version": "1.14.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/annotated-doc@0.0.4",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/fastapi/annotated-doc"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "annotated-doc",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/annotated-doc@0.0.4",
+      "type": "library",
+      "version": "0.0.4"
+    },
+    {
+      "bom-ref": "pkg:pypi/annotated-types@0.8.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/annotated-types/annotated-types"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "annotated-types",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/annotated-types@0.8.0",
+      "type": "library",
+      "version": "0.8.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/anyio@4.14.2",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://anyio.readthedocs.io/en/latest/"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "anyio",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/anyio@4.14.2",
+      "type": "library",
+      "version": "4.14.2"
+    },
+    {
+      "bom-ref": "pkg:pypi/certifi@2026.7.22",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/certifi/python-certifi"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MPL-2.0"
+        }
+      ],
+      "name": "certifi",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/certifi@2026.7.22",
+      "type": "library",
+      "version": "2026.7.22"
+    },
+    {
+      "bom-ref": "pkg:pypi/charset-normalizer@3.4.9",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/jawah/charset_normalizer"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "charset-normalizer",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/charset-normalizer@3.4.9",
+      "type": "library",
+      "version": "3.4.9"
+    },
+    {
+      "bom-ref": "pkg:pypi/click@8.4.2",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/pallets/click/"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "BSD-3-Clause"
+        }
+      ],
+      "name": "click",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/click@8.4.2",
+      "type": "library",
+      "version": "8.4.2"
+    },
+    {
+      "bom-ref": "urn:meongtamjeong:dependency:clip@1.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/openai/CLIP.git@dcba3cb2e2827b402d2701e7e1c7d9fed8a20ef1"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "clip",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "environment,runtime,vlm"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "license-file-header"
+        }
+      ],
+      "type": "library",
+      "version": "1.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/colorama@0.4.6",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/tartley/colorama"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "name": "BSD (variant unspecified)"
+          }
+        }
+      ],
+      "name": "colorama",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "Classifier"
+        }
+      ],
+      "purl": "pkg:pypi/colorama@0.4.6",
+      "type": "library",
+      "version": "0.4.6"
+    },
+    {
+      "bom-ref": "pkg:pypi/et-xmlfile@2.0.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://foss.heptapod.net/openpyxl/et_xmlfile"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "et-xmlfile",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/et-xmlfile@2.0.0",
+      "type": "library",
+      "version": "2.0.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/exceptiongroup@1.3.1",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/agronholm/exceptiongroup/blob/main/CHANGES.rst"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "exceptiongroup",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "Classifier"
+        }
+      ],
+      "purl": "pkg:pypi/exceptiongroup@1.3.1",
+      "type": "library",
+      "version": "1.3.1"
+    },
+    {
+      "bom-ref": "pkg:pypi/faiss-cpu@1.14.3",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/facebookresearch/faiss"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "faiss-cpu",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "environment,runtime,vlm"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/faiss-cpu@1.14.3",
+      "type": "library",
+      "version": "1.14.3"
+    },
+    {
+      "bom-ref": "pkg:pypi/fastapi@0.140.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/fastapi/fastapi"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "fastapi",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "development,environment,requirements-analysis,runtime,vlm"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/fastapi@0.140.0",
+      "type": "library",
+      "version": "0.140.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/filelock@3.32.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/tox-dev/py-filelock"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "filelock",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/filelock@3.32.0",
+      "type": "library",
+      "version": "3.32.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/fsspec@2026.6.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/fsspec/filesystem_spec"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "BSD-3-Clause"
+        }
+      ],
+      "name": "fsspec",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/fsspec@2026.6.0",
+      "type": "library",
+      "version": "2026.6.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/ftfy@6.3.1",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/rspeer/python-ftfy"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "name": "ftfy",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "environment,runtime,vlm"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/ftfy@6.3.1",
+      "type": "library",
+      "version": "6.3.1"
+    },
+    {
+      "bom-ref": "pkg:pypi/h11@0.16.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/python-hyper/h11"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "h11",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/h11@0.16.0",
+      "type": "library",
+      "version": "0.16.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/hf-xet@1.5.2",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/huggingface/xet-core.git"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "name": "hf-xet",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/hf-xet@1.5.2",
+      "type": "library",
+      "version": "1.5.2"
+    },
+    {
+      "bom-ref": "pkg:pypi/httpcore@1.0.9",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/encode/httpcore"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "BSD-3-Clause"
+        }
+      ],
+      "name": "httpcore",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/httpcore@1.0.9",
+      "type": "library",
+      "version": "1.0.9"
+    },
+    {
+      "bom-ref": "pkg:pypi/httptools@0.8.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/MagicStack/httptools"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "httptools",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/httptools@0.8.0",
+      "type": "library",
+      "version": "0.8.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/httpx@0.28.1",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/encode/httpx"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "BSD-3-Clause"
+        }
+      ],
+      "name": "httpx",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "development,environment,requirements-analysis,runtime,vlm"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/httpx@0.28.1",
+      "type": "library",
+      "version": "0.28.1"
+    },
+    {
+      "bom-ref": "pkg:pypi/huggingface-hub@1.24.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/huggingface/huggingface_hub"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "name": "huggingface-hub",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/huggingface-hub@1.24.0",
+      "type": "library",
+      "version": "1.24.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/idna@3.18",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/kjd/idna"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "BSD-3-Clause"
+        }
+      ],
+      "name": "idna",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/idna@3.18",
+      "type": "library",
+      "version": "3.18"
+    },
+    {
+      "bom-ref": "pkg:pypi/iniconfig@2.3.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/pytest-dev/iniconfig"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "iniconfig",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/iniconfig@2.3.0",
+      "type": "library",
+      "version": "2.3.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/jinja2@3.1.6",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/pallets/jinja/"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "name": "BSD (variant unspecified)"
+          }
+        }
+      ],
+      "name": "jinja2",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "Classifier"
+        }
+      ],
+      "purl": "pkg:pypi/jinja2@3.1.6",
+      "type": "library",
+      "version": "3.1.6"
+    },
+    {
+      "bom-ref": "pkg:pypi/markdown-it-py@4.2.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/executablebooks/markdown-it-py"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "markdown-it-py",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "Classifier"
+        }
+      ],
+      "purl": "pkg:pypi/markdown-it-py@4.2.0",
+      "type": "library",
+      "version": "4.2.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/markupsafe@3.0.3",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/pallets/markupsafe/"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "BSD-3-Clause"
+        }
+      ],
+      "name": "markupsafe",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/markupsafe@3.0.3",
+      "type": "library",
+      "version": "3.0.3"
+    },
+    {
+      "bom-ref": "pkg:pypi/mdurl@0.1.2",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/executablebooks/mdurl"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "mdurl",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "Classifier"
+        }
+      ],
+      "purl": "pkg:pypi/mdurl@0.1.2",
+      "type": "library",
+      "version": "0.1.2"
+    },
+    {
+      "bom-ref": "pkg:pypi/mpmath@1.3.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/fredrik-johansson/mpmath"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "name": "BSD"
+          }
+        }
+      ],
+      "name": "mpmath",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/mpmath@1.3.0",
+      "type": "library",
+      "version": "1.3.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/networkx@3.4.2",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://networkx.org/"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "name": "BSD (variant unspecified)"
+          }
+        }
+      ],
+      "name": "networkx",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "Classifier"
+        }
+      ],
+      "purl": "pkg:pypi/networkx@3.4.2",
+      "type": "library",
+      "version": "3.4.2"
+    },
+    {
+      "bom-ref": "pkg:pypi/numpy@2.2.6",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/numpy/numpy"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "name": "BSD (variant unspecified)"
+          }
+        }
+      ],
+      "name": "numpy",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "development,environment,requirements-analysis,runtime,vlm"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "Classifier"
+        }
+      ],
+      "purl": "pkg:pypi/numpy@2.2.6",
+      "type": "library",
+      "version": "2.2.6"
+    },
+    {
+      "bom-ref": "pkg:pypi/opencv-python-headless@4.13.0.92",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/opencv/opencv-python"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "name": "opencv-python-headless",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "environment,runtime,vlm"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/opencv-python-headless@4.13.0.92",
+      "type": "library",
+      "version": "4.13.0.92"
+    },
+    {
+      "bom-ref": "pkg:pypi/openpyxl@3.1.5",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://foss.heptapod.net/openpyxl/openpyxl"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "openpyxl",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "requirements-analysis"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/openpyxl@3.1.5",
+      "type": "library",
+      "version": "3.1.5"
+    },
+    {
+      "bom-ref": "pkg:pypi/packaging@26.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/pypa/packaging"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "Apache-2.0 OR BSD-2-Clause"
+        }
+      ],
+      "name": "packaging",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/packaging@26.0",
+      "type": "library",
+      "version": "26.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/pandas@2.3.3",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/pandas-dev/pandas"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "name": "BSD (variant unspecified)"
+          }
+        }
+      ],
+      "name": "pandas",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "requirements-analysis"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "Classifier"
+        }
+      ],
+      "purl": "pkg:pypi/pandas@2.3.3",
+      "type": "library",
+      "version": "2.3.3"
+    },
+    {
+      "bom-ref": "pkg:pypi/pillow@12.3.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/python-pillow/Pillow"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT-CMU"
+        }
+      ],
+      "name": "pillow",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "development,environment,requirements-analysis,runtime,vlm"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/pillow@12.3.0",
+      "type": "library",
+      "version": "12.3.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/pip@25.2",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/pypa/pip"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "pip",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/pip@25.2",
+      "type": "library",
+      "version": "25.2"
+    },
+    {
+      "bom-ref": "pkg:pypi/pluggy@1.6.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://pypi.org/project/pluggy/1.6.0/"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "pluggy",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/pluggy@1.6.0",
+      "type": "library",
+      "version": "1.6.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/psutil@7.2.2",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/giampaolo/psutil"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "BSD-3-Clause"
+        }
+      ],
+      "name": "psutil",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/psutil@7.2.2",
+      "type": "library",
+      "version": "7.2.2"
+    },
+    {
+      "bom-ref": "pkg:pypi/pydantic@2.13.4",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/pydantic/pydantic"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "pydantic",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "development,environment,requirements-analysis,runtime,vlm"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/pydantic@2.13.4",
+      "type": "library",
+      "version": "2.13.4"
+    },
+    {
+      "bom-ref": "pkg:pypi/pydantic-core@2.46.4",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/pydantic/pydantic/tree/main/pydantic-core"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "pydantic-core",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/pydantic-core@2.46.4",
+      "type": "library",
+      "version": "2.46.4"
+    },
+    {
+      "bom-ref": "pkg:pypi/pygments@2.20.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/pygments/pygments"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "BSD-2-Clause"
+        }
+      ],
+      "name": "pygments",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/pygments@2.20.0",
+      "type": "library",
+      "version": "2.20.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/pytest@9.0.3",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/pytest-dev/pytest"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "pytest",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "development,environment,requirements-analysis"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/pytest@9.0.3",
+      "type": "library",
+      "version": "9.0.3"
+    },
+    {
+      "bom-ref": "pkg:pypi/python-dateutil@2.9.0.post0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/dateutil/dateutil"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "name": "Dual License"
+          }
+        }
+      ],
+      "name": "python-dateutil",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/python-dateutil@2.9.0.post0",
+      "type": "library",
+      "version": "2.9.0.post0"
+    },
+    {
+      "bom-ref": "pkg:pypi/python-dotenv@1.2.2",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/theskumar/python-dotenv"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "BSD-3-Clause"
+        }
+      ],
+      "name": "python-dotenv",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "development,environment,requirements-analysis,runtime,vlm"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/python-dotenv@1.2.2",
+      "type": "library",
+      "version": "1.2.2"
+    },
+    {
+      "bom-ref": "pkg:pypi/python-multipart@0.0.32",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/Kludex/python-multipart"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "name": "python-multipart",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "development,environment,requirements-analysis,runtime,vlm"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/python-multipart@0.0.32",
+      "type": "library",
+      "version": "0.0.32"
+    },
+    {
+      "bom-ref": "pkg:pypi/pytz@2026.3.post1",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/stub42/pytz.git"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "pytz",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/pytz@2026.3.post1",
+      "type": "library",
+      "version": "2026.3.post1"
+    },
+    {
+      "bom-ref": "pkg:pypi/pyyaml@6.0.3",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://pyyaml.org/wiki/PyYAMLDocumentation"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "pyyaml",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/pyyaml@6.0.3",
+      "type": "library",
+      "version": "6.0.3"
+    },
+    {
+      "bom-ref": "pkg:pypi/regex@2026.7.19",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/mrabarnett/mrab-regex"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "Apache-2.0 AND CNRI-Python"
+        }
+      ],
+      "name": "regex",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "environment,runtime,vlm"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/regex@2026.7.19",
+      "type": "library",
+      "version": "2026.7.19"
+    },
+    {
+      "bom-ref": "pkg:pypi/requests@2.34.2",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/psf/requests"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "name": "requests",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "development,environment,requirements-analysis,runtime,vlm"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/requests@2.34.2",
+      "type": "library",
+      "version": "2.34.2"
+    },
+    {
+      "bom-ref": "pkg:pypi/rich@15.0.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/Textualize/rich"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "rich",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/rich@15.0.0",
+      "type": "library",
+      "version": "15.0.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/ruff@0.15.21",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/astral-sh/ruff"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "ruff",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "development,environment,requirements-analysis"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/ruff@0.15.21",
+      "type": "library",
+      "version": "0.15.21"
+    },
+    {
+      "bom-ref": "pkg:pypi/safetensors@0.8.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/huggingface/safetensors"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "name": "safetensors",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "Classifier"
+        }
+      ],
+      "purl": "pkg:pypi/safetensors@0.8.0",
+      "type": "library",
+      "version": "0.8.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/sentencepiece@0.2.2",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/google/sentencepiece"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "name": "sentencepiece",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "vlm"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/sentencepiece@0.2.2",
+      "type": "library",
+      "version": "0.2.2"
+    },
+    {
+      "bom-ref": "pkg:pypi/setuptools@80.10.2",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/pypa/setuptools"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "setuptools",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/setuptools@80.10.2",
+      "type": "library",
+      "version": "80.10.2"
+    },
+    {
+      "bom-ref": "pkg:pypi/shellingham@1.5.4",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/sarugaku/shellingham"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "ISC"
+        }
+      ],
+      "name": "shellingham",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/shellingham@1.5.4",
+      "type": "library",
+      "version": "1.5.4"
+    },
+    {
+      "bom-ref": "pkg:pypi/six@1.17.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/benjaminp/six"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "six",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/six@1.17.0",
+      "type": "library",
+      "version": "1.17.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/starlette@1.3.1",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/Kludex/starlette"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "BSD-3-Clause"
+        }
+      ],
+      "name": "starlette",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/starlette@1.3.1",
+      "type": "library",
+      "version": "1.3.1"
+    },
+    {
+      "bom-ref": "pkg:pypi/sympy@1.14.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/sympy/sympy"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "name": "BSD"
+          }
+        }
+      ],
+      "name": "sympy",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/sympy@1.14.0",
+      "type": "library",
+      "version": "1.14.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/tokenizers@0.22.2",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/huggingface/tokenizers"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "name": "tokenizers",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "Classifier"
+        }
+      ],
+      "purl": "pkg:pypi/tokenizers@0.22.2",
+      "type": "library",
+      "version": "0.22.2"
+    },
+    {
+      "bom-ref": "pkg:pypi/tomli@2.4.1",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/hukkin/tomli"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "tomli",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/tomli@2.4.1",
+      "type": "library",
+      "version": "2.4.1"
+    },
+    {
+      "bom-ref": "pkg:pypi/torch@2.13.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/pytorch/pytorch"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "name": "Apache-2.0 AND Apache-2.0 WITH LLVM-exception AND BSD-2-Clause AND BSD-3-Clause AND BSL-1.0 AND MIT"
+          }
+        }
+      ],
+      "name": "torch",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "environment,runtime,vlm"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/torch@2.13.0",
+      "type": "library",
+      "version": "2.13.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/torchvision@0.28.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/pytorch/vision"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "name": "BSD"
+          }
+        }
+      ],
+      "name": "torchvision",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "environment,runtime,vlm"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/torchvision@0.28.0",
+      "type": "library",
+      "version": "0.28.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/tqdm@4.69.1",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/tqdm/tqdm"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MPL-2.0 AND MIT"
+        }
+      ],
+      "name": "tqdm",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "environment,runtime,vlm"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/tqdm@4.69.1",
+      "type": "library",
+      "version": "4.69.1"
+    },
+    {
+      "bom-ref": "pkg:pypi/transformers@5.14.1",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/huggingface/transformers"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "name": "transformers",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "vlm"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/transformers@5.14.1",
+      "type": "library",
+      "version": "5.14.1"
+    },
+    {
+      "bom-ref": "pkg:pypi/typer@0.27.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/fastapi/typer"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "typer",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/typer@0.27.0",
+      "type": "library",
+      "version": "0.27.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/typing-extensions@4.16.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/python/typing_extensions"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "PSF-2.0"
+        }
+      ],
+      "name": "typing-extensions",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/typing-extensions@4.16.0",
+      "type": "library",
+      "version": "4.16.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/typing-inspection@0.4.2",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/pydantic/typing-inspection"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "typing-inspection",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/typing-inspection@0.4.2",
+      "type": "library",
+      "version": "0.4.2"
+    },
+    {
+      "bom-ref": "pkg:pypi/tzdata@2026.3",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/python/tzdata"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "name": "tzdata",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/tzdata@2026.3",
+      "type": "library",
+      "version": "2026.3"
+    },
+    {
+      "bom-ref": "pkg:pypi/urllib3@2.7.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/urllib3/urllib3"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "urllib3",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "environment,runtime,vlm"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/urllib3@2.7.0",
+      "type": "library",
+      "version": "2.7.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/uvicorn@0.51.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/Kludex/uvicorn"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "BSD-3-Clause"
+        }
+      ],
+      "name": "uvicorn",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "true"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "environment,runtime,vlm"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/uvicorn@0.51.0",
+      "type": "library",
+      "version": "0.51.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/watchfiles@1.2.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/samuelcolvin/watchfiles"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "watchfiles",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License"
+        }
+      ],
+      "purl": "pkg:pypi/watchfiles@1.2.0",
+      "type": "library",
+      "version": "1.2.0"
+    },
+    {
+      "bom-ref": "pkg:pypi/wcwidth@0.8.2",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/jquast/wcwidth"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "wcwidth",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/wcwidth@0.8.2",
+      "type": "library",
+      "version": "0.8.2"
+    },
+    {
+      "bom-ref": "pkg:pypi/websockets@16.1.1",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/python-websockets/websockets"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "BSD-3-Clause"
+        }
+      ],
+      "name": "websockets",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/websockets@16.1.1",
+      "type": "library",
+      "version": "16.1.1"
+    },
+    {
+      "bom-ref": "pkg:pypi/wheel@0.47.0",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/pypa/wheel"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "wheel",
+      "properties": [
+        {
+          "name": "meongtamjeong:direct",
+          "value": "false"
+        },
+        {
+          "name": "meongtamjeong:scopes",
+          "value": "installed-environment"
+        },
+        {
+          "name": "meongtamjeong:license-source",
+          "value": "License-Expression"
+        }
+      ],
+      "purl": "pkg:pypi/wheel@0.47.0",
+      "type": "library",
+      "version": "0.47.0"
+    }
+  ],
+  "dependencies": [
+    {
+      "dependsOn": [
+        "pkg:pypi/accelerate@1.14.0",
+        "pkg:pypi/faiss-cpu@1.14.3",
+        "pkg:pypi/fastapi@0.140.0",
+        "pkg:pypi/ftfy@6.3.1",
+        "pkg:pypi/httpx@0.28.1",
+        "pkg:pypi/numpy@2.2.6",
+        "pkg:pypi/opencv-python-headless@4.13.0.92",
+        "pkg:pypi/openpyxl@3.1.5",
+        "pkg:pypi/pandas@2.3.3",
+        "pkg:pypi/pillow@12.3.0",
+        "pkg:pypi/pydantic@2.13.4",
+        "pkg:pypi/pytest@9.0.3",
+        "pkg:pypi/python-dotenv@1.2.2",
+        "pkg:pypi/python-multipart@0.0.32",
+        "pkg:pypi/regex@2026.7.19",
+        "pkg:pypi/requests@2.34.2",
+        "pkg:pypi/ruff@0.15.21",
+        "pkg:pypi/sentencepiece@0.2.2",
+        "pkg:pypi/torch@2.13.0",
+        "pkg:pypi/torchvision@0.28.0",
+        "pkg:pypi/tqdm@4.69.1",
+        "pkg:pypi/transformers@5.14.1",
+        "pkg:pypi/urllib3@2.7.0",
+        "pkg:pypi/uvicorn@0.51.0",
+        "urn:meongtamjeong:dependency:clip@1.0"
+      ],
+      "ref": "pkg:github/YuMinBee/meongtamjeong@submission-2026"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/accelerate@1.14.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/annotated-doc@0.0.4"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/annotated-types@0.8.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/anyio@4.14.2"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/certifi@2026.7.22"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/charset-normalizer@3.4.9"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/click@8.4.2"
+    },
+    {
+      "dependsOn": [],
+      "ref": "urn:meongtamjeong:dependency:clip@1.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/colorama@0.4.6"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/et-xmlfile@2.0.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/exceptiongroup@1.3.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/faiss-cpu@1.14.3"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/fastapi@0.140.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/filelock@3.32.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/fsspec@2026.6.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/ftfy@6.3.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/h11@0.16.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/hf-xet@1.5.2"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/httpcore@1.0.9"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/httptools@0.8.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/httpx@0.28.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/huggingface-hub@1.24.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/idna@3.18"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/iniconfig@2.3.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/jinja2@3.1.6"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/markdown-it-py@4.2.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/markupsafe@3.0.3"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/mdurl@0.1.2"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/mpmath@1.3.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/networkx@3.4.2"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/numpy@2.2.6"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/opencv-python-headless@4.13.0.92"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/openpyxl@3.1.5"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/packaging@26.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/pandas@2.3.3"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/pillow@12.3.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/pip@25.2"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/pluggy@1.6.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/psutil@7.2.2"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/pydantic@2.13.4"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/pydantic-core@2.46.4"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/pygments@2.20.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/pytest@9.0.3"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/python-dateutil@2.9.0.post0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/python-dotenv@1.2.2"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/python-multipart@0.0.32"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/pytz@2026.3.post1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/pyyaml@6.0.3"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/regex@2026.7.19"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/requests@2.34.2"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/rich@15.0.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/ruff@0.15.21"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/safetensors@0.8.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/sentencepiece@0.2.2"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/setuptools@80.10.2"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/shellingham@1.5.4"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/six@1.17.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/starlette@1.3.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/sympy@1.14.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/tokenizers@0.22.2"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/tomli@2.4.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/torch@2.13.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/torchvision@0.28.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/tqdm@4.69.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/transformers@5.14.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/typer@0.27.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/typing-extensions@4.16.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/typing-inspection@0.4.2"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/tzdata@2026.3"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/urllib3@2.7.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/uvicorn@0.51.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/watchfiles@1.2.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/wcwidth@0.8.2"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/websockets@16.1.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:pypi/wheel@0.47.0"
+    }
+  ],
+  "metadata": {
+    "component": {
+      "bom-ref": "pkg:github/YuMinBee/meongtamjeong@submission-2026",
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/YuMinBee/meongtamjeong"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "name": "MeongTamjeong",
+      "properties": [
+        {
+          "name": "meongtamjeong:dependency-graph-complete",
+          "value": "false"
+        }
+      ],
+      "purl": "pkg:github/YuMinBee/meongtamjeong@submission-2026",
+      "type": "application",
+      "version": "submission-2026"
+    },
+    "timestamp": "2026-08-26T08:05:00Z",
+    "tools": {
+      "components": [
+        {
+          "name": "meongtamjeong-generate-sbom",
+          "type": "application",
+          "version": "1.0"
+        }
+      ]
+    }
+  },
+  "serialNumber": "urn:uuid:1c19d811-b510-5c6d-940d-d45928f9346a",
+  "specVersion": "1.6",
+  "version": 1
+}

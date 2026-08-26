@@ -20,8 +20,25 @@ Git 원격 이력에 공개된 샘플 사진과 사진 파생 artifact의 권리
   사진 품질 점수는 출력하지 않습니다.
 
 ```powershell
+python scripts/sync_active_index.py `
+  --fresh-cache <TEMP_DIR>/fresh_dogs.json `
+  --existing-index data/dog_faiss.index `
+  --existing-metas data/dog_metas.json `
+  --index-out <TEMP_DIR>/dog_faiss.index `
+  --metas-out <TEMP_DIR>/dog_metas.json `
+  --report-out <TEMP_DIR>/active_index_sync_report.json `
+  --reference-date <YYYY-MM-DD> `
+  --device cpu `
+  --text-only
+
 python scripts/build_public_text_release.py --output-dir dist/public-text-only
 ```
+
+`--text-only`는 기존·신규 공고의 사진/crop 벡터를 보존하지 않고, 원격 사진을
+다운로드하거나 이미지 encoder를 호출하지도 않습니다. 최신 공개 공고 텍스트만
+공식 CLIP commit으로 임베딩한 뒤 검증된 임시 산출물을 canonical data 위치에
+교체합니다. 대규모 학습이 실행 중인 장비에서는 이 CPU 임베딩 단계도 자원이
+확보된 뒤 순차 실행합니다.
 
 ## 패키징
 

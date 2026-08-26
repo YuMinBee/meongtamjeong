@@ -266,6 +266,8 @@ tests/                                단위·통합·회귀 테스트
 
 ## 문서와 라이선스
 
+- [SPDX 2.3 SBOM](SBOM.spdx.json) / [CycloneDX 1.6 SBOM](SBOM.cdx.json)
+- [사람이 읽는 SBOM](docs/SBOM.md)
 - [모델·시스템 카드](MODEL_CARD.md)
 - [데이터 카드](DATA_CARD.md)
 - [제3자 모델·소프트웨어 고지](THIRD_PARTY_NOTICES.md)
