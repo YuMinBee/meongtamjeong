@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#174f40" />
+  <meta name="theme-color" content="#0b2925" />
   <title>멍탐정 · 보호소 방문 후보 탐색</title>
   <style>
     :root {
@@ -833,6 +833,518 @@
       *, *::before, *::after { scroll-behavior:auto !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
     }
   </style>
+  <style id="editorial-design-refresh">
+    /*
+      2026 contest visual refresh
+      Search-first information hierarchy inspired by mature adoption portals,
+      with an original editorial palette and illustration system for 멍탐정.
+    */
+    :root {
+      --canvas:#f3f3ee;
+      --surface:#ffffff;
+      --surface-strong:#ffffff;
+      --ink:#122923;
+      --muted:#65736d;
+      --line:#d8ded9;
+      --line-strong:#bcc8c0;
+      --brand:#123f37;
+      --brand-deep:#0b2925;
+      --brand-soft:#d9f3e7;
+      --accent:#ff6940;
+      --accent-soft:#ffe4d9;
+      --signal:#ddff78;
+      --gold:#8b6115;
+      --gold-soft:#fff1c9;
+      --blue:#285c73;
+      --blue-soft:#dceef5;
+      --danger:#a8483f;
+      --danger-soft:#fae5e1;
+      --focus:#e64d26;
+      --shadow:0 24px 64px rgba(15,47,39,.11);
+      --shadow-soft:0 12px 32px rgba(15,47,39,.08);
+      --radius-xl:32px;
+      --radius-lg:24px;
+      --radius-md:16px;
+    }
+    body {
+      color:var(--ink);
+      background-color:var(--canvas);
+      background-image:
+        linear-gradient(rgba(18,63,55,.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(18,63,55,.028) 1px, transparent 1px),
+        radial-gradient(circle at 8% 3%, rgba(255,105,64,.10), transparent 25rem),
+        radial-gradient(circle at 94% 16%, rgba(221,255,120,.20), transparent 28rem);
+      background-size:32px 32px, 32px 32px, auto, auto;
+      font-family:"Pretendard Variable", Pretendard, "SUIT Variable", SUIT, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    }
+    .shell { width:min(1360px, calc(100vw - 48px)); }
+    .site-header {
+      border-bottom:1px solid rgba(18,63,55,.09);
+      background:rgba(250,250,247,.90);
+      box-shadow:0 7px 26px rgba(18,41,35,.045);
+    }
+    .header-inner { min-height:80px; }
+    .brand { gap:11px; }
+    .brand-mark {
+      width:46px;
+      height:46px;
+      color:var(--signal);
+      border:1px solid rgba(221,255,120,.18);
+      border-radius:50%;
+      background:var(--brand-deep);
+      box-shadow:none;
+    }
+    .brand-mark svg { width:27px; height:27px; }
+    .brand-copy strong { font-size:1.18rem; font-weight:900; }
+    .brand-copy span { color:#6f7975; font-size:.64rem; font-weight:750; letter-spacing:.16em; }
+    .header-nav { display:flex; align-items:center; gap:6px; margin-left:auto; }
+    .header-nav a {
+      min-height:40px;
+      display:inline-flex;
+      align-items:center;
+      padding:0 13px;
+      color:#43544e;
+      border-radius:999px;
+      font-size:.82rem;
+      font-weight:760;
+      text-decoration:none;
+    }
+    .header-nav a:hover { color:var(--brand-deep); background:#e8ece8; }
+    .header-actions { margin-left:8px; }
+    .principle-badge {
+      color:var(--brand-deep);
+      border:1px solid #c7e1d5;
+      background:var(--brand-soft);
+    }
+    .connection-button {
+      min-height:44px;
+      padding:0 15px;
+      color:#fff;
+      border-color:var(--brand-deep);
+      background:var(--brand-deep);
+    }
+    main { padding:20px 0 72px; }
+    .hero {
+      isolation:isolate;
+      position:relative;
+      overflow:hidden;
+      min-height:600px;
+      grid-template-columns:minmax(0, 1.08fr) minmax(390px, .92fr);
+      gap:clamp(36px, 5vw, 78px);
+      align-items:center;
+      margin-top:18px;
+      padding:clamp(42px, 5.7vw, 78px);
+      color:#fff;
+      border-radius:42px;
+      background:
+        radial-gradient(circle at 87% 8%, rgba(221,255,120,.19), transparent 20rem),
+        linear-gradient(135deg, #103f37 0%, #0b2a27 72%);
+      box-shadow:0 30px 80px rgba(11,41,37,.20);
+    }
+    .hero::before {
+      content:"";
+      position:absolute;
+      z-index:-1;
+      width:290px;
+      height:290px;
+      right:-85px;
+      bottom:-105px;
+      border:54px solid rgba(255,105,64,.74);
+      border-radius:50%;
+      transform:rotate(-14deg);
+    }
+    .hero::after {
+      content:"";
+      position:absolute;
+      z-index:-1;
+      width:160px;
+      height:96px;
+      left:46%;
+      top:12%;
+      opacity:.25;
+      background-image:radial-gradient(circle, var(--signal) 2px, transparent 2.6px);
+      background-size:17px 17px;
+      transform:rotate(8deg);
+    }
+    .hero-copy, .hero-showcase { position:relative; z-index:1; }
+    .eyebrow {
+      width:max-content;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin:0 0 24px;
+      padding:8px 12px;
+      color:var(--brand-deep);
+      border-radius:999px;
+      background:var(--signal);
+      font-size:.7rem;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:none;
+    }
+    .eyebrow::before { content:""; width:7px; height:7px; border-radius:50%; background:var(--accent); }
+    .hero h1 {
+      max-width:820px;
+      font-size:clamp(3rem, 5.4vw, 5.4rem);
+      line-height:.99;
+      letter-spacing:-.075em;
+      text-wrap:balance;
+    }
+    .hero h1 em { color:var(--signal); }
+    .hero h1 em::after { content:none; }
+    .hero-lead {
+      max-width:660px;
+      margin-top:25px;
+      color:rgba(245,255,250,.76);
+      font-size:1.02rem;
+      line-height:1.72;
+    }
+    .hero-actions { display:flex; flex-wrap:wrap; align-items:center; gap:18px; margin-top:32px; }
+    .hero-cta {
+      min-height:56px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      padding:0 21px;
+      color:var(--brand-deep);
+      border-radius:16px;
+      background:var(--signal);
+      box-shadow:0 12px 30px rgba(0,0,0,.18);
+      font-size:.92rem;
+      font-weight:900;
+      text-decoration:none;
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .hero-cta:hover { transform:translateY(-2px); box-shadow:0 17px 34px rgba(0,0,0,.22); }
+    .hero-cta svg { width:19px; height:19px; }
+    .hero-note { margin:0; color:rgba(245,255,250,.66); font-size:.73rem; line-height:1.5; }
+    .hero-note strong { display:block; color:#fff; font-size:.78rem; }
+    .hero-showcase { display:grid; gap:12px; }
+    .hero-portrait {
+      position:relative;
+      overflow:hidden;
+      min-height:315px;
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:32px;
+      background:linear-gradient(145deg, #eaffab 0%, #c7f1de 100%);
+      box-shadow:0 22px 55px rgba(0,0,0,.18);
+    }
+    .hero-portrait::after {
+      content:"";
+      position:absolute;
+      width:120px;
+      height:120px;
+      right:-42px;
+      top:-46px;
+      border:22px solid var(--accent);
+      border-radius:50%;
+    }
+    .hero-portrait svg { position:absolute; width:112%; height:112%; left:-6%; bottom:-13%; color:var(--brand-deep); }
+    .portrait-chip {
+      position:absolute;
+      z-index:2;
+      min-height:34px;
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:0 11px;
+      color:#fff;
+      border:1px solid rgba(255,255,255,.22);
+      border-radius:999px;
+      background:rgba(11,41,37,.88);
+      box-shadow:0 8px 20px rgba(11,41,37,.15);
+      backdrop-filter:blur(8px);
+      font-size:.7rem;
+      font-weight:820;
+    }
+    .portrait-chip::before { content:""; width:6px; height:6px; border-radius:50%; background:var(--signal); }
+    .portrait-chip.top { top:18px; left:18px; }
+    .portrait-chip.bottom { right:18px; bottom:18px; color:var(--brand-deep); background:rgba(255,255,255,.90); }
+    .portrait-chip.bottom::before { background:var(--accent); }
+    .hero-proof {
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:8px;
+      padding:0;
+      border:0;
+      border-radius:0;
+      background:transparent;
+      box-shadow:none;
+    }
+    .proof-item {
+      min-height:106px;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:10px;
+      padding:13px;
+      color:#fff;
+      border:1px solid rgba(255,255,255,.11);
+      border-radius:18px;
+      background:rgba(255,255,255,.075);
+    }
+    .proof-icon { width:34px; height:34px; color:var(--signal); border-radius:11px; background:rgba(221,255,120,.11); }
+    .proof-icon svg { width:18px; height:18px; }
+    .proof-item strong { font-size:.76rem; line-height:1.35; }
+    .proof-item span span { margin-top:4px; color:rgba(245,255,250,.58); font-size:.64rem; line-height:1.35; }
+    .workspace {
+      grid-template-columns:400px minmax(0,1fr);
+      gap:30px;
+      margin-top:44px;
+    }
+    .profile-panel {
+      border:1px solid rgba(18,63,55,.13);
+      border-radius:30px;
+      background:#fff;
+      box-shadow:0 22px 56px rgba(15,47,39,.10);
+    }
+    .panel-head {
+      padding:28px 27px 23px;
+      color:#fff;
+      border:0;
+      background:var(--brand-deep);
+    }
+    .step-label {
+      width:max-content;
+      display:inline-flex;
+      align-items:center;
+      min-height:27px;
+      padding:0 9px;
+      color:var(--brand-deep);
+      border-radius:999px;
+      background:var(--signal);
+      font-size:.63rem;
+      font-weight:900;
+      letter-spacing:.1em;
+    }
+    .panel-head h2 { margin-top:12px; font-size:1.65rem; }
+    .panel-head p { color:rgba(255,255,255,.66); font-size:.8rem; }
+    .search-form { padding:25px 27px 28px; }
+    .field > span, .field-label { color:#324a42; font-weight:820; }
+    input[type="text"], input[type="password"], input[type="number"], select, textarea {
+      min-height:50px;
+      border:1.5px solid #cbd4ce;
+      border-radius:14px;
+      background:#fbfcfa;
+    }
+    .query-input {
+      min-height:62px !important;
+      border-width:2px !important;
+      border-color:#93a59b !important;
+      background:#fff !important;
+      font-size:.9rem;
+    }
+    input[type="text"]:focus, input[type="password"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+      border-color:var(--brand) !important;
+      box-shadow:0 0 0 4px rgba(18,63,55,.11);
+    }
+    .drop-zone {
+      min-height:118px;
+      border:1.5px dashed #76a38f;
+      border-radius:18px;
+      background:linear-gradient(135deg, #edf9f3, #f7fbf8);
+    }
+    .drop-zone-icon { color:var(--brand-deep); background:var(--signal); box-shadow:none; }
+    .drop-zone:hover, .drop-zone.dragover { border-color:var(--accent); background:var(--accent-soft); }
+    .preset-button { border-radius:10px; background:#f7f7f3; }
+    .preset-button:hover, .preset-button.active { color:var(--brand-deep); border-color:#9ac8b2; background:var(--brand-soft); }
+    .form-divider { background:#e5e9e6; }
+    .range-output { color:var(--brand-deep); border-color:#a8cfbd; background:var(--brand-soft); }
+    details.inquiry-prep { border-color:#b9d5c7; border-radius:18px; background:#f0f9f5; }
+    .switch-row, .temperament-option { border-radius:13px; background:#fff; }
+    .primary-button {
+      min-height:60px;
+      color:var(--brand-deep);
+      border-radius:16px;
+      background:var(--accent);
+      box-shadow:0 13px 27px rgba(226,76,37,.24);
+      font-size:.92rem;
+    }
+    .primary-button:hover { box-shadow:0 17px 32px rgba(226,76,37,.30); }
+    .results-head { min-height:104px; padding:5px 3px 20px; }
+    .results-head .step-label { color:#fff; background:var(--brand-deep); }
+    .results-head h2 { margin-top:11px; font-size:1.85rem; }
+    .results-description { max-width:620px; line-height:1.55; }
+    .result-count strong { color:var(--accent); font-size:1.55rem; }
+    .ethics-banner {
+      margin-bottom:18px;
+      padding:15px 17px;
+      color:#254b3e;
+      border:1px solid #b6d8c8;
+      border-left:5px solid var(--brand);
+      border-radius:17px;
+      background:#e9f7f0;
+    }
+    .compare-note { border-radius:15px; }
+    .results-list { grid-template-columns:repeat(2, minmax(0,1fr)); gap:18px; }
+    .results-list > li { min-width:0; display:flex; }
+    .dog-card {
+      width:100%;
+      min-height:0;
+      display:flex;
+      flex-direction:column;
+      border:1px solid rgba(18,63,55,.13);
+      border-radius:24px;
+      box-shadow:0 12px 34px rgba(15,47,39,.08);
+    }
+    .dog-card:hover { transform:translateY(-4px); border-color:#9db6aa; box-shadow:0 22px 46px rgba(15,47,39,.13); }
+    .image-shell { min-height:0; aspect-ratio:16/11; background:#dfe9e3; }
+    .image-fallback { position:absolute; inset:0; min-height:0; background:linear-gradient(145deg, #d9f3e7, #f1f5d7); }
+    .rank-badge {
+      top:16px;
+      left:16px;
+      min-width:52px;
+      min-height:38px;
+      color:var(--brand-deep);
+      border:0;
+      border-radius:11px;
+      background:var(--signal);
+      backdrop-filter:none;
+    }
+    .rank-change { left:16px; bottom:16px; background:rgba(11,41,37,.90); }
+    .card-body { flex:1; padding:21px 21px 20px; }
+    .card-top { display:grid; gap:12px; }
+    .status-stack { justify-items:start; text-align:left; }
+    .notice-badge { color:var(--brand-deep); background:var(--brand-soft); }
+    .dog-title h3 { font-size:1.34rem; }
+    .dog-title p { white-space:normal; line-height:1.45; }
+    .meta-chip { border-radius:999px; background:#f6f7f4; }
+    .reason-box { border:1px solid #dfe7e1; border-radius:15px; background:#f3f7f4; }
+    .reason-label { color:var(--brand-deep); }
+    .evidence-line { grid-template-columns:72px minmax(0,1fr); }
+    .card-footer { align-items:stretch; }
+    .card-actions { width:100%; display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .score-button, .inquiry-button, .notice-link { min-height:44px; border-radius:12px; }
+    .inquiry-button { border-color:var(--brand-deep); background:var(--brand-deep); }
+    .notice-link { grid-column:1/-1; color:var(--brand-deep); background:var(--accent); }
+    .score-panel { border-radius:15px; }
+    .score-grid { grid-template-columns:1fr 1fr; }
+    .state-card {
+      min-height:500px;
+      border:1px solid #cad5ce;
+      border-radius:26px;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(221,255,120,.32), transparent 12rem),
+        #fff;
+      box-shadow:var(--shadow-soft);
+    }
+    .state-visual {
+      width:146px;
+      height:146px;
+      color:var(--brand-deep);
+      border:1px solid #acd0bf;
+      border-radius:50%;
+      background:var(--brand-soft);
+      transform:none;
+    }
+    .state-visual svg { transform:none; }
+    .state-card h3 { font-size:1.42rem; }
+    .state-tips span { color:var(--brand-deep); border:1px solid #cad8d0; background:#f6f7f3; }
+    .skeleton-list { grid-template-columns:repeat(2, minmax(0,1fr)); gap:18px; }
+    .skeleton-card { height:560px; display:block; border-radius:24px; }
+    .skeleton-image { min-height:260px; }
+    .method-strip {
+      position:relative;
+      overflow:hidden;
+      gap:0;
+      margin-top:56px;
+      padding:14px;
+      color:#fff;
+      border:0;
+      border-radius:30px;
+      background:var(--brand-deep);
+      box-shadow:0 22px 54px rgba(11,41,37,.16);
+    }
+    .method-step {
+      min-height:142px;
+      grid-template-columns:48px 1fr;
+      gap:15px;
+      padding:23px 21px;
+      border-radius:20px;
+      background:transparent;
+    }
+    .method-step + .method-step { border-left:1px solid rgba(255,255,255,.12); }
+    .method-number { width:46px; height:46px; color:var(--brand-deep); border-radius:50%; background:var(--signal); }
+    .method-step strong { font-size:.92rem; }
+    .method-step p { color:rgba(255,255,255,.60); font-size:.72rem; }
+    footer { padding:0 4px; font-size:.72rem; }
+    dialog { border:1px solid rgba(18,63,55,.14); border-radius:26px; background:#fff; }
+    dialog::backdrop { background:rgba(6,28,24,.62); }
+    .dialog-head { padding:25px 25px 17px; }
+    .dialog-head h2 { font-size:1.3rem; }
+    .dialog-body { padding:5px 25px 25px; }
+    .icon-button { border-radius:50%; }
+    .dialog-actions button { border-radius:13px; }
+    .dialog-actions .save, .copy-actions button:last-child { color:var(--brand-deep); border-color:var(--accent); background:var(--accent); }
+    .inquiry-overview { border-radius:17px; }
+    .inquiry-questions, .inquiry-template { border-radius:15px; }
+    @media (max-width:1180px) {
+      .shell { width:min(100% - 36px, 1080px); }
+      .header-nav { display:none; }
+      .hero { min-height:0; grid-template-columns:1fr; gap:36px; }
+      .hero-showcase { width:min(100%, 620px); }
+      .hero-portrait { min-height:350px; }
+      .workspace { grid-template-columns:350px minmax(0,1fr); gap:22px; }
+      .results-list, .skeleton-list { grid-template-columns:1fr; }
+      .dog-card { display:grid; grid-template-columns:220px minmax(0,1fr); }
+      .image-shell { min-height:100%; aspect-ratio:auto; }
+      .card-actions { grid-template-columns:1fr; }
+      .notice-link { grid-column:auto; }
+      .skeleton-card { height:360px; display:grid; grid-template-columns:220px 1fr; }
+      .skeleton-image { min-height:100%; }
+    }
+    @media (max-width:900px) {
+      .principle-badge { display:none; }
+      .hero { padding:42px; border-radius:32px; }
+      .hero h1 { font-size:clamp(2.8rem, 9vw, 4.6rem); }
+      .workspace { grid-template-columns:1fr; }
+      .profile-panel { width:min(100%, 700px); margin:0 auto; }
+      .results-head { margin-top:16px; }
+      .results-list, .skeleton-list { grid-template-columns:repeat(2, minmax(0,1fr)); }
+      .dog-card { display:flex; }
+      .image-shell { min-height:0; aspect-ratio:16/11; }
+      .card-actions { grid-template-columns:1fr 1fr; }
+      .notice-link { grid-column:1/-1; }
+      .skeleton-card { height:560px; display:block; }
+      .skeleton-image { min-height:260px; }
+      .method-strip { grid-template-columns:1fr; }
+      .method-step + .method-step { border-top:1px solid rgba(255,255,255,.12); border-left:0; }
+    }
+    @media (max-width:680px) {
+      .shell { width:min(100% - 24px, 620px); }
+      .header-inner { min-height:70px; }
+      .brand-mark { width:42px; height:42px; }
+      .brand-copy span { display:none; }
+      .connection-button { width:44px; padding:0; justify-content:center; }
+      .connection-button span:last-child { display:none; }
+      main { padding-top:8px; }
+      .hero { margin-top:10px; padding:31px 23px 25px; border-radius:26px; }
+      .hero::after { display:none; }
+      .hero h1 { font-size:clamp(2.5rem, 13vw, 3.7rem); line-height:1.02; }
+      .hero-lead { font-size:.9rem; }
+      .hero-actions { align-items:stretch; flex-direction:column; }
+      .hero-cta { width:100%; }
+      .hero-portrait { min-height:265px; border-radius:24px; }
+      .hero-proof { grid-template-columns:1fr; }
+      .proof-item { min-height:72px; display:grid; grid-template-columns:34px 1fr; align-items:center; }
+      .workspace { margin-top:28px; }
+      .profile-panel { border-radius:24px; }
+      .panel-head { padding:24px 21px 20px; }
+      .search-form { padding:22px 20px 24px; }
+      .field-grid, .advanced-body { grid-template-columns:1fr; }
+      .results-head { align-items:flex-start; }
+      .results-list, .skeleton-list { grid-template-columns:1fr; }
+      .dog-card { display:flex; }
+      .card-actions { grid-template-columns:1fr; }
+      .notice-link { grid-column:auto; }
+      .image-shell, .image-fallback { min-height:0; aspect-ratio:4/3; }
+      .state-card { min-height:430px; padding:30px 22px; }
+      .skeleton-card { height:535px; }
+      .skeleton-image { min-height:245px; }
+      .method-strip { margin-top:34px; border-radius:24px; }
+      .method-step { min-height:118px; }
+    }
+  </style>
 </head>
 <body>
   <a class="skip-link" href="#searchWorkspace">탐색 화면으로 바로가기</a>
@@ -849,6 +1361,10 @@
         </span>
         <span class="brand-copy"><strong>멍탐정</strong><span>MEONGTAMJEONG</span></span>
       </a>
+      <nav class="header-nav" aria-label="주요 메뉴">
+        <a href="#searchWorkspace">후보 찾기</a>
+        <a href="#howItWorks">작동 방식</a>
+      </nav>
       <div class="header-actions">
         <span class="principle-badge">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -864,23 +1380,42 @@
   <main id="top">
     <div class="shell">
       <section class="hero" aria-labelledby="heroTitle">
-        <div>
-          <p class="eyebrow">Appearance-first shelter dog search</p>
-          <h1 id="heroTitle">마음에 그린 모습을 찾고,<br><em>보호소 문의</em>까지 한 번에.</h1>
-          <p class="hero-lead">원하는 외형을 자연어로 설명하면 사진과 공고를 함께 검색합니다. 크기·연령·지역으로 먼저 볼 순서를 조정하고, 성격 선호는 예측 대신 보호소에서 확인할 질문으로 바꿔드려요.</p>
+        <div class="hero-copy">
+          <p class="eyebrow">사진과 문장으로 찾는 보호소 친구</p>
+          <h1 id="heroTitle">마음에 그린 모습을<br><em>말로 찾아보세요.</em></h1>
+          <p class="hero-lead">털색, 무늬, 귀 모양처럼 눈에 보이는 특징을 설명하거나 참고사진을 더해보세요. 멍탐정이 실제 보호 공고에서 닮은 후보를 찾고, 보호소에 확인할 질문까지 정리합니다.</p>
+          <div class="hero-actions">
+            <a class="hero-cta" href="#searchWorkspace">친구 찾아보기<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <p class="hero-note"><strong>판단 대신 확인을 돕습니다</strong>성격과 입양 적합성은 사진으로 예측하지 않아요.</p>
+          </div>
         </div>
-        <div class="hero-proof" aria-label="멍탐정 탐색 원칙">
-          <div class="proof-item">
-            <span class="proof-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3h10v3H7zM5 6h14v14H5z" stroke="currentColor" stroke-width="1.8"/><path d="M8 11h8M8 15h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-            <span><strong>외형 중심 탐색</strong><span>사진과 자연어 의미를 함께 비교</span></span>
+        <div class="hero-showcase">
+          <div class="hero-portrait" aria-hidden="true">
+            <span class="portrait-chip top">사진 + 자연어 의미 탐색</span>
+            <svg viewBox="0 0 420 320" fill="none">
+              <path d="M99 124c-45-11-62-50-43-78 18-27 55-28 79 6 17-37 48-54 82-50 35 4 59 27 68 66 31-25 68-12 77 18 10 33-17 63-58 66" stroke="currentColor" stroke-width="12" stroke-linecap="round"/>
+              <path d="M91 132c0-79 49-126 126-126 76 0 124 48 124 126 0 94-48 154-124 154-77 0-126-60-126-154Z" fill="rgba(255,255,255,.32)" stroke="currentColor" stroke-width="12"/>
+              <circle cx="169" cy="144" r="11" fill="currentColor"/><circle cx="260" cy="144" r="11" fill="currentColor"/>
+              <path d="M180 203c22 20 50 20 72 0M216 181v36" stroke="currentColor" stroke-width="12" stroke-linecap="round"/>
+              <circle cx="308" cy="241" r="55" fill="#fff" stroke="currentColor" stroke-width="11"/>
+              <path d="m347 280 39 39" stroke="currentColor" stroke-width="14" stroke-linecap="round"/>
+              <path d="M285 241h46M308 218v46" stroke="#ff6940" stroke-width="10" stroke-linecap="round"/>
+            </svg>
+            <span class="portrait-chip bottom">근거가 있는 만큼만</span>
           </div>
-          <div class="proof-item">
-            <span class="proof-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="5.5" stroke="currentColor" stroke-width="1.9"/><path d="m15 15 4 4M8 10.5l1.6 1.6L13 8.8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <span><strong>객관적 선호 반영</strong><span>크기·연령·지역으로 우선순위 조정</span></span>
-          </div>
-          <div class="proof-item">
-            <span class="proof-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4.8 6v5.4c0 4.4 3 7.8 7.2 9.6 4.2-1.8 7.2-5.2 7.2-9.6V6L12 3Z" stroke="currentColor" stroke-width="1.8"/><path d="M9.5 12h5M12 9.5v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-            <span><strong>보호소 문의 연결</strong><span>성격 선호를 확인 질문으로 준비</span></span>
+          <div class="hero-proof" aria-label="멍탐정 탐색 원칙">
+            <div class="proof-item">
+              <span class="proof-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3h10v3H7zM5 6h14v14H5z" stroke="currentColor" stroke-width="1.8"/><path d="M8 11h8M8 15h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+              <span><strong>외형 중심 탐색</strong><span>사진과 문장을 함께 비교</span></span>
+            </div>
+            <div class="proof-item">
+              <span class="proof-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="5.5" stroke="currentColor" stroke-width="1.9"/><path d="m15 15 4 4M8 10.5l1.6 1.6L13 8.8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span><strong>객관 조건 반영</strong><span>크기·연령·지역만 정렬</span></span>
+            </div>
+            <div class="proof-item">
+              <span class="proof-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4.8 6v5.4c0 4.4 3 7.8 7.2 9.6 4.2-1.8 7.2-5.2 7.2-9.6V6L12 3Z" stroke="currentColor" stroke-width="1.8"/><path d="M9.5 12h5M12 9.5v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+              <span><strong>문의까지 연결</strong><span>확인 질문과 문구를 준비</span></span>
+            </div>
           </div>
         </div>
       </section>
@@ -1048,7 +1583,7 @@
         </section>
       </section>
 
-      <section class="method-strip" aria-label="멍탐정 외형 탐색과 보호소 문의 흐름">
+      <section class="method-strip" id="howItWorks" aria-label="멍탐정 외형 탐색과 보호소 문의 흐름">
         <div class="method-step"><span class="method-number">01</span><div><strong>원하는 모습을 설명해요</strong><p>CLIP·FAISS·BM25 검색이 사진과 문장의 의미가 가까운 활성 공고를 찾습니다.</p></div></div>
         <div class="method-step"><span class="method-number">02</span><div><strong>객관적 조건으로 순서를 조정해요</strong><p>크기·연령·지역처럼 공고에서 확인 가능한 선호만 후보 순서에 반영합니다.</p></div></div>
         <div class="method-step"><span class="method-number">03</span><div><strong>보호소에 바로 확인해요</strong><p>원하는 성격과 생활환경은 추측하지 않고 전화·이메일용 질문으로 바꿉니다.</p></div></div>
