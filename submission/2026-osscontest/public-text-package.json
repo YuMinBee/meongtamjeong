@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "profile": "public-text-only-v1",
+  "status": "verified-interim-untagged",
+  "source_commit": "9f7b3ead8c818353faf339a075f4fa5b6349019c",
+  "archive": {
+    "file": "meongtamjeong-public-text-only-v1.zip",
+    "bytes": 2798144,
+    "sha256": "489cc2b508838319cca91f61315da575a3e61151bd84df1194ec3d80c47282af",
+    "deterministic_repeat_match": true,
+    "files": 182,
+    "uncompressed_bytes": 8657412
+  },
+  "data": {
+    "reference_date": "2026-07-26",
+    "dimension": 512,
+    "vectors": 1516,
+    "unique_notices": 1516,
+    "index_sha256": "679bf196cb5d85426a7975b0cb235dbdc1f0c886d69eeae443ef7ead8e5e764e",
+    "metas_sha256": "5810b5e79f475b0d747e5d8e9b32a9e01f15c8369172afbb672ea74ebe447757"
+  },
+  "excluded": {
+    "image_vectors": 1228,
+    "crop_image_vectors": 1002,
+    "sample_photos": true,
+    "remote_photo_urls": true,
+    "full_profile_evaluations": true
+  },
+  "limitations": [
+    "This is an interim untagged package, not the final receipt-number release.",
+    "The contained text index is the frozen 2026-07-26 profile and must be refreshed after the concurrent training workload ends."
+  ]
+}

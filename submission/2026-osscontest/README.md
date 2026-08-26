@@ -9,8 +9,16 @@
 - `2026 오픈소스 개발자대회 결과보고서_접수번호(팀명).docx`: 수정 가능한 공식 양식
 - `2026 오픈소스 개발자대회 결과보고서_접수번호(팀명).pdf`: 위 DOCX의 PDF 렌더
 - `report-qa.json`: 템플릿·산출물 해시와 페이지 검사 기록
+- `meongtamjeong-public-text-only-v1.zip`: 사진 권리 노출을 줄인 검증용 공개 소스 번들
+- `public-text-package.json`: 위 ZIP의 source commit·artifact hash·제외 통계
 - `scripts/build_contest_report.py`: 공식 템플릿에서 문서를 다시 만드는 도구
 - `scripts/render_contest_report.ps1`: 설치 없이 준비한 LibreOffice로 PDF를 다시 만드는 도구
+
+공개 소스 번들은 commit `9f7b3ead8c818353faf339a075f4fa5b6349019c`에서 두 번
+독립 생성해 같은 SHA-256이 나오는 것을 확인했습니다. 2026-07-26 기준 공개 공고 텍스트
+벡터 1,516개만 포함하며, 사진 벡터 1,228개와 crop 벡터 1,002개, 샘플 사진, 원격 사진
+URL, full 프로필 전용 평가를 제외합니다. 아직 접수번호가 확정된 최종 tag 산출물은
+아니며, 최신 1,266건 재동기화 뒤 다시 생성해야 합니다.
 
 ## 제출 전에 반드시 넣을 정보
 
