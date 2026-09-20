@@ -2052,7 +2052,8 @@ def test_profile_demo_route_serves_the_profile_search_ui(client: TestClient) -> 
 
     assert response.status_code == 200
     assert "text/html" in response.headers["content-type"]
-    assert "마음에 그린 모습을 찾고" in response.text
+    assert 'id="heroTitle"' in response.text
+    assert "마음에 그린 모습을" in response.text
     assert "보호소 문의" in response.text
     assert "fetch('/search/profile'" in response.text
     assert "ranking_scope:'appearance'" in response.text

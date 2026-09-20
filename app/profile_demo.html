@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#174f40" />
+  <meta name="theme-color" content="#0b2925" />
   <title>멍탐정 · 보호소 방문 후보 탐색</title>
   <style>
     :root {
@@ -833,6 +833,452 @@
       *, *::before, *::after { scroll-behavior:auto !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
     }
   </style>
+  <style id="service-design-refresh">
+    /*
+      2026 contest visual refresh
+      Search-first information hierarchy inspired by mature adoption portals.
+      The visual system stays deliberately restrained so the search and notices lead.
+    */
+    :root {
+      --canvas:#f6f7f5;
+      --surface:#ffffff;
+      --surface-strong:#ffffff;
+      --ink:#202925;
+      --muted:#68736e;
+      --line:#dfe4e0;
+      --line-strong:#c6cec9;
+      --brand:#245a46;
+      --brand-deep:#183f31;
+      --brand-soft:#edf4ef;
+      --accent:#d85f42;
+      --accent-soft:#faece7;
+      --signal:#e4ece6;
+      --gold:#8b6115;
+      --gold-soft:#fff1c9;
+      --blue:#285c73;
+      --blue-soft:#dceef5;
+      --danger:#a8483f;
+      --danger-soft:#fae5e1;
+      --focus:#a83f28;
+      --shadow:0 8px 24px rgba(24,63,49,.07);
+      --shadow-soft:0 4px 14px rgba(24,63,49,.055);
+      --radius-xl:20px;
+      --radius-lg:16px;
+      --radius-md:12px;
+    }
+    body {
+      color:var(--ink);
+      background:var(--canvas);
+      font-family:"Pretendard Variable", Pretendard, "SUIT Variable", SUIT, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    }
+    .shell { width:min(1240px, calc(100vw - 48px)); }
+    .site-header {
+      border-bottom:1px solid var(--line);
+      background:rgba(255,255,255,.94);
+      box-shadow:none;
+    }
+    .header-inner { min-height:72px; }
+    .brand { gap:11px; }
+    .brand-mark {
+      width:40px;
+      height:40px;
+      color:#fff;
+      border:0;
+      border-radius:11px;
+      background:var(--brand);
+      box-shadow:none;
+    }
+    .brand-mark svg { width:25px; height:25px; }
+    .brand-copy strong { font-size:1.08rem; font-weight:850; }
+    .brand-copy span { color:#6f7975; font-size:.64rem; font-weight:750; letter-spacing:.16em; }
+    .header-nav { display:flex; align-items:center; gap:6px; margin-left:auto; }
+    .header-nav a {
+      min-height:40px;
+      display:inline-flex;
+      align-items:center;
+      padding:0 13px;
+      color:#43544e;
+      border-radius:8px;
+      font-size:.82rem;
+      font-weight:760;
+      text-decoration:none;
+    }
+    .header-nav a:hover { color:var(--brand-deep); background:#f0f3f1; }
+    .header-actions { margin-left:8px; }
+    .principle-badge {
+      color:var(--brand-deep);
+      border:1px solid #d8e3dc;
+      background:var(--brand-soft);
+    }
+    .connection-button {
+      min-height:44px;
+      padding:0 15px;
+      color:var(--brand-deep);
+      border-color:var(--line-strong);
+      background:#fff;
+    }
+    main { padding:0 0 64px; }
+    .hero {
+      min-height:0;
+      grid-template-columns:minmax(0, 1fr) 390px;
+      gap:clamp(48px, 7vw, 92px);
+      align-items:center;
+      margin:0;
+      padding:72px 0 64px;
+      color:var(--ink);
+      border-bottom:1px solid var(--line);
+      border-radius:0;
+      background:transparent;
+      box-shadow:none;
+    }
+    .hero::before, .hero::after { content:none; }
+    .eyebrow {
+      width:max-content;
+      margin:0 0 18px;
+      padding:0;
+      color:var(--brand);
+      background:transparent;
+      font-size:.72rem;
+      font-weight:850;
+      letter-spacing:.06em;
+    }
+    .eyebrow::before { content:none; }
+    .hero h1 {
+      max-width:720px;
+      font-size:clamp(2.7rem, 4.4vw, 4.15rem);
+      line-height:1.07;
+      letter-spacing:-.06em;
+      text-wrap:balance;
+    }
+    .hero h1 em { color:var(--brand); }
+    .hero h1 em::after { content:none; }
+    .hero-lead {
+      max-width:640px;
+      margin-top:22px;
+      color:var(--muted);
+      font-size:1rem;
+      line-height:1.7;
+    }
+    .hero-actions { display:flex; flex-wrap:wrap; align-items:center; gap:18px; margin-top:28px; }
+    .hero-cta {
+      min-height:50px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      padding:0 21px;
+      color:#fff;
+      border-radius:10px;
+      background:var(--brand);
+      box-shadow:none;
+      font-size:.88rem;
+      font-weight:800;
+      text-decoration:none;
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .hero-cta:hover { transform:translateY(-1px); background:var(--brand-deep); box-shadow:none; }
+    .hero-cta svg { width:19px; height:19px; }
+    .hero-note { margin:0; color:var(--muted); font-size:.73rem; line-height:1.5; }
+    .hero-note strong { display:block; color:#43524c; font-size:.76rem; }
+    .hero-showcase { display:block; }
+    .hero-proof {
+      display:grid;
+      grid-template-columns:1fr;
+      gap:0;
+      padding:8px 22px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      box-shadow:var(--shadow-soft);
+    }
+    .proof-item {
+      min-height:82px;
+      display:grid;
+      grid-template-columns:38px minmax(0,1fr);
+      align-items:center;
+      gap:12px;
+      padding:14px 0;
+      color:var(--ink);
+      border:0;
+      border-bottom:1px solid var(--line);
+      border-radius:0;
+      background:transparent;
+    }
+    .proof-item:last-child { border-bottom:0; }
+    .proof-icon { width:36px; height:36px; color:var(--brand); border-radius:9px; background:var(--brand-soft); }
+    .proof-icon svg { width:18px; height:18px; }
+    .proof-item strong { font-size:.82rem; line-height:1.35; }
+    .proof-item span span { margin-top:3px; color:var(--muted); font-size:.69rem; line-height:1.4; }
+    .workspace {
+      grid-template-columns:360px minmax(0,1fr);
+      gap:28px;
+      align-items:stretch;
+      margin-top:40px;
+    }
+    .profile-panel {
+      align-self:start;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fff;
+      box-shadow:var(--shadow);
+    }
+    .panel-head {
+      padding:25px 25px 19px;
+      color:var(--ink);
+      border-bottom:1px solid var(--line);
+      background:#fff;
+    }
+    .step-label {
+      width:max-content;
+      display:inline-flex;
+      align-items:center;
+      min-height:0;
+      padding:0;
+      color:var(--brand);
+      background:transparent;
+      font-size:.63rem;
+      font-weight:900;
+      letter-spacing:.1em;
+    }
+    .panel-head h2 { margin-top:8px; font-size:1.5rem; }
+    .panel-head p { color:var(--muted); font-size:.8rem; }
+    .search-form { padding:23px 25px 26px; }
+    .field > span, .field-label { color:#324a42; font-weight:820; }
+    input[type="text"], input[type="password"], input[type="number"], select, textarea {
+      min-height:50px;
+      border:1px solid var(--line-strong);
+      border-radius:10px;
+      background:#fff;
+    }
+    .query-input {
+      min-height:62px !important;
+      border-width:1px !important;
+      border-color:var(--line-strong) !important;
+      background:#fff !important;
+      font-size:.9rem;
+    }
+    input[type="text"]:focus, input[type="password"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+      border-color:var(--brand) !important;
+      box-shadow:0 0 0 4px rgba(18,63,55,.11);
+    }
+    .drop-zone {
+      min-height:110px;
+      border:1px dashed #9eaea5;
+      border-radius:11px;
+      background:#f8faf8;
+    }
+    .drop-zone-icon { color:var(--brand); background:var(--brand-soft); box-shadow:none; }
+    .drop-zone:hover, .drop-zone.dragover { border-color:var(--accent); background:var(--accent-soft); }
+    .preset-button { border-radius:10px; background:#f7f7f3; }
+    .preset-button:hover, .preset-button.active { color:var(--brand-deep); border-color:#9ac8b2; background:var(--brand-soft); }
+    .form-divider { background:#e5e9e6; }
+    .range-output { color:var(--brand-deep); border-color:#a8cfbd; background:var(--brand-soft); }
+    details.inquiry-prep { border-color:#cddbd3; border-radius:12px; background:#f4f8f5; }
+    .switch-row, .temperament-option { border-radius:9px; background:#fff; }
+    .primary-button {
+      min-height:60px;
+      color:#fff;
+      border-radius:10px;
+      background:var(--brand);
+      box-shadow:none;
+      font-size:.92rem;
+    }
+    .primary-button:hover { background:var(--brand-deep); box-shadow:none; }
+    .results-panel {
+      min-width:0;
+      align-self:stretch;
+      display:flex;
+      flex-direction:column;
+    }
+    .results-head { min-height:104px; padding:5px 3px 20px; }
+    .results-head .step-label { color:var(--brand); background:transparent; }
+    .results-head h2 { margin-top:8px; font-size:1.65rem; }
+    .results-description { max-width:620px; line-height:1.55; }
+    .result-count strong { color:var(--brand); font-size:1.4rem; }
+    .ethics-banner {
+      margin-bottom:18px;
+      padding:15px 17px;
+      color:#254b3e;
+      border:1px solid #d2dfd7;
+      border-left:3px solid var(--brand);
+      border-radius:10px;
+      background:#f2f7f4;
+    }
+    .compare-note { border-radius:15px; }
+    .results-list { grid-template-columns:repeat(2, minmax(0,1fr)); grid-auto-flow:row dense; align-items:stretch; gap:18px; }
+    .results-list > li { min-width:0; height:100%; display:flex; }
+    .dog-card {
+      width:100%;
+      height:100%;
+      min-height:0;
+      display:flex;
+      flex-direction:column;
+      border:1px solid var(--line);
+      border-radius:14px;
+      box-shadow:var(--shadow-soft);
+    }
+    .dog-card:hover { transform:translateY(-2px); border-color:#aebbb3; box-shadow:0 8px 22px rgba(24,63,49,.09); }
+    .image-shell { min-height:0; aspect-ratio:16/11; background:#dfe9e3; }
+    .image-fallback { position:absolute; inset:0; min-height:0; background:#edf2ef; }
+    .rank-badge {
+      top:16px;
+      left:16px;
+      min-width:52px;
+      min-height:38px;
+      color:#fff;
+      border:0;
+      border-radius:8px;
+      background:rgba(24,63,49,.92);
+      backdrop-filter:none;
+    }
+    .rank-change { left:16px; bottom:16px; background:rgba(11,41,37,.90); }
+    .card-body { flex:1; padding:21px 21px 20px; }
+    .card-top { display:grid; gap:12px; }
+    .status-stack { justify-items:start; text-align:left; }
+    .notice-badge { color:var(--brand-deep); background:var(--brand-soft); }
+    .dog-title h3 { font-size:1.34rem; }
+    .dog-title p { white-space:normal; line-height:1.45; }
+    .meta-chip { border-radius:7px; background:#f7f8f6; }
+    .reason-box { border:1px solid #e2e7e3; border-radius:10px; background:#f7f8f7; }
+    .reason-label { color:var(--brand-deep); }
+    .evidence-line { grid-template-columns:72px minmax(0,1fr); }
+    .card-footer { align-items:stretch; }
+    .card-actions { width:100%; display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .score-button, .inquiry-button, .notice-link { min-height:42px; border-radius:9px; }
+    .inquiry-button { color:var(--brand); border-color:var(--brand); background:#fff; }
+    .notice-link { grid-column:1/-1; color:#fff; background:var(--brand); }
+    .score-panel { border-radius:10px; }
+    .score-grid { grid-template-columns:1fr 1fr; }
+    .state-card {
+      min-height:500px;
+      border:1px solid #cad5ce;
+      border-radius:14px;
+      background:#fff;
+      box-shadow:none;
+    }
+    #emptyState {
+      position:sticky;
+      top:98px;
+      min-height:clamp(500px, calc(100vh - 132px), 640px);
+    }
+    .state-visual {
+      width:124px;
+      height:124px;
+      color:var(--brand);
+      border:1px solid #cedbd3;
+      border-radius:24px;
+      background:var(--brand-soft);
+      transform:none;
+    }
+    .state-visual svg { transform:none; }
+    .state-card h3 { font-size:1.3rem; }
+    .state-tips span { color:var(--brand-deep); border:1px solid #cad8d0; background:#f6f7f3; }
+    .skeleton-list { grid-template-columns:repeat(2, minmax(0,1fr)); gap:18px; }
+    .skeleton-card { height:560px; display:block; border-radius:14px; }
+    .skeleton-image { min-height:260px; }
+    .method-strip {
+      position:relative;
+      overflow:hidden;
+      gap:0;
+      margin-top:48px;
+      padding:0;
+      color:var(--ink);
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      box-shadow:none;
+    }
+    .method-step {
+      min-height:128px;
+      grid-template-columns:42px 1fr;
+      gap:13px;
+      padding:22px 20px;
+      border-radius:0;
+      background:transparent;
+    }
+    .method-step + .method-step { border-left:1px solid var(--line); }
+    .method-number { width:40px; height:40px; color:var(--brand); border-radius:9px; background:var(--brand-soft); }
+    .method-step strong { font-size:.92rem; }
+    .method-step p { color:var(--muted); font-size:.72rem; }
+    footer { padding:0 4px; font-size:.72rem; }
+    dialog { border:1px solid var(--line); border-radius:16px; background:#fff; }
+    dialog::backdrop { background:rgba(6,28,24,.62); }
+    .dialog-head { padding:25px 25px 17px; }
+    .dialog-head h2 { font-size:1.3rem; }
+    .dialog-body { padding:5px 25px 25px; }
+    .icon-button { border-radius:9px; }
+    .dialog-actions button { border-radius:9px; }
+    .dialog-actions .save, .copy-actions button:last-child { color:#fff; border-color:var(--brand); background:var(--brand); }
+    .inquiry-overview { border-radius:17px; }
+    .inquiry-questions, .inquiry-template { border-radius:15px; }
+    @media (max-width:1180px) {
+      .shell { width:min(100% - 36px, 1080px); }
+      .header-nav { display:none; }
+      .hero { grid-template-columns:minmax(0,1fr) 340px; gap:36px; }
+      .hero-showcase { width:auto; }
+      .workspace { grid-template-columns:350px minmax(0,1fr); gap:22px; }
+      .results-list, .skeleton-list { grid-template-columns:1fr; }
+      .dog-card { display:grid; grid-template-columns:220px minmax(0,1fr); }
+      .image-shell { min-height:100%; aspect-ratio:auto; }
+      .card-actions { grid-template-columns:1fr; }
+      .notice-link { grid-column:auto; }
+      .skeleton-card { height:360px; display:grid; grid-template-columns:220px 1fr; }
+      .skeleton-image { min-height:100%; }
+    }
+    @media (max-width:900px) {
+      .principle-badge { display:none; }
+      .hero { grid-template-columns:1fr; gap:28px; padding:54px 0 46px; border-radius:0; }
+      .hero h1 { font-size:clamp(2.65rem, 8vw, 3.8rem); }
+      .hero-showcase { width:min(100%, 620px); }
+      .workspace { grid-template-columns:1fr; }
+      .profile-panel { width:min(100%, 700px); margin:0 auto; }
+      .results-panel { display:block; align-self:auto; }
+      #emptyState { position:static; min-height:500px; }
+      .results-head { margin-top:16px; }
+      .results-list, .skeleton-list { grid-template-columns:repeat(2, minmax(0,1fr)); }
+      .dog-card { display:flex; }
+      .image-shell { min-height:0; aspect-ratio:16/11; }
+      .card-actions { grid-template-columns:1fr 1fr; }
+      .notice-link { grid-column:1/-1; }
+      .skeleton-card { height:560px; display:block; }
+      .skeleton-image { min-height:260px; }
+      .method-strip { grid-template-columns:1fr; }
+      .method-step + .method-step { border-top:1px solid var(--line); border-left:0; }
+    }
+    @media (max-width:680px) {
+      .shell { width:min(100% - 24px, 620px); }
+      .header-inner { min-height:70px; }
+      .brand-mark { width:42px; height:42px; }
+      .brand-copy span { display:none; }
+      .connection-button { width:44px; padding:0; justify-content:center; }
+      .connection-button span:last-child { display:none; }
+      main { padding-top:8px; }
+      .hero { margin:0; padding:40px 0 36px; border-radius:0; }
+      .hero h1 { font-size:clamp(2.35rem, 11vw, 3.15rem); line-height:1.08; }
+      .hero-lead { font-size:.9rem; }
+      .hero-actions { align-items:stretch; flex-direction:column; }
+      .hero-cta { width:100%; }
+      .hero-proof { grid-template-columns:1fr; }
+      .proof-item { min-height:72px; display:grid; grid-template-columns:34px 1fr; align-items:center; }
+      .workspace { margin-top:28px; }
+      .profile-panel { border-radius:16px; }
+      .panel-head { padding:24px 21px 20px; }
+      .search-form { padding:22px 20px 24px; }
+      .field-grid, .advanced-body { grid-template-columns:1fr; }
+      .results-head { align-items:flex-start; }
+      .results-list, .skeleton-list { grid-template-columns:1fr; }
+      .dog-card { display:flex; }
+      .card-actions { grid-template-columns:1fr; }
+      .notice-link { grid-column:auto; }
+      .image-shell, .image-fallback { min-height:0; aspect-ratio:4/3; }
+      .state-card { min-height:430px; padding:30px 22px; }
+      #emptyState { min-height:430px; }
+      .skeleton-card { height:535px; }
+      .skeleton-image { min-height:245px; }
+      .method-strip { margin-top:34px; border-radius:12px; }
+      .method-step { min-height:118px; }
+    }
+  </style>
 </head>
 <body>
   <a class="skip-link" href="#searchWorkspace">탐색 화면으로 바로가기</a>
@@ -849,6 +1295,10 @@
         </span>
         <span class="brand-copy"><strong>멍탐정</strong><span>MEONGTAMJEONG</span></span>
       </a>
+      <nav class="header-nav" aria-label="주요 메뉴">
+        <a href="#searchWorkspace">후보 찾기</a>
+        <a href="#howItWorks">작동 방식</a>
+      </nav>
       <div class="header-actions">
         <span class="principle-badge">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -864,23 +1314,29 @@
   <main id="top">
     <div class="shell">
       <section class="hero" aria-labelledby="heroTitle">
-        <div>
-          <p class="eyebrow">Appearance-first shelter dog search</p>
-          <h1 id="heroTitle">마음에 그린 모습을 찾고,<br><em>보호소 문의</em>까지 한 번에.</h1>
-          <p class="hero-lead">원하는 외형을 자연어로 설명하면 사진과 공고를 함께 검색합니다. 크기·연령·지역으로 먼저 볼 순서를 조정하고, 성격 선호는 예측 대신 보호소에서 확인할 질문으로 바꿔드려요.</p>
+        <div class="hero-copy">
+          <p class="eyebrow">사진과 문장으로 찾는 보호소 친구</p>
+          <h1 id="heroTitle">마음에 그린 모습을<br><em>말로 찾아보세요.</em></h1>
+          <p class="hero-lead">털색, 무늬, 귀 모양처럼 눈에 보이는 특징을 설명하거나 참고사진을 더해보세요. 멍탐정이 실제 보호 공고에서 닮은 후보를 찾고, 보호소에 확인할 질문까지 정리합니다.</p>
+          <div class="hero-actions">
+            <a class="hero-cta" href="#searchWorkspace">친구 찾아보기<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <p class="hero-note"><strong>판단 대신 확인을 돕습니다</strong>성격과 입양 적합성은 사진으로 예측하지 않아요.</p>
+          </div>
         </div>
-        <div class="hero-proof" aria-label="멍탐정 탐색 원칙">
-          <div class="proof-item">
-            <span class="proof-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3h10v3H7zM5 6h14v14H5z" stroke="currentColor" stroke-width="1.8"/><path d="M8 11h8M8 15h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-            <span><strong>외형 중심 탐색</strong><span>사진과 자연어 의미를 함께 비교</span></span>
-          </div>
-          <div class="proof-item">
-            <span class="proof-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="5.5" stroke="currentColor" stroke-width="1.9"/><path d="m15 15 4 4M8 10.5l1.6 1.6L13 8.8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <span><strong>객관적 선호 반영</strong><span>크기·연령·지역으로 우선순위 조정</span></span>
-          </div>
-          <div class="proof-item">
-            <span class="proof-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4.8 6v5.4c0 4.4 3 7.8 7.2 9.6 4.2-1.8 7.2-5.2 7.2-9.6V6L12 3Z" stroke="currentColor" stroke-width="1.8"/><path d="M9.5 12h5M12 9.5v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-            <span><strong>보호소 문의 연결</strong><span>성격 선호를 확인 질문으로 준비</span></span>
+        <div class="hero-showcase">
+          <div class="hero-proof" aria-label="멍탐정 탐색 원칙">
+            <div class="proof-item">
+              <span class="proof-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3h10v3H7zM5 6h14v14H5z" stroke="currentColor" stroke-width="1.8"/><path d="M8 11h8M8 15h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+              <span><strong>외형 중심 탐색</strong><span>사진과 문장을 함께 비교</span></span>
+            </div>
+            <div class="proof-item">
+              <span class="proof-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="5.5" stroke="currentColor" stroke-width="1.9"/><path d="m15 15 4 4M8 10.5l1.6 1.6L13 8.8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span><strong>객관 조건 반영</strong><span>크기·연령·지역만 정렬</span></span>
+            </div>
+            <div class="proof-item">
+              <span class="proof-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4.8 6v5.4c0 4.4 3 7.8 7.2 9.6 4.2-1.8 7.2-5.2 7.2-9.6V6L12 3Z" stroke="currentColor" stroke-width="1.8"/><path d="M9.5 12h5M12 9.5v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+              <span><strong>문의까지 연결</strong><span>확인 질문과 문구를 준비</span></span>
+            </div>
           </div>
         </div>
       </section>
@@ -1048,7 +1504,7 @@
         </section>
       </section>
 
-      <section class="method-strip" aria-label="멍탐정 외형 탐색과 보호소 문의 흐름">
+      <section class="method-strip" id="howItWorks" aria-label="멍탐정 외형 탐색과 보호소 문의 흐름">
         <div class="method-step"><span class="method-number">01</span><div><strong>원하는 모습을 설명해요</strong><p>CLIP·FAISS·BM25 검색이 사진과 문장의 의미가 가까운 활성 공고를 찾습니다.</p></div></div>
         <div class="method-step"><span class="method-number">02</span><div><strong>객관적 조건으로 순서를 조정해요</strong><p>크기·연령·지역처럼 공고에서 확인 가능한 선호만 후보 순서에 반영합니다.</p></div></div>
         <div class="method-step"><span class="method-number">03</span><div><strong>보호소에 바로 확인해요</strong><p>원하는 성격과 생활환경은 추측하지 않고 전화·이메일용 질문으로 바꿉니다.</p></div></div>

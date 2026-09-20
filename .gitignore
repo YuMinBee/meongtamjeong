@@ -38,3 +38,17 @@ data/image_crops*/
 data/reports/
 logs/
 dist/
+
+# Local manuscripts, exports, and evaluation credentials are not published.
+/output/
+experiments/dog_domain/PAPER_*
+experiments/dog_domain/export_paper*.py
+experiments/dog_domain/revise_linear_paper.py
+experiments/dog_domain/final_paper_audit.py
+experiments/dog_domain/verify_paper_audit.py
+**/access.json
+**/FRIEND_LINKS.txt
+**/OPEN_DASHBOARD.url
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
