@@ -23,6 +23,22 @@ CLIP 텍스트 특징을 DINO 시각 공간으로 정렬하는 Linear·MLP 비�
 
 [평가 도구 사용법](VISUAL_EVALUATION.md) · [PetFinder 확장 프로토콜](PETFINDER_EXPANDED_PROTOCOL_KO.md)
 
+## 기준선 비교와 객관적 지표 (2026-09-28~29)
+
+각 실험은 결과를 보기 전에 프로토콜을 고정했고, 변경 사항은 프로토콜의 "변경 기록"에 남겼습니다.
+GPU 실험은 RTX 3090(Linux)에서 실행했으며, 기존 RTX 4090 캐시와의 특징 코사인은 0.99999 이상이고 기존 수치를 그대로 재계산해 확인했습니다.
+
+| 실험 | 진입점 | 프로토콜 / 결과 |
+|---|---|---|
+| dino.txt·Talk2DINO·DINOv3-L 기준선 | `python -m experiments.dog_domain.related_baselines --stage all` | [프로토콜](RELATED_BASELINES_PROTOCOL.md) · [결과](RELATED_BASELINES_RESULTS.md) |
+| PetFinder 같은 개 다시 찾기 | `python -m experiments.dog_domain.petfinder_identity` | [프로토콜](PETFINDER_IDENTITY_PROTOCOL.md) · [결과](PETFINDER_IDENTITY_RESULTS.md) |
+| SigLIP 2·CLIP ViT-L 기준선 | `python -m experiments.dog_domain.strong_clip` | [프로토콜](STRONG_CLIP_PROTOCOL.md) · [결과](STRONG_CLIP_RESULTS.md) |
+| 사전 지정 비교의 Holm 보정 | `python -m experiments.dog_domain.multiplicity` | [결과](MULTIPLICITY_RESULTS.md) |
+| 한국 공고 색 라벨 검수 (블라인드) | `python -m experiments.dog_domain.gold_labels build` → 라벨링 → `analyze --labels FILE [--merged]` | [프로토콜](GOLD_LABEL_PROTOCOL.md) · [결과](GOLD_LABEL_RESULTS.md) · [색 묶음](GOLD_LABEL_RESULTS_MERGED.md) |
+
+`related_baselines`는 dino.txt 가중치(공식 파일명 해시로 검증), Talk2DINO 공개 가중치, facebookresearch/dinov3 코드를 `D:/meongtamjeong_research/` 아래에서 읽습니다.
+라벨링 화면은 공고 사진을 재배포하지 않도록 로컬 이미지 폴더 옆에 생성되며, 공고의 기재 색은 표시하지 않습니다. 개인별 라벨 파일은 저장소에 포함하지 않습니다.
+
 ## 초기 파일럿 기록
 
 아래 내용은 2026-09-16에 수행한 초기 MPDD·DogFaceNet 실험 기록입니다.
