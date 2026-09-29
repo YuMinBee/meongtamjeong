@@ -8,20 +8,14 @@
 
 현재 저장소의 기본 실행은 안정적인 CLIP 경로를 사용하는 `off` 모드입니다. DINO 경로는 애플리케이션에 통합되어 있으며, 실제 전환 전에는 CLIP 결과를 그대로 제공하면서 DINO 후보와 지연시간을 함께 기록하는 `shadow` 모드를 권장합니다.
 
-## 최근 연구 코드 업데이트
+## 핵심 결과 한눈에 보기
 
-서비스의 기본 CLIP 경로와 기존 Flow 기반 DINO 통합은 유지합니다. 별도 실험에서는
-**PetFinder로 학습한 Linear·MLP 정렬을 한국·대만 공고에 적용**하고,
-이미지 검색·속성 조건 일치·사람이 평가한 외형 유사성을 구분해 검증합니다.
-아래의 기존 파일럿 결과와 최신 실험은 학습 자료와 평가 기준이 달라 직접 혼합하지 않습니다.
+말레이시아 PetFinder 공고로만 정렬을 학습하고, **한국·대만 공고에 추가 학습 없이** 적용했습니다. 자세한 수치는 [실험 결과](#실험-결과)에 있습니다.
 
-- [강아지 도메인 실험](experiments/dog_domain/README.md): 데이터 준비, 전체 공고 정보 학습, 교차 데이터셋 평가 및 검증 도구
-- [Composed retrieval 실험](experiments/composed_retrieval/README.md): COCO 정렬 학습과 CIRCO·GeneCIS 평가 파이프라인
-- [사람 시각 평가 도구](experiments/dog_domain/VISUAL_EVALUATION.md): 평가자별 접근, SQLite 자동 저장, 점수 선택 후 다음 항목 이동, 이전 점수 수정, JSON 백업
-- [DINO 이미지 단독 보완 평가](experiments/dog_domain/DINO_VISUAL_SUPPLEMENT_KO.md): 기존 평가와 겹치는 쌍은 재사용하고 새로운 쌍만 추가 평가
-
-논문 원고·Word/PDF·개인별 평점·비밀 평가 링크·모델 가중치·원본 데이터는 이 업데이트에 포함하지 않습니다.
-연구 스크립트의 로컬 경로와 데이터 접근 조건은 각 실험 안내를 확인하세요.
+- **사진+외형 조건 검색**: DINOv3 + 도메인 정렬이 CLIP·SigLIP 2·dino.txt·Talk2DINO보다 대체로 높습니다 (nDCG@10, CLIP B/32 대비 +7.9~9.7점).
+- **같은 개 다시 찾기**: DINO 표현이 CLIP 계열보다 크게 우수합니다 (PetFinder R@1: CLIP 43.7% → DINOv3-B 70.5% → DINOv3-L 77.2%).
+- **성능 차이의 원인**: 사상 구조(선형·MLP·flow)나 백본 크기가 아니라 **입양 공고 도메인으로 정렬했는지**였습니다. 선형 사상 하나(약 39만 매개변수), 수 초 학습으로 충분했습니다.
+- **라벨 검수**: 사진 기준으로 다시 라벨링한 색으로 채점해도 결론이 유지됐습니다.
 
 ## 문제 정의
 
@@ -100,7 +94,46 @@ z_query = normalize(0.80 · z_image + 0.20 · z_text)
 
 ## 실험 결과
 
-아래 결과는 검색 표현의 가능성을 검토한 파일럿입니다. 내부 결과는 20~21개 질의의 작은 표본과 공고 메타데이터 기반 silver relevance를 사용하므로, 일반적인 성능 우월성이나 실제 입양 결과로 해석하면 안 됩니다.
+### 3개국 공고 교차 평가 (2026-09)
+
+PetFinder(말레이시아) 공고 5,252건으로 정렬 head만 학습하고, PetFinder test 1,618건·한국 611건(보호소 136곳)·대만 5,427건(33곳)에서 평가했습니다. 인코더는 모두 고정했고, 사진 0.8 + 글 0.2 결합은 모든 방법에 동일하게 적용했으며, 각 실험은 결과를 보기 전에 프로토콜을 고정했습니다. 구간은 보호소 단위 군집 부트스트랩입니다.
+
+**속성 조건 검색** — 참고 사진 + “find a small dog whose coat is white”형 조건, 색·크기가 맞으면 정답 (nDCG@10 × 100)
+
+| 방법 | PetFinder | 한국 | 대만 |
+|---|---:|---:|---:|
+| CLIP ViT-B/32 (기존 서비스 기준선) | 48.45 | 35.21 | 37.81 |
+| CLIP ViT-L/14 (LAION) | 53.16 | 37.53 | 44.72 |
+| SigLIP 2 So400m | 52.36 | 38.47 | 45.98 |
+| Talk2DINO (공개 가중치) | 55.45 | 40.35 | 44.94 |
+| dino.txt ViT-L (공개 가중치) | 53.62 | 40.09 | 46.46 |
+| DINOv3-B 사진만 | 55.38 | 40.63 | 45.29 |
+| **DINOv3-B + 선형 정렬** | **58.22** | **43.14** | **47.50** |
+| DINOv3-L + 선형 정렬 | 58.43 | 43.97 | 47.82 |
+
+**같은 공고의 다른 사진 찾기** — 정답이 공고 구조로 확정되는 개체 검색 (R@1, 사진만 입력)
+
+| 방법 | 한국 (611쌍) | PetFinder (1,110 질의) |
+|---|---:|---:|
+| CLIP ViT-B/32 | 71.0% | 43.7% |
+| SigLIP 2 So400m | 84.5% | 62.6% |
+| dino.txt ViT-L | 90.2% | 67.9% |
+| DINOv3-B | 93.0% | 70.5% |
+| DINOv3-L | 93.9% | 77.2% |
+
+관찰:
+
+- 공개 정렬 모델의 텍스트는 사진 검색에 0.8점 미만을 더했지만, 도메인 정렬은 2.2~2.9점을 더했습니다. Talk2DINO의 투영 구조를 같은 데이터로 다시 학습하거나 DINOde식 flow로 바꿔도 선형 사상과의 차이는 0.1점 이내였습니다.
+- 텍스트 정렬을 위해 이미지 표현을 바꾸는 dino.txt보다 원본 DINOv3-L이 개체 검색에서 9.3%p 높아, 이미지 공간을 보존하는 설계가 유리했습니다. 조건 문장을 더해도 개체 검색 성능은 떨어지지 않았습니다.
+- 한국 611건의 털색을 공고 색을 가린 채 사진 기준으로 다시 라벨링했습니다. 공고 색과 하나 이상 겹친 비율은 50.7%였지만 흰색·크림, 갈색 계열을 묶으면 88.7%였습니다. 어느 기준으로 재채점해도 결론은 유지됐습니다 (CLIP 대비 +7.9 → +8.2, 묶음 기준 +10.7).
+- 사전 지정 비교 63개에 Holm 보정을 적용한 뒤 43개가 유의했습니다. 대만에서 SigLIP 2 So400m·dino.txt와의 차이는 확인되지 않았습니다.
+- 속성 지표는 텍스트 단독 검색에 유리합니다 (SigLIP 2 글만 한국 45.9). 참고 사진과의 닮음은 속성 지표로 잴 수 없어, 평가자 5명의 블라인드 시각 평가로 따로 확인했습니다 (시각 nDCG@5: 글만 31.1, CLIP 50.1, 정렬 결합 89.6).
+
+프로토콜과 전체 결과: [기준선 비교](experiments/dog_domain/RELATED_BASELINES_RESULTS.md) · [강한 CLIP 계열](experiments/dog_domain/STRONG_CLIP_RESULTS.md) · [PetFinder 개체 검색](experiments/dog_domain/PETFINDER_IDENTITY_RESULTS.md) · [색 라벨 검수](experiments/dog_domain/GOLD_LABEL_RESULTS.md) · [다중비교 보정](experiments/dog_domain/MULTIPLICITY_RESULTS.md) · [실험 안내](experiments/dog_domain/README.md)
+
+### 초기 파일럿 (2026-08)
+
+아래 결과는 검색 표현의 가능성을 처음 검토한 파일럿입니다. 20~21개 질의의 작은 표본과 공고 메타데이터 기반 silver relevance를 사용하므로, 위의 교차 평가와 직접 비교하거나 일반적인 성능 우월성으로 해석하면 안 됩니다.
 
 | 평가 | 비교 | CLIP 기준선 | DINOv3 경로 | 관찰 |
 |---|---|---:|---:|---|
@@ -129,8 +162,11 @@ z_query = normalize(0.80 · z_image + 0.20 · z_text)
 |---|---|---:|
 | DINOv3 ViT-B/16 image encoder | frozen | 학습 없음 |
 | OpenAI CLIP ViT-B/32 text encoder | frozen | 학습 없음 |
-| CLIP→DINO hyperspherical flow | trainable | 621,984 parameters |
+| CLIP→DINO hyperspherical flow (서비스 통합 경로) | trainable | 621,984 parameters |
+| CLIP→DINO 선형 사상 (교차 평가 실험) | trainable | 393,216 parameters |
 | 공고문 행동 head | 기본 비활성 | 검색 적용 안 함 |
+
+교차 평가에서는 선형 사상과 flow의 검색 성능이 0.1점 이내로 같았습니다. 서비스 경로는 기존 flow head를 유지합니다.
 
 2026-08-15 로컬 refresh에서는 정렬 가능한 공고 1,106건을 927 train / 179 validation으로 나눴고, flow head 학습은 CUDA에서 3.481초가 걸렸습니다. 이 시간은 RTX 4090과 이미 생성된 임베딩을 사용한 측정값입니다. 최초 모델 다운로드, dog crop 생성, DINO 인덱스 구축 시간은 포함하지 않으며 하드웨어와 데이터 수에 따라 달라집니다.
 
@@ -265,6 +301,8 @@ app/                                  FastAPI, hybrid retrieval, reranking
 data/                                 Git 추적 CLIP snapshot과 manifest
 experiments/dino_fusion/              DINO index, 정렬 head, 통합 실험
 experiments/dino_fusion_external_eval/  기관 분리 외부 평가와 ablation
+experiments/dog_domain/               3개국 교차 평가, 기준선 비교, 개체 검색, 라벨 검수
+experiments/composed_retrieval/       COCO 정렬 학습과 CIRCO·GeneCIS 일반 도메인 평가
 docs/evaluation/                      고정 평가 프로토콜과 결과
 scripts/                              데이터 갱신·검증·평가 CLI
 tests/                                단위·통합·회귀 테스트
@@ -272,6 +310,8 @@ tests/                                단위·통합·회귀 테스트
 
 ## 해석상의 한계
 
+- 속성 검색의 정답은 공고 기재 색·크기(silver label)입니다. 사진 기준 색 검수는 연구자 1명이 공고 색을 가린 채 수행했으며, 평가자 간 일치도는 아직 없습니다.
+- 같은 공고의 사진은 같은 날·같은 장소에서 찍힌 경우가 많아 배경이 단서가 될 수 있습니다. 서로 다른 날 찍은 실종·보호 사진 매칭 성능을 직접 뜻하지 않습니다.
 - 내부 DINO 파일럿은 표본이 작고 일부 질의와 relevance가 공고 메타데이터에서 만들어진 silver label입니다.
 - 외부 PetFinder 평가는 기관 단위로 분리했지만 multimodal test는 77마리이며, 원본 이미지 archive는 재배포하지 않습니다.
 - 유사도와 혼합 점수는 후보 순서를 위한 상대값이지 확률, 성격 점수 또는 입양 적합도가 아닙니다.
@@ -281,6 +321,7 @@ tests/                                단위·통합·회귀 테스트
 
 ## 문서와 라이선스
 
+- [강아지 도메인 실험 안내](experiments/dog_domain/README.md) · [사람 시각 평가 도구](experiments/dog_domain/VISUAL_EVALUATION.md) · [Composed retrieval 실험](experiments/composed_retrieval/README.md)
 - [모델·시스템 카드](MODEL_CARD.md)
 - [데이터 카드](DATA_CARD.md)
 - [제3자 모델·소프트웨어 고지](THIRD_PARTY_NOTICES.md)
