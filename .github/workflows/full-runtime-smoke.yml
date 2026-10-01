@@ -37,7 +37,7 @@ jobs:
 
       - name: Verify the fixed active-only snapshot
         run: >-
-          python scripts/check_contest_readiness.py
+          python scripts/check_index_readiness.py
           --metas data/dog_metas.json
           --index data/dog_faiss.index
           --reference-date 2026-07-26

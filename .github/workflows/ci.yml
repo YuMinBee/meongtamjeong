@@ -38,7 +38,7 @@ jobs:
 
       - name: Verify tracked snapshot at its fixed reference date
         run: >-
-          python scripts/check_contest_readiness.py
+          python scripts/check_index_readiness.py
           --metas data/dog_metas.json
           --index data/dog_faiss.index
           --reference-date 2026-07-26
@@ -56,7 +56,7 @@ jobs:
           python scripts/portal_candidate_selection_study.py validate-template
 
       # The frozen v2/v3 one-shot reports are historical evidence tied to their
-      # recorded code hashes. A final contest release must create a new holdout
+      # recorded code hashes. A final release must create a new holdout
       # after the implementation and live snapshot are frozen.
 
       - name: Secret-scan release candidates

@@ -236,7 +236,7 @@ class HistoryScanResult:
         """Whether user-controlled refs are clean enough for a release.
 
         Local ``refs/codex/*`` snapshots are still scanned and reported, but
-        they are not part of a pushed contest release. Mixed blobs remain
+        they are not part of a pushed release. Mixed blobs remain
         blocking because they are also reachable from a user-controlled ref.
         Oversized unscanned blobs stay conservative and block both modes.
         """

@@ -85,7 +85,7 @@ class PreferredAge(str, Enum):
 
 
 class AppearanceProfile(BaseModel):
-    """Objective preferences used by the contest-facing appearance flow."""
+    """Objective preferences used by the public appearance flow."""
 
     model_config = ConfigDict(extra="forbid")
 

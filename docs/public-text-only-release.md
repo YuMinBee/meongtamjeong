@@ -28,7 +28,7 @@ python scripts/build_public_text_release.py --output-dir dist/public-text-only
 의도한 변경을 commit하고 annotated tag를 만든 clean HEAD에서 실행합니다. 아래 전체 게이트가 profile 적용 평가와 결정적 요약을 만든 뒤 같은 tag의 ZIP을 생성·검증합니다.
 
 ```powershell
-python scripts/verify_contest_release.py --profile public-text-only --required-tag <RELEASE_TAG>
+python scripts/verify_release.py --profile public-text-only --required-tag <RELEASE_TAG>
 ```
 
 public ZIP은 canonical index·metadata·manifest를 text-only 파생물로 교체하고,

@@ -1,4 +1,4 @@
-"""Build a deterministic contest-readiness report for vector metadata."""
+"""Build a deterministic index-readiness report for vector metadata."""
 
 from __future__ import annotations
 
@@ -1002,7 +1002,7 @@ def parse_nonnegative_int(value: str) -> int:
 
 def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Report static metadata readiness before contest submission."
+        description="Report static metadata readiness before release."
     )
     parser.add_argument("--metas", type=Path, default=DEFAULT_METAS_PATH)
     parser.add_argument("--cache", type=Path)

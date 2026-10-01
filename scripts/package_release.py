@@ -1,4 +1,4 @@
-"""Create a deterministic, secret-scanned contest submission archive.
+"""Create a deterministic, secret-scanned release archive.
 
 Only regular files recorded in Git's index are eligible.  Their bytes are read
 from the working tree so intentional, uncommitted edits to already tracked
@@ -30,12 +30,12 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
 
-DEFAULT_OUTPUT = BASE_DIR / "dist" / "meongtamjeong-contest.zip"
+DEFAULT_OUTPUT = BASE_DIR / "dist" / "meongtamjeong-release.zip"
 FIXED_ZIP_TIMESTAMP = (1980, 1, 1, 0, 0, 0)
 REGULAR_GIT_MODES = {"100644", "100755"}
 MODEL_SUFFIXES = {".pt", ".pth", ".ckpt", ".safetensors"}
-CONTEST_ENV_PATH = ".env.contest.example"
-CONTEST_ARTIFACT_KEYS = ("INDEX_PATH", "METAS_PATH")
+RELEASE_ENV_PATH = ".env.production.example"
+RELEASE_ARTIFACT_KEYS = ("INDEX_PATH", "METAS_PATH")
 FULL_RELEASE_PROFILE = "full"
 PUBLIC_TEXT_PACKAGE_PROFILE = "public-text-only"
 RELEASE_PROFILE_CHOICES = (FULL_RELEASE_PROFILE, PUBLIC_TEXT_PACKAGE_PROFILE)
@@ -95,7 +95,7 @@ PUBLIC_TEXT_RETAINED_TESTS = frozenset(
         "tests/test_public_text_release.py",
         "tests/test_public_text_runtime.py",
         "tests/test_smoke_full_runtime.py",
-        "tests/test_verify_contest_release.py",
+        "tests/test_verify_release.py",
         "tests/test_verify_release_archive.py",
     }
 )
@@ -119,7 +119,7 @@ PUBLIC_TEXT_REQUIRED_PROFILE_NEUTRAL_TOOLING = frozenset(
 )
 COMMON_REQUIRED_RELEASE_PATHS = frozenset(
     {
-        ".env.contest.example",
+        ".env.production.example",
         ".env.example",
         "CONTRIBUTING.md",
         "DATA_CARD.md",
@@ -150,17 +150,17 @@ COMMON_REQUIRED_RELEASE_PATHS = frozenset(
         "requirements-dev.txt",
         "requirements.lock.txt",
         "requirements.txt",
-        "scripts/check_contest_readiness.py",
+        "scripts/check_index_readiness.py",
         "scripts/check_dependency_snapshot.py",
         "scripts/generate_dependency_report.py",
         "scripts/package_release.py",
         "scripts/smoke_full_runtime.py",
-        "scripts/verify_contest_release.py",
+        "scripts/verify_release.py",
         "scripts/verify_release_archive.py",
         "tests/test_package_release.py",
         "tests/test_dependency_snapshot.py",
         "tests/test_smoke_full_runtime.py",
-        "tests/test_verify_contest_release.py",
+        "tests/test_verify_release.py",
         "tests/test_verify_release_archive.py",
     }
 )
@@ -168,9 +168,6 @@ FULL_REQUIRED_RELEASE_PATHS = frozenset(
     {
         "data/active_index_sync_report.json",
         "data/eval_query_holdout.appearance_v3.sha256",
-        "docs/contest-development-report-draft.md",
-        "docs/contest-evidence-matrix.md",
-        "docs/contest-release-runbook.md",
         "docs/demo-video-script.md",
         "docs/evaluation/profile_rerank.appearance_v1.json",
         "docs/evaluation/profile_rerank.appearance_v1.md",
@@ -922,7 +919,7 @@ Conda 환경을 활성화하고 루트에서 다음 값을 설정한 뒤 실행�
 ```powershell
 conda env create -f environment.release.yml
 conda activate meongtamjeong-release
-$env:APP_ENV = "contest"
+$env:APP_ENV = "production"
 $keyBytes = New-Object byte[] 32
 $rng = [Security.Cryptography.RandomNumberGenerator]::Create()
 $rng.GetBytes($keyBytes)
@@ -1511,17 +1508,17 @@ def _release_manifest_file(
     return TrackedFile(RELEASE_MANIFEST_PATH, "100644", data)
 
 
-def _validate_contest_artifact_paths(files: Sequence[TrackedFile]) -> None:
-    """Require contest example artifact paths to exist in the release archive."""
+def _validate_release_artifact_paths(files: Sequence[TrackedFile]) -> None:
+    """Require production example artifact paths to exist in the release archive."""
 
     files_by_name = {item.archive_path: item for item in files}
-    contest_env = files_by_name.get(CONTEST_ENV_PATH)
-    if contest_env is None:
+    release_env = files_by_name.get(RELEASE_ENV_PATH)
+    if release_env is None:
         return
     try:
-        text = contest_env.data.decode("utf-8-sig")
+        text = release_env.data.decode("utf-8-sig")
     except UnicodeDecodeError as exc:
-        raise PackagingError(f"{CONTEST_ENV_PATH} is not valid UTF-8") from exc
+        raise PackagingError(f"{RELEASE_ENV_PATH} is not valid UTF-8") from exc
 
     configured: dict[str, str] = {}
     for line_number, raw_line in enumerate(text.splitlines(), start=1):
@@ -1530,37 +1527,37 @@ def _validate_contest_artifact_paths(files: Sequence[TrackedFile]) -> None:
             continue
         name, value = line.split("=", 1)
         name = name.strip()
-        if name not in CONTEST_ARTIFACT_KEYS:
+        if name not in RELEASE_ARTIFACT_KEYS:
             continue
         if name in configured:
             raise PackagingError(
-                f"duplicate {name} in {CONTEST_ENV_PATH}:{line_number}"
+                f"duplicate {name} in {RELEASE_ENV_PATH}:{line_number}"
             )
         value = value.strip()
         if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
             value = value[1:-1].strip()
         configured[name] = value
 
-    missing_keys = [key for key in CONTEST_ARTIFACT_KEYS if not configured.get(key)]
+    missing_keys = [key for key in RELEASE_ARTIFACT_KEYS if not configured.get(key)]
     if missing_keys:
         raise PackagingError(
-            f"{CONTEST_ENV_PATH} is missing required artifact path(s): "
+            f"{RELEASE_ENV_PATH} is missing required artifact path(s): "
             + ", ".join(missing_keys)
         )
 
     archive_names = set(files_by_name)
-    for key in CONTEST_ARTIFACT_KEYS:
+    for key in RELEASE_ARTIFACT_KEYS:
         value = configured[key]
         archive_path = value[2:] if value.startswith("./") else value
         try:
             _validate_archive_name(archive_path)
         except PackagingError as exc:
             raise PackagingError(
-                f"{CONTEST_ENV_PATH} {key} has an unsafe artifact path"
+                f"{RELEASE_ENV_PATH} {key} has an unsafe artifact path"
             ) from exc
         if archive_path not in archive_names:
             raise PackagingError(
-                f"{CONTEST_ENV_PATH} {key} target is not included in release"
+                f"{RELEASE_ENV_PATH} {key} target is not included in release"
             )
 
 
@@ -1643,7 +1640,7 @@ def package_release(
             "--public-evidence-dir is valid only with --profile public-text-only"
         )
     root = repo.resolve(strict=True)
-    target = (output or (root / "dist" / "meongtamjeong-contest.zip")).resolve(
+    target = (output or (root / "dist" / "meongtamjeong-release.zip")).resolve(
         strict=False
     )
     files, excluded_count = collect_tracked_files(root, output=target)
@@ -1659,7 +1656,7 @@ def package_release(
         faiss_module=faiss_module,
     )
     excluded_count += profile_excluded
-    _validate_contest_artifact_paths(files)
+    _validate_release_artifact_paths(files)
     _scan_files(files)
     if commit_sha is None and (clean_required or required_tag is not None):
         commit_sha, tag_object_id = _require_clean_head(root, required_tag=required_tag)
@@ -1739,7 +1736,7 @@ def package_release(
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "Create a deterministic contest ZIP from tracked working-tree files "
+            "Create a deterministic release ZIP from tracked working-tree files "
             "after exclusion and secret checks."
         )
     )
@@ -1753,7 +1750,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--output",
         type=Path,
         default=None,
-        help="output ZIP path (default: <repo>/dist/meongtamjeong-contest.zip)",
+        help="output ZIP path (default: <repo>/dist/meongtamjeong-release.zip)",
     )
     parser.add_argument(
         "--check-only",

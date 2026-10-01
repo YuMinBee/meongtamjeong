@@ -134,12 +134,12 @@ def test_deployment_security_defaults_are_fail_closed(main_module: Any) -> None:
             main_module._validated_app_env(invalid_environment)
     assert main_module._validated_api_key("local-demo", "development") == "local-demo"
     with pytest.raises(RuntimeError, match="API_KEY must be replaced"):
-        main_module._validated_api_key("change-me", "contest")
+        main_module._validated_api_key("change-me", "production")
     with pytest.raises(RuntimeError, match="API_KEY must be replaced"):
         main_module._validated_api_key("", "production")
     with pytest.raises(RuntimeError, match="at least 24 characters"):
-        main_module._validated_api_key("too-short", "contest")
-    strong_key = "contest-key-with-32-random-chars"
+        main_module._validated_api_key("too-short", "production")
+    strong_key = "production-key-with-32-random-chars"
     assert main_module._validated_api_key(strong_key, "production") == strong_key
     assert main_module.NOTICE_LOOKUP_MAX_CONCURRENCY == 2
 
@@ -215,7 +215,7 @@ def test_development_legacy_experimental_uis_still_require_authentication(
     assert response.json() == {"detail": "Forbidden"}
 
 
-@pytest.mark.parametrize("app_env", ("contest", "production"))
+@pytest.mark.parametrize("app_env", ("production",))
 @pytest.mark.parametrize(
     "path",
     ("/visualize/dashboard", "/visualize/adoption-flow"),
@@ -237,7 +237,7 @@ def test_deployed_legacy_experimental_uis_redirect_without_authentication(
     assert response.headers["x-meongtamjeong-legacy-ui"] == "disabled"
 
 
-@pytest.mark.parametrize("app_env", ("contest", "production"))
+@pytest.mark.parametrize("app_env", ("production",))
 @pytest.mark.parametrize(
     "path",
     ("/visualize/dashboard", "/visualize/adoption-flow"),
@@ -275,7 +275,7 @@ def test_get_query_api_key_is_development_only(
     )
     assert local_response.status_code == 200
 
-    for deployed_env in ("contest", "production"):
+    for deployed_env in ("production",):
         monkeypatch.setattr(main_module, "APP_ENV", deployed_env)
         deployed_response = client.get(
             f"/health?api_key={API_HEADERS['x-api-key']}",
@@ -287,7 +287,7 @@ def test_get_query_api_key_is_development_only(
         assert header_response.status_code == 200
 
 
-@pytest.mark.parametrize("app_env", ("contest", "production"))
+@pytest.mark.parametrize("app_env", ("production",))
 @pytest.mark.parametrize(
     "path",
     ("/live/breeds", "/live/breeds/417000/images", "/visualize/live-breeds"),

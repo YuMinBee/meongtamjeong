@@ -135,7 +135,7 @@ def public_main_module(request: pytest.FixtureRequest):
     monkeypatch.setitem(sys.modules, "clip", clip_stub)
     monkeypatch.setitem(sys.modules, "faiss", faiss_stub)
     monkeypatch.setitem(sys.modules, "torch", torch_stub)
-    monkeypatch.setenv("APP_ENV", "contest")
+    monkeypatch.setenv("APP_ENV", "production")
     monkeypatch.setenv("API_KEY", API_KEY)
     monkeypatch.setenv("INDEX_PATH", str(index_path))
     monkeypatch.setenv("METAS_PATH", str(metas_path))

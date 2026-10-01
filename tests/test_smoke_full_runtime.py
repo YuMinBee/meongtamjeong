@@ -23,7 +23,7 @@ def test_smoke_runtime_bootstrap_uses_repository_absolute_paths(
     )
     assert Path(os.environ["INDEX_PATH"]).is_absolute()
     assert Path(os.environ["METAS_PATH"]).is_absolute()
-    assert os.environ["APP_ENV"] == "contest"
+    assert os.environ["APP_ENV"] == "production"
     assert len(os.environ["API_KEY"]) >= 24
     assert os.environ["GEMMA3_ENABLED"] == "false"
     assert os.environ["RELEASE_PROFILE"] == "full"
