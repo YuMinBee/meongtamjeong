@@ -12,7 +12,7 @@ from uuid import uuid4
 import pytest
 
 from app.notice_status import classify_notice as shared_classify_notice
-from scripts import check_contest_readiness as readiness
+from scripts import check_index_readiness as readiness
 
 
 REFERENCE_DATE = datetime(2026, 7, 17)

@@ -80,7 +80,7 @@ def _write_tagged_release_fixture(
         target = repo / name
         if target.exists():
             continue
-        if name == ".env.contest.example":
+        if name == ".env.production.example":
             content: str | bytes = (
                 "API_KEY=change-me\n"
                 "INDEX_PATH=./data/dog_faiss.index\n"
@@ -188,7 +188,7 @@ def _write_public_text_source_fixture(repo: Path) -> None:
         vectors=[_profile_vector(0), _profile_vector(1), _profile_vector(2)],
     )
     _write(
-        repo / ".env.contest.example",
+        repo / ".env.production.example",
         "API_KEY=change-me\n"
         "INDEX_PATH=./data/dog_faiss.index\n"
         "METAS_PATH=./data/dog_metas.json\n",
@@ -206,10 +206,6 @@ def _write_public_text_source_fixture(repo: Path) -> None:
     )
     _write(repo / "docs" / "dependency-report.md", "# Dependencies\n")
     _write(repo / "docs" / "dependency-report.json", "{}\n")
-    _write(
-        repo / "docs" / "contest-development-report-draft.md",
-        "full-profile vectors: 3,746\n",
-    )
     _write(repo / "CONTRIBUTING.md", "run the full release gate\n")
     _write(repo / ".github" / "workflows" / "ci.yml", "name: full-ci\n")
     _write(
@@ -316,14 +312,13 @@ def _write_public_text_source_fixture(repo: Path) -> None:
     )
     _track(
         repo,
-        ".env.contest.example",
+        ".env.production.example",
         "README.md",
         "DATA_CARD.md",
         "MODEL_CARD.md",
         "THIRD_PARTY_NOTICES.md",
         "docs/dependency-report.md",
         "docs/dependency-report.json",
-        "docs/contest-development-report-draft.md",
         "CONTRIBUTING.md",
         ".github/workflows/ci.yml",
         "data/dog_faiss.index",
@@ -848,14 +843,14 @@ def test_clean_release_rejects_staged_and_unstaged_tracked_changes(
         release.package_release(git_repo, check_only=True, require_clean=True)
 
 
-def test_contest_environment_artifacts_must_be_in_release(git_repo: Path) -> None:
+def test_release_environment_artifacts_must_be_in_release(git_repo: Path) -> None:
     _write(
-        git_repo / ".env.contest.example",
+        git_repo / ".env.production.example",
         "API_KEY=change-me\n"
         "INDEX_PATH=./data/dog_faiss.index\n"
         "METAS_PATH=./data/dog_metas.json\n",
     )
-    _track(git_repo, ".env.contest.example")
+    _track(git_repo, ".env.production.example")
 
     with pytest.raises(release.PackagingError, match="not included in release"):
         release.package_release(git_repo, check_only=True)
@@ -954,7 +949,6 @@ def test_public_text_profile_replaces_canonical_data_and_excludes_visual_artifac
         assert "data/public_text_release_report.json" in names
         assert "docs/dependency-report.md" in names
         assert "docs/dependency-report.json" in names
-        assert "docs/contest-development-report-draft.md" not in names
         assert "CONTRIBUTING.md" in names
         assert not any(name.startswith(".github/") for name in names)
         assert "docs/public-text-only-release.md" in names

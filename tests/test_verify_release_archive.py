@@ -16,7 +16,7 @@ from scripts import package_release
 from scripts import verify_release_archive as verifier
 
 
-TAG = "contest-2026-final"
+TAG = "release-2026-final"
 COMMIT_SHA = "1" * 40
 TAG_OBJECT_ID = "2" * 40
 

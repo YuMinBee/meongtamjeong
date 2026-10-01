@@ -40,7 +40,7 @@
     },
     "retrieval_report": {
       "path": "docs/evaluation/retrieval_eval.appearance_v1.json",
-      "sha256": "30e7ea0c94d725b8cfe7c76147d8c91e7db807df9bab2486b68cabb93e4f019f"
+      "sha256": "c8a402af413f4ba97fdbdfdaafc23123fc7d8d0c4bf48e1a9bf0ab03429862c9"
     },
     "queries": {
       "path": "data/eval_queries.appearance_v1.json",

@@ -1,4 +1,4 @@
-"""Run the fail-closed contest release verification suite.
+"""Run the fail-closed release verification suite.
 
 The orchestrator intentionally does not relay or persist child-process output.
 Each underlying command remains the source of its own detailed diagnostics;
@@ -42,13 +42,13 @@ PUBLIC_TEXT_TESTS = (
     "tests/test_public_text_release.py",
     "tests/test_public_text_runtime.py",
     "tests/test_smoke_full_runtime.py",
-    "tests/test_verify_contest_release.py",
+    "tests/test_verify_release.py",
     "tests/test_verify_release_archive.py",
 )
 RELEASE_MANIFEST_PATH = "release/manifest.json"
 RELEASE_ARCHIVE_PATHS = {
-    FULL_RELEASE_PROFILE: "dist/meongtamjeong-contest-full.zip",
-    PUBLIC_TEXT_RELEASE_PROFILE: "dist/meongtamjeong-contest-public-text-only.zip",
+    FULL_RELEASE_PROFILE: "dist/meongtamjeong-release-full.zip",
+    PUBLIC_TEXT_RELEASE_PROFILE: "dist/meongtamjeong-release-public-text-only.zip",
 }
 
 
@@ -133,10 +133,10 @@ def build_steps(
                 ),
             ),
             Step(
-                "contest_readiness",
+                "index_readiness",
                 (
                     python,
-                    "scripts/check_contest_readiness.py",
+                    "scripts/check_index_readiness.py",
                     "--metas",
                     metas_path,
                     "--index",
@@ -330,10 +330,10 @@ def build_steps(
         )
     return (
         Step(
-            "contest_readiness",
+            "index_readiness",
             (
                 python,
-                "scripts/check_contest_readiness.py",
+                "scripts/check_index_readiness.py",
                 "--metas",
                 "data/dog_metas.json",
                 "--index",
@@ -712,7 +712,7 @@ def _positive_int(value: str) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "Run every contest release gate and emit only a compact JSON summary."
+            "Run every release gate and emit only a compact JSON summary."
         )
     )
     parser.add_argument(

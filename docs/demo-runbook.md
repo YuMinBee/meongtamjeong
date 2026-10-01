@@ -6,7 +6,7 @@
 
 ```bash
 conda activate dog-rag
-python scripts/check_contest_readiness.py --metas data/dog_metas.json --index data/dog_faiss.index --max-age-days 7 --strict
+python scripts/check_index_readiness.py --metas data/dog_metas.json --index data/dog_faiss.index --max-age-days 7 --strict
 uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 

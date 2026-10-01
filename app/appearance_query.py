@@ -1,7 +1,7 @@
 """Policy helpers for appearance-only search.
 
 The regular hybrid search intentionally accepts broad natural-language input.
-The contest demo has a narrower contract: personality and household-fit
+The appearance demo has a narrower contract: personality and household-fit
 preferences must become shelter questions, never retrieval signals.  These
 helpers enforce that narrower contract without changing the legacy/profile
 search behavior.
@@ -32,7 +32,7 @@ APPEARANCE_SEARCH_CONDITION_KEYS = frozenset(
 )
 
 # Public-notice temperament edges remain available to the legacy search flow,
-# but must not influence the contest-facing appearance-only rank, even as an
+# but must not influence the public appearance-only rank, even as an
 # indirect graph-neighbor similarity signal.
 APPEARANCE_GRAPH_EXCLUDED_FEATURE_PREFIXES = ("temperament:",)
 
@@ -1038,7 +1038,7 @@ def _assemble_normalized_query(text: str) -> tuple[str, bool]:
 
 
 def analyze_appearance_query(value: Any) -> dict[str, Any]:
-    """Analyze and safely normalize a contest-facing appearance query.
+    """Analyze and safely normalize a public-facing appearance query.
 
     The return value is JSON-compatible so API routes can expose warnings
     without depending on an LLM or changing the legacy string helper.  Negated

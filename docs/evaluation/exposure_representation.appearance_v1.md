@@ -16,7 +16,7 @@
 | 입력 | 경로 | SHA-256 |
 |---|---|---|
 | dog_metas | `data/dog_metas.json` | `723a4df01e2802ad5d42bd276eefbded097a0a6e72900784395c4c19626b6c00` |
-| retrieval_report | `docs/evaluation/retrieval_eval.appearance_v1.json` | `30e7ea0c94d725b8cfe7c76147d8c91e7db807df9bab2486b68cabb93e4f019f` |
+| retrieval_report | `docs/evaluation/retrieval_eval.appearance_v1.json` | `c8a402af413f4ba97fdbdfdaafc23123fc7d8d0c4bf48e1a9bf0ab03429862c9` |
 | queries | `data/eval_queries.appearance_v1.json` | `fb8713b31d1210ee72eeb1ceb2dca37cceb24777dc3f00142a9adec6d090c03d` |
 
 ## Corpus 필드 증거 커버리지

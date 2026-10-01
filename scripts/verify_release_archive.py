@@ -40,7 +40,7 @@ from scripts.package_release import (  # noqa: E402
 )
 
 
-DEFAULT_ARCHIVE = BASE_DIR / "dist" / "meongtamjeong-contest.zip"
+DEFAULT_ARCHIVE = BASE_DIR / "dist" / "meongtamjeong-release.zip"
 DEFAULT_TIMEOUT_SECONDS = 300
 MAX_ARCHIVE_ENTRIES = 20_000
 MAX_MEMBER_BYTES = 2 * 1024 * 1024 * 1024

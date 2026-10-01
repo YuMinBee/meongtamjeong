@@ -21,7 +21,7 @@ if str(REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(REPOSITORY_ROOT))
 
 
-SMOKE_AUTH_VALUE = "-".join(("local", "runtime", "smoke", "contest", "key"))
+SMOKE_AUTH_VALUE = "-".join(("local", "runtime", "smoke", "production", "key"))
 FULL_RELEASE_PROFILE = "full"
 PUBLIC_TEXT_PACKAGE_PROFILE = "public-text-only"
 PUBLIC_TEXT_RUNTIME_PROFILE = "public-text-only-v1"
@@ -48,7 +48,7 @@ def configure_offline_cpu_runtime(
     """Set deterministic, non-secret settings before importing ``app.main``."""
 
     os.environ["API_KEY"] = SMOKE_AUTH_VALUE
-    os.environ["APP_ENV"] = "contest"
+    os.environ["APP_ENV"] = "production"
     os.environ["ANIMAL_API_KEY"] = ""
     os.environ["INDEX_PATH"] = str(
         (index_path or REPOSITORY_ROOT / "data" / "dog_faiss.index").resolve()
@@ -137,10 +137,10 @@ def run_smoke(
     with TestClient(main_module.app) as client:
         missing_auth = client.get("/health")
         if missing_auth.status_code != 403:
-            raise RuntimeError("contest runtime allowed a request without header auth")
+            raise RuntimeError("production runtime allowed a request without header auth")
         query_auth = client.get(f"/health?api_key={SMOKE_AUTH_VALUE}")
         if query_auth.status_code != 403:
-            raise RuntimeError("contest runtime accepted a query-string API key")
+            raise RuntimeError("production runtime accepted a query-string API key")
         health = require_ok(client.get("/health", headers=headers), "health")
         if int(health.get("index_size") or 0) <= 0:
             raise RuntimeError("health reported an empty FAISS index")

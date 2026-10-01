@@ -1,6 +1,6 @@
 {
   "schema_version": "appearance-query-robustness-report.v2",
-  "generated_at": "2026-08-14T13:01:21+00:00",
+  "generated_at": "2026-10-01T06:22:38+00:00",
   "reference_date": "2026-07-26",
   "system": {
     "id": "appearance_natural_graph",
@@ -68,18 +68,18 @@
     },
     "appearance_query_module": {
       "path": "app/appearance_query.py",
-      "sha256": "fa9b063d9d805ac450d9a531bc971d7144c18067b2e18bd722c2e2f5c1796d9f",
-      "bytes": 34264
+      "sha256": "0c5f85a2f8e756bb54ac23b8aaf1abe288d6e2c7fb5e5ea2e3f0feaa238800c6",
+      "bytes": 34258
     },
     "hybrid_rag_module": {
       "path": "app/hybrid_rag.py",
-      "sha256": "4a2de17cbbb837ef88dd34c831b79f34942a385acd82d7ae54b24fd55eb03dfd",
-      "bytes": 31739
+      "sha256": "17ea0a2899618c3ffb0587fc000636bdb8eec55b3471b3b476ae4312006bf4f5",
+      "bytes": 30825
     },
     "graph_rag_module": {
       "path": "app/graph_rag.py",
-      "sha256": "83039703d1f02f22769444b19b529cc863670a637a146b0249f57054ff642c81",
-      "bytes": 35671
+      "sha256": "fc08b885839ae04d4314c861b177bf928fd8349ace57c5a79ba2d590bd5a706c",
+      "bytes": 34632
     },
     "retrieval_evaluation_module": {
       "path": "app/retrieval_evaluation.py",

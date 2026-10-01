@@ -10,7 +10,7 @@ from types import SimpleNamespace
 import pytest
 
 from scripts import package_release
-from scripts import verify_contest_release as gate
+from scripts import verify_release as gate
 
 
 class RecordingRunner:
@@ -97,7 +97,7 @@ def test_fixed_suite_uses_current_date_and_required_argv_lists(tmp_path: Path) -
 
     commands = [call[0] for call in runner.calls]
     readiness = next(
-        argv for argv in commands if "check_contest_readiness.py" in " ".join(argv)
+        argv for argv in commands if "check_index_readiness.py" in " ".join(argv)
     )
     assert readiness[-9:] == [
         "--metas",
@@ -185,7 +185,7 @@ def test_failures_do_not_short_circuit_and_sensitive_output_is_never_reported(
     secret = "do-not-print-this-value"
     runner = RecordingRunner(
         failures={
-            "check_contest_readiness.py": 2,
+            "check_index_readiness.py": 2,
             "scan_git_history_secrets.py": 1,
             "package_release.py": 1,
         },
@@ -201,7 +201,7 @@ def test_failures_do_not_short_circuit_and_sensitive_output_is_never_reported(
 
     assert len(runner.calls) == len(gate.build_steps(reference_date=date(2026, 8, 26)))
     assert report["ready"] is False
-    assert _step(report, "contest_readiness")["exit_code"] == 2
+    assert _step(report, "index_readiness")["exit_code"] == 2
     assert _step(report, "git_history_secret_scan")["exit_code"] == 1
     assert _step(report, "release_package_check")["exit_code"] == 1
     assert _step(report, "git_clean")["exit_code"] == 1
@@ -233,7 +233,7 @@ def test_skip_slow_is_preflight_only_and_never_ready(tmp_path: Path) -> None:
 
 def test_required_tag_builds_and_verifies_archive_identity(tmp_path: Path) -> None:
     runner = RecordingRunner()
-    tag = "contest-2026-final"
+    tag = "release-2026-final"
     report = gate.run_release_gate(
         repo=tmp_path,
         reference_date=date(2026, 11, 3),
@@ -356,7 +356,7 @@ def test_timeout_and_missing_executable_fail_closed(tmp_path: Path) -> None:
     )
 
     assert report["ready"] is False
-    assert _step(report, "contest_readiness")["exit_code"] == 124
+    assert _step(report, "index_readiness")["exit_code"] == 124
     assert _step(report, "evaluation_retrieval")["exit_code"] == 127
     serialized = json.dumps(report)
     assert "secret executable detail" not in serialized

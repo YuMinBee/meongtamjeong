@@ -114,13 +114,13 @@ def _env_csv(name: str, default: str) -> list[str]:
     return [value for value in values if value]
 
 
-SUPPORTED_APP_ENVS = frozenset({"development", "contest", "production"})
+SUPPORTED_APP_ENVS = frozenset({"development", "production"})
 
 
 def _validated_app_env(value: str) -> str:
     normalized = str(value or "").strip().lower()
     if normalized not in SUPPORTED_APP_ENVS:
-        raise RuntimeError("APP_ENV must be one of: development, contest, production")
+        raise RuntimeError("APP_ENV must be one of: development, production")
     return normalized
 
 
@@ -130,11 +130,11 @@ def _validated_api_key(value: str, app_env: str) -> str:
     if environment != "development":
         if normalized in {"", "change-me"}:
             raise RuntimeError(
-                "API_KEY must be replaced before contest or production startup"
+                "API_KEY must be replaced before production startup"
             )
         if len(normalized) < 24:
             raise RuntimeError(
-                "API_KEY must contain at least 24 characters for contest or production"
+                "API_KEY must contain at least 24 characters for production"
             )
     return normalized or "change-me"
 
@@ -320,7 +320,7 @@ if PUBLIC_TEXT_RELEASE_ACTIVE:
 DINO_FUSION_SETTINGS = DinoFusionSettings.from_env(BASE_DIR)
 DINO_FUSION_RUNTIME = DinoFusionRuntime(DINO_FUSION_SETTINGS)
 PUBLIC_DEMO_PATHS = {"/demo", "/visualize/profile-search"}
-LEGACY_UI_DISABLED_ENVS = frozenset({"contest", "production"})
+LEGACY_UI_DISABLED_ENVS = frozenset({"production"})
 LEGACY_EXPERIMENTAL_UI_PATHS = frozenset(
     {"/visualize/dashboard", "/visualize/adoption-flow"}
 )
@@ -436,7 +436,7 @@ async def api_key_checker(request: Request, call_next):
     key = request.headers.get("x-api-key")
     # Query-string credentials can leak through browser history, access logs,
     # and referrers. Keep this compatibility path for local development only;
-    # contest and production deployments require the header.
+    # production deployments require the header.
     if request.method == "GET" and not key and APP_ENV == "development":
         key = request.query_params.get("api_key")
     if not secrets.compare_digest(key or "", API_KEY):
@@ -1011,7 +1011,7 @@ def get_live_dog_cache(
 
 
 def require_live_gallery_enabled() -> None:
-    """Keep legacy bulk-refresh routes out of contest/production serving."""
+    """Keep legacy bulk-refresh routes out of production serving."""
 
     if APP_ENV in LEGACY_UI_DISABLED_ENVS or not PUBLIC_NOTICE_VISUAL_ASSETS_ENABLED:
         raise HTTPException(status_code=404, detail="Not Found")
@@ -2505,7 +2505,7 @@ def search_profile(body: ProfileSearchRequest):
             _profile_negation_conflicts(negated_fields, body.profile)
         )
         _reject_negation_conflicts(query_analysis, conflicting_inputs)
-        # The contest-facing appearance flow promises active notices. Unknown
+        # The public appearance flow promises active notices. Unknown
         # status remains configurable only for the legacy profile scope.
         include_unknown_notices = False
 
@@ -3694,7 +3694,7 @@ def feature_dashboard_ui(request: Request):
   <aside class="panel" role="note">
     <strong>Legacy experimental UI — development only.</strong>
     This screen may expose behavior-oriented or LLM-assisted controls that are not
-    part of the contest demo. Use <a href="/demo">the appearance-first demo</a> for
+    part of the appearance demo. Use <a href="/demo">the appearance-first demo</a> for
     evidence-bounded search and verified shelter contact guidance.
   </aside>
   <header>
@@ -4024,7 +4024,7 @@ def adoption_flow_ui(request: Request):
   <aside class="summary" role="note">
     <strong>Legacy experimental UI — development only.</strong>
     This screen includes broad lifestyle and personality inputs that are not part
-    of the contest ranking claim. Use <a href="/demo">the appearance-first demo</a>
+    of the appearance ranking claim. Use <a href="/demo">the appearance-first demo</a>
     for evidence-bounded search and verified shelter contact guidance.
   </aside>
   <header>

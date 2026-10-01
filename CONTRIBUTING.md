@@ -26,7 +26,7 @@ python -m pytest -q
 ```bash
 python -m pytest -q
 ruff check app scripts tests
-python scripts/check_contest_readiness.py --metas data/dog_metas.json --index data/dog_faiss.index --strict
+python scripts/check_index_readiness.py --metas data/dog_metas.json --index data/dog_faiss.index --strict
 python scripts/smoke_full_runtime.py
 ```
 
@@ -35,7 +35,7 @@ python scripts/smoke_full_runtime.py
 릴리스 후보는 clean commit과 태그에서 다음 단일 게이트도 통과해야 합니다. `--skip-slow` 결과는 제출 PASS로 사용할 수 없습니다.
 
 ```bash
-python scripts/verify_contest_release.py --required-tag <RELEASE_TAG>
+python scripts/verify_release.py --required-tag <RELEASE_TAG>
 ```
 
 ## Pull request
