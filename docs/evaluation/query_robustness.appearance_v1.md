@@ -1,6 +1,6 @@
 # 외형 질의 개발셋 회귀·실패 사례 평가
 
-- 생성 시각(UTC): `2026-10-01T05:35:13+00:00`
+- 생성 시각(UTC): `2026-10-01T06:22:38+00:00`
 - 고정 기준일: `2026-07-26`
 - 시스템: `appearance_natural_graph`
 - 평가 역할: `development_regression_set`
@@ -60,7 +60,7 @@
 | `variants` | `42b853f78dcfc21c254f0f8f9648511ea59c1610c6287c37ed3a5f1fc1423819` |
 | `evaluation_module` | `724c27b7df3a4c43b9579cb0c01aa9a361801ed1331668e1c0ff202dbdac8f4a` |
 | `evaluation_cli` | `ce205084a44b4dd1f2f86c12552ca339f64ca9ef30907a0490e21e758d7b0682` |
-| `appearance_query_module` | `fa9b063d9d805ac450d9a531bc971d7144c18067b2e18bd722c2e2f5c1796d9f` |
+| `appearance_query_module` | `0c5f85a2f8e756bb54ac23b8aaf1abe288d6e2c7fb5e5ea2e3f0feaa238800c6` |
 | `hybrid_rag_module` | `17ea0a2899618c3ffb0587fc000636bdb8eec55b3471b3b476ae4312006bf4f5` |
 | `graph_rag_module` | `fc08b885839ae04d4314c861b177bf928fd8349ace57c5a79ba2d590bd5a706c` |
 | `retrieval_evaluation_module` | `86856f56ee6792d13e4f8a0d6ca895277417a3962712610778af39473dc48266` |
